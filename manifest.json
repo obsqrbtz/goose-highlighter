@@ -4,18 +4,21 @@
   "version": "1.0",
   "description": "Highlight text on web pages",
   "default_locale": "en",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "permissions": [
+    "storage"
+  ],
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": "icons/icon128.png"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
