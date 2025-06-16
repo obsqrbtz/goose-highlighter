@@ -49,15 +49,55 @@ function updateListForm() {
 
 function renderWords() {
   const list = lists[currentListIndex];
-  wordList.innerHTML = list.words.map((w, i) => `
-    <div>
-      <input type="checkbox" data-index="${i}">
-      <input value="${w.wordStr}" data-word-edit="${i}">
-      <input type="color" value="${w.background || list.background}" data-bg-edit="${i}">
-      <input type="color" value="${w.foreground || list.foreground}" data-fg-edit="${i}">
-      <label><input type="checkbox" ${w.active ? "checked" : ""} data-active-edit="${i}"> ${chrome.i18n.getMessage("word_active_label")}</label>
-    </div>
-  `).join("");
+  wordList.innerHTML = ""; // Clear first
+
+  list.words.forEach((w, i) => {
+    const container = document.createElement("div");
+
+    const cbSelect = document.createElement("input");
+    cbSelect.type = "checkbox";
+    cbSelect.dataset.index = i;
+
+    const inputWord = document.createElement("input");
+    inputWord.type = "text";
+    inputWord.value = w.wordStr;
+    inputWord.dataset.wordEdit = i;
+
+    const inputBg = document.createElement("input");
+    inputBg.type = "color";
+    inputBg.value = w.background || list.background;
+    inputBg.dataset.bgEdit = i;
+
+    const inputFg = document.createElement("input");
+    inputFg.type = "color";
+    inputFg.value = w.foreground || list.foreground;
+    inputFg.dataset.fgEdit = i;
+
+    const labelActive = document.createElement("label");
+    const cbActive = document.createElement("input");
+    cbActive.type = "checkbox";
+    if (w.active) cbActive.checked = true;
+    cbActive.dataset.activeEdit = i;
+    labelActive.appendChild(cbActive);
+    labelActive.appendChild(document.createTextNode(" " + chrome.i18n.getMessage("word_active_label")));
+
+    container.appendChild(cbSelect);
+    container.appendChild(inputWord);
+    container.appendChild(inputBg);
+    container.appendChild(inputFg);
+    container.appendChild(labelActive);
+
+    const styles = getComputedStyle(document.documentElement);
+    const bg = styles.getPropertyValue('--input-bg').trim();
+    const fg = styles.getPropertyValue('--text-color').trim();
+    const border = styles.getPropertyValue('--input-border').trim();
+
+    inputWord.style.backgroundColor = bg;
+    inputWord.style.color = fg;
+    inputWord.style.border = `1px solid ${border}`;
+
+    wordList.appendChild(container);
+  });
 }
 
 listSelect.onchange = () => {

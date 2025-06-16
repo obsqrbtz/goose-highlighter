@@ -63,6 +63,9 @@ select {
 textarea {
   height: 70px;
   resize: vertical;
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--input-border) !important;
 }
 
 input[type="color"] {
@@ -126,6 +129,9 @@ button:hover {
 
 #wordList input[type="text"] {
   flex: 2;
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--input-border) !important;
 }
 
 #wordList input[type="color"] {
