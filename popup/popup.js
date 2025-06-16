@@ -21,6 +21,8 @@ async function debouncedSave() {
 
 async function save() {
   await debouncedSave();
+  renderLists();
+  renderWords();
 }
 
 async function load() {
