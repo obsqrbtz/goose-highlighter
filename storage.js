@@ -1,8 +1,8 @@
-export async function getLists() {
+async function getLists() {
     const { lists } = await chrome.storage.local.get("lists");
     return lists || [];
 }
 
-export async function saveLists(lists) {
+async function saveLists(lists) {
     await chrome.storage.local.set({ lists });
 }
