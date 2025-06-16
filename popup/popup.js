@@ -1,0 +1,197 @@
+const listSelect = document.getElementById("listSelect");
+const listName = document.getElementById("listName");
+const listBg = document.getElementById("listBg");
+const listFg = document.getElementById("listFg");
+const listActive = document.getElementById("listActive");
+const bulkPaste = document.getElementById("bulkPaste");
+const wordList = document.getElementById("wordList");
+const importInput = document.getElementById("importInput");
+
+let lists = [];
+let currentListIndex = 0;
+
+async function save() {
+  await chrome.storage.local.set({ lists });
+  renderLists();
+  renderWords();
+}
+
+async function load() {
+  const res = await chrome.storage.local.get("lists");
+  lists = res.lists || [];
+  if (!lists.length) {
+    lists.push({ 
+      id: Date.now(), 
+      name: chrome.i18n.getMessage("default_list_name"), 
+      background: "#ffff00", 
+      foreground: "#000000", 
+      active: true, 
+      words: [] 
+    });
+  }
+  renderLists();
+  renderWords();
+}
+
+function renderLists() {
+  listSelect.innerHTML = lists.map((list, index) => `<option value="${index}">${list.name}</option>`).join("");
+  listSelect.value = currentListIndex;
+  updateListForm();
+}
+
+function updateListForm() {
+  const list = lists[currentListIndex];
+  listName.value = list.name;
+  listBg.value = list.background;
+  listFg.value = list.foreground;
+  listActive.checked = list.active;
+}
+
+function renderWords() {
+  const list = lists[currentListIndex];
+  wordList.innerHTML = list.words.map((w, i) => `
+    <div>
+      <input type="checkbox" data-index="${i}">
+      <input value="${w.wordStr}" data-word-edit="${i}">
+      <input type="color" value="${w.background || list.background}" data-bg-edit="${i}">
+      <input type="color" value="${w.foreground || list.foreground}" data-fg-edit="${i}">
+      <label><input type="checkbox" ${w.active ? "checked" : ""} data-active-edit="${i}"> ${chrome.i18n.getMessage("word_active_label")}</label>
+    </div>
+  `).join("");
+}
+
+listSelect.onchange = () => {
+  currentListIndex = +listSelect.value;
+  renderWords();
+  updateListForm();
+};
+
+document.getElementById("newListBtn").onclick = () => {
+  lists.push({ 
+    id: Date.now(), 
+    name: chrome.i18n.getMessage("new_list_name"), 
+    background: "#ffff00", 
+    foreground: "#000000", 
+    active: true, 
+    words: [] 
+  });
+  currentListIndex = lists.length - 1;
+  save();
+};
+
+document.getElementById("deleteListBtn").onclick = () => {
+  if (confirm(chrome.i18n.getMessage("confirm_delete_list"))) {
+    lists.splice(currentListIndex, 1);
+    currentListIndex = Math.max(0, currentListIndex - 1);
+    save();
+  }
+};
+
+listName.oninput = () => { lists[currentListIndex].name = listName.value; save(); };
+listBg.oninput = () => { lists[currentListIndex].background = listBg.value; save(); };
+listFg.oninput = () => { lists[currentListIndex].foreground = listFg.value; save(); };
+listActive.onchange = () => { lists[currentListIndex].active = listActive.checked; save(); };
+
+document.getElementById("addWordsBtn").onclick = () => {
+  const words = bulkPaste.value.split(/\n+/).map(w => w.trim()).filter(Boolean);
+  const list = lists[currentListIndex];
+  for (const w of words) list.words.push({ wordStr: w, background: "", foreground: "", active: true });
+  bulkPaste.value = "";
+  save();
+};
+
+document.getElementById("selectAllBtn").onclick = () => {
+  wordList.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = true);
+};
+
+document.getElementById("deleteSelectedBtn").onclick = () => {
+  if (confirm(chrome.i18n.getMessage("confirm_delete_words"))) {
+    const list = lists[currentListIndex];
+    const toDelete = [...wordList.querySelectorAll("input[type=checkbox]:checked")].map(cb => +cb.dataset.index);
+    lists[currentListIndex].words = list.words.filter((_, i) => !toDelete.includes(i));
+    save();
+  }
+};
+
+document.getElementById("disableSelectedBtn").onclick = () => {
+  const list = lists[currentListIndex];
+  wordList.querySelectorAll("input[type=checkbox]:checked").forEach(cb => list.words[+cb.dataset.index].active = false);
+  save();
+};
+
+document.getElementById("enableSelectedBtn").onclick = () => {
+  const list = lists[currentListIndex];
+  wordList.querySelectorAll("input[type=checkbox]:checked").forEach(cb => list.words[+cb.dataset.index].active = true);
+  save();
+};
+
+wordList.addEventListener("input", e => {
+  const index = e.target.dataset.wordEdit ?? e.target.dataset.bgEdit ?? e.target.dataset.fgEdit;
+  if (e.target.dataset.wordEdit != null) lists[currentListIndex].words[index].wordStr = e.target.value;
+  if (e.target.dataset.bgEdit != null) lists[currentListIndex].words[index].background = e.target.value;
+  if (e.target.dataset.fgEdit != null) lists[currentListIndex].words[index].foreground = e.target.value;
+  save();
+});
+
+wordList.addEventListener("change", e => {
+  if (e.target.dataset.activeEdit != null) {
+    lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
+    save();
+  }
+});
+
+
+const exportBtn = document.getElementById("exportBtn");
+exportBtn.onclick = () => {
+  const blob = new Blob([JSON.stringify(lists, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "highlight-lists.json";
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+const importBtn = document.getElementById("importBtn");
+importBtn.onclick = () => importInput.click();
+
+importInput.onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (Array.isArray(data)) {
+        lists = data;
+        currentListIndex = 0;
+        save();
+      }
+    } catch (err) {
+      alert(chrome.i18n.getMessage("invalid_json_error"));
+    }
+  };
+  reader.readAsText(file);
+};
+
+// Localize the page
+function localizePage() {
+  // Localize all elements with a data-i18n attribute
+  const elements = document.querySelectorAll('[data-i18n]');
+  elements.forEach(element => {
+    const message = element.dataset.i18n;
+    const localizedText = chrome.i18n.getMessage(message);
+    if (localizedText) {
+      if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+        element.placeholder = localizedText;
+      } else {
+        element.textContent = localizedText;
+      }
+    }
+  });
+}
+
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', localizePage);
+
+load();

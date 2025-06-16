@@ -1,0 +1,68 @@
+{
+  "extension_name": {
+    "message": "Goose Highlighter"
+  },
+  "select_list": {
+    "message": "Выберите список:"
+  },
+  "new_list": {
+    "message": "+ Новый список"
+  },
+  "delete_list": {
+    "message": "Удалить список"
+  },
+  "list_name": {
+    "message": "Имя списка:"
+  },
+  "background": {
+    "message": "Фон:"
+  },
+  "foreground": {
+    "message": "Текст:"
+  },
+  "enable_highlight": {
+    "message": "Включить выделение"
+  },
+  "paste_hint": {
+    "message": "Вставьте список слов здесь"
+  },
+  "apply_paste": {
+    "message": "Добавить слова"
+  },
+  "select_all": {
+    "message": "Выбрать все"
+  },
+  "delete_selected": {
+    "message": "Удалить выбранное"
+  },
+  "disable_selected": {
+    "message": "Отключить выбранное"
+  },
+  "enable_selected": {
+    "message": "Включить выбранное"
+  },
+  "import_list": {
+    "message": "Импорт JSON"
+  },
+  "export_list": {
+    "message": "Экспорт JSON"
+  },
+  "default_list_name": {
+    "message": "Список по умолчанию"
+  },
+  "new_list_name": {
+    "message": "Новый список"
+  },
+  "word_active_label": {
+    "message": "активно"
+  },
+  "invalid_json_error": {
+    "message": "Неверный JSON файл"
+  },
+  "confirm_delete_list": {
+    "message": "Вы уверены, что хотите удалить этот список?"
+  },
+  "confirm_delete_words": {
+    "message": "Вы уверены, что хотите удалить выбранные слова?"
+  }
+}

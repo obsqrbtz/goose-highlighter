@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><span data-i18n="extension_name"></span></title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1 data-i18n="extension_name">Goose Highlighter</h1>
+
+    <div class="section">
+      <label for="listSelect" data-i18n="select_list">Select List:</label>
+      <select id="listSelect"></select>
+      <button id="newListBtn" data-i18n="new_list">+ New List</button>
+      <button id="deleteListBtn" data-i18n="delete_list">Delete List</button>
+    </div>
+
+    <div class="section">
+      <label><span data-i18n="list_name">List Name:</span> <input type="text" id="listName"></label>
+      <label><span data-i18n="background">Background:</span> <input type="color" id="listBg"></label>
+      <label><span data-i18n="foreground">Foreground:</span> <input type="color" id="listFg"></label>
+      <label><input type="checkbox" id="listActive"> <span data-i18n="enable_highlight">Enable Highlight</span></label>
+    </div>
+
+    <div class="section">
+      <textarea id="bulkPaste" data-i18n="paste_hint" placeholder="Paste words here..."></textarea>
+      <button id="addWordsBtn" data-i18n="apply_paste">Add Words</button>
+    </div>
+
+    <div class="section">
+      <button id="selectAllBtn" data-i18n="select_all">Select All</button>
+      <button id="deleteSelectedBtn" data-i18n="delete_selected">Delete Selected</button>
+      <button id="disableSelectedBtn" data-i18n="disable_selected">Disable Selected</button>
+      <button id="enableSelectedBtn" data-i18n="enable_selected">Enable Selected</button>
+    </div>
+
+    <div id="wordList"></div>
+
+    <div class="section">
+      <button id="importBtn" data-i18n="import_list">Import JSON</button>
+      <input type="file" id="importInput" accept="application/json" hidden>
+      <button id="exportBtn" data-i18n="export_list">Export JSON</button>
+    </div>
+  </div>
+
+  <script src="../storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

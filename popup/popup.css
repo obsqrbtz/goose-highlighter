@@ -1,0 +1,77 @@
+body {
+  font-family: Arial, sans-serif;
+  width: 360px;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+  color: #333;
+}
+
+.container {
+  padding: 10px;
+}
+
+h1 {
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+.section {
+  margin-bottom: 12px;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+textarea {
+  height: 60px;
+  resize: vertical;
+}
+
+button {
+  margin: 4px 2px;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#wordList > div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 4px;
+}
+
+#wordList input[type="text"] {
+  flex: 2;
+}
+
+#wordList input[type="color"] {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+}
+
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}

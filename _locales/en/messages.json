@@ -1,0 +1,68 @@
+{
+  "extension_name": {
+    "message": "Goose Highlighter"
+  },
+  "select_list": {
+    "message": "Select List:"
+  },
+  "new_list": {
+    "message": "+ New List"
+  },
+  "delete_list": {
+    "message": "Delete List"
+  },
+  "list_name": {
+    "message": "List Name:"
+  },
+  "background": {
+    "message": "Background:"
+  },
+  "foreground": {
+    "message": "Foreground:"
+  },
+  "enable_highlight": {
+    "message": "Enable Highlight"
+  },
+  "paste_hint": {
+    "message": "Paste words here"
+  },
+  "apply_paste": {
+    "message": "Add Words"
+  },
+  "select_all": {
+    "message": "Select All"
+  },
+  "delete_selected": {
+    "message": "Delete Selected"
+  },
+  "disable_selected": {
+    "message": "Disable Selected"
+  },
+  "enable_selected": {
+    "message": "Enable Selected"
+  },
+  "import_list": {
+    "message": "Import JSON"
+  },
+  "export_list": {
+    "message": "Export JSON"
+  },
+  "default_list_name": {
+    "message": "Default List"
+  },
+  "new_list_name": {
+    "message": "New List"
+  },
+  "word_active_label": {
+    "message": "active"
+  },
+  "invalid_json_error": {
+    "message": "Invalid JSON file"
+  },
+  "confirm_delete_list": {
+    "message": "Are you sure you want to delete this list?"
+  },
+  "confirm_delete_words": {
+    "message": "Are you sure you want to delete the selected words?"
+  }
+}
