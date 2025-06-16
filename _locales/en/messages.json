@@ -64,5 +64,8 @@
   },
   "confirm_delete_words": {
     "message": "Are you sure you want to delete the selected words?"
+  },
+  "deselect_all": {
+    "message": "Deselect All"
   }
 }

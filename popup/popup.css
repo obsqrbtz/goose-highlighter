@@ -22,16 +22,22 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  width: 360px;
+  width: 400px;
   margin: 0;
   padding: 0;
   background: var(--bg-color);
   color: var(--text-color);
   transition: background 0.3s ease, color 0.3s ease;
+  max-height: 600px;
+  overflow: hidden;
 }
 
 .container {
-  padding: 16px;
+  padding: 12px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 h1 {
@@ -42,7 +48,15 @@ h1 {
 }
 
 .section {
-  margin-bottom: 16px;
+  margin-bottom: 0;
+}
+
+.word-list-section {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 input[type="text"],
@@ -50,9 +64,9 @@ textarea,
 select {
   width: 100%;
   box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 10px;
-  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  padding: 6px;
   border-radius: 6px;
   border: 1px solid var(--input-border);
   background-color: var(--input-bg);
@@ -61,7 +75,7 @@ select {
 }
 
 textarea {
-  height: 70px;
+  height: 60px;
   resize: vertical;
   background-color: var(--input-bg) !important;
   color: var(--text-color) !important;
@@ -102,9 +116,9 @@ input[type="checkbox"]:checked::after {
 }
 
 button {
-  margin: 4px 2px;
-  padding: 8px 12px;
-  font-size: 0.9em;
+  margin: 2px;
+  padding: 6px 10px;
+  font-size: 0.85em;
   border: none;
   border-radius: 6px;
   background-color: var(--button-bg);
@@ -117,36 +131,56 @@ button:hover {
   background-color: var(--button-hover);
 }
 
+#wordList {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  background: var(--wordlist-bg);
+  border-radius: 6px;
+  padding: 4px;
+  min-height: 200px;
+}
+
 #wordList>div {
   display: flex;
   align-items: center;
-  margin-bottom: 6px;
-  gap: 6px;
+  margin-bottom: 4px;
+  gap: 4px;
   background: var(--wordlist-bg);
-  padding: 6px;
+  padding: 4px;
   border-radius: 6px;
+  will-change: transform;
+  flex-wrap: nowrap;
+  position: absolute;
+  left: 4px;
+  right: 4px;
 }
 
 #wordList input[type="text"] {
-  flex: 2;
+  flex: 1;
+  min-width: 0;
   background-color: var(--input-bg) !important;
   color: var(--text-color) !important;
   border: 1px solid var(--input-border) !important;
 }
 
 #wordList input[type="color"] {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 
-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  font-size: 0.95em;
+#wordList input[type="checkbox"] {
+  flex-shrink: 0;
+}
+
+#wordList label {
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin: 0;
 }
 
 input[type="file"] {

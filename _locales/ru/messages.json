@@ -64,5 +64,8 @@
   },
   "confirm_delete_words": {
     "message": "Вы уверены, что хотите удалить выбранные слова?"
+  },
+  "deselect_all": {
+    "message": "Отменить выбор"
   }
 }

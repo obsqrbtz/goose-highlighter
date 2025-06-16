@@ -9,11 +9,18 @@ const importInput = document.getElementById("importInput");
 
 let lists = [];
 let currentListIndex = 0;
+let saveTimeout;
+let selectedCheckboxes = new Set();
+
+async function debouncedSave() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    await chrome.storage.local.set({ lists });
+  }, 500);
+}
 
 async function save() {
-  await chrome.storage.local.set({ lists });
-  renderLists();
-  renderWords();
+  await debouncedSave();
 }
 
 async function load() {
@@ -49,14 +56,34 @@ function updateListForm() {
 
 function renderWords() {
   const list = lists[currentListIndex];
-  wordList.innerHTML = ""; // Clear first
+  const fragment = document.createDocumentFragment();
 
-  list.words.forEach((w, i) => {
+  const itemHeight = 32;
+  const containerHeight = wordList.clientHeight;
+  const scrollTop = wordList.scrollTop;
+  const startIndex = Math.floor(scrollTop / itemHeight);
+  const endIndex = Math.min(
+    startIndex + Math.ceil(containerHeight / itemHeight) + 2,
+    list.words.length
+  );
+
+  wordList.style.height = `${list.words.length * itemHeight}px`;
+
+  for (let i = startIndex; i < endIndex; i++) {
+    const w = list.words[i];
     const container = document.createElement("div");
+    container.style.height = `${itemHeight}px`;
+    container.style.position = 'absolute';
+    container.style.top = `${i * itemHeight}px`;
+    container.style.width = '100%';
+    container.style.boxSizing = 'border-box';
 
     const cbSelect = document.createElement("input");
     cbSelect.type = "checkbox";
     cbSelect.dataset.index = i;
+    if (selectedCheckboxes.has(i)) {
+      cbSelect.checked = true;
+    }
 
     const inputWord = document.createElement("input");
     inputWord.type = "text";
@@ -96,11 +123,49 @@ function renderWords() {
     inputWord.style.color = fg;
     inputWord.style.border = `1px solid ${border}`;
 
-    wordList.appendChild(container);
-  });
+    fragment.appendChild(container);
+  }
+
+  wordList.innerHTML = '';
+  wordList.appendChild(fragment);
 }
 
+document.getElementById("selectAllBtn").onclick = () => {
+  const list = lists[currentListIndex];
+  list.words.forEach((_, index) => {
+    selectedCheckboxes.add(index);
+  });
+  renderWords();
+};
+
+wordList.addEventListener("change", e => {
+  if (e.target.type === "checkbox") {
+    if (e.target.dataset.index != null) {
+      if (e.target.checked) {
+        selectedCheckboxes.add(+e.target.dataset.index);
+      } else {
+        selectedCheckboxes.delete(+e.target.dataset.index);
+      }
+    } else if (e.target.dataset.activeEdit != null) {
+      lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
+      debouncedSave();
+    }
+  }
+});
+
+let scrollTimeout;
+wordList.addEventListener('scroll', () => {
+  if (scrollTimeout) {
+    return;
+  }
+  scrollTimeout = setTimeout(() => {
+    requestAnimationFrame(renderWords);
+    scrollTimeout = null;
+  }, 16); // ~60fps
+});
+
 listSelect.onchange = () => {
+  selectedCheckboxes.clear();
   currentListIndex = +listSelect.value;
   renderWords();
   updateListForm();
@@ -140,46 +205,61 @@ document.getElementById("addWordsBtn").onclick = () => {
   save();
 };
 
-document.getElementById("selectAllBtn").onclick = () => {
-  wordList.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = true);
-};
-
 document.getElementById("deleteSelectedBtn").onclick = () => {
   if (confirm(chrome.i18n.getMessage("confirm_delete_words"))) {
     const list = lists[currentListIndex];
-    const toDelete = [...wordList.querySelectorAll("input[type=checkbox]:checked")].map(cb => +cb.dataset.index);
+    const toDelete = Array.from(selectedCheckboxes);
     lists[currentListIndex].words = list.words.filter((_, i) => !toDelete.includes(i));
+    selectedCheckboxes.clear();
     save();
+    renderWords();
   }
 };
 
 document.getElementById("disableSelectedBtn").onclick = () => {
   const list = lists[currentListIndex];
-  wordList.querySelectorAll("input[type=checkbox]:checked").forEach(cb => list.words[+cb.dataset.index].active = false);
+  selectedCheckboxes.forEach(index => {
+    list.words[index].active = false;
+  });
   save();
+  renderWords();
 };
 
 document.getElementById("enableSelectedBtn").onclick = () => {
   const list = lists[currentListIndex];
-  wordList.querySelectorAll("input[type=checkbox]:checked").forEach(cb => list.words[+cb.dataset.index].active = true);
+  selectedCheckboxes.forEach(index => {
+    list.words[index].active = true;
+  });
   save();
+  renderWords();
 };
 
 wordList.addEventListener("input", e => {
   const index = e.target.dataset.wordEdit ?? e.target.dataset.bgEdit ?? e.target.dataset.fgEdit;
-  if (e.target.dataset.wordEdit != null) lists[currentListIndex].words[index].wordStr = e.target.value;
-  if (e.target.dataset.bgEdit != null) lists[currentListIndex].words[index].background = e.target.value;
-  if (e.target.dataset.fgEdit != null) lists[currentListIndex].words[index].foreground = e.target.value;
-  save();
+  if (index == null) return;
+
+  const word = lists[currentListIndex].words[index];
+  if (e.target.dataset.wordEdit != null) word.wordStr = e.target.value;
+  if (e.target.dataset.bgEdit != null) word.background = e.target.value;
+  if (e.target.dataset.fgEdit != null) word.foreground = e.target.value;
+
+  debouncedSave();
 });
 
 wordList.addEventListener("change", e => {
-  if (e.target.dataset.activeEdit != null) {
-    lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
-    save();
+  if (e.target.type === "checkbox") {
+    if (e.target.dataset.index != null) { // Word selection checkbox
+      if (e.target.checked) {
+        selectedCheckboxes.add(+e.target.dataset.index);
+      } else {
+        selectedCheckboxes.delete(+e.target.dataset.index);
+      }
+    } else if (e.target.dataset.activeEdit != null) { // Active checkbox
+      lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
+      debouncedSave();
+    }
   }
 });
-
 
 const exportBtn = document.getElementById("exportBtn");
 exportBtn.onclick = () => {
@@ -249,5 +329,10 @@ toggle.addEventListener('change', () => {
     localStorage.setItem('theme', 'light');
   }
 });
+
+document.getElementById("deselectAllBtn").onclick = () => {
+  selectedCheckboxes.clear();
+  renderWords();
+};
 
 load();
