@@ -6,7 +6,7 @@
     "message": "Select List:"
   },
   "new_list": {
-    "message": "+ New List"
+    "message": "New List"
   },
   "delete_list": {
     "message": "Delete List"

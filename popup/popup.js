@@ -20,13 +20,13 @@ async function load() {
   const res = await chrome.storage.local.get("lists");
   lists = res.lists || [];
   if (!lists.length) {
-    lists.push({ 
-      id: Date.now(), 
-      name: chrome.i18n.getMessage("default_list_name"), 
-      background: "#ffff00", 
-      foreground: "#000000", 
-      active: true, 
-      words: [] 
+    lists.push({
+      id: Date.now(),
+      name: chrome.i18n.getMessage("default_list_name"),
+      background: "#ffff00",
+      foreground: "#000000",
+      active: true,
+      words: []
     });
   }
   renderLists();
@@ -67,13 +67,13 @@ listSelect.onchange = () => {
 };
 
 document.getElementById("newListBtn").onclick = () => {
-  lists.push({ 
-    id: Date.now(), 
-    name: chrome.i18n.getMessage("new_list_name"), 
-    background: "#ffff00", 
-    foreground: "#000000", 
-    active: true, 
-    words: [] 
+  lists.push({
+    id: Date.now(),
+    name: chrome.i18n.getMessage("new_list_name"),
+    background: "#ffff00",
+    foreground: "#000000",
+    active: true,
+    words: []
   });
   currentListIndex = lists.length - 1;
   save();
@@ -174,9 +174,7 @@ importInput.onchange = e => {
   reader.readAsText(file);
 };
 
-// Localize the page
 function localizePage() {
-  // Localize all elements with a data-i18n attribute
   const elements = document.querySelectorAll('[data-i18n]');
   elements.forEach(element => {
     const message = element.dataset.i18n;
@@ -191,7 +189,25 @@ function localizePage() {
   });
 }
 
-// Call this function when the page loads
 document.addEventListener('DOMContentLoaded', localizePage);
+
+const toggle = document.getElementById('themeToggle');
+const body = document.body;
+
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+  body.classList.add('dark');
+  toggle.checked = true;
+}
+
+toggle.addEventListener('change', () => {
+  if (toggle.checked) {
+    body.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    body.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+});
 
 load();

@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><span data-i18n="extension_name"></span></title>
-  <link rel="stylesheet" href="popup.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="extension_name">Goose Highlighter</title>
+  <link rel="stylesheet" href="popup.css" />
 </head>
+
 <body>
   <div class="container">
     <h1 data-i18n="extension_name">Goose Highlighter</h1>
+
+    <div class="section" style="text-align: right;">
+      <label>
+        <input type="checkbox" id="themeToggle" />
+        Dark Mode
+      </label>
+    </div>
 
     <div class="section">
       <label for="listSelect" data-i18n="select_list">Select List:</label>
@@ -18,10 +27,11 @@
     </div>
 
     <div class="section">
-      <label><span data-i18n="list_name">List Name:</span> <input type="text" id="listName"></label>
-      <label><span data-i18n="background">Background:</span> <input type="color" id="listBg"></label>
-      <label><span data-i18n="foreground">Foreground:</span> <input type="color" id="listFg"></label>
-      <label><input type="checkbox" id="listActive"> <span data-i18n="enable_highlight">Enable Highlight</span></label>
+      <label><span data-i18n="list_name">List Name:</span> <input type="text" id="listName" /></label>
+      <label><span data-i18n="background">Background:</span> <input type="color" id="listBg" /></label>
+      <label><span data-i18n="foreground">Foreground:</span> <input type="color" id="listFg" /></label>
+      <label><input type="checkbox" id="listActive" /> <span data-i18n="enable_highlight">Enable
+          Highlight</span></label>
     </div>
 
     <div class="section">
@@ -40,7 +50,7 @@
 
     <div class="section">
       <button id="importBtn" data-i18n="import_list">Import JSON</button>
-      <input type="file" id="importInput" accept="application/json" hidden>
+      <input type="file" id="importInput" accept="application/json" hidden />
       <button id="exportBtn" data-i18n="export_list">Export JSON</button>
     </div>
   </div>
@@ -48,4 +58,5 @@
   <script src="../storage.js"></script>
   <script src="popup.js"></script>
 </body>
+
 </html>
