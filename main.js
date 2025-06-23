@@ -18,6 +18,7 @@ function clearHighlights() {
   }
 }
 
+
 function processNodes() {
   observer.disconnect();
   clearHighlights();
