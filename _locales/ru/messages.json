@@ -82,5 +82,8 @@
   },
   "add_words": {
     "message": "Добавить слова"
+  },
+  "global_highlight_toggle": {
+    "message": "Вкл"
   }
 }

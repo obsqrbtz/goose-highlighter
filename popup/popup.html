@@ -12,15 +12,26 @@
 
 <body class="dark">
   <div class="container">
-    <h1><i class="fa-solid fa-marker"></i> <span data-i18n="extension_name">Goose Highlighter</span></h1>
+
+    <div class="header-bar">
+      <span class="title">
+        <i class="fa-solid fa-highlighter"></i> Goose Highlighter
+      </span>
+      <div class="icon-toggles">
+        <label class="icon-toggle" title="Toggle highlighting">
+          <input type="checkbox" class="hidden-toggle" id="globalHighlightToggle" />
+          <i class="toggle-icon global-icon fa-solid"></i>
+        </label>
+        <label class="icon-toggle" title="Toggle dark mode">
+          <input type="checkbox" class="hidden-toggle" id="themeToggle" />
+          <i class="toggle-icon theme-icon fa-solid"></i>
+        </label>
+      </div>
+    </div>
 
     <div class="section">
       <div class="section-header">
         <h2><i class="fa-solid fa-list"></i> <span data-i18n="highlight_lists">Highlight Lists</span></h2>
-        <label>
-          <input type="checkbox" id="themeToggle" />
-          <i class="fa-solid fa-moon"></i> <span data-i18n="dark_mode">Dark Mode</span>
-        </label>
       </div>
       <label for="listSelect" data-i18n="select_list">Select List:</label>
       <select id="listSelect"></select>

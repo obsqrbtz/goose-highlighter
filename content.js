@@ -1,4 +1,5 @@
 let currentLists = [];
+let isGlobalHighlightEnabled = true;
 
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -19,8 +20,17 @@ function clearHighlights() {
 
 function processNodes() {
   observer.disconnect();
-
   clearHighlights();
+
+  // If global highlighting is disabled, skip processing
+  if (!isGlobalHighlightEnabled) {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+    return;
+  }
 
   const textNodes = [];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
@@ -35,7 +45,6 @@ function processNodes() {
   while (walker.nextNode()) textNodes.push(walker.currentNode);
 
   const activeWords = [];
-
   for (const list of currentLists) {
     if (!list.active) continue;
     for (const word of list.words) {
@@ -92,8 +101,12 @@ function debounce(func, wait) {
 }
 
 // Initial highlight on load
-chrome.storage.local.get("lists", ({ lists }) => {
+chrome.storage.local.get(["lists", "globalHighlightEnabled"], ({ lists, globalHighlightEnabled }) => {
   if (Array.isArray(lists)) setListsAndUpdate(lists);
+  if (globalHighlightEnabled !== undefined) {
+    isGlobalHighlightEnabled = globalHighlightEnabled;
+  }
+  processNodes(); // Initial processing
 });
 
 // Listen for updates from the popup and re-apply highlights
@@ -102,6 +115,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     chrome.storage.local.get("lists", ({ lists }) => {
       if (Array.isArray(lists)) setListsAndUpdate(lists);
     });
+  } else if (message.type === "GLOBAL_TOGGLE_UPDATED") {
+    isGlobalHighlightEnabled = message.enabled;
+    processNodes();
   }
 });
 
@@ -112,4 +128,5 @@ observer.observe(document.body, {
   subtree: true,
   characterData: true
 });
+
 window.addEventListener('scroll', debouncedProcessNodes);

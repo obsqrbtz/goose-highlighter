@@ -82,5 +82,8 @@
   },
   "add_words": {
     "message": "Add Words"
+  },
+  "global_highlight_toggle": {
+    "message": "Enable"
   }
 }

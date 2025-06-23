@@ -6,11 +6,11 @@ const listActive = document.getElementById("listActive");
 const bulkPaste = document.getElementById("bulkPaste");
 const wordList = document.getElementById("wordList");
 const importInput = document.getElementById("importInput");
-
 let lists = [];
 let currentListIndex = 0;
 let saveTimeout;
 let selectedCheckboxes = new Set();
+let globalHighlightEnabled = true;
 
 async function debouncedSave() {
   clearTimeout(saveTimeout);
@@ -20,7 +20,10 @@ async function debouncedSave() {
 }
 
 async function save() {
-  await chrome.storage.local.set({ lists });
+  await chrome.storage.local.set({
+    lists: lists,
+    globalHighlightEnabled: globalHighlightEnabled
+  });
   renderLists();
   renderWords();
 
@@ -28,14 +31,37 @@ async function save() {
     for (let tab of tabs) {
       if (tab.id) {
         chrome.tabs.sendMessage(tab.id, { type: "WORD_LIST_UPDATED" });
+        chrome.tabs.sendMessage(tab.id, {
+          type: "GLOBAL_TOGGLE_UPDATED",
+          enabled: globalHighlightEnabled
+        });
+      }
+    }
+  });
+}
+
+async function updateGlobalToggleState() {
+  await chrome.storage.local.set({ globalHighlightEnabled: globalHighlightEnabled });
+  chrome.tabs.query({}, function (tabs) {
+    for (let tab of tabs) {
+      if (tab.id) {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "GLOBAL_TOGGLE_UPDATED",
+          enabled: globalHighlightEnabled
+        });
       }
     }
   });
 }
 
 async function load() {
-  const res = await chrome.storage.local.get("lists");
-  lists = res.lists || [];
+  const res = await chrome.storage.local.get({
+    lists: [],
+    globalHighlightEnabled: true
+  });
+  lists = res.lists;
+  globalHighlightEnabled = res.globalHighlightEnabled !== false; // Default to true if undefined
+
   if (!lists.length) {
     lists.push({
       id: Date.now(),
@@ -48,6 +74,8 @@ async function load() {
   }
   renderLists();
   renderWords();
+
+  document.getElementById("globalHighlightToggle").checked = globalHighlightEnabled;
 }
 
 function renderLists() {
@@ -178,6 +206,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     renderWords();
   };
+
+  // Add event listener for the global toggle
+  document.getElementById("globalHighlightToggle").addEventListener('change', function () {
+    globalHighlightEnabled = this.checked;
+    updateGlobalToggleState();
+  });
 
   wordList.addEventListener("change", e => {
     if (e.target.type === "checkbox") {

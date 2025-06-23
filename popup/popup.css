@@ -6,7 +6,7 @@
   --button-bg: #222;
   --button-hover: #444;
   --button-text: white;
-  --accent: #ffeb3b;
+  --accent: #ec9c23;
   --accent-text: #000;
   --highlight-tag: #292929;
   --highlight-tag-border: #444;
@@ -16,7 +16,7 @@
   --border-radius: 12px;
   --section-bg: #111;
   --switch-bg: #444;
-  --checkbox-accent: #ffeb3b;
+  --checkbox-accent: #ec9c23;
   --checkbox-border: #666;
 }
 
@@ -298,4 +298,86 @@ input[type="file"] {
   font-weight: normal;
   margin-left: -8px;
   margin-right: -8px;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-color);
+  border-radius: 12px;
+  color: var(--fg-color);
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.icon-toggles {
+  display: flex;
+  gap: 12px;
+}
+
+.icon-toggle {
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffa500;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.icon-toggle:hover {
+  color: #ffd580;
+}
+
+.hidden-toggle {
+  display: none;
+}
+
+.icon-toggle {
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffa500;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.icon-toggle:hover {
+  color: #ffd580;
+}
+
+/* GLOBAL HIGHLIGHT ICON: toggle-on/off */
+.global-icon::before {
+  content: "\f204";
+  /* fa-toggle-off (default) */
+}
+
+#globalHighlightToggle:checked+.global-icon::before {
+  content: "\f205";
+  /* fa-toggle-on */
+}
+
+/* THEME ICON: sun/moon */
+.theme-icon::before {
+  content: "\f185";
+  /* fa-sun (light mode) */
+}
+
+#themeToggle:checked+.theme-icon::before {
+  content: "\f186";
+  /* fa-moon (dark mode) */
+}
+
+/* Font Awesome fallback settings */
+.toggle-icon {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+
+label:has(input.switch) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
