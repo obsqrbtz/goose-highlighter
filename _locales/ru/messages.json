@@ -33,13 +33,13 @@
     "message": "Выбрать все"
   },
   "delete_selected": {
-    "message": "Удалить выбранное"
+    "message": "Удалить"
   },
   "disable_selected": {
-    "message": "Отключить выбранное"
+    "message": "Отключить"
   },
   "enable_selected": {
-    "message": "Включить выбранное"
+    "message": "Включить"
   },
   "import_list": {
     "message": "Импорт JSON"

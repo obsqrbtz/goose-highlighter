@@ -30,16 +30,16 @@
     "message": "Add Words"
   },
   "select_all": {
-    "message": "Select All"
+    "message": "Select"
   },
   "delete_selected": {
-    "message": "Delete Selected"
+    "message": "Delete"
   },
   "disable_selected": {
-    "message": "Disable Selected"
+    "message": "Disable"
   },
   "enable_selected": {
-    "message": "Enable Selected"
+    "message": "Enable"
   },
   "import_list": {
     "message": "Import JSON"
@@ -66,6 +66,6 @@
     "message": "Are you sure you want to delete the selected words?"
   },
   "deselect_all": {
-    "message": "Deselect All"
+    "message": "Deselect"
   }
 }

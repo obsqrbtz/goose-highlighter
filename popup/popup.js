@@ -60,6 +60,7 @@ function renderWords() {
   const list = lists[currentListIndex];
   const fragment = document.createDocumentFragment();
 
+  // For virtualized list, calculate visible items
   const itemHeight = 32;
   const containerHeight = wordList.clientHeight;
   const scrollTop = wordList.scrollTop;
@@ -77,59 +78,91 @@ function renderWords() {
     container.style.height = `${itemHeight}px`;
     container.style.position = 'absolute';
     container.style.top = `${i * itemHeight}px`;
-    container.style.width = '100%';
+    container.style.width = 'calc(100% - 8px)';
+    container.style.left = '4px';
+    container.style.right = '4px';
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.gap = '6px';
+    container.style.padding = '0 4px';
     container.style.boxSizing = 'border-box';
+    container.style.background = 'var(--highlight-tag)';
+    container.style.border = '1px solid var(--highlight-tag-border)';
+    container.style.borderRadius = '30px';
 
+    // Checkbox for selection
     const cbSelect = document.createElement("input");
     cbSelect.type = "checkbox";
+    cbSelect.className = "word-checkbox";
     cbSelect.dataset.index = i;
     if (selectedCheckboxes.has(i)) {
       cbSelect.checked = true;
     }
 
+    // Text input for word
     const inputWord = document.createElement("input");
     inputWord.type = "text";
     inputWord.value = w.wordStr;
     inputWord.dataset.wordEdit = i;
+    inputWord.style.flexGrow = '1';
+    inputWord.style.minWidth = '0';
+    inputWord.style.padding = '4px 8px';
+    inputWord.style.borderRadius = '4px';
+    inputWord.style.border = '1px solid var(--input-border)';
+    inputWord.style.backgroundColor = 'var(--input-bg)';
+    inputWord.style.color = 'var(--text-color)';
 
+    // Background color picker
     const inputBg = document.createElement("input");
     inputBg.type = "color";
     inputBg.value = w.background || list.background;
     inputBg.dataset.bgEdit = i;
+    inputBg.style.width = '24px';
+    inputBg.style.height = '24px';
+    inputBg.style.flexShrink = '0';
 
+    // Foreground color picker
     const inputFg = document.createElement("input");
     inputFg.type = "color";
     inputFg.value = w.foreground || list.foreground;
     inputFg.dataset.fgEdit = i;
+    inputFg.style.width = '24px';
+    inputFg.style.height = '24px';
+    inputFg.style.flexShrink = '0';
 
-    const labelActive = document.createElement("label");
+    // Active checkbox container
+    const activeContainer = document.createElement("label");
+    activeContainer.className = "word-active";
+    activeContainer.style.display = 'flex';
+    activeContainer.style.alignItems = 'center';
+    activeContainer.style.gap = '4px';
+    activeContainer.style.flexShrink = '0';
+
+    // Active checkbox
     const cbActive = document.createElement("input");
     cbActive.type = "checkbox";
-    if (w.active) cbActive.checked = true;
+    cbActive.checked = w.active !== false;
     cbActive.dataset.activeEdit = i;
-    labelActive.appendChild(cbActive);
-    labelActive.appendChild(document.createTextNode(" " + chrome.i18n.getMessage("word_active_label")));
+    cbActive.className = "switch";
+
+    activeContainer.appendChild(cbActive);
 
     container.appendChild(cbSelect);
     container.appendChild(inputWord);
     container.appendChild(inputBg);
     container.appendChild(inputFg);
-    container.appendChild(labelActive);
-
-    const styles = getComputedStyle(document.documentElement);
-    const bg = styles.getPropertyValue('--input-bg').trim();
-    const fg = styles.getPropertyValue('--text-color').trim();
-    const border = styles.getPropertyValue('--input-border').trim();
-
-    inputWord.style.backgroundColor = bg;
-    inputWord.style.color = fg;
-    inputWord.style.border = `1px solid ${border}`;
+    container.appendChild(activeContainer);
 
     fragment.appendChild(container);
   }
 
   wordList.innerHTML = '';
   wordList.appendChild(fragment);
+
+  const wordCount = document.getElementById('wordCount');
+  if (wordCount) {
+    wordCount.textContent = list.words.length;
+  }
 }
 
 document.getElementById("selectAllBtn").onclick = () => {
@@ -250,13 +283,13 @@ wordList.addEventListener("input", e => {
 
 wordList.addEventListener("change", e => {
   if (e.target.type === "checkbox") {
-    if (e.target.dataset.index != null) { // Word selection checkbox
+    if (e.target.dataset.index != null) {
       if (e.target.checked) {
         selectedCheckboxes.add(+e.target.dataset.index);
       } else {
         selectedCheckboxes.delete(+e.target.dataset.index);
       }
-    } else if (e.target.dataset.activeEdit != null) { // Active checkbox
+    } else if (e.target.dataset.activeEdit != null) {
       lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
       debouncedSave();
     }
@@ -317,17 +350,24 @@ const toggle = document.getElementById('themeToggle');
 const body = document.body;
 
 const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
+if (savedTheme === 'light') {
+  body.classList.remove('dark');
+  body.classList.add('light');
+  toggle.checked = false;
+} else {
   body.classList.add('dark');
+  body.classList.remove('light');
   toggle.checked = true;
 }
 
 toggle.addEventListener('change', () => {
   if (toggle.checked) {
     body.classList.add('dark');
+    body.classList.remove('light');
     localStorage.setItem('theme', 'dark');
   } else {
     body.classList.remove('dark');
+    body.classList.add('light');
     localStorage.setItem('theme', 'light');
   }
 });
