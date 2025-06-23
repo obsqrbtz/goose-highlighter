@@ -225,9 +225,15 @@ button.danger:hover {
 
 .color-row {
   display: flex;
-  gap: 12px;
+  gap: 24px;
   align-items: center;
   margin-bottom: 8px;
+}
+
+.color-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 #wordList {
