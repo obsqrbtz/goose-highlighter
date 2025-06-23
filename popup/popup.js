@@ -12,6 +12,18 @@ let saveTimeout;
 let selectedCheckboxes = new Set();
 let globalHighlightEnabled = true;
 
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, function (m) {
+    return ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[m];
+  });
+}
+
 async function debouncedSave() {
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(async () => {
@@ -79,7 +91,9 @@ async function load() {
 }
 
 function renderLists() {
-  listSelect.innerHTML = lists.map((list, index) => `<option value="${index}">${list.name}</option>`).join("");
+  listSelect.innerHTML = lists.map((list, index) =>
+    `<option value="${index}">${escapeHtml(list.name)}</option>`
+  ).join("");
   listSelect.value = currentListIndex;
   updateListForm();
 }
