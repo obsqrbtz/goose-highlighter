@@ -67,5 +67,20 @@
   },
   "deselect_all": {
     "message": "Отменить выбор"
+  },
+  "highlight_lists": {
+    "message": "Списки"
+  },
+  "dark_mode": {
+    "message": "Темная тема"
+  },
+  "list_settings": {
+    "message": "Настройки списка"
+  },
+  "word_list": {
+    "message": "Список слов"
+  },
+  "add_words": {
+    "message": "Добавить слова"
   }
 }

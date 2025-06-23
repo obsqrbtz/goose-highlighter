@@ -67,5 +67,20 @@
   },
   "deselect_all": {
     "message": "Deselect"
+  },
+  "highlight_lists": {
+    "message": "Highlight Lists"
+  },
+  "dark_mode": {
+    "message": "Dark Mode"
+  },
+  "list_settings": {
+    "message": "List Settings"
+  },
+  "word_list": {
+    "message": "Word List"
+  },
+  "add_words": {
+    "message": "Add Words"
   }
 }
