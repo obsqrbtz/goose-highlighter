@@ -156,6 +156,7 @@ input[type="checkbox"].switch {
   width: 40px;
   height: 20px;
   background: var(--switch-bg);
+  border: 0px;
   border-radius: 20px;
   position: relative;
   outline: none;
@@ -239,7 +240,7 @@ button.danger:hover {
   max-height: 300px;
 }
 
-#wordList > div {
+#wordList>div {
   position: absolute;
   width: calc(100% - 8px);
   left: 4px;
@@ -248,9 +249,6 @@ button.danger:hover {
   gap: 6px;
   padding: 4px;
   box-sizing: border-box;
-  background: var(--highlight-tag);
-  border: 1px solid var(--highlight-tag-border);
-  border-radius: 30px;
 }
 
 #wordList input[type="text"] {
@@ -292,4 +290,6 @@ input[type="file"] {
 
 #wordCount {
   font-weight: normal;
+  margin-left: -8px;
+  margin-right: -8px;
 }

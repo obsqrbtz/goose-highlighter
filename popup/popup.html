@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
 <body class="dark">
   <div class="container">
     <h1><i class="fa-solid fa-marker"></i> <span data-i18n="extension_name">Goose Highlighter</span></h1>
@@ -24,7 +26,8 @@
       <select id="listSelect"></select>
       <div class="button-row">
         <button id="newListBtn"><i class="fa-solid fa-plus"></i> <span data-i18n="new_list">New</span></button>
-        <button id="deleteListBtn" class="danger"><i class="fa-solid fa-trash"></i> <span data-i18n="delete_list">Delete</span></button>
+        <button id="deleteListBtn" class="danger"><i class="fa-solid fa-trash"></i> <span
+            data-i18n="delete_list">Delete</span></button>
       </div>
     </div>
 
@@ -48,13 +51,14 @@
     </div>
 
     <div class="section">
-      <h2><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span> (<span id="wordCount">0</span>)</h2>
+      <h2><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span>(<span id="wordCount">0</span>)
+      </h2>
       <div class="button-row wrap">
         <button id="selectAllBtn"><span data-i18n="select_all">Select All</span></button>
         <button id="deselectAllBtn"><span data-i18n="deselect_all">Clear</span></button>
-        <button id="deleteSelectedBtn" class="danger"><span data-i18n="delete_selected">Delete</span></button>
-        <button id="disableSelectedBtn"><span data-i18n="disable_selected">Disable</span></button>
         <button id="enableSelectedBtn"><span data-i18n="enable_selected">Enable</span></button>
+        <button id="disableSelectedBtn"><span data-i18n="disable_selected">Disable</span></button>
+        <button id="deleteSelectedBtn" class="danger"><span data-i18n="delete_selected">Delete</span></button>
       </div>
       <div id="wordList"></div>
     </div>
@@ -71,4 +75,5 @@
   <script src="../storage.js"></script>
   <script src="popup.js"></script>
 </body>
+
 </html>

@@ -60,7 +60,6 @@ function renderWords() {
   const list = lists[currentListIndex];
   const fragment = document.createDocumentFragment();
 
-  // For virtualized list, calculate visible items
   const itemHeight = 32;
   const containerHeight = wordList.clientHeight;
   const scrollTop = wordList.scrollTop;
@@ -70,7 +69,12 @@ function renderWords() {
     list.words.length
   );
 
-  wordList.style.height = `${list.words.length * itemHeight}px`;
+  wordList.innerHTML = '';
+
+  const spacer = document.createElement('div');
+  spacer.style.position = 'relative';
+  spacer.style.height = `${list.words.length * itemHeight}px`;
+  spacer.style.width = '100%';
 
   for (let i = startIndex; i < endIndex; i++) {
     const w = list.words[i];
@@ -88,9 +92,7 @@ function renderWords() {
     container.style.boxSizing = 'border-box';
     container.style.background = 'var(--highlight-tag)';
     container.style.border = '1px solid var(--highlight-tag-border)';
-    container.style.borderRadius = '30px';
 
-    // Checkbox for selection
     const cbSelect = document.createElement("input");
     cbSelect.type = "checkbox";
     cbSelect.className = "word-checkbox";
@@ -99,7 +101,6 @@ function renderWords() {
       cbSelect.checked = true;
     }
 
-    // Text input for word
     const inputWord = document.createElement("input");
     inputWord.type = "text";
     inputWord.value = w.wordStr;
@@ -112,7 +113,6 @@ function renderWords() {
     inputWord.style.backgroundColor = 'var(--input-bg)';
     inputWord.style.color = 'var(--text-color)';
 
-    // Background color picker
     const inputBg = document.createElement("input");
     inputBg.type = "color";
     inputBg.value = w.background || list.background;
@@ -121,7 +121,6 @@ function renderWords() {
     inputBg.style.height = '24px';
     inputBg.style.flexShrink = '0';
 
-    // Foreground color picker
     const inputFg = document.createElement("input");
     inputFg.type = "color";
     inputFg.value = w.foreground || list.foreground;
@@ -130,7 +129,6 @@ function renderWords() {
     inputFg.style.height = '24px';
     inputFg.style.flexShrink = '0';
 
-    // Active checkbox container
     const activeContainer = document.createElement("label");
     activeContainer.className = "word-active";
     activeContainer.style.display = 'flex';
@@ -138,7 +136,6 @@ function renderWords() {
     activeContainer.style.gap = '4px';
     activeContainer.style.flexShrink = '0';
 
-    // Active checkbox
     const cbActive = document.createElement("input");
     cbActive.type = "checkbox";
     cbActive.checked = w.active !== false;
@@ -153,11 +150,10 @@ function renderWords() {
     container.appendChild(inputFg);
     container.appendChild(activeContainer);
 
-    fragment.appendChild(container);
+    spacer.appendChild(container);
   }
 
-  wordList.innerHTML = '';
-  wordList.appendChild(fragment);
+  wordList.appendChild(spacer);
 
   const wordCount = document.getElementById('wordCount');
   if (wordCount) {
@@ -183,7 +179,7 @@ wordList.addEventListener("change", e => {
       }
     } else if (e.target.dataset.activeEdit != null) {
       lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
-      debouncedSave();
+      save();
     }
   }
 });
@@ -278,7 +274,7 @@ wordList.addEventListener("input", e => {
   if (e.target.dataset.bgEdit != null) word.background = e.target.value;
   if (e.target.dataset.fgEdit != null) word.foreground = e.target.value;
 
-  debouncedSave();
+  save();
 });
 
 wordList.addEventListener("change", e => {
@@ -291,7 +287,7 @@ wordList.addEventListener("change", e => {
       }
     } else if (e.target.dataset.activeEdit != null) {
       lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
-      debouncedSave();
+      save();
     }
   }
 });
