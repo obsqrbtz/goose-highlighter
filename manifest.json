@@ -5,23 +5,19 @@
   "description": "Highlight text on web pages",
   "default_locale": "en",
   "permissions": [
+    "scripting",
     "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": "icons/icon128.png"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ],
-      "run_at": "document_idle"
-    }
-  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "icons": {
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
