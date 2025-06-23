@@ -20,9 +20,17 @@ async function debouncedSave() {
 }
 
 async function save() {
-  await debouncedSave();
+  await chrome.storage.local.set({ lists });
   renderLists();
   renderWords();
+
+  chrome.tabs.query({}, function (tabs) {
+    for (let tab of tabs) {
+      if (tab.id) {
+        chrome.tabs.sendMessage(tab.id, { type: "WORD_LIST_UPDATED" });
+      }
+    }
+  });
 }
 
 async function load() {
@@ -177,6 +185,7 @@ wordList.addEventListener("change", e => {
       } else {
         selectedCheckboxes.delete(+e.target.dataset.index);
       }
+      renderWords();
     } else if (e.target.dataset.activeEdit != null) {
       lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
       save();
@@ -275,21 +284,6 @@ wordList.addEventListener("input", e => {
   if (e.target.dataset.fgEdit != null) word.foreground = e.target.value;
 
   save();
-});
-
-wordList.addEventListener("change", e => {
-  if (e.target.type === "checkbox") {
-    if (e.target.dataset.index != null) {
-      if (e.target.checked) {
-        selectedCheckboxes.add(+e.target.dataset.index);
-      } else {
-        selectedCheckboxes.delete(+e.target.dataset.index);
-      }
-    } else if (e.target.dataset.activeEdit != null) {
-      lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
-      save();
-    }
-  }
 });
 
 const exportBtn = document.getElementById("exportBtn");

@@ -1,37 +1,54 @@
+let currentLists = [];
+
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function highlightWords(lists) {
-  const processNodes = () => {
-    const textNodes = [];
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: node => {
-        if (node.parentNode && node.parentNode.nodeName === 'MARK') return NodeFilter.FILTER_REJECT;
-        if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME'].includes(node.parentNode.nodeName)) return NodeFilter.FILTER_REJECT;
-        if (!node.nodeValue.trim()) return NodeFilter.FILTER_SKIP;
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    });
-
-    while (walker.nextNode()) textNodes.push(walker.currentNode);
-
-    const activeWords = [];
-
-    for (const list of lists) {
-      if (!list.active) continue;
-      for (const word of list.words) {
-        if (!word.active) continue;
-        activeWords.push({
-          text: word.wordStr,
-          background: word.background || list.background,
-          foreground: word.foreground || list.foreground
-        });
-      }
+function clearHighlights() {
+  // Remove all <mark> elements added by the highlighter
+  const marks = document.querySelectorAll('mark[data-gh]');
+  for (const mark of marks) {
+    // Replace the <mark> with its text content
+    const parent = mark.parentNode;
+    if (parent) {
+      parent.replaceChild(document.createTextNode(mark.textContent), mark);
+      parent.normalize(); // Merge adjacent text nodes
     }
+  }
+}
 
-    if (activeWords.length === 0) return;
+function processNodes() {
+  observer.disconnect();
 
+  clearHighlights();
+
+  const textNodes = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode: node => {
+      if (node.parentNode && node.parentNode.nodeName === 'MARK') return NodeFilter.FILTER_REJECT;
+      if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME'].includes(node.parentNode.nodeName)) return NodeFilter.FILTER_REJECT;
+      if (!node.nodeValue.trim()) return NodeFilter.FILTER_SKIP;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  const activeWords = [];
+
+  for (const list of currentLists) {
+    if (!list.active) continue;
+    for (const word of list.words) {
+      if (!word.active) continue;
+      activeWords.push({
+        text: word.wordStr,
+        background: word.background || list.background,
+        foreground: word.foreground || list.foreground
+      });
+    }
+  }
+
+  if (activeWords.length > 0) {
     const wordMap = new Map();
     for (const word of activeWords) wordMap.set(word.text.toLowerCase(), word);
 
@@ -43,25 +60,25 @@ function highlightWords(lists) {
       const span = document.createElement('span');
       span.innerHTML = node.nodeValue.replace(pattern, match => {
         const word = wordMap.get(match.toLowerCase()) || { background: '#ffff00', foreground: '#000000' };
-        return `<mark style="background:${word.background};color:${word.foreground};padding:0 2px;">${match}</mark>`;
+        return `<mark data-gh style="background:${word.background};color:${word.foreground};padding:0 2px;">${match}</mark>`;
       });
 
       node.parentNode.replaceChild(span, node);
     }
-  };
+  }
 
-  const debouncedProcessNodes = debounce(processNodes, 300);
-
-  debouncedProcessNodes();
-
-  const observer = new MutationObserver(debouncedProcessNodes);
   observer.observe(document.body, {
     childList: true,
     subtree: true,
     characterData: true
   });
+}
 
-  window.addEventListener('scroll', debouncedProcessNodes);
+const debouncedProcessNodes = debounce(processNodes, 300);
+
+function setListsAndUpdate(lists) {
+  currentLists = lists;
+  debouncedProcessNodes();
 }
 
 // Debounce helper function
@@ -74,6 +91,25 @@ function debounce(func, wait) {
   };
 }
 
+// Initial highlight on load
 chrome.storage.local.get("lists", ({ lists }) => {
-  if (Array.isArray(lists)) highlightWords(lists);
+  if (Array.isArray(lists)) setListsAndUpdate(lists);
 });
+
+// Listen for updates from the popup and re-apply highlights
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "WORD_LIST_UPDATED") {
+    chrome.storage.local.get("lists", ({ lists }) => {
+      if (Array.isArray(lists)) setListsAndUpdate(lists);
+    });
+  }
+});
+
+// Set up observer and scroll handler
+const observer = new MutationObserver(debouncedProcessNodes);
+observer.observe(document.body, {
+  childList: true,
+  subtree: true,
+  characterData: true
+});
+window.addEventListener('scroll', debouncedProcessNodes);
