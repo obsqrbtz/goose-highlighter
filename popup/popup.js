@@ -169,202 +169,203 @@ function renderWords() {
   }
 }
 
-document.getElementById("selectAllBtn").onclick = () => {
-  const list = lists[currentListIndex];
-  list.words.forEach((_, index) => {
-    selectedCheckboxes.add(index);
-  });
-  renderWords();
-};
-
-wordList.addEventListener("change", e => {
-  if (e.target.type === "checkbox") {
-    if (e.target.dataset.index != null) {
-      if (e.target.checked) {
-        selectedCheckboxes.add(+e.target.dataset.index);
-      } else {
-        selectedCheckboxes.delete(+e.target.dataset.index);
-      }
-      renderWords();
-    } else if (e.target.dataset.activeEdit != null) {
-      lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
-      save();
-    }
-  }
-});
-
-let scrollTimeout;
-wordList.addEventListener('scroll', () => {
-  if (scrollTimeout) {
-    return;
-  }
-  scrollTimeout = setTimeout(() => {
-    requestAnimationFrame(renderWords);
-    scrollTimeout = null;
-  }, 16); // ~60fps
-});
-
-listSelect.onchange = () => {
-  selectedCheckboxes.clear();
-  currentListIndex = +listSelect.value;
-  renderWords();
-  updateListForm();
-};
-
-document.getElementById("newListBtn").onclick = () => {
-  lists.push({
-    id: Date.now(),
-    name: chrome.i18n.getMessage("new_list_name"),
-    background: "#ffff00",
-    foreground: "#000000",
-    active: true,
-    words: []
-  });
-  currentListIndex = lists.length - 1;
-  save();
-};
-
-document.getElementById("deleteListBtn").onclick = () => {
-  if (confirm(chrome.i18n.getMessage("confirm_delete_list"))) {
-    lists.splice(currentListIndex, 1);
-    currentListIndex = Math.max(0, currentListIndex - 1);
-    save();
-  }
-};
-
-listName.oninput = () => { lists[currentListIndex].name = listName.value; save(); };
-listBg.oninput = () => { lists[currentListIndex].background = listBg.value; save(); };
-listFg.oninput = () => { lists[currentListIndex].foreground = listFg.value; save(); };
-listActive.onchange = () => { lists[currentListIndex].active = listActive.checked; save(); };
-
-document.getElementById("addWordsBtn").onclick = () => {
-  const words = bulkPaste.value.split(/\n+/).map(w => w.trim()).filter(Boolean);
-  const list = lists[currentListIndex];
-  for (const w of words) list.words.push({ wordStr: w, background: "", foreground: "", active: true });
-  bulkPaste.value = "";
-  save();
-};
-
-document.getElementById("deleteSelectedBtn").onclick = () => {
-  if (confirm(chrome.i18n.getMessage("confirm_delete_words"))) {
+document.addEventListener('DOMContentLoaded', () => {
+  localizePage();
+  document.getElementById("selectAllBtn").onclick = () => {
     const list = lists[currentListIndex];
-    const toDelete = Array.from(selectedCheckboxes);
-    lists[currentListIndex].words = list.words.filter((_, i) => !toDelete.includes(i));
-    selectedCheckboxes.clear();
-    save();
+    list.words.forEach((_, index) => {
+      selectedCheckboxes.add(index);
+    });
     renderWords();
-  }
-};
+  };
 
-document.getElementById("disableSelectedBtn").onclick = () => {
-  const list = lists[currentListIndex];
-  selectedCheckboxes.forEach(index => {
-    list.words[index].active = false;
-  });
-  save();
-  renderWords();
-};
-
-document.getElementById("enableSelectedBtn").onclick = () => {
-  const list = lists[currentListIndex];
-  selectedCheckboxes.forEach(index => {
-    list.words[index].active = true;
-  });
-  save();
-  renderWords();
-};
-
-wordList.addEventListener("input", e => {
-  const index = e.target.dataset.wordEdit ?? e.target.dataset.bgEdit ?? e.target.dataset.fgEdit;
-  if (index == null) return;
-
-  const word = lists[currentListIndex].words[index];
-  if (e.target.dataset.wordEdit != null) word.wordStr = e.target.value;
-  if (e.target.dataset.bgEdit != null) word.background = e.target.value;
-  if (e.target.dataset.fgEdit != null) word.foreground = e.target.value;
-
-  save();
-});
-
-const exportBtn = document.getElementById("exportBtn");
-exportBtn.onclick = () => {
-  const blob = new Blob([JSON.stringify(lists, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "highlight-lists.json";
-  a.click();
-  URL.revokeObjectURL(url);
-};
-
-const importBtn = document.getElementById("importBtn");
-importBtn.onclick = () => importInput.click();
-
-importInput.onchange = e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (Array.isArray(data)) {
-        lists = data;
-        currentListIndex = 0;
+  wordList.addEventListener("change", e => {
+    if (e.target.type === "checkbox") {
+      if (e.target.dataset.index != null) {
+        if (e.target.checked) {
+          selectedCheckboxes.add(+e.target.dataset.index);
+        } else {
+          selectedCheckboxes.delete(+e.target.dataset.index);
+        }
+        renderWords();
+      } else if (e.target.dataset.activeEdit != null) {
+        lists[currentListIndex].words[e.target.dataset.activeEdit].active = e.target.checked;
         save();
       }
-    } catch (err) {
-      alert(chrome.i18n.getMessage("invalid_json_error"));
-    }
-  };
-  reader.readAsText(file);
-};
-
-function localizePage() {
-  const elements = document.querySelectorAll('[data-i18n]');
-  elements.forEach(element => {
-    const message = element.dataset.i18n;
-    const localizedText = chrome.i18n.getMessage(message);
-    if (localizedText) {
-      if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
-        element.placeholder = localizedText;
-      } else {
-        element.textContent = localizedText;
-      }
     }
   });
-}
 
-document.addEventListener('DOMContentLoaded', localizePage);
+  let scrollTimeout;
+  wordList.addEventListener('scroll', () => {
+    if (scrollTimeout) {
+      return;
+    }
+    scrollTimeout = setTimeout(() => {
+      requestAnimationFrame(renderWords);
+      scrollTimeout = null;
+    }, 16); // ~60fps
+  });
 
-const toggle = document.getElementById('themeToggle');
-const body = document.body;
+  listSelect.onchange = () => {
+    selectedCheckboxes.clear();
+    currentListIndex = +listSelect.value;
+    renderWords();
+    updateListForm();
+  };
 
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'light') {
-  body.classList.remove('dark');
-  body.classList.add('light');
-  toggle.checked = false;
-} else {
-  body.classList.add('dark');
-  body.classList.remove('light');
-  toggle.checked = true;
-}
+  document.getElementById("newListBtn").onclick = () => {
+    lists.push({
+      id: Date.now(),
+      name: chrome.i18n.getMessage("new_list_name"),
+      background: "#ffff00",
+      foreground: "#000000",
+      active: true,
+      words: []
+    });
+    currentListIndex = lists.length - 1;
+    save();
+  };
 
-toggle.addEventListener('change', () => {
-  if (toggle.checked) {
-    body.classList.add('dark');
-    body.classList.remove('light');
-    localStorage.setItem('theme', 'dark');
-  } else {
+  document.getElementById("deleteListBtn").onclick = () => {
+    if (confirm(chrome.i18n.getMessage("confirm_delete_list"))) {
+      lists.splice(currentListIndex, 1);
+      currentListIndex = Math.max(0, currentListIndex - 1);
+      save();
+    }
+  };
+
+  listName.oninput = () => { lists[currentListIndex].name = listName.value; save(); };
+  listBg.oninput = () => { lists[currentListIndex].background = listBg.value; save(); };
+  listFg.oninput = () => { lists[currentListIndex].foreground = listFg.value; save(); };
+  listActive.onchange = () => { lists[currentListIndex].active = listActive.checked; save(); };
+
+  document.getElementById("addWordsBtn").onclick = () => {
+    const words = bulkPaste.value.split(/\n+/).map(w => w.trim()).filter(Boolean);
+    const list = lists[currentListIndex];
+    for (const w of words) list.words.push({ wordStr: w, background: "", foreground: "", active: true });
+    bulkPaste.value = "";
+    save();
+  };
+
+  document.getElementById("deleteSelectedBtn").onclick = () => {
+    if (confirm(chrome.i18n.getMessage("confirm_delete_words"))) {
+      const list = lists[currentListIndex];
+      const toDelete = Array.from(selectedCheckboxes);
+      lists[currentListIndex].words = list.words.filter((_, i) => !toDelete.includes(i));
+      selectedCheckboxes.clear();
+      save();
+      renderWords();
+    }
+  };
+
+  document.getElementById("disableSelectedBtn").onclick = () => {
+    const list = lists[currentListIndex];
+    selectedCheckboxes.forEach(index => {
+      list.words[index].active = false;
+    });
+    save();
+    renderWords();
+  };
+
+  document.getElementById("enableSelectedBtn").onclick = () => {
+    const list = lists[currentListIndex];
+    selectedCheckboxes.forEach(index => {
+      list.words[index].active = true;
+    });
+    save();
+    renderWords();
+  };
+
+  wordList.addEventListener("input", e => {
+    const index = e.target.dataset.wordEdit ?? e.target.dataset.bgEdit ?? e.target.dataset.fgEdit;
+    if (index == null) return;
+
+    const word = lists[currentListIndex].words[index];
+    if (e.target.dataset.wordEdit != null) word.wordStr = e.target.value;
+    if (e.target.dataset.bgEdit != null) word.background = e.target.value;
+    if (e.target.dataset.fgEdit != null) word.foreground = e.target.value;
+
+    save();
+  });
+
+  const exportBtn = document.getElementById("exportBtn");
+  exportBtn.onclick = () => {
+    const blob = new Blob([JSON.stringify(lists, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "highlight-lists.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importBtn = document.getElementById("importBtn");
+  importBtn.onclick = () => importInput.click();
+
+  importInput.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (Array.isArray(data)) {
+          lists = data;
+          currentListIndex = 0;
+          save();
+        }
+      } catch (err) {
+        alert(chrome.i18n.getMessage("invalid_json_error"));
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  function localizePage() {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(element => {
+      const message = element.dataset.i18n;
+      const localizedText = chrome.i18n.getMessage(message);
+      if (localizedText) {
+        if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+          element.placeholder = localizedText;
+        } else {
+          element.textContent = localizedText;
+        }
+      }
+    });
+  }
+
+  const toggle = document.getElementById('themeToggle');
+  const body = document.body;
+
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
     body.classList.remove('dark');
     body.classList.add('light');
-    localStorage.setItem('theme', 'light');
+    toggle.checked = false;
+  } else {
+    body.classList.add('dark');
+    body.classList.remove('light');
+    toggle.checked = true;
   }
+
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      body.classList.add('dark');
+      body.classList.remove('light');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      body.classList.remove('dark');
+      body.classList.add('light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  document.getElementById("deselectAllBtn").onclick = () => {
+    selectedCheckboxes.clear();
+    renderWords();
+  };
+
+  load();
 });
-
-document.getElementById("deselectAllBtn").onclick = () => {
-  selectedCheckboxes.clear();
-  renderWords();
-};
-
-load();
