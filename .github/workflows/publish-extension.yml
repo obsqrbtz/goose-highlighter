@@ -1,0 +1,47 @@
+name: Publish Chrome Extension
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    name: Pack and Upload Extension
+    runs-on: ubuntu-latest
+
+    env:
+      EXTENSION_ID: ${{ secrets.GOOGLE_EXTENSION_ID }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create zip package
+        run: |
+          zip -r goose-highlighter.zip . -x '*.git*' 'node_modules/*' 'versioning.md' '.releaserc.json' 'package.json' 'package-lock.json' 'README.md'
+
+      - name: Install webstore upload CLI
+        run: npm install -g chrome-webstore-upload-cli
+
+      - name: Upload to Chrome Web Store
+        run: |
+          chrome-webstore-upload upload \
+            --source goose-highlighter.zip \
+            --extension-id $EXTENSION_ID \
+            --client-id ${{ secrets.GOOGLE_CLIENT_ID }} \
+            --client-secret ${{ secrets.GOOGLE_CLIENT_SECRET }} \
+            --refresh-token ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+
+      - name: Publish extension
+        run: |
+          chrome-webstore-upload publish \
+            --extension-id $EXTENSION_ID \
+            --client-id ${{ secrets.GOOGLE_CLIENT_ID }} \
+            --client-secret ${{ secrets.GOOGLE_CLIENT_SECRET }} \
+            --refresh-token ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+
