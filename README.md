@@ -9,3 +9,7 @@ Goose Highlighter is a browser extension that allows you to highlight custom wor
 - **Bulk Add:** Paste multiple words at once.
 - **Enable/Disable:** Toggle highlighting globally, per list, or per word.
 - **Import/Export:** Backup or share your highlight lists as JSON files.
+
+## Install
+
+- go to [Chrome Web Store page](https://chromewebstore.google.com/detail/goose-highlighter/kdoehicejfnccbmecpkfjlbljpfogoep) and choose `Add to chrome`.
