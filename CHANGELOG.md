@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.5.0...v1.6.0) (2025-06-25)
+
+
+### Features
+
+* add more locales ([d97becf](https://github.com/obsqrbtz/goose-highlighter/commit/d97becfaae696e33247840090e8a752b5ed4ed72))
+
 # [1.5.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.4.0...v1.5.0) (2025-06-24)
 
 
