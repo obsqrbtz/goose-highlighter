@@ -1,0 +1,92 @@
+{
+  "extension_name": {
+    "message": "Goose Highlighter"
+  },
+  "extension_description": {
+    "message": "Herhangi bir web sitesinde kelimeleri ve ifadeleri vurgulayın. Özel listeler oluşturun, renkler kullanın, içe/dışa aktarın ve daha fazlası."
+  },
+  "select_list": {
+    "message": "Liste Seç:"
+  },
+  "new_list": {
+    "message": "Yeni Liste"
+  },
+  "delete_list": {
+    "message": "Listeyi Sil"
+  },
+  "list_name": {
+    "message": "Liste Adı:"
+  },
+  "background": {
+    "message": "Arka Plan:"
+  },
+  "foreground": {
+    "message": "Metin Rengi:"
+  },
+  "enable_highlight": {
+    "message": "Vurgulamayı Etkinleştir"
+  },
+  "paste_hint": {
+    "message": "Kelimeleri buraya yapıştırın"
+  },
+  "apply_paste": {
+    "message": "Kelimeleri Ekle"
+  },
+  "select_all": {
+    "message": "Seç"
+  },
+  "delete_selected": {
+    "message": "Sil"
+  },
+  "disable_selected": {
+    "message": "Devre Dışı Bırak"
+  },
+  "enable_selected": {
+    "message": "Etkinleştir"
+  },
+  "import_list": {
+    "message": "JSON İçe Aktar"
+  },
+  "export_list": {
+    "message": "JSON Dışa Aktar"
+  },
+  "default_list_name": {
+    "message": "Varsayılan Liste"
+  },
+  "new_list_name": {
+    "message": "Yeni Liste"
+  },
+  "word_active_label": {
+    "message": "aktif"
+  },
+  "invalid_json_error": {
+    "message": "Geçersiz JSON dosyası"
+  },
+  "confirm_delete_list": {
+    "message": "Bu listeyi silmek istediğinizden emin misiniz?"
+  },
+  "confirm_delete_words": {
+    "message": "Seçili kelimeleri silmek istediğinizden emin misiniz?"
+  },
+  "deselect_all": {
+    "message": "Seçimi Kaldır"
+  },
+  "highlight_lists": {
+    "message": "Vurgulama Listeleri"
+  },
+  "dark_mode": {
+    "message": "Karanlık Mod"
+  },
+  "list_settings": {
+    "message": "Liste Ayarları"
+  },
+  "word_list": {
+    "message": "Kelime Listesi"
+  },
+  "add_words": {
+    "message": "Kelimeleri Ekle"
+  },
+  "global_highlight_toggle": {
+    "message": "Etkinleştir"
+  }
+}

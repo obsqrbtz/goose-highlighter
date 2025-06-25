@@ -1,0 +1,92 @@
+{
+    "extension_name": {
+        "message": "Goose Highlighter"
+    },
+    "extension_description": {
+        "message": "어떤 웹사이트에서든 단어와 구문을 하이라이트하세요. 맞춤 목록 생성, 색상 사용, 가져오기/내보내기 등 다양한 기능을 제공합니다."
+    },
+    "select_list": {
+        "message": "리스트 선택:"
+    },
+    "new_list": {
+        "message": "새 리스트"
+    },
+    "delete_list": {
+        "message": "리스트 삭제"
+    },
+    "list_name": {
+        "message": "리스트 이름:"
+    },
+    "background": {
+        "message": "배경색:"
+    },
+    "foreground": {
+        "message": "글자색:"
+    },
+    "enable_highlight": {
+        "message": "하이라이트 활성화"
+    },
+    "paste_hint": {
+        "message": "여기에 단어를 붙여넣기"
+    },
+    "apply_paste": {
+        "message": "단어 추가"
+    },
+    "select_all": {
+        "message": "선택"
+    },
+    "delete_selected": {
+        "message": "삭제"
+    },
+    "disable_selected": {
+        "message": "비활성화"
+    },
+    "enable_selected": {
+        "message": "활성화"
+    },
+    "import_list": {
+        "message": "JSON 가져오기"
+    },
+    "export_list": {
+        "message": "JSON 내보내기"
+    },
+    "default_list_name": {
+        "message": "기본 리스트"
+    },
+    "new_list_name": {
+        "message": "새 리스트"
+    },
+    "word_active_label": {
+        "message": "활성"
+    },
+    "invalid_json_error": {
+        "message": "잘못된 JSON 파일"
+    },
+    "confirm_delete_list": {
+        "message": "이 리스트를 삭제하시겠습니까?"
+    },
+    "confirm_delete_words": {
+        "message": "선택한 단어를 삭제하시겠습니까?"
+    },
+    "deselect_all": {
+        "message": "선택 해제"
+    },
+    "highlight_lists": {
+        "message": "하이라이트 리스트"
+    },
+    "dark_mode": {
+        "message": "다크 모드"
+    },
+    "list_settings": {
+        "message": "리스트 설정"
+    },
+    "word_list": {
+        "message": "단어 리스트"
+    },
+    "add_words": {
+        "message": "단어 추가"
+    },
+    "global_highlight_toggle": {
+        "message": "활성화"
+    }
+}

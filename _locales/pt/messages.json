@@ -1,0 +1,92 @@
+{
+    "extension_name": {
+        "message": "Goose Highlighter"
+    },
+    "extension_description": {
+        "message": "Destaque palavras e frases em qualquer site. Crie listas personalizadas, use cores, importe/exporte e muito mais."
+    },
+    "select_list": {
+        "message": "Selecionar lista:"
+    },
+    "new_list": {
+        "message": "Nova lista"
+    },
+    "delete_list": {
+        "message": "Excluir lista"
+    },
+    "list_name": {
+        "message": "Nome da lista:"
+    },
+    "background": {
+        "message": "Fundo:"
+    },
+    "foreground": {
+        "message": "Texto:"
+    },
+    "enable_highlight": {
+        "message": "Ativar destaque"
+    },
+    "paste_hint": {
+        "message": "Cole as palavras aqui"
+    },
+    "apply_paste": {
+        "message": "Adicionar palavras"
+    },
+    "select_all": {
+        "message": "Selecionar"
+    },
+    "delete_selected": {
+        "message": "Excluir"
+    },
+    "disable_selected": {
+        "message": "Desativar"
+    },
+    "enable_selected": {
+        "message": "Ativar"
+    },
+    "import_list": {
+        "message": "Importar JSON"
+    },
+    "export_list": {
+        "message": "Exportar JSON"
+    },
+    "default_list_name": {
+        "message": "Lista padrão"
+    },
+    "new_list_name": {
+        "message": "Nova lista"
+    },
+    "word_active_label": {
+        "message": "ativo"
+    },
+    "invalid_json_error": {
+        "message": "Arquivo JSON inválido"
+    },
+    "confirm_delete_list": {
+        "message": "Tem certeza de que deseja excluir esta lista?"
+    },
+    "confirm_delete_words": {
+        "message": "Tem certeza de que deseja excluir as palavras selecionadas?"
+    },
+    "deselect_all": {
+        "message": "Desmarcar"
+    },
+    "highlight_lists": {
+        "message": "Listas de destaque"
+    },
+    "dark_mode": {
+        "message": "Modo escuro"
+    },
+    "list_settings": {
+        "message": "Configurações da lista"
+    },
+    "word_list": {
+        "message": "Lista de palavras"
+    },
+    "add_words": {
+        "message": "Adicionar palavras"
+    },
+    "global_highlight_toggle": {
+        "message": "Ativar"
+    }
+}

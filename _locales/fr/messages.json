@@ -1,0 +1,92 @@
+{
+    "extension_name": {
+        "message": "Goose Highlighter"
+    },
+    "extension_description": {
+        "message": "Surlignez des mots et des phrases sur n'importe quel site web. Créez des listes personnalisées, utilisez des couleurs, importez/exportez, et plus encore."
+    },
+    "select_list": {
+        "message": "Sélectionner une liste :"
+    },
+    "new_list": {
+        "message": "Nouvelle liste"
+    },
+    "delete_list": {
+        "message": "Supprimer la liste"
+    },
+    "list_name": {
+        "message": "Nom de la liste :"
+    },
+    "background": {
+        "message": "Arrière-plan :"
+    },
+    "foreground": {
+        "message": "Texte :"
+    },
+    "enable_highlight": {
+        "message": "Activer la surbrillance"
+    },
+    "paste_hint": {
+        "message": "Collez les mots ici"
+    },
+    "apply_paste": {
+        "message": "Ajouter des mots"
+    },
+    "select_all": {
+        "message": "Sélectionner"
+    },
+    "delete_selected": {
+        "message": "Supprimer"
+    },
+    "disable_selected": {
+        "message": "Désactiver"
+    },
+    "enable_selected": {
+        "message": "Activer"
+    },
+    "import_list": {
+        "message": "Importer JSON"
+    },
+    "export_list": {
+        "message": "Exporter JSON"
+    },
+    "default_list_name": {
+        "message": "Liste par défaut"
+    },
+    "new_list_name": {
+        "message": "Nouvelle liste"
+    },
+    "word_active_label": {
+        "message": "actif"
+    },
+    "invalid_json_error": {
+        "message": "Fichier JSON invalide"
+    },
+    "confirm_delete_list": {
+        "message": "Êtes-vous sûr de vouloir supprimer cette liste ?"
+    },
+    "confirm_delete_words": {
+        "message": "Êtes-vous sûr de vouloir supprimer les mots sélectionnés ?"
+    },
+    "deselect_all": {
+        "message": "Désélectionner"
+    },
+    "highlight_lists": {
+        "message": "Listes de surbrillance"
+    },
+    "dark_mode": {
+        "message": "Mode sombre"
+    },
+    "list_settings": {
+        "message": "Paramètres de la liste"
+    },
+    "word_list": {
+        "message": "Liste de mots"
+    },
+    "add_words": {
+        "message": "Ajouter des mots"
+    },
+    "global_highlight_toggle": {
+        "message": "Activer"
+    }
+}

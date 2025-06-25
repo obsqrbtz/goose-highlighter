@@ -1,0 +1,92 @@
+{
+  "extension_name": {
+    "message": "Goose Highlighter"
+  },
+  "extension_description": {
+    "message": "Resalta palabras y frases en cualquier sitio web. Crea listas personalizadas, usa colores, importa/exporta y más."
+  },
+  "select_list": {
+    "message": "Seleccionar lista:"
+  },
+  "new_list": {
+    "message": "Nueva lista"
+  },
+  "delete_list": {
+    "message": "Eliminar lista"
+  },
+  "list_name": {
+    "message": "Nombre de la lista:"
+  },
+  "background": {
+    "message": "Fondo:"
+  },
+  "foreground": {
+    "message": "Texto:"
+  },
+  "enable_highlight": {
+    "message": "Activar resaltado"
+  },
+  "paste_hint": {
+    "message": "Pega las palabras aquí"
+  },
+  "apply_paste": {
+    "message": "Agregar palabras"
+  },
+  "select_all": {
+    "message": "Seleccionar"
+  },
+  "delete_selected": {
+    "message": "Eliminar"
+  },
+  "disable_selected": {
+    "message": "Desactivar"
+  },
+  "enable_selected": {
+    "message": "Activar"
+  },
+  "import_list": {
+    "message": "Importar JSON"
+  },
+  "export_list": {
+    "message": "Exportar JSON"
+  },
+  "default_list_name": {
+    "message": "Lista predeterminada"
+  },
+  "new_list_name": {
+    "message": "Nueva lista"
+  },
+  "word_active_label": {
+    "message": "activo"
+  },
+  "invalid_json_error": {
+    "message": "Archivo JSON no válido"
+  },
+  "confirm_delete_list": {
+    "message": "¿Estás seguro de que deseas eliminar esta lista?"
+  },
+  "confirm_delete_words": {
+    "message": "¿Estás seguro de que deseas eliminar las palabras seleccionadas?"
+  },
+  "deselect_all": {
+    "message": "Deseleccionar"
+  },
+  "highlight_lists": {
+    "message": "Listas de resaltado"
+  },
+  "dark_mode": {
+    "message": "Modo oscuro"
+  },
+  "list_settings": {
+    "message": "Configuración de la lista"
+  },
+  "word_list": {
+    "message": "Lista de palabras"
+  },
+  "add_words": {
+    "message": "Agregar palabras"
+  },
+  "global_highlight_toggle": {
+    "message": "Activar"
+  }
+}

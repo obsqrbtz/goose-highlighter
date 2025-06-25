@@ -1,0 +1,92 @@
+{
+    "extension_name": {
+        "message": "Goose Highlighter"
+    },
+    "extension_description": {
+        "message": "किसी भी वेबसाइट पर शब्द और वाक्यांश हाइलाइट करें। कस्टम सूचियाँ बनाएं, रंगों का उपयोग करें, आयात/निर्यात करें और बहुत कुछ।"
+    },
+    "select_list": {
+        "message": "सूची चुनें:"
+    },
+    "new_list": {
+        "message": "नई सूची"
+    },
+    "delete_list": {
+        "message": "सूची हटाएं"
+    },
+    "list_name": {
+        "message": "सूची का नाम:"
+    },
+    "background": {
+        "message": "पृष्ठभूमि:"
+    },
+    "foreground": {
+        "message": "फॉरग्राउंड:"
+    },
+    "enable_highlight": {
+        "message": "हाइलाइट सक्षम करें"
+    },
+    "paste_hint": {
+        "message": "यहाँ शब्द चिपकाएँ"
+    },
+    "apply_paste": {
+        "message": "शब्द जोड़ें"
+    },
+    "select_all": {
+        "message": "सभी चुनें"
+    },
+    "delete_selected": {
+        "message": "हटाएं"
+    },
+    "disable_selected": {
+        "message": "अक्षम करें"
+    },
+    "enable_selected": {
+        "message": "सक्षम करें"
+    },
+    "import_list": {
+        "message": "JSON आयात करें"
+    },
+    "export_list": {
+        "message": "JSON निर्यात करें"
+    },
+    "default_list_name": {
+        "message": "डिफ़ॉल्ट सूची"
+    },
+    "new_list_name": {
+        "message": "नई सूची"
+    },
+    "word_active_label": {
+        "message": "सक्रिय"
+    },
+    "invalid_json_error": {
+        "message": "अमान्य JSON फ़ाइल"
+    },
+    "confirm_delete_list": {
+        "message": "क्या आप वाकई इस सूची को हटाना चाहते हैं?"
+    },
+    "confirm_delete_words": {
+        "message": "क्या आप वाकई चयनित शब्दों को हटाना चाहते हैं?"
+    },
+    "deselect_all": {
+        "message": "चयन हटाएँ"
+    },
+    "highlight_lists": {
+        "message": "हाइलाइट सूचियाँ"
+    },
+    "dark_mode": {
+        "message": "डार्क मोड"
+    },
+    "list_settings": {
+        "message": "सूची सेटिंग्स"
+    },
+    "word_list": {
+        "message": "शब्द सूची"
+    },
+    "add_words": {
+        "message": "शब्द जोड़ें"
+    },
+    "global_highlight_toggle": {
+        "message": "सक्षम करें"
+    }
+}

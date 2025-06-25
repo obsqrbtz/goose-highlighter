@@ -1,0 +1,92 @@
+{
+    "extension_name": {
+        "message": "Goose Highlighter"
+    },
+    "extension_description": {
+        "message": "Markiere Wörter und Phrasen auf jeder Webseite. Erstelle benutzerdefinierte Listen, verwende Farben, importiere/exportiere und mehr."
+    },
+    "select_list": {
+        "message": "Liste auswählen:"
+    },
+    "new_list": {
+        "message": "Neue Liste"
+    },
+    "delete_list": {
+        "message": "Liste löschen"
+    },
+    "list_name": {
+        "message": "Listenname:"
+    },
+    "background": {
+        "message": "Hintergrund:"
+    },
+    "foreground": {
+        "message": "Vordergrund:"
+    },
+    "enable_highlight": {
+        "message": "Hervorhebung aktivieren"
+    },
+    "paste_hint": {
+        "message": "Wörter hier einfügen"
+    },
+    "apply_paste": {
+        "message": "Wörter hinzufügen"
+    },
+    "select_all": {
+        "message": "Auswählen"
+    },
+    "delete_selected": {
+        "message": "Löschen"
+    },
+    "disable_selected": {
+        "message": "Deaktivieren"
+    },
+    "enable_selected": {
+        "message": "Aktivieren"
+    },
+    "import_list": {
+        "message": "JSON importieren"
+    },
+    "export_list": {
+        "message": "JSON exportieren"
+    },
+    "default_list_name": {
+        "message": "Standardliste"
+    },
+    "new_list_name": {
+        "message": "Neue Liste"
+    },
+    "word_active_label": {
+        "message": "aktiv"
+    },
+    "invalid_json_error": {
+        "message": "Ungültige JSON-Datei"
+    },
+    "confirm_delete_list": {
+        "message": "Möchten Sie diese Liste wirklich löschen?"
+    },
+    "confirm_delete_words": {
+        "message": "Möchten Sie die ausgewählten Wörter wirklich löschen?"
+    },
+    "deselect_all": {
+        "message": "Abwählen"
+    },
+    "highlight_lists": {
+        "message": "Hervorhebungslisten"
+    },
+    "dark_mode": {
+        "message": "Dunkelmodus"
+    },
+    "list_settings": {
+        "message": "Listeneinstellungen"
+    },
+    "word_list": {
+        "message": "Wortliste"
+    },
+    "add_words": {
+        "message": "Wörter hinzufügen"
+    },
+    "global_highlight_toggle": {
+        "message": "Aktivieren"
+    }
+}

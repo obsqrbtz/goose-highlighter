@@ -2,6 +2,9 @@
   "extension_name": {
     "message": "Goose Highlighter"
   },
+  "extension_description": {
+    "message": "Highlight words and phrases on any website. Create custom lists, use colors, import/export, and more."
+  },
   "select_list": {
     "message": "Select List:"
   },

@@ -1,0 +1,92 @@
+{
+  "extension_name": {
+    "message": "Goose Highlighter"
+  },
+  "extension_description": {
+    "message": "Markeer woorden en zinnen op elke website. Maak aangepaste lijsten, gebruik kleuren, importeer/exporteer en meer."
+  },
+  "select_list": {
+    "message": "Selecteer lijst:"
+  },
+  "new_list": {
+    "message": "Nieuwe lijst"
+  },
+  "delete_list": {
+    "message": "Lijst verwijderen"
+  },
+  "list_name": {
+    "message": "Lijstnaam:"
+  },
+  "background": {
+    "message": "Achtergrond:"
+  },
+  "foreground": {
+    "message": "Tekstkleur:"
+  },
+  "enable_highlight": {
+    "message": "Markeren inschakelen"
+  },
+  "paste_hint": {
+    "message": "Plak hier de woorden"
+  },
+  "apply_paste": {
+    "message": "Woorden toevoegen"
+  },
+  "select_all": {
+    "message": "Selecteren"
+  },
+  "delete_selected": {
+    "message": "Verwijderen"
+  },
+  "disable_selected": {
+    "message": "Uitschakelen"
+  },
+  "enable_selected": {
+    "message": "Inschakelen"
+  },
+  "import_list": {
+    "message": "JSON importeren"
+  },
+  "export_list": {
+    "message": "JSON exporteren"
+  },
+  "default_list_name": {
+    "message": "Standaardlijst"
+  },
+  "new_list_name": {
+    "message": "Nieuwe lijst"
+  },
+  "word_active_label": {
+    "message": "actief"
+  },
+  "invalid_json_error": {
+    "message": "Ongeldig JSON-bestand"
+  },
+  "confirm_delete_list": {
+    "message": "Weet je zeker dat je deze lijst wilt verwijderen?"
+  },
+  "confirm_delete_words": {
+    "message": "Weet je zeker dat je de geselecteerde woorden wilt verwijderen?"
+  },
+  "deselect_all": {
+    "message": "Deselecteren"
+  },
+  "highlight_lists": {
+    "message": "Markeer lijsten"
+  },
+  "dark_mode": {
+    "message": "Donkere modus"
+  },
+  "list_settings": {
+    "message": "Lijst instellingen"
+  },
+  "word_list": {
+    "message": "Woordenlijst"
+  },
+  "add_words": {
+    "message": "Woorden toevoegen"
+  },
+  "global_highlight_toggle": {
+    "message": "Inschakelen"
+  }
+}

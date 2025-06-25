@@ -1,0 +1,92 @@
+{
+    "extension_name": {
+        "message": "Goose Highlighter"
+    },
+    "extension_description": {
+        "message": "Evidenzia parole e frasi su qualsiasi sito web. Crea liste personalizzate, usa colori, importa/esporta e altro ancora."
+    },
+    "select_list": {
+        "message": "Seleziona elenco:"
+    },
+    "new_list": {
+        "message": "Nuovo elenco"
+    },
+    "delete_list": {
+        "message": "Elimina elenco"
+    },
+    "list_name": {
+        "message": "Nome elenco:"
+    },
+    "background": {
+        "message": "Sfondo:"
+    },
+    "foreground": {
+        "message": "Colore del testo:"
+    },
+    "enable_highlight": {
+        "message": "Abilita evidenziazione"
+    },
+    "paste_hint": {
+        "message": "Incolla le parole qui"
+    },
+    "apply_paste": {
+        "message": "Aggiungi parole"
+    },
+    "select_all": {
+        "message": "Seleziona"
+    },
+    "delete_selected": {
+        "message": "Elimina"
+    },
+    "disable_selected": {
+        "message": "Disattiva"
+    },
+    "enable_selected": {
+        "message": "Attiva"
+    },
+    "import_list": {
+        "message": "Importa JSON"
+    },
+    "export_list": {
+        "message": "Esporta JSON"
+    },
+    "default_list_name": {
+        "message": "Elenco predefinito"
+    },
+    "new_list_name": {
+        "message": "Nuovo elenco"
+    },
+    "word_active_label": {
+        "message": "attivo"
+    },
+    "invalid_json_error": {
+        "message": "File JSON non valido"
+    },
+    "confirm_delete_list": {
+        "message": "Sei sicuro di voler eliminare questo elenco?"
+    },
+    "confirm_delete_words": {
+        "message": "Sei sicuro di voler eliminare le parole selezionate?"
+    },
+    "deselect_all": {
+        "message": "Deseleziona"
+    },
+    "highlight_lists": {
+        "message": "Elenchi di evidenziazione"
+    },
+    "dark_mode": {
+        "message": "Modalità scura"
+    },
+    "list_settings": {
+        "message": "Impostazioni elenco"
+    },
+    "word_list": {
+        "message": "Elenco parole"
+    },
+    "add_words": {
+        "message": "Aggiungi parole"
+    },
+    "global_highlight_toggle": {
+        "message": "Attiva"
+    }
+}

@@ -1,0 +1,92 @@
+{
+    "extension_name": {
+        "message": "Goose Highlighter"
+    },
+    "extension_description": {
+        "message": "任意のウェブサイトで単語やフレーズをハイライトします。カスタムリストの作成、色の使用、インポート/エクスポートなどが可能です。"
+    },
+    "select_list": {
+        "message": "リストを選択:"
+    },
+    "new_list": {
+        "message": "新しいリスト"
+    },
+    "delete_list": {
+        "message": "リストを削除"
+    },
+    "list_name": {
+        "message": "リスト名:"
+    },
+    "background": {
+        "message": "背景色:"
+    },
+    "foreground": {
+        "message": "文字色:"
+    },
+    "enable_highlight": {
+        "message": "ハイライトを有効にする"
+    },
+    "paste_hint": {
+        "message": "ここに単語を貼り付けてください"
+    },
+    "apply_paste": {
+        "message": "単語を追加"
+    },
+    "select_all": {
+        "message": "すべて選択"
+    },
+    "delete_selected": {
+        "message": "削除"
+    },
+    "disable_selected": {
+        "message": "無効にする"
+    },
+    "enable_selected": {
+        "message": "有効にする"
+    },
+    "import_list": {
+        "message": "JSONをインポート"
+    },
+    "export_list": {
+        "message": "JSONをエクスポート"
+    },
+    "default_list_name": {
+        "message": "デフォルトリスト"
+    },
+    "new_list_name": {
+        "message": "新しいリスト"
+    },
+    "word_active_label": {
+        "message": "有効"
+    },
+    "invalid_json_error": {
+        "message": "無効なJSONファイル"
+    },
+    "confirm_delete_list": {
+        "message": "このリストを削除してもよろしいですか？"
+    },
+    "confirm_delete_words": {
+        "message": "選択した単語を削除してもよろしいですか？"
+    },
+    "deselect_all": {
+        "message": "すべて解除"
+    },
+    "highlight_lists": {
+        "message": "ハイライトリスト"
+    },
+    "dark_mode": {
+        "message": "ダークモード"
+    },
+    "list_settings": {
+        "message": "リスト設定"
+    },
+    "word_list": {
+        "message": "単語リスト"
+    },
+    "add_words": {
+        "message": "単語を追加"
+    },
+    "global_highlight_toggle": {
+        "message": "有効にする"
+    }
+}

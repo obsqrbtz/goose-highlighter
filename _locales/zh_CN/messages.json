@@ -1,0 +1,92 @@
+{
+  "extension_name": {
+    "message": "Goose Highlighter"
+  },
+  "extension_description": {
+    "message": "在任何网站上高亮显示单词和短语。创建自定义列表，使用颜色，导入/导出等功能。"
+  },
+  "select_list": {
+    "message": "选择列表："
+  },
+  "new_list": {
+    "message": "新建列表"
+  },
+  "delete_list": {
+    "message": "删除列表"
+  },
+  "list_name": {
+    "message": "列表名称："
+  },
+  "background": {
+    "message": "背景："
+  },
+  "foreground": {
+    "message": "文字颜色："
+  },
+  "enable_highlight": {
+    "message": "启用高亮"
+  },
+  "paste_hint": {
+    "message": "在此粘贴单词"
+  },
+  "apply_paste": {
+    "message": "添加单词"
+  },
+  "select_all": {
+    "message": "选择"
+  },
+  "delete_selected": {
+    "message": "删除"
+  },
+  "disable_selected": {
+    "message": "禁用"
+  },
+  "enable_selected": {
+    "message": "启用"
+  },
+  "import_list": {
+    "message": "导入 JSON"
+  },
+  "export_list": {
+    "message": "导出 JSON"
+  },
+  "default_list_name": {
+    "message": "默认列表"
+  },
+  "new_list_name": {
+    "message": "新建列表"
+  },
+  "word_active_label": {
+    "message": "激活"
+  },
+  "invalid_json_error": {
+    "message": "无效的 JSON 文件"
+  },
+  "confirm_delete_list": {
+    "message": "您确定要删除此列表吗？"
+  },
+  "confirm_delete_words": {
+    "message": "您确定要删除选中的单词吗？"
+  },
+  "deselect_all": {
+    "message": "取消选择"
+  },
+  "highlight_lists": {
+    "message": "高亮列表"
+  },
+  "dark_mode": {
+    "message": "暗黑模式"
+  },
+  "list_settings": {
+    "message": "列表设置"
+  },
+  "word_list": {
+    "message": "单词列表"
+  },
+  "add_words": {
+    "message": "添加单词"
+  },
+  "global_highlight_toggle": {
+    "message": "启用"
+  }
+}
