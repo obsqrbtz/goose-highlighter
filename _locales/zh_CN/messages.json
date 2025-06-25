@@ -88,5 +88,8 @@
   },
   "global_highlight_toggle": {
     "message": "启用"
-  }
+  },
+  "search_placeholder": {
+    "message": "搜索..."
+}
 }

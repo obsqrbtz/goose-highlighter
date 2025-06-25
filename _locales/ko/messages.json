@@ -88,5 +88,8 @@
     },
     "global_highlight_toggle": {
         "message": "활성화"
+    },
+    "search_placeholder": {
+        "message": "검색..."
     }
 }

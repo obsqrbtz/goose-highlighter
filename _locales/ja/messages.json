@@ -88,5 +88,8 @@
     },
     "global_highlight_toggle": {
         "message": "有効にする"
+    },
+    "search_placeholder": {
+        "message": "検索..."
     }
 }

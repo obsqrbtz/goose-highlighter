@@ -236,6 +236,12 @@ button.danger:hover {
   gap: 6px;
 }
 
+#wordSearch{
+  width:100%;
+  margin-bottom:8px;
+  margin-top: 8px;
+}
+
 #wordList {
   margin-top: 8px;
   position: relative;

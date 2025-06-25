@@ -11,6 +11,7 @@ let currentListIndex = 0;
 let saveTimeout;
 let selectedCheckboxes = new Set();
 let globalHighlightEnabled = true;
+let wordSearchQuery = "";
 
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, function (m) {
@@ -108,7 +109,12 @@ function updateListForm() {
 
 function renderWords() {
   const list = lists[currentListIndex];
-  const fragment = document.createDocumentFragment();
+
+  let filteredWords = list.words;
+  if (wordSearchQuery.trim()) {
+    const q = wordSearchQuery.trim().toLowerCase();
+    filteredWords = list.words.filter(w => w.wordStr.toLowerCase().includes(q));
+  }
 
   const itemHeight = 32;
   const containerHeight = wordList.clientHeight;
@@ -116,18 +122,19 @@ function renderWords() {
   const startIndex = Math.floor(scrollTop / itemHeight);
   const endIndex = Math.min(
     startIndex + Math.ceil(containerHeight / itemHeight) + 2,
-    list.words.length
+    filteredWords.length
   );
 
   wordList.innerHTML = '';
 
   const spacer = document.createElement('div');
   spacer.style.position = 'relative';
-  spacer.style.height = `${list.words.length * itemHeight}px`;
+  spacer.style.height = `${filteredWords.length * itemHeight}px`;
   spacer.style.width = '100%';
 
   for (let i = startIndex; i < endIndex; i++) {
-    const w = list.words[i];
+    const w = filteredWords[i];
+    if (!w) continue;
     const container = document.createElement("div");
     container.style.height = `${itemHeight}px`;
     container.style.position = 'absolute';
@@ -143,18 +150,20 @@ function renderWords() {
     container.style.background = 'var(--highlight-tag)';
     container.style.border = '1px solid var(--highlight-tag-border)';
 
+    const realIndex = list.words.indexOf(w);
+
     const cbSelect = document.createElement("input");
     cbSelect.type = "checkbox";
     cbSelect.className = "word-checkbox";
-    cbSelect.dataset.index = i;
-    if (selectedCheckboxes.has(i)) {
+    cbSelect.dataset.index = realIndex;
+    if (selectedCheckboxes.has(realIndex)) {
       cbSelect.checked = true;
     }
 
     const inputWord = document.createElement("input");
     inputWord.type = "text";
     inputWord.value = w.wordStr;
-    inputWord.dataset.wordEdit = i;
+    inputWord.dataset.wordEdit = realIndex;
     inputWord.style.flexGrow = '1';
     inputWord.style.minWidth = '0';
     inputWord.style.padding = '4px 8px';
@@ -166,7 +175,7 @@ function renderWords() {
     const inputBg = document.createElement("input");
     inputBg.type = "color";
     inputBg.value = w.background || list.background;
-    inputBg.dataset.bgEdit = i;
+    inputBg.dataset.bgEdit = realIndex;
     inputBg.style.width = '24px';
     inputBg.style.height = '24px';
     inputBg.style.flexShrink = '0';
@@ -174,7 +183,7 @@ function renderWords() {
     const inputFg = document.createElement("input");
     inputFg.type = "color";
     inputFg.value = w.foreground || list.foreground;
-    inputFg.dataset.fgEdit = i;
+    inputFg.dataset.fgEdit = realIndex;
     inputFg.style.width = '24px';
     inputFg.style.height = '24px';
     inputFg.style.flexShrink = '0';
@@ -189,7 +198,7 @@ function renderWords() {
     const cbActive = document.createElement("input");
     cbActive.type = "checkbox";
     cbActive.checked = w.active !== false;
-    cbActive.dataset.activeEdit = i;
+    cbActive.dataset.activeEdit = realIndex;
     cbActive.className = "switch";
 
     activeContainer.appendChild(cbActive);
@@ -207,7 +216,7 @@ function renderWords() {
 
   const wordCount = document.getElementById('wordCount');
   if (wordCount) {
-    wordCount.textContent = list.words.length;
+    wordCount.textContent = filteredWords.length;
   }
 }
 
@@ -221,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderWords();
   };
 
-  // Add event listener for the global toggle
   document.getElementById("globalHighlightToggle").addEventListener('change', function () {
     globalHighlightEnabled = this.checked;
     updateGlobalToggleState();
@@ -414,6 +422,12 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedCheckboxes.clear();
     renderWords();
   };
+
+  const wordSearch = document.getElementById("wordSearch");
+  wordSearch.addEventListener("input", (e) => {
+    wordSearchQuery = e.target.value;
+    renderWords();
+  });
 
   load();
 });

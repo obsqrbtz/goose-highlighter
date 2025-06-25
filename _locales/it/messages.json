@@ -88,5 +88,8 @@
     },
     "global_highlight_toggle": {
         "message": "Attiva"
+    },
+    "search_placeholder": {
+        "message": "Cerca..."
     }
 }

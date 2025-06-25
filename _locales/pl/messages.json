@@ -88,5 +88,8 @@
   },
   "global_highlight_toggle": {
     "message": "Włącz"
+  },
+  "search_placeholder": {
+    "message": "Szukaj..."
   }
 }

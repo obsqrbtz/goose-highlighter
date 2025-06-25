@@ -88,5 +88,8 @@
     },
     "global_highlight_toggle": {
         "message": "सक्षम करें"
+    },
+    "search_placeholder": {
+        "message": "खोजें..."
     }
 }

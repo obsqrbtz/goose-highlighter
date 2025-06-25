@@ -88,5 +88,8 @@
   },
   "global_highlight_toggle": {
     "message": "Inschakelen"
+  },
+  "search_placeholder": {
+    "message": "Zoeken..."
   }
 }

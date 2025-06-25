@@ -88,5 +88,8 @@
   },
   "global_highlight_toggle": {
     "message": "Вкл"
+  },
+  "search_placeholder": {
+    "message": "Поиск..."
   }
 }
