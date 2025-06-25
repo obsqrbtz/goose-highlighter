@@ -2,6 +2,9 @@
   "extension_name": {
     "message": "Goose Highlighter"
   },
+  "extension_description": {
+    "message": "Выделяйте слова и фразы на любом сайте. Создавайте собственные списки, используйте цвета, импортируйте и экспортируйте данные."
+  },
   "select_list": {
     "message": "Выберите список:"
   },
