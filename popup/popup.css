@@ -424,3 +424,34 @@ label:has(input.switch) {
   align-items: center;
   gap: 8px;
 }
+
+#wordList,
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--section-bg);
+}
+
+#wordList::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 8px;
+  background: var(--section-bg);
+  border-radius: 8px;
+}
+
+#wordList::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 8px;
+  min-height: 24px;
+  border: 2px solid var(--section-bg);
+}
+
+#wordList::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background: #ffb84d;
+}
+
+#wordList::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+  background: var(--section-bg);
+}
