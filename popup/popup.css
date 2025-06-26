@@ -114,12 +114,49 @@ textarea {
 }
 
 input[type="color"] {
-  background: none;
-  border: none;
-  cursor: pointer;
+  background: var(--input-bg);
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
   width: 36px;
   height: 36px;
   margin-left: 6px;
+  cursor: pointer;
+  padding: 0;
+  transition: border 0.2s, box-shadow 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type="color"]:focus,
+input[type="color"]:hover {
+  border: 2px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(236,156,35,0.15);
+  outline: none;
+}
+
+.color-label input[type="color"] {
+  width: 32px;
+  height: 32px;
+  margin-left: 0;
+}
+
+/* Remove default color input styling for Webkit browsers */
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 8px;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border-radius: 8px;
+  border: none;
+}
+
+/* Remove default color input styling for Firefox */
+input[type="color"]::-moz-color-swatch {
+  border-radius: 8px;
+  border: none;
+  padding: 0;
 }
 
 input[type="checkbox"] {
