@@ -91,5 +91,14 @@
   },
   "search_placeholder": {
     "message": "Szukaj..."
+  },
+  "options": {
+    "message": "Opcje"
+  },
+  "match_case": {
+    "message": "Uwzględnij wielkość liter"
+  },
+  "match_whole": {
+    "message": "Tylko całe słowo"
   }
 }

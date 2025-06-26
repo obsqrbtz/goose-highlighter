@@ -91,5 +91,8 @@
     },
     "search_placeholder": {
     "message": "Pesquisar..."
-}
+},
+  "options": { "message": "Opções" },
+  "match_case": { "message": "Diferenciar maiúsculas/minúsculas" },
+  "match_whole": { "message": "Palavra inteira" }
 }

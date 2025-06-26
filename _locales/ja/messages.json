@@ -91,5 +91,14 @@
     },
     "search_placeholder": {
         "message": "検索..."
+    },
+    "options": {
+        "message": "オプション"
+    },
+    "match_case": {
+        "message": "大文字と小文字を区別"
+    },
+    "match_whole": {
+        "message": "完全一致"
     }
 }

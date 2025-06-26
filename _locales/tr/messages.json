@@ -91,5 +91,14 @@
   },
   "search_placeholder": {
     "message": "Ara..."
+  },
+  "options": {
+    "message": "Seçenekler"
+  },
+  "match_case": {
+    "message": "Büyük/küçük harf duyarlı"
+  },
+  "match_whole": {
+    "message": "Tüm kelimeyle eşleş"
   }
 }

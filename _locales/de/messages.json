@@ -91,5 +91,8 @@
     },
     "search_placeholder": {
     "message": "Suchen..."
-}
+},
+  "options": { "message": "Optionen" },
+  "match_case": { "message": "Groß-/Kleinschreibung beachten" },
+  "match_whole": { "message": "Ganzes Wort übereinstimmen" }
 }

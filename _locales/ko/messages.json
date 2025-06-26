@@ -91,5 +91,14 @@
     },
     "search_placeholder": {
         "message": "검색..."
+    },
+    "options": {
+        "message": "옵션"
+    },
+    "match_case": {
+        "message": "대소문자 구분"
+    },
+    "match_whole": {
+        "message": "전체 단어 일치"
     }
 }

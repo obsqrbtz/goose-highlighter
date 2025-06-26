@@ -91,5 +91,14 @@
   },
   "search_placeholder": {
     "message": "Zoeken..."
+  },
+  "options": {
+    "message": "Opties"
+  },
+  "match_case": {
+    "message": "Hoofdlettergevoelig"
+  },
+  "match_whole": {
+    "message": "Alleen volledig woord"
   }
 }

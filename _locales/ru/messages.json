@@ -91,5 +91,14 @@
   },
   "search_placeholder": {
     "message": "Поиск..."
+  },
+  "options": {
+    "message": "Опции"
+  },
+  "match_case": {
+    "message": "С учетом регистра"
+  },
+  "match_whole": {
+    "message": "Слово целиком"
   }
 }

@@ -1,5 +1,7 @@
 let currentLists = [];
 let isGlobalHighlightEnabled = true;
+let matchCase = false;
+let matchWhole = false;
 
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -62,7 +64,12 @@ function processNodes() {
     const wordMap = new Map();
     for (const word of activeWords) wordMap.set(word.text.toLowerCase(), word);
 
-    const pattern = new RegExp(`(${Array.from(wordMap.keys()).map(escapeRegex).join('|')})`, 'gi');
+    let flags = matchCase ? 'g' : 'gi';
+    let wordsPattern = Array.from(wordMap.keys()).map(escapeRegex).join('|');
+    if (matchWhole) {
+      wordsPattern = `\\b(?:${wordsPattern})\\b`;
+    }
+    const pattern = new RegExp(`(${wordsPattern})`, flags);
 
     for (const node of textNodes) {
       if (!pattern.test(node.nodeValue)) continue;
@@ -102,12 +109,14 @@ function debounce(func, wait) {
 }
 
 // Initial highlight on load
-chrome.storage.local.get(["lists", "globalHighlightEnabled"], ({ lists, globalHighlightEnabled }) => {
+chrome.storage.local.get(["lists", "globalHighlightEnabled", "matchCaseEnabled", "matchWholeEnabled"], ({ lists, globalHighlightEnabled, matchCaseEnabled, matchWholeEnabled }) => {
   if (Array.isArray(lists)) setListsAndUpdate(lists);
   if (globalHighlightEnabled !== undefined) {
     isGlobalHighlightEnabled = globalHighlightEnabled;
   }
-  processNodes(); // Initial processing
+  matchCase = !!matchCaseEnabled;
+  matchWhole = !!matchWholeEnabled;
+  processNodes();
 });
 
 // Listen for updates from the popup and re-apply highlights
@@ -118,6 +127,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
   } else if (message.type === "GLOBAL_TOGGLE_UPDATED") {
     isGlobalHighlightEnabled = message.enabled;
+    processNodes();
+  } else if (message.type === "MATCH_OPTIONS_UPDATED") {
+    matchCase = !!message.matchCase;
+    matchWhole = !!message.matchWhole;
     processNodes();
   }
 });

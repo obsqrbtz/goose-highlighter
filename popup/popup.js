@@ -6,12 +6,16 @@ const listActive = document.getElementById("listActive");
 const bulkPaste = document.getElementById("bulkPaste");
 const wordList = document.getElementById("wordList");
 const importInput = document.getElementById("importInput");
+const matchCase = document.getElementById("matchCase");
+const matchWhole = document.getElementById("matchWhole");
 let lists = [];
 let currentListIndex = 0;
 let saveTimeout;
 let selectedCheckboxes = new Set();
 let globalHighlightEnabled = true;
 let wordSearchQuery = "";
+let matchCaseEnabled = false;
+let matchWholeEnabled = false;
 
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, function (m) {
@@ -35,7 +39,9 @@ async function debouncedSave() {
 async function save() {
   await chrome.storage.local.set({
     lists: lists,
-    globalHighlightEnabled: globalHighlightEnabled
+    globalHighlightEnabled: globalHighlightEnabled,
+    matchCaseEnabled,
+    matchWholeEnabled
   });
   renderLists();
   renderWords();
@@ -47,6 +53,11 @@ async function save() {
         chrome.tabs.sendMessage(tab.id, {
           type: "GLOBAL_TOGGLE_UPDATED",
           enabled: globalHighlightEnabled
+        });
+        chrome.tabs.sendMessage(tab.id, {
+          type: "MATCH_OPTIONS_UPDATED",
+          matchCase: matchCaseEnabled,
+          matchWhole: matchWholeEnabled
         });
       }
     }
@@ -70,10 +81,16 @@ async function updateGlobalToggleState() {
 async function load() {
   const res = await chrome.storage.local.get({
     lists: [],
-    globalHighlightEnabled: true
+    globalHighlightEnabled: true,
+    matchCaseEnabled: false,
+    matchWholeEnabled: false
   });
   lists = res.lists;
-  globalHighlightEnabled = res.globalHighlightEnabled !== false; // Default to true if undefined
+  globalHighlightEnabled = res.globalHighlightEnabled !== false;
+  matchCaseEnabled = !!res.matchCaseEnabled;
+  matchWholeEnabled = !!res.matchWholeEnabled;
+  matchCase.checked = matchCaseEnabled;
+  matchWhole.checked = matchWholeEnabled;
 
   if (!lists.length) {
     lists.push({
@@ -427,6 +444,15 @@ document.addEventListener('DOMContentLoaded', () => {
   wordSearch.addEventListener("input", (e) => {
     wordSearchQuery = e.target.value;
     renderWords();
+  });
+
+  matchCase.addEventListener('change', () => {
+    matchCaseEnabled = matchCase.checked;
+    save();
+  });
+  matchWhole.addEventListener('change', () => {
+    matchWholeEnabled = matchWhole.checked;
+    save();
   });
 
   load();

@@ -91,5 +91,14 @@
   },
   "search_placeholder": {
     "message": "Search..."
+  },
+  "options": {
+    "message": "Options"
+  },
+  "match_case": {
+    "message": "Match Case"
+  },
+  "match_whole": {
+    "message": "Match Whole Word"
   }
 }

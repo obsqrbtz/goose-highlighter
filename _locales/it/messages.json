@@ -91,5 +91,14 @@
     },
     "search_placeholder": {
         "message": "Cerca..."
+    },
+    "options": {
+        "message": "Opzioni"
+    },
+    "match_case": {
+        "message": "Maiuscole/minuscole"
+    },
+    "match_whole": {
+        "message": "Solo parola intera"
     }
 }

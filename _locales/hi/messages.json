@@ -91,5 +91,14 @@
     },
     "search_placeholder": {
         "message": "खोजें..."
+    },
+    "options": {
+        "message": "विकल्प"
+    },
+    "match_case": {
+        "message": "केस मिलाएं"
+    },
+    "match_whole": {
+        "message": "पूरा शब्द मिलाएं"
     }
 }

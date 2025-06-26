@@ -77,16 +77,24 @@
         <button id="disableSelectedBtn"><span data-i18n="disable_selected">Disable</span></button>
         <button id="deleteSelectedBtn" class="danger"><span data-i18n="delete_selected">Delete</span></button>
       </div>
-      <input type="text" id="wordSearch" data-i18n="search_placeholder" placeholder="Search..."/>
+      <input type="text" id="wordSearch" data-i18n="search_placeholder" placeholder="Search..." />
       <div id="wordList"></div>
     </div>
 
     <div class="section">
-      <div class="button-row">
-        <button id="importBtn"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import</span></button>
-        <input type="file" id="importInput" accept="application/json" hidden />
-        <button id="exportBtn"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export</span></button>
+      <h2><i class="fa-solid fa-sliders"></i> <span data-i18n="options">Options</span></h2>
+      <div class="button-row" style="margin-bottom:8px;">
+        <label><input type="checkbox" id="matchCase" /> <span data-i18n="match_case">Match Case</span></label>
+        <label><input type="checkbox" id="matchWhole" /> <span data-i18n="match_whole">Match Whole Word</span></label>
       </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="button-row">
+      <button id="importBtn"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import</span></button>
+      <input type="file" id="importInput" accept="application/json" hidden />
+      <button id="exportBtn"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export</span></button>
     </div>
   </div>
 

@@ -91,5 +91,14 @@
     },
     "search_placeholder": {
         "message": "Rechercher..."
+    },
+    "options": {
+        "message": "Options"
+    },
+    "match_case": {
+        "message": "Respecter la casse"
+    },
+    "match_whole": {
+        "message": "Mot entier seulement"
     }
 }
