@@ -1,3 +1,19 @@
+# [1.7.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.6.0...v1.7.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* colorbox styling ([1e704b5](https://github.com/obsqrbtz/goose-highlighter/commit/1e704b51a859845e539224aeb389a4e493d64520))
+* colorbox styling ([08ad7c4](https://github.com/obsqrbtz/goose-highlighter/commit/08ad7c432541ea4240dec05a340ad0b3279ce82f))
+* moved import/export to options section ([fe15965](https://github.com/obsqrbtz/goose-highlighter/commit/fe15965e89e8483f6b96eb779617053664c9d5b1))
+* wordlist scrollbar styling ([b30fac5](https://github.com/obsqrbtz/goose-highlighter/commit/b30fac5deda7941035d8ae23001c998c2584c03e))
+
+
+### Features
+
+* add word search ([80d4bff](https://github.com/obsqrbtz/goose-highlighter/commit/80d4bff0b4ef7c9e97506d1fe43a827bcc4b28fd))
+* added matching flags ([759307f](https://github.com/obsqrbtz/goose-highlighter/commit/759307f9834a2bbb23e963e2042b7d41d5cfda44))
+
 # [1.6.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.5.0...v1.6.0) (2025-06-25)
 
 
