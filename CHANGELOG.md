@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.0...v1.7.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* unicode support in regex ([ae1cf48](https://github.com/obsqrbtz/goose-highlighter/commit/ae1cf48c53cd42e65279cf2acde1a2860d8a31ee))
+
 # [1.7.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.6.0...v1.7.0) (2025-06-26)
 
 
