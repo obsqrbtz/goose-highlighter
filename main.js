@@ -60,29 +60,38 @@ function processNodes() {
     }
   }
 
-  if (activeWords.length > 0) {
-    const wordMap = new Map();
-    for (const word of activeWords) wordMap.set(word.text.toLowerCase(), word);
+if (activeWords.length > 0) {
+  const wordMap = new Map();
+  for (const word of activeWords) {
+    wordMap.set(matchCase ? word.text : word.text.toLowerCase(), word);
+  }
 
-    let flags = matchCase ? 'g' : 'gi';
-    let wordsPattern = Array.from(wordMap.keys()).map(escapeRegex).join('|');
-    if (matchWhole) {
-      wordsPattern = `\\b(?:${wordsPattern})\\b`;
-    }
+  let flags = matchCase ? 'gu' : 'giu';
+  let wordsPattern = Array.from(wordMap.keys()).map(escapeRegex).join('|');
+  
+  if (matchWhole) {
+    wordsPattern = `(?:(?<!\\p{L})|^)(${wordsPattern})(?:(?!\\p{L})|$)`;
+  }
+  
+  try {
     const pattern = new RegExp(`(${wordsPattern})`, flags);
 
     for (const node of textNodes) {
-      if (!pattern.test(node.nodeValue)) continue;
+      if (!node.nodeValue || !pattern.test(node.nodeValue)) continue;
 
       const span = document.createElement('span');
       span.innerHTML = node.nodeValue.replace(pattern, match => {
-        const word = wordMap.get(match.toLowerCase()) || { background: '#ffff00', foreground: '#000000' };
+        const lookup = matchCase ? match : match.toLowerCase();
+        const word = wordMap.get(lookup) || { background: '#ffff00', foreground: '#000000' };
         return `<mark data-gh style="background:${word.background};color:${word.foreground};padding:0 2px;">${match}</mark>`;
       });
 
       node.parentNode.replaceChild(span, node);
     }
+  } catch (e) {
+    console.error("Regex error:", e);
   }
+}
 
   observer.observe(document.body, {
     childList: true,
