@@ -2,20 +2,54 @@ let currentLists = [];
 let isGlobalHighlightEnabled = true;
 let matchCase = false;
 let matchWhole = false;
+let styleSheet = null;
+let wordStyleMap = new Map();
 
 function escapeRegex(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function initializeStyleSheet() {
+  if (!styleSheet) {
+    const style = document.createElement('style');
+    style.id = 'goose-highlighter-styles';
+    document.head.appendChild(style);
+    styleSheet = style.sheet;
+  }
+}
+
+function updateWordStyles(activeWords) {
+  initializeStyleSheet();
+  
+  while (styleSheet.cssRules.length > 0) {
+    styleSheet.deleteRule(0);
+  }
+  
+  wordStyleMap.clear();
+  const uniqueStyles = new Map();
+  
+  for (const word of activeWords) {
+    const styleKey = `${word.background}-${word.foreground}`;
+    if (!uniqueStyles.has(styleKey)) {
+      const className = `highlighted-word-${uniqueStyles.size}`;
+      uniqueStyles.set(styleKey, className);
+      
+      const rule = `.${className} { background: ${word.background}; color: ${word.foreground}; padding: 0 2px; }`;
+      styleSheet.insertRule(rule, styleSheet.cssRules.length);
+    }
+    
+    const lookup = matchCase ? word.text : word.text.toLowerCase();
+    wordStyleMap.set(lookup, uniqueStyles.get(styleKey));
+  }
 }
 
 function clearHighlights() {
-  // Remove all <mark> elements added by the highlighter
-  const marks = document.querySelectorAll('mark[data-gh]');
-  for (const mark of marks) {
-    // Replace the <mark> with its text content
-    const parent = mark.parentNode;
+  const highlightedElements = document.querySelectorAll('[data-gh]');
+  for (const element of highlightedElements) {
+    const parent = element.parentNode;
     if (parent) {
-      parent.replaceChild(document.createTextNode(mark.textContent), mark);
-      parent.normalize(); // Merge adjacent text nodes
+      parent.replaceChild(document.createTextNode(element.textContent), element);
+      parent.normalize();
     }
   }
 }
@@ -25,7 +59,6 @@ function processNodes() {
   observer.disconnect();
   clearHighlights();
 
-  // If global highlighting is disabled, skip processing
   if (!isGlobalHighlightEnabled) {
     observer.observe(document.body, {
       childList: true,
@@ -38,7 +71,7 @@ function processNodes() {
   const textNodes = [];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode: node => {
-      if (node.parentNode && node.parentNode.nodeName === 'MARK') return NodeFilter.FILTER_REJECT;
+      if (node.parentNode && node.parentNode.hasAttribute('data-gh')) return NodeFilter.FILTER_REJECT;
       if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME'].includes(node.parentNode.nodeName)) return NodeFilter.FILTER_REJECT;
       if (!node.nodeValue.trim()) return NodeFilter.FILTER_SKIP;
       return NodeFilter.FILTER_ACCEPT;
@@ -61,6 +94,8 @@ function processNodes() {
   }
 
 if (activeWords.length > 0) {
+  updateWordStyles(activeWords);
+  
   const wordMap = new Map();
   for (const word of activeWords) {
     wordMap.set(matchCase ? word.text : word.text.toLowerCase(), word);
@@ -82,14 +117,14 @@ if (activeWords.length > 0) {
       const span = document.createElement('span');
       span.innerHTML = node.nodeValue.replace(pattern, match => {
         const lookup = matchCase ? match : match.toLowerCase();
-        const word = wordMap.get(lookup) || { background: '#ffff00', foreground: '#000000' };
-        return `<mark data-gh style="background:${word.background};color:${word.foreground};padding:0 2px;">${match}</mark>`;
+        const className = wordStyleMap.get(lookup) || 'highlighted-word-0';
+        return `<span data-gh class="${className}">${match}</span>`;
       });
 
       node.parentNode.replaceChild(span, node);
     }
   } catch (e) {
-    console.error("Regex error:", e);
+    console.error('Regex error:', e);
   }
 }
 
@@ -107,7 +142,6 @@ function setListsAndUpdate(lists) {
   debouncedProcessNodes();
 }
 
-// Debounce helper function
 function debounce(func, wait) {
   let timeout;
   return function () {
@@ -118,7 +152,7 @@ function debounce(func, wait) {
 }
 
 // Initial highlight on load
-chrome.storage.local.get(["lists", "globalHighlightEnabled", "matchCaseEnabled", "matchWholeEnabled"], ({ lists, globalHighlightEnabled, matchCaseEnabled, matchWholeEnabled }) => {
+chrome.storage.local.get(['lists', 'globalHighlightEnabled', 'matchCaseEnabled', 'matchWholeEnabled'], ({ lists, globalHighlightEnabled, matchCaseEnabled, matchWholeEnabled }) => {
   if (Array.isArray(lists)) setListsAndUpdate(lists);
   if (globalHighlightEnabled !== undefined) {
     isGlobalHighlightEnabled = globalHighlightEnabled;
@@ -129,15 +163,15 @@ chrome.storage.local.get(["lists", "globalHighlightEnabled", "matchCaseEnabled",
 });
 
 // Listen for updates from the popup and re-apply highlights
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "WORD_LIST_UPDATED") {
-    chrome.storage.local.get("lists", ({ lists }) => {
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === 'WORD_LIST_UPDATED') {
+    chrome.storage.local.get('lists', ({ lists }) => {
       if (Array.isArray(lists)) setListsAndUpdate(lists);
     });
-  } else if (message.type === "GLOBAL_TOGGLE_UPDATED") {
+  } else if (message.type === 'GLOBAL_TOGGLE_UPDATED') {
     isGlobalHighlightEnabled = message.enabled;
     processNodes();
-  } else if (message.type === "MATCH_OPTIONS_UPDATED") {
+  } else if (message.type === 'MATCH_OPTIONS_UPDATED') {
     matchCase = !!message.matchCase;
     matchWhole = !!message.matchWhole;
     processNodes();

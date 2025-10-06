@@ -1,19 +1,18 @@
-const listSelect = document.getElementById("listSelect");
-const listName = document.getElementById("listName");
-const listBg = document.getElementById("listBg");
-const listFg = document.getElementById("listFg");
-const listActive = document.getElementById("listActive");
-const bulkPaste = document.getElementById("bulkPaste");
-const wordList = document.getElementById("wordList");
-const importInput = document.getElementById("importInput");
-const matchCase = document.getElementById("matchCase");
-const matchWhole = document.getElementById("matchWhole");
+const listSelect = document.getElementById('listSelect');
+const listName = document.getElementById('listName');
+const listBg = document.getElementById('listBg');
+const listFg = document.getElementById('listFg');
+const listActive = document.getElementById('listActive');
+const bulkPaste = document.getElementById('bulkPaste');
+const wordList = document.getElementById('wordList');
+const importInput = document.getElementById('importInput');
+const matchCase = document.getElementById('matchCase');
+const matchWhole = document.getElementById('matchWhole');
 let lists = [];
 let currentListIndex = 0;
-let saveTimeout;
 let selectedCheckboxes = new Set();
 let globalHighlightEnabled = true;
-let wordSearchQuery = "";
+let wordSearchQuery = '';
 let matchCaseEnabled = false;
 let matchWholeEnabled = false;
 
@@ -24,16 +23,9 @@ function escapeHtml(str) {
       '<': '&lt;',
       '>': '&gt;',
       '"': '&quot;',
-      "'": '&#39;'
+      '\'': '&#39;'
     })[m];
   });
-}
-
-async function debouncedSave() {
-  clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(async () => {
-    await chrome.storage.local.set({ lists });
-  }, 500);
 }
 
 async function save() {
@@ -49,13 +41,13 @@ async function save() {
   chrome.tabs.query({}, function (tabs) {
     for (let tab of tabs) {
       if (tab.id) {
-        chrome.tabs.sendMessage(tab.id, { type: "WORD_LIST_UPDATED" });
+        chrome.tabs.sendMessage(tab.id, { type: 'WORD_LIST_UPDATED' });
         chrome.tabs.sendMessage(tab.id, {
-          type: "GLOBAL_TOGGLE_UPDATED",
+          type: 'GLOBAL_TOGGLE_UPDATED',
           enabled: globalHighlightEnabled
         });
         chrome.tabs.sendMessage(tab.id, {
-          type: "MATCH_OPTIONS_UPDATED",
+          type: 'MATCH_OPTIONS_UPDATED',
           matchCase: matchCaseEnabled,
           matchWhole: matchWholeEnabled
         });
@@ -70,7 +62,7 @@ async function updateGlobalToggleState() {
     for (let tab of tabs) {
       if (tab.id) {
         chrome.tabs.sendMessage(tab.id, {
-          type: "GLOBAL_TOGGLE_UPDATED",
+          type: 'GLOBAL_TOGGLE_UPDATED',
           enabled: globalHighlightEnabled
         });
       }
@@ -95,9 +87,9 @@ async function load() {
   if (!lists.length) {
     lists.push({
       id: Date.now(),
-      name: chrome.i18n.getMessage("default_list_name"),
-      background: "#ffff00",
-      foreground: "#000000",
+      name: chrome.i18n.getMessage('default_list_name'),
+      background: '#ffff00',
+      foreground: '#000000',
       active: true,
       words: []
     });
@@ -105,13 +97,13 @@ async function load() {
   renderLists();
   renderWords();
 
-  document.getElementById("globalHighlightToggle").checked = globalHighlightEnabled;
+  document.getElementById('globalHighlightToggle').checked = globalHighlightEnabled;
 }
 
 function renderLists() {
   listSelect.innerHTML = lists.map((list, index) =>
     `<option value="${index}">${escapeHtml(list.name)}</option>`
-  ).join("");
+  ).join('');
   listSelect.value = currentListIndex;
   updateListForm();
 }
@@ -152,7 +144,7 @@ function renderWords() {
   for (let i = startIndex; i < endIndex; i++) {
     const w = filteredWords[i];
     if (!w) continue;
-    const container = document.createElement("div");
+    const container = document.createElement('div');
     container.style.height = `${itemHeight}px`;
     container.style.position = 'absolute';
     container.style.top = `${i * itemHeight}px`;
@@ -169,16 +161,16 @@ function renderWords() {
 
     const realIndex = list.words.indexOf(w);
 
-    const cbSelect = document.createElement("input");
-    cbSelect.type = "checkbox";
-    cbSelect.className = "word-checkbox";
+    const cbSelect = document.createElement('input');
+    cbSelect.type = 'checkbox';
+    cbSelect.className = 'word-checkbox';
     cbSelect.dataset.index = realIndex;
     if (selectedCheckboxes.has(realIndex)) {
       cbSelect.checked = true;
     }
 
-    const inputWord = document.createElement("input");
-    inputWord.type = "text";
+    const inputWord = document.createElement('input');
+    inputWord.type = 'text';
     inputWord.value = w.wordStr;
     inputWord.dataset.wordEdit = realIndex;
     inputWord.style.flexGrow = '1';
@@ -189,34 +181,34 @@ function renderWords() {
     inputWord.style.backgroundColor = 'var(--input-bg)';
     inputWord.style.color = 'var(--text-color)';
 
-    const inputBg = document.createElement("input");
-    inputBg.type = "color";
+    const inputBg = document.createElement('input');
+    inputBg.type = 'color';
     inputBg.value = w.background || list.background;
     inputBg.dataset.bgEdit = realIndex;
     inputBg.style.width = '24px';
     inputBg.style.height = '24px';
     inputBg.style.flexShrink = '0';
 
-    const inputFg = document.createElement("input");
-    inputFg.type = "color";
+    const inputFg = document.createElement('input');
+    inputFg.type = 'color';
     inputFg.value = w.foreground || list.foreground;
     inputFg.dataset.fgEdit = realIndex;
     inputFg.style.width = '24px';
     inputFg.style.height = '24px';
     inputFg.style.flexShrink = '0';
 
-    const activeContainer = document.createElement("label");
-    activeContainer.className = "word-active";
+    const activeContainer = document.createElement('label');
+    activeContainer.className = 'word-active';
     activeContainer.style.display = 'flex';
     activeContainer.style.alignItems = 'center';
     activeContainer.style.gap = '4px';
     activeContainer.style.flexShrink = '0';
 
-    const cbActive = document.createElement("input");
-    cbActive.type = "checkbox";
+    const cbActive = document.createElement('input');
+    cbActive.type = 'checkbox';
     cbActive.checked = w.active !== false;
     cbActive.dataset.activeEdit = realIndex;
-    cbActive.className = "switch";
+    cbActive.className = 'switch';
 
     activeContainer.appendChild(cbActive);
 
@@ -239,7 +231,7 @@ function renderWords() {
 
 document.addEventListener('DOMContentLoaded', () => {
   localizePage();
-  document.getElementById("selectAllBtn").onclick = () => {
+  document.getElementById('selectAllBtn').onclick = () => {
     const list = lists[currentListIndex];
     list.words.forEach((_, index) => {
       selectedCheckboxes.add(index);
@@ -247,13 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
     renderWords();
   };
 
-  document.getElementById("globalHighlightToggle").addEventListener('change', function () {
+  document.getElementById('globalHighlightToggle').addEventListener('change', function () {
     globalHighlightEnabled = this.checked;
     updateGlobalToggleState();
   });
 
-  wordList.addEventListener("change", e => {
-    if (e.target.type === "checkbox") {
+  wordList.addEventListener('change', e => {
+    if (e.target.type === 'checkbox') {
       if (e.target.dataset.index != null) {
         if (e.target.checked) {
           selectedCheckboxes.add(+e.target.dataset.index);
@@ -286,12 +278,12 @@ document.addEventListener('DOMContentLoaded', () => {
     updateListForm();
   };
 
-  document.getElementById("newListBtn").onclick = () => {
+  document.getElementById('newListBtn').onclick = () => {
     lists.push({
       id: Date.now(),
-      name: chrome.i18n.getMessage("new_list_name"),
-      background: "#ffff00",
-      foreground: "#000000",
+      name: chrome.i18n.getMessage('new_list_name'),
+      background: '#ffff00',
+      foreground: '#000000',
       active: true,
       words: []
     });
@@ -299,8 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
     save();
   };
 
-  document.getElementById("deleteListBtn").onclick = () => {
-    if (confirm(chrome.i18n.getMessage("confirm_delete_list"))) {
+  document.getElementById('deleteListBtn').onclick = () => {
+    if (confirm(chrome.i18n.getMessage('confirm_delete_list'))) {
       lists.splice(currentListIndex, 1);
       currentListIndex = Math.max(0, currentListIndex - 1);
       save();
@@ -312,16 +304,16 @@ document.addEventListener('DOMContentLoaded', () => {
   listFg.oninput = () => { lists[currentListIndex].foreground = listFg.value; save(); };
   listActive.onchange = () => { lists[currentListIndex].active = listActive.checked; save(); };
 
-  document.getElementById("addWordsBtn").onclick = () => {
+  document.getElementById('addWordsBtn').onclick = () => {
     const words = bulkPaste.value.split(/\n+/).map(w => w.trim()).filter(Boolean);
     const list = lists[currentListIndex];
-    for (const w of words) list.words.push({ wordStr: w, background: "", foreground: "", active: true });
-    bulkPaste.value = "";
+    for (const w of words) list.words.push({ wordStr: w, background: '', foreground: '', active: true });
+    bulkPaste.value = '';
     save();
   };
 
-  document.getElementById("deleteSelectedBtn").onclick = () => {
-    if (confirm(chrome.i18n.getMessage("confirm_delete_words"))) {
+  document.getElementById('deleteSelectedBtn').onclick = () => {
+    if (confirm(chrome.i18n.getMessage('confirm_delete_words'))) {
       const list = lists[currentListIndex];
       const toDelete = Array.from(selectedCheckboxes);
       lists[currentListIndex].words = list.words.filter((_, i) => !toDelete.includes(i));
@@ -331,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  document.getElementById("disableSelectedBtn").onclick = () => {
+  document.getElementById('disableSelectedBtn').onclick = () => {
     const list = lists[currentListIndex];
     selectedCheckboxes.forEach(index => {
       list.words[index].active = false;
@@ -340,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderWords();
   };
 
-  document.getElementById("enableSelectedBtn").onclick = () => {
+  document.getElementById('enableSelectedBtn').onclick = () => {
     const list = lists[currentListIndex];
     selectedCheckboxes.forEach(index => {
       list.words[index].active = true;
@@ -349,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderWords();
   };
 
-  wordList.addEventListener("input", e => {
+  wordList.addEventListener('input', e => {
     const index = e.target.dataset.wordEdit ?? e.target.dataset.bgEdit ?? e.target.dataset.fgEdit;
     if (index == null) return;
 
@@ -361,18 +353,18 @@ document.addEventListener('DOMContentLoaded', () => {
     save();
   });
 
-  const exportBtn = document.getElementById("exportBtn");
+  const exportBtn = document.getElementById('exportBtn');
   exportBtn.onclick = () => {
-    const blob = new Blob([JSON.stringify(lists, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(lists, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = "highlight-lists.json";
+    a.download = 'highlight-lists.json';
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const importBtn = document.getElementById("importBtn");
+  const importBtn = document.getElementById('importBtn');
   importBtn.onclick = () => importInput.click();
 
   importInput.onchange = e => {
@@ -388,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
           save();
         }
       } catch (err) {
-        alert(chrome.i18n.getMessage("invalid_json_error"));
+        alert(chrome.i18n.getMessage('invalid_json_error:' + err.message));
       }
     };
     reader.readAsText(file);
@@ -435,13 +427,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.getElementById("deselectAllBtn").onclick = () => {
+  document.getElementById('deselectAllBtn').onclick = () => {
     selectedCheckboxes.clear();
     renderWords();
   };
 
-  const wordSearch = document.getElementById("wordSearch");
-  wordSearch.addEventListener("input", (e) => {
+  const wordSearch = document.getElementById('wordSearch');
+  wordSearch.addEventListener('input', (e) => {
     wordSearchQuery = e.target.value;
     renderWords();
   });
