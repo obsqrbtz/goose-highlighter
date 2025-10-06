@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.1...v1.7.2) (2025-10-06)
+
+
+### Bug Fixes
+
+* do not create <mark> elements, just wrap found words in <span> and add .css styling ([6ba0d2e](https://github.com/obsqrbtz/goose-highlighter/commit/6ba0d2eb7c7346cdca3921a12d300a714439efa5))
+
 ## [1.7.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.0...v1.7.1) (2025-06-27)
 
 
