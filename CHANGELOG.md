@@ -1,3 +1,11 @@
+# [1.8.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.2...v1.8.0) (2025-10-07)
+
+
+### Features
+
+* add collapsible sections ([a158a30](https://github.com/obsqrbtz/goose-highlighter/commit/a158a303b01416f81e69bb137b71d3369904b044))
+* add websites to exception list ([915add3](https://github.com/obsqrbtz/goose-highlighter/commit/915add3a4cdbff390a4d0f7d227a4ece5fa31072))
+
 ## [1.7.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.1...v1.7.2) (2025-10-06)
 
 
