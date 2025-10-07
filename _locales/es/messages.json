@@ -100,5 +100,26 @@
   },
   "match_whole": {
     "message": "Coincidir palabra completa"
+  },
+  "site_exceptions": {
+    "message": "Excepciones de sitios"
+  },
+  "add_exception": {
+    "message": "Agregar a excepciones"
+  },
+  "remove_exception": {
+    "message": "Quitar de excepciones"
+  },
+  "manage_exceptions": {
+    "message": "Gestionar"
+  },
+  "exceptions_list": {
+    "message": "Sitios de excepción:"
+  },
+  "clear_all": {
+    "message": "Limpiar todo"
+  },
+  "confirm_clear_exceptions": {
+    "message": "¿Estás seguro de que deseas limpiar todas las excepciones?"
   }
 }

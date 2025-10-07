@@ -100,5 +100,26 @@
     },
     "match_whole": {
         "message": "पूरा शब्द मिलाएं"
+    },
+    "site_exceptions": {
+        "message": "साइट अपवाद"
+    },
+    "add_exception": {
+        "message": "अपवादों में जोड़ें"
+    },
+    "remove_exception": {
+        "message": "अपवादों से हटाएं"
+    },
+    "manage_exceptions": {
+        "message": "प्रबंधित करें"
+    },
+    "exceptions_list": {
+        "message": "अपवाद साइटें:"
+    },
+    "clear_all": {
+        "message": "सभी साफ करें"
+    },
+    "confirm_clear_exceptions": {
+        "message": "क्या आप वाकई सभी अपवादों को साफ करना चाहते हैं?"
     }
 }

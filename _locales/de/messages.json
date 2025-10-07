@@ -94,5 +94,26 @@
 },
   "options": { "message": "Optionen" },
   "match_case": { "message": "Groß-/Kleinschreibung beachten" },
-  "match_whole": { "message": "Ganzes Wort übereinstimmen" }
+  "match_whole": { "message": "Ganzes Wort übereinstimmen" },
+  "site_exceptions": {
+    "message": "Website-Ausnahmen"
+  },
+  "add_exception": {
+    "message": "Zu Ausnahmen hinzufügen"
+  },
+  "remove_exception": {
+    "message": "Aus Ausnahmen entfernen"
+  },
+  "manage_exceptions": {
+    "message": "Verwalten"
+  },
+  "exceptions_list": {
+    "message": "Ausnahme-Websites:"
+  },
+  "clear_all": {
+    "message": "Alle löschen"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Möchten Sie wirklich alle Ausnahmen löschen?"
+  }
 }

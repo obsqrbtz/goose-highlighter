@@ -100,5 +100,26 @@
   },
   "match_whole": {
     "message": "Tylko całe słowo"
+  },
+  "site_exceptions": {
+    "message": "Wyjątki stron"
+  },
+  "add_exception": {
+    "message": "Dodaj do wyjątków"
+  },
+  "remove_exception": {
+    "message": "Usuń z wyjątków"
+  },
+  "manage_exceptions": {
+    "message": "Zarządzaj"
+  },
+  "exceptions_list": {
+    "message": "Strony wyjątków:"
+  },
+  "clear_all": {
+    "message": "Wyczyść wszystko"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Czy na pewno chcesz wyczyścić wszystkie wyjątki?"
   }
 }

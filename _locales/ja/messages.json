@@ -100,5 +100,26 @@
     },
     "match_whole": {
         "message": "完全一致"
+    },
+    "site_exceptions": {
+        "message": "サイト例外"
+    },
+    "add_exception": {
+        "message": "例外に追加"
+    },
+    "remove_exception": {
+        "message": "例外から削除"
+    },
+    "manage_exceptions": {
+        "message": "管理"
+    },
+    "exceptions_list": {
+        "message": "例外サイト:"
+    },
+    "clear_all": {
+        "message": "すべてクリア"
+    },
+    "confirm_clear_exceptions": {
+        "message": "すべての例外をクリアしてもよろしいですか？"
     }
 }

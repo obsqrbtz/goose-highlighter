@@ -100,5 +100,26 @@
   },
   "match_whole": {
     "message": "Слово целиком"
+  },
+  "site_exceptions": {
+    "message": "Сайты-исключения"
+  },
+  "add_exception": {
+    "message": "Добавить в исключения"
+  },
+  "remove_exception": {
+    "message": "Удалить из исключений"
+  },
+  "manage_exceptions": {
+    "message": "Управление"
+  },
+  "exceptions_list": {
+    "message": "Сайты-исключения:"
+  },
+  "clear_all": {
+    "message": "Очистить все"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Вы уверены, что хотите очистить все исключения?"
   }
 }

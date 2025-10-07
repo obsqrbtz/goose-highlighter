@@ -100,5 +100,26 @@
   },
   "match_whole": {
     "message": "Tüm kelimeyle eşleş"
+  },
+  "site_exceptions": {
+    "message": "Site İstisnaları"
+  },
+  "add_exception": {
+    "message": "İstisnalara Ekle"
+  },
+  "remove_exception": {
+    "message": "İstisnalardan Çıkar"
+  },
+  "manage_exceptions": {
+    "message": "Yönet"
+  },
+  "exceptions_list": {
+    "message": "İstisna Siteleri:"
+  },
+  "clear_all": {
+    "message": "Hepsini Temizle"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Tüm istisnaları temizlemek istediğinizden emin misiniz?"
   }
 }

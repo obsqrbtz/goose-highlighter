@@ -94,5 +94,26 @@
 },
   "options": { "message": "Opções" },
   "match_case": { "message": "Diferenciar maiúsculas/minúsculas" },
-  "match_whole": { "message": "Palavra inteira" }
+  "match_whole": { "message": "Palavra inteira" },
+  "site_exceptions": {
+    "message": "Exceções de sites"
+  },
+  "add_exception": {
+    "message": "Adicionar às exceções"
+  },
+  "remove_exception": {
+    "message": "Remover das exceções"
+  },
+  "manage_exceptions": {
+    "message": "Gerenciar"
+  },
+  "exceptions_list": {
+    "message": "Sites de exceção:"
+  },
+  "clear_all": {
+    "message": "Limpar tudo"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Tem certeza de que deseja limpar todas as exceções?"
+  }
 }

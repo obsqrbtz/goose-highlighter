@@ -506,3 +506,54 @@ body::-webkit-scrollbar-corner,
 #wordList::-webkit-scrollbar-corner {
   background: var(--scrollbar-bg);
 }
+
+/* Exception Panel Styles */
+.exceptions-panel {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius);
+  background: var(--input-bg);
+}
+
+.exceptions-list {
+  max-height: 120px;
+  overflow-y: auto;
+  margin: 8px 0;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--section-bg);
+}
+
+.exception-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--highlight-tag-border);
+  font-size: 12px;
+}
+
+.exception-item:last-child {
+  border-bottom: none;
+}
+
+.exception-domain {
+  flex: 1;
+  word-break: break-all;
+  margin-right: 8px;
+}
+
+.exception-remove {
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.exception-remove:hover {
+  background: #d00030;
+}

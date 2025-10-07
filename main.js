@@ -1,5 +1,7 @@
 let currentLists = [];
 let isGlobalHighlightEnabled = true;
+let exceptionsList = [];
+let isCurrentSiteException = false;
 let matchCase = false;
 let matchWhole = false;
 let styleSheet = null;
@@ -7,6 +9,11 @@ let wordStyleMap = new Map();
 
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function isCurrentSiteInExceptions() {
+  const currentHostname = window.location.hostname;
+  return exceptionsList.includes(currentHostname);
 }
 
 function initializeStyleSheet() {
@@ -59,7 +66,7 @@ function processNodes() {
   observer.disconnect();
   clearHighlights();
 
-  if (!isGlobalHighlightEnabled) {
+  if (!isGlobalHighlightEnabled || isCurrentSiteException) {
     observer.observe(document.body, {
       childList: true,
       subtree: true,
@@ -152,13 +159,15 @@ function debounce(func, wait) {
 }
 
 // Initial highlight on load
-chrome.storage.local.get(['lists', 'globalHighlightEnabled', 'matchCaseEnabled', 'matchWholeEnabled'], ({ lists, globalHighlightEnabled, matchCaseEnabled, matchWholeEnabled }) => {
+chrome.storage.local.get(['lists', 'globalHighlightEnabled', 'matchCaseEnabled', 'matchWholeEnabled', 'exceptionsList'], ({ lists, globalHighlightEnabled, matchCaseEnabled, matchWholeEnabled, exceptionsList: exceptions }) => {
   if (Array.isArray(lists)) setListsAndUpdate(lists);
   if (globalHighlightEnabled !== undefined) {
     isGlobalHighlightEnabled = globalHighlightEnabled;
   }
   matchCase = !!matchCaseEnabled;
   matchWhole = !!matchWholeEnabled;
+  exceptionsList = Array.isArray(exceptions) ? exceptions : [];
+  isCurrentSiteException = isCurrentSiteInExceptions();
   processNodes();
 });
 
@@ -175,6 +184,12 @@ chrome.runtime.onMessage.addListener((message) => {
     matchCase = !!message.matchCase;
     matchWhole = !!message.matchWhole;
     processNodes();
+  } else if (message.type === 'EXCEPTIONS_LIST_UPDATED') {
+    chrome.storage.local.get('exceptionsList', ({ exceptionsList: exceptions }) => {
+      exceptionsList = Array.isArray(exceptions) ? exceptions : [];
+      isCurrentSiteException = isCurrentSiteInExceptions();
+      processNodes();
+    });
   }
 });
 

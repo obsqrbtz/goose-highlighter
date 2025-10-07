@@ -100,5 +100,26 @@
     },
     "match_whole": {
         "message": "Solo parola intera"
+    },
+    "site_exceptions": {
+        "message": "Eccezioni siti"
+    },
+    "add_exception": {
+        "message": "Aggiungi alle eccezioni"
+    },
+    "remove_exception": {
+        "message": "Rimuovi dalle eccezioni"
+    },
+    "manage_exceptions": {
+        "message": "Gestisci"
+    },
+    "exceptions_list": {
+        "message": "Siti di eccezione:"
+    },
+    "clear_all": {
+        "message": "Cancella tutto"
+    },
+    "confirm_clear_exceptions": {
+        "message": "Sei sicuro di voler cancellare tutte le eccezioni?"
     }
 }

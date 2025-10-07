@@ -100,5 +100,26 @@
   },
   "match_whole": {
     "message": "Match Whole Word"
+  },
+  "site_exceptions": {
+    "message": "Site Exceptions"
+  },
+  "add_exception": {
+    "message": "Add to Exceptions"
+  },
+  "remove_exception": {
+    "message": "Remove from Exceptions"
+  },
+  "manage_exceptions": {
+    "message": "Manage"
+  },
+  "exceptions_list": {
+    "message": "Exception Sites:"
+  },
+  "clear_all": {
+    "message": "Clear All"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Are you sure you want to clear all exceptions?"
   }
 }

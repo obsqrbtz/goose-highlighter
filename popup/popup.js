@@ -15,6 +15,8 @@ let globalHighlightEnabled = true;
 let wordSearchQuery = '';
 let matchCaseEnabled = false;
 let matchWholeEnabled = false;
+let exceptionsList = [];
+let currentTabHost = '';
 
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, function (m) {
@@ -33,7 +35,8 @@ async function save() {
     lists: lists,
     globalHighlightEnabled: globalHighlightEnabled,
     matchCaseEnabled,
-    matchWholeEnabled
+    matchWholeEnabled,
+    exceptionsList
   });
   renderLists();
   renderWords();
@@ -51,6 +54,7 @@ async function save() {
           matchCase: matchCaseEnabled,
           matchWhole: matchWholeEnabled
         });
+        chrome.tabs.sendMessage(tab.id, { type: 'EXCEPTIONS_LIST_UPDATED' });
       }
     }
   });
@@ -75,14 +79,27 @@ async function load() {
     lists: [],
     globalHighlightEnabled: true,
     matchCaseEnabled: false,
-    matchWholeEnabled: false
+    matchWholeEnabled: false,
+    exceptionsList: []
   });
   lists = res.lists;
   globalHighlightEnabled = res.globalHighlightEnabled !== false;
   matchCaseEnabled = !!res.matchCaseEnabled;
   matchWholeEnabled = !!res.matchWholeEnabled;
+  exceptionsList = res.exceptionsList || [];
   matchCase.checked = matchCaseEnabled;
   matchWhole.checked = matchWholeEnabled;
+
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab && tab.url) {
+      const url = new URL(tab.url);
+      currentTabHost = url.hostname;
+      updateExceptionButton();
+    }
+  } catch (e) {
+    console.warn('Could not get current tab:', e);
+  }
 
   if (!lists.length) {
     lists.push({
@@ -96,6 +113,7 @@ async function load() {
   }
   renderLists();
   renderWords();
+  renderExceptions();
 
   document.getElementById('globalHighlightToggle').checked = globalHighlightEnabled;
 }
@@ -229,6 +247,42 @@ function renderWords() {
   }
 }
 
+function updateExceptionButton() {
+  const toggleBtn = document.getElementById('toggleExceptionBtn');
+  const btnText = document.getElementById('exceptionBtnText');
+  
+  if (!toggleBtn || !btnText || !currentTabHost) return;
+  
+  const isException = exceptionsList.includes(currentTabHost);
+  
+  if (isException) {
+    btnText.textContent = chrome.i18n.getMessage('remove_exception') || 'Remove from Exceptions';
+    toggleBtn.className = 'danger';
+    toggleBtn.querySelector('i').className = 'fa-solid fa-check';
+  } else {
+    btnText.textContent = chrome.i18n.getMessage('add_exception') || 'Add to Exceptions';
+    toggleBtn.className = '';
+    toggleBtn.querySelector('i').className = 'fa-solid fa-ban';
+  }
+}
+
+function renderExceptions() {
+  const container = document.getElementById('exceptionsList');
+  if (!container) return;
+  
+  if (exceptionsList.length === 0) {
+    container.innerHTML = '<div class="exception-item">No exceptions</div>';
+    return;
+  }
+  
+  container.innerHTML = exceptionsList.map(domain => 
+    `<div class="exception-item">
+      <span class="exception-domain">${escapeHtml(domain)}</span>
+      <button class="exception-remove" data-domain="${escapeHtml(domain)}">Remove</button>
+    </div>`
+  ).join('');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   localizePage();
   document.getElementById('selectAllBtn').onclick = () => {
@@ -355,7 +409,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const exportBtn = document.getElementById('exportBtn');
   exportBtn.onclick = () => {
-    const blob = new Blob([JSON.stringify(lists, null, 2)], { type: 'application/json' });
+    const exportData = {
+      lists: lists,
+      exceptionsList: exceptionsList
+    };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -374,11 +432,24 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.onload = e => {
       try {
         const data = JSON.parse(e.target.result);
+        
         if (Array.isArray(data)) {
+          // Old format - just lists
           lists = data;
-          currentListIndex = 0;
-          save();
+        } else if (data && typeof data === 'object') {
+          // New format - object with lists and exceptions
+          if (Array.isArray(data.lists)) {
+            lists = data.lists;
+          }
+          if (Array.isArray(data.exceptionsList)) {
+            exceptionsList = data.exceptionsList;
+          }
         }
+        
+        currentListIndex = 0;
+        updateExceptionButton();
+        renderExceptions();
+        save();
       } catch (err) {
         alert(chrome.i18n.getMessage('invalid_json_error:' + err.message));
       }
@@ -445,6 +516,50 @@ document.addEventListener('DOMContentLoaded', () => {
   matchWhole.addEventListener('change', () => {
     matchWholeEnabled = matchWhole.checked;
     save();
+  });
+
+  document.getElementById('toggleExceptionBtn').addEventListener('click', () => {
+    if (!currentTabHost) return;
+    
+    const isException = exceptionsList.includes(currentTabHost);
+    
+    if (isException) {
+      exceptionsList = exceptionsList.filter(domain => domain !== currentTabHost);
+    } else {
+      exceptionsList.push(currentTabHost);
+    }
+    
+    updateExceptionButton();
+    renderExceptions();
+    save();
+  });
+
+  document.getElementById('manageExceptionsBtn').addEventListener('click', () => {
+    const panel = document.getElementById('exceptionsPanel');
+    if (panel.style.display === 'none') {
+      panel.style.display = 'block';
+    } else {
+      panel.style.display = 'none';
+    }
+  });
+
+  document.getElementById('clearExceptionsBtn').addEventListener('click', () => {
+    if (confirm(chrome.i18n.getMessage('confirm_clear_exceptions') || 'Clear all exceptions?')) {
+      exceptionsList = [];
+      updateExceptionButton();
+      renderExceptions();
+      save();
+    }
+  });
+
+  document.getElementById('exceptionsList').addEventListener('click', (e) => {
+    if (e.target.classList.contains('exception-remove')) {
+      const domain = e.target.dataset.domain;
+      exceptionsList = exceptionsList.filter(d => d !== domain);
+      updateExceptionButton();
+      renderExceptions();
+      save();
+    }
   });
 
   load();

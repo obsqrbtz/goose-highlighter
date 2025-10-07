@@ -31,6 +31,21 @@
 
     <div class="section">
       <div class="section-header">
+        <h2><i class="fa-solid fa-ban"></i> <span data-i18n="site_exceptions">Site Exceptions</span></h2>
+      </div>
+      <div class="button-row">
+        <button id="toggleExceptionBtn"><i class="fa-solid fa-ban"></i> <span id="exceptionBtnText" data-i18n="add_exception">Add to Exceptions</span></button>
+        <button id="manageExceptionsBtn"><i class="fa-solid fa-list"></i> <span data-i18n="manage_exceptions">Manage</span></button>
+      </div>
+      <div id="exceptionsPanel" class="exceptions-panel" style="display: none;">
+        <h3 data-i18n="exceptions_list">Exception Sites:</h3>
+        <div id="exceptionsList" class="exceptions-list"></div>
+        <button id="clearExceptionsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span data-i18n="clear_all">Clear All</span></button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
         <h2><i class="fa-solid fa-list"></i> <span data-i18n="highlight_lists">Highlight Lists</span></h2>
       </div>
       <label for="listSelect" data-i18n="select_list">Select List:</label>

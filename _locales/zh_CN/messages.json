@@ -100,5 +100,26 @@
   },
   "match_whole": {
     "message": "全词匹配"
+  },
+  "site_exceptions": {
+    "message": "网站例外"
+  },
+  "add_exception": {
+    "message": "添加到例外"
+  },
+  "remove_exception": {
+    "message": "从例外中移除"
+  },
+  "manage_exceptions": {
+    "message": "管理"
+  },
+  "exceptions_list": {
+    "message": "例外网站："
+  },
+  "clear_all": {
+    "message": "清除全部"
+  },
+  "confirm_clear_exceptions": {
+    "message": "您确定要清除所有例外吗？"
   }
 }

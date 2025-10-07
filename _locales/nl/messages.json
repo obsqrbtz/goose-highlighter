@@ -100,5 +100,26 @@
   },
   "match_whole": {
     "message": "Alleen volledig woord"
+  },
+  "site_exceptions": {
+    "message": "Site-uitzonderingen"
+  },
+  "add_exception": {
+    "message": "Toevoegen aan uitzonderingen"
+  },
+  "remove_exception": {
+    "message": "Verwijderen uit uitzonderingen"
+  },
+  "manage_exceptions": {
+    "message": "Beheren"
+  },
+  "exceptions_list": {
+    "message": "Uitzondering sites:"
+  },
+  "clear_all": {
+    "message": "Alles wissen"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Weet je zeker dat je alle uitzonderingen wilt wissen?"
   }
 }

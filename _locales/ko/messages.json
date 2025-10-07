@@ -100,5 +100,26 @@
     },
     "match_whole": {
         "message": "전체 단어 일치"
+    },
+    "site_exceptions": {
+        "message": "사이트 예외"
+    },
+    "add_exception": {
+        "message": "예외에 추가"
+    },
+    "remove_exception": {
+        "message": "예외에서 제거"
+    },
+    "manage_exceptions": {
+        "message": "관리"
+    },
+    "exceptions_list": {
+        "message": "예외 사이트:"
+    },
+    "clear_all": {
+        "message": "모두 지우기"
+    },
+    "confirm_clear_exceptions": {
+        "message": "모든 예외를 지우시겠습니까?"
     }
 }

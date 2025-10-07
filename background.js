@@ -8,3 +8,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         });
     }
 });
+
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.storage.local.get(['exceptionsList'], (result) => {
+        if (!result.exceptionsList) {
+            chrome.storage.local.set({ exceptionsList: [] });
+        }
+    });
+});
