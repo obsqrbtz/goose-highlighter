@@ -121,5 +121,8 @@
   },
   "confirm_clear_exceptions": {
     "message": "Weet je zeker dat je alle uitzonderingen wilt wissen?"
+  },
+  "remove": {
+    "message": "Verwijderen"
   }
 }

@@ -121,5 +121,8 @@
   },
   "confirm_clear_exceptions": {
     "message": "Are you sure you want to clear all exceptions?"
+  },
+  "remove": {
+    "message": "Remove"
   }
 }

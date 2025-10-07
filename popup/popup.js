@@ -17,6 +17,51 @@ let matchCaseEnabled = false;
 let matchWholeEnabled = false;
 let exceptionsList = [];
 let currentTabHost = '';
+let sectionStates = {};
+
+function loadSectionStates() {
+  const saved = localStorage.getItem('goose-highlighter-section-states');
+  if (saved) {
+    try {
+      sectionStates = JSON.parse(saved);
+    } catch {
+      sectionStates = {};
+    }
+  }
+}
+
+function saveSectionStates() {
+  localStorage.setItem('goose-highlighter-section-states', JSON.stringify(sectionStates));
+}
+
+function toggleSection(sectionName) {
+  const section = document.querySelector(`[data-section="${sectionName}"]`);
+  if (!section) return;
+  
+  const isCollapsed = section.classList.contains('collapsed');
+  
+  if (isCollapsed) {
+    section.classList.remove('collapsed');
+    sectionStates[sectionName] = false;
+  } else {
+    section.classList.add('collapsed');
+    sectionStates[sectionName] = true;
+  }
+  
+  saveSectionStates();
+}
+
+function initializeSectionStates() {
+  loadSectionStates();
+  
+  // Apply saved states
+  Object.keys(sectionStates).forEach(sectionName => {
+    const section = document.querySelector(`[data-section="${sectionName}"]`);
+    if (section && sectionStates[sectionName]) {
+      section.classList.add('collapsed');
+    }
+  });
+}
 
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, function (m) {
@@ -278,13 +323,39 @@ function renderExceptions() {
   container.innerHTML = exceptionsList.map(domain => 
     `<div class="exception-item">
       <span class="exception-domain">${escapeHtml(domain)}</span>
-      <button class="exception-remove" data-domain="${escapeHtml(domain)}">Remove</button>
+      <button class="exception-remove" data-domain="${escapeHtml(domain)}">${chrome.i18n.getMessage('remove')}</button>
     </div>`
   ).join('');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initializeSectionStates();
   localizePage();
+  
+  // Add event listeners for collapse toggles
+  document.querySelectorAll('.collapse-toggle').forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const targetSection = button.getAttribute('data-target');
+      toggleSection(targetSection);
+    });
+  });
+  
+  // Also allow clicking section headers to toggle
+  document.querySelectorAll('.section-header').forEach(header => {
+    header.addEventListener('click', (e) => {
+      // Don't toggle if clicking on a button or input within the header
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('button')) {
+        return;
+      }
+      const section = header.closest('.section');
+      const sectionName = section.getAttribute('data-section');
+      if (sectionName) {
+        toggleSection(sectionName);
+      }
+    });
+  });
+
   document.getElementById('selectAllBtn').onclick = () => {
     const list = lists[currentListIndex];
     list.words.forEach((_, index) => {

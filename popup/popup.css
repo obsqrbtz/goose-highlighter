@@ -80,6 +80,7 @@ h1 {
   border-radius: var(--border-radius);
   padding: 14px;
   box-shadow: var(--shadow);
+  transition: all 0.2s ease;
 }
 
 .section-header {
@@ -87,6 +88,60 @@ h1 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  cursor: pointer;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.section-header:hover {
+  background: var(--highlight-tag);
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.collapse-toggle {
+  background: none !important;
+  border: none !important;
+  color: var(--text-color) !important;
+  padding: 4px !important;
+  margin: 0 !important;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.collapse-toggle:hover {
+  background: var(--button-hover) !important;
+  color: var(--accent) !important;
+}
+
+.collapse-toggle i {
+  transition: transform 0.2s ease;
+  font-size: 0.8em;
+}
+
+.section.collapsed .collapse-toggle i {
+  transform: rotate(180deg);
+}
+
+.section-content {
+  overflow: hidden;
+  max-height: 2000px;
+}
+
+.section.collapsed .section-content {
+  max-height: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section.collapsed .section-header {
+  margin-bottom: 0;
 }
 
 .section h2 {
@@ -96,6 +151,7 @@ h1 {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
 }
 
 input[type="text"],

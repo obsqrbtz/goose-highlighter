@@ -121,5 +121,8 @@
   },
   "confirm_clear_exceptions": {
     "message": "Вы уверены, что хотите очистить все исключения?"
+  },
+  "remove": {
+    "message": "Удалить"
   }
 }

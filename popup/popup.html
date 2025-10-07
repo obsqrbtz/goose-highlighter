@@ -29,83 +29,121 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" data-section="exceptions">
       <div class="section-header">
         <h2><i class="fa-solid fa-ban"></i> <span data-i18n="site_exceptions">Site Exceptions</span></h2>
+        <button class="collapse-toggle" data-target="exceptions">
+          <i class="fa-solid fa-chevron-up"></i>
+        </button>
       </div>
-      <div class="button-row">
-        <button id="toggleExceptionBtn"><i class="fa-solid fa-ban"></i> <span id="exceptionBtnText" data-i18n="add_exception">Add to Exceptions</span></button>
-        <button id="manageExceptionsBtn"><i class="fa-solid fa-list"></i> <span data-i18n="manage_exceptions">Manage</span></button>
-      </div>
-      <div id="exceptionsPanel" class="exceptions-panel" style="display: none;">
-        <h3 data-i18n="exceptions_list">Exception Sites:</h3>
-        <div id="exceptionsList" class="exceptions-list"></div>
-        <button id="clearExceptionsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span data-i18n="clear_all">Clear All</span></button>
+      <div class="section-content" id="exceptions-content">
+        <div class="button-row">
+          <button id="toggleExceptionBtn"><i class="fa-solid fa-ban"></i> <span id="exceptionBtnText" data-i18n="add_exception">Add to Exceptions</span></button>
+          <button id="manageExceptionsBtn"><i class="fa-solid fa-list"></i> <span data-i18n="manage_exceptions">Manage</span></button>
+        </div>
+        <div id="exceptionsPanel" class="exceptions-panel" style="display: none;">
+          <h3 data-i18n="exceptions_list">Exception Sites:</h3>
+          <div id="exceptionsList" class="exceptions-list"></div>
+          <button id="clearExceptionsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span data-i18n="clear_all">Clear All</span></button>
+        </div>
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" data-section="lists">
       <div class="section-header">
         <h2><i class="fa-solid fa-list"></i> <span data-i18n="highlight_lists">Highlight Lists</span></h2>
+        <button class="collapse-toggle" data-target="lists">
+          <i class="fa-solid fa-chevron-up"></i>
+        </button>
       </div>
-      <label for="listSelect" data-i18n="select_list">Select List:</label>
-      <select id="listSelect"></select>
-      <div class="button-row">
-        <button id="newListBtn"><i class="fa-solid fa-plus"></i> <span data-i18n="new_list">New</span></button>
-        <button id="deleteListBtn" class="danger"><i class="fa-solid fa-trash"></i> <span
-            data-i18n="delete_list">Delete</span></button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2><i class="fa-solid fa-gear"></i> <span data-i18n="list_settings">List Settings</span></h2>
-      <label><span data-i18n="list_name">List Name:</span> <input type="text" id="listName" /></label>
-      <div class="color-row">
-        <div class="color-label">
-          <span data-i18n="background">Background:</span>
-          <input type="color" id="listBg" />
-        </div>
-        <div class="color-label">
-          <span data-i18n="foreground">Foreground:</span>
-          <input type="color" id="listFg" />
+      <div class="section-content" id="lists-content">
+        <label for="listSelect" data-i18n="select_list">Select List:</label>
+        <select id="listSelect"></select>
+        <div class="button-row">
+          <button id="newListBtn"><i class="fa-solid fa-plus"></i> <span data-i18n="new_list">New</span></button>
+          <button id="deleteListBtn" class="danger"><i class="fa-solid fa-trash"></i> <span
+              data-i18n="delete_list">Delete</span></button>
         </div>
       </div>
-      <label>
-        <span data-i18n="enable_highlight">Enable Highlighting</span>
-        <input type="checkbox" class="switch" id="listActive" />
-      </label>
     </div>
 
-    <div class="section">
-      <h2><i class="fa-solid fa-pen"></i> <span data-i18n="add_words">Add Words</span></h2>
-      <textarea id="bulkPaste" data-i18n="paste_hint" placeholder="Paste words here..."></textarea>
-      <button id="addWordsBtn"><span data-i18n="apply_paste">Add Words</span></button>
-    </div>
-
-    <div class="section">
-      <h2><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span>(<span id="wordCount">0</span>)
-      </h2>
-      <div class="button-row wrap">
-        <button id="selectAllBtn"><span data-i18n="select_all">Select All</span></button>
-        <button id="deselectAllBtn"><span data-i18n="deselect_all">Clear</span></button>
-        <button id="enableSelectedBtn"><span data-i18n="enable_selected">Enable</span></button>
-        <button id="disableSelectedBtn"><span data-i18n="disable_selected">Disable</span></button>
-        <button id="deleteSelectedBtn" class="danger"><span data-i18n="delete_selected">Delete</span></button>
+    <div class="section" data-section="settings">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-gear"></i> <span data-i18n="list_settings">List Settings</span></h2>
+        <button class="collapse-toggle" data-target="settings">
+          <i class="fa-solid fa-chevron-up"></i>
+        </button>
       </div>
-      <input type="text" id="wordSearch" data-i18n="search_placeholder" placeholder="Search..." />
-      <div id="wordList"></div>
+      <div class="section-content" id="settings-content">
+        <label><span data-i18n="list_name">List Name:</span> <input type="text" id="listName" /></label>
+        <div class="color-row">
+          <div class="color-label">
+            <span data-i18n="background">Background:</span>
+            <input type="color" id="listBg" />
+          </div>
+          <div class="color-label">
+            <span data-i18n="foreground">Foreground:</span>
+            <input type="color" id="listFg" />
+          </div>
+        </div>
+        <label>
+          <span data-i18n="enable_highlight">Enable Highlighting</span>
+          <input type="checkbox" class="switch" id="listActive" />
+        </label>
+      </div>
     </div>
 
-    <div class="section">
-      <h2><i class="fa-solid fa-sliders"></i> <span data-i18n="options">Options</span></h2>
-      <div class="button-row" style="margin-bottom:8px;">
-        <label><input type="checkbox" id="matchCase" /> <span data-i18n="match_case">Match Case</span></label>
-        <label><input type="checkbox" id="matchWhole" /> <span data-i18n="match_whole">Match Whole Word</span></label>
+    <div class="section" data-section="addwords">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-pen"></i> <span data-i18n="add_words">Add Words</span></h2>
+        <button class="collapse-toggle" data-target="addwords">
+          <i class="fa-solid fa-chevron-up"></i>
+        </button>
       </div>
-      <div class="button-row">
-        <button id="importBtn"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import</span></button>
-        <input type="file" id="importInput" accept="application/json" hidden />
-        <button id="exportBtn"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export</span></button>
+      <div class="section-content" id="addwords-content">
+        <textarea id="bulkPaste" data-i18n="paste_hint" placeholder="Paste words here..."></textarea>
+        <button id="addWordsBtn"><span data-i18n="apply_paste">Add Words</span></button>
+      </div>
+    </div>
+
+    <div class="section" data-section="wordlist">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span>(<span id="wordCount">0</span>)
+        </h2>
+        <button class="collapse-toggle" data-target="wordlist">
+          <i class="fa-solid fa-chevron-up"></i>
+        </button>
+      </div>
+      <div class="section-content" id="wordlist-content">
+        <div class="button-row wrap">
+          <button id="selectAllBtn"><span data-i18n="select_all">Select All</span></button>
+          <button id="deselectAllBtn"><span data-i18n="deselect_all">Clear</span></button>
+          <button id="enableSelectedBtn"><span data-i18n="enable_selected">Enable</span></button>
+          <button id="disableSelectedBtn"><span data-i18n="disable_selected">Disable</span></button>
+          <button id="deleteSelectedBtn" class="danger"><span data-i18n="delete_selected">Delete</span></button>
+        </div>
+        <input type="text" id="wordSearch" data-i18n="search_placeholder" placeholder="Search..." />
+        <div id="wordList"></div>
+      </div>
+    </div>
+
+    <div class="section" data-section="options">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-sliders"></i> <span data-i18n="options">Options</span></h2>
+        <button class="collapse-toggle" data-target="options">
+          <i class="fa-solid fa-chevron-up"></i>
+        </button>
+      </div>
+      <div class="section-content" id="options-content">
+        <div class="button-row" style="margin-bottom:8px;">
+          <label><input type="checkbox" id="matchCase" /> <span data-i18n="match_case">Match Case</span></label>
+          <label><input type="checkbox" id="matchWhole" /> <span data-i18n="match_whole">Match Whole Word</span></label>
+        </div>
+        <div class="button-row">
+          <button id="importBtn"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import</span></button>
+          <input type="file" id="importInput" accept="application/json" hidden />
+          <button id="exportBtn"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export</span></button>
+        </div>
       </div>
     </div>
   </div>

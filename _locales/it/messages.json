@@ -121,5 +121,8 @@
     },
     "confirm_clear_exceptions": {
         "message": "Sei sicuro di voler cancellare tutte le eccezioni?"
+    },
+    "remove": {
+        "message": "Rimuovi"
     }
 }

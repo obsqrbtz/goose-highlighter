@@ -121,5 +121,8 @@
     },
     "confirm_clear_exceptions": {
         "message": "すべての例外をクリアしてもよろしいですか？"
+    },
+    "remove": {
+        "message": "削除"
     }
 }
