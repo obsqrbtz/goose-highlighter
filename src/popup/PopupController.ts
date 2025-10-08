@@ -144,9 +144,11 @@ export class PopupController {
       this.updateListForm();
     });
 
-    listName.addEventListener('input', () => {
-      this.lists[this.currentListIndex].name = listName.value;
-      this.save();
+    listName.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        this.lists[this.currentListIndex].name = listName.value;
+        this.save();
+      }
     });
 
     listBg.addEventListener('input', () => {
@@ -237,15 +239,28 @@ export class PopupController {
 
     wordList.addEventListener('input', (e) => {
       const target = e.target as HTMLInputElement;
-      const index = +(target.dataset.wordEdit ?? target.dataset.bgEdit ?? target.dataset.fgEdit ?? -1);
+      const index = +(target.dataset.bgEdit ?? target.dataset.fgEdit ?? -1);
       if (index === -1) return;
 
       const word = this.lists[this.currentListIndex].words[index];
-      if (target.dataset.wordEdit != null) word.wordStr = target.value;
       if (target.dataset.bgEdit != null) word.background = target.value;
       if (target.dataset.fgEdit != null) word.foreground = target.value;
 
       this.save();
+    });
+
+    wordList.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const target = e.target as HTMLInputElement;
+        const index = +(target.dataset.wordEdit ?? -1);
+        if (index === -1) return;
+
+        const word = this.lists[this.currentListIndex].words[index];
+        if (target.dataset.wordEdit != null) {
+          word.wordStr = target.value;
+          this.save();
+        }
+      }
     });
 
     let scrollTimeout: number;
@@ -472,6 +487,8 @@ export class PopupController {
     });
     MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
   }
+
+
 
   private async updateGlobalToggleState(): Promise<void> {
     await StorageService.update('globalHighlightEnabled', this.globalHighlightEnabled);
