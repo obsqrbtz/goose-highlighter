@@ -1,13 +1,9 @@
 name: Create GitHub Release
 
-# on:
-#   push:
-#     tags:
-#       - 'v*'
-
 on:
   push:
-    branches: [ main ]
+    tags:
+      - 'v*'
 
 jobs:
   release:
@@ -38,7 +34,7 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Update manifest version
-        run: node scripts/update-manifest-version.js
+        run: node scripts/update-manifest-version.js ${{ steps.version.outputs.VERSION }}
 
       - name: Create extension zip
         run: |
