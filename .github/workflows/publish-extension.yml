@@ -33,6 +33,9 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
+      - name: Update manifest version
+        run: node scripts/update-manifest-version.js ${{ steps.version.outputs.VERSION }}
+
       - name: Create zip package
         run: |
           zip -r goose-highlighter.zip . -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'versioning.md' '.releaserc.json' 'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' 'eslint.config.mjs'
