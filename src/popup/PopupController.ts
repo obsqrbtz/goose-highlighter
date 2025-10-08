@@ -132,10 +132,6 @@ export class PopupController {
 
   private setupListManagement(): void {
     const listSelect = document.getElementById('listSelect') as HTMLSelectElement;
-    const listName = document.getElementById('listName') as HTMLInputElement;
-    const listBg = document.getElementById('listBg') as HTMLInputElement;
-    const listFg = document.getElementById('listFg') as HTMLInputElement;
-    const listActive = document.getElementById('listActive') as HTMLInputElement;
 
     listSelect.addEventListener('change', () => {
       this.selectedCheckboxes.clear();
@@ -144,26 +140,9 @@ export class PopupController {
       this.updateListForm();
     });
 
-    listName.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        this.lists[this.currentListIndex].name = listName.value;
-        this.save();
-      }
-    });
-
-    listBg.addEventListener('input', () => {
-      this.lists[this.currentListIndex].background = listBg.value;
-      this.save();
-    });
-
-    listFg.addEventListener('input', () => {
-      this.lists[this.currentListIndex].foreground = listFg.value;
-      this.save();
-    });
-
-    listActive.addEventListener('change', () => {
-      this.lists[this.currentListIndex].active = listActive.checked;
-      this.save();
+    // Apply button for list settings
+    document.getElementById('applyListSettingsBtn')?.addEventListener('click', () => {
+      this.applyListSettings();
     });
 
     document.getElementById('newListBtn')?.addEventListener('click', () => {
@@ -463,6 +442,20 @@ export class PopupController {
         localStorage.setItem('theme', 'light');
       }
     });
+  }
+
+  private applyListSettings(): void {
+    const listName = document.getElementById('listName') as HTMLInputElement;
+    const listBg = document.getElementById('listBg') as HTMLInputElement;
+    const listFg = document.getElementById('listFg') as HTMLInputElement;
+    const listActive = document.getElementById('listActive') as HTMLInputElement;
+
+    this.lists[this.currentListIndex].name = listName.value;
+    this.lists[this.currentListIndex].background = listBg.value;
+    this.lists[this.currentListIndex].foreground = listFg.value;
+    this.lists[this.currentListIndex].active = listActive.checked;
+
+    this.save();
   }
 
   private async save(): Promise<void> {
