@@ -1,5 +1,3 @@
-// Type definitions for the Goose Highlighter extension
-
 export interface HighlightWord {
   wordStr: string;
   background: string;
@@ -37,31 +35,12 @@ export interface MessageData {
   matchWhole?: boolean;
 }
 
-export interface SectionStates {
-  [sectionName: string]: boolean;
-}
-
 export interface ExportData {
   lists: HighlightList[];
   exceptionsList: string[];
 }
 
-// DOM element selectors used in popup
-export interface PopupElements {
-  listSelect: HTMLSelectElement;
-  listName: HTMLInputElement;
-  listBg: HTMLInputElement;
-  listFg: HTMLInputElement;
-  listActive: HTMLInputElement;
-  bulkPaste: HTMLTextAreaElement;
-  wordList: HTMLDivElement;
-  importInput: HTMLInputElement;
-  matchCase: HTMLInputElement;
-  matchWhole: HTMLInputElement;
-}
-
-// Default storage values
-export const DEFAULT_STORAGE: Partial<StorageData> = {
+export const DEFAULT_STORAGE: StorageData = {
   lists: [],
   globalHighlightEnabled: true,
   matchCaseEnabled: false,
@@ -69,7 +48,8 @@ export const DEFAULT_STORAGE: Partial<StorageData> = {
   exceptionsList: []
 };
 
-// Constants
-export const WORD_ITEM_HEIGHT = 32;
-export const DEBOUNCE_DELAY = 300;
-export const SCROLL_THROTTLE = 16; // ~60fps
+export const CONSTANTS = {
+  WORD_ITEM_HEIGHT: 32,
+  DEBOUNCE_DELAY: 300,
+  SCROLL_THROTTLE: 16
+} as const;
