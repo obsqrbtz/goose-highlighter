@@ -1,3 +1,4 @@
+// @ts-nocheck
 const listSelect = document.getElementById('listSelect');
 const listName = document.getElementById('listName');
 const listBg = document.getElementById('listBg');

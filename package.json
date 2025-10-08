@@ -5,11 +5,17 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
+    "@types/chrome": "^0.0.270",
     "eslint": "^9.30.0",
     "globals": "^16.2.0",
-    "semantic-release": "^24.2.5"
+    "semantic-release": "^24.2.5",
+    "typescript": "^5.6.0"
   },
   "scripts": {
-    "prepare": "node scripts/update-manifest-version.js"
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rimraf dist",
+    "rebuild": "npm run clean && npm run build",
+    "prepare": "npm run build && node scripts/update-manifest-version.js"
   }
 }

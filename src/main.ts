@@ -1,3 +1,4 @@
+// @ts-nocheck
 let currentLists = [];
 let isGlobalHighlightEnabled = true;
 let exceptionsList = [];
