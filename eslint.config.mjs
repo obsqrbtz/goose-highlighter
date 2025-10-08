@@ -28,4 +28,13 @@ export default [...compat.extends('eslint:recommended'), {
         semi: ['error', 'always'],
         quotes: ['error', 'single'],
     },
+}, {
+    files: ['scripts/**/*.js'],
+    languageOptions: {
+        globals: {
+            ...globals.node,
+        },
+        ecmaVersion: 12,
+        sourceType: 'module',
+    },
 }];
