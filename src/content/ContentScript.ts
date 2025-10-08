@@ -12,6 +12,7 @@ export class ContentScript {
   private matchCase = false;
   private matchWhole = false;
   private highlightEngine: HighlightEngine;
+  private isProcessing = false;
 
   constructor() {
     this.highlightEngine = new HighlightEngine(() => this.processHighlights());
@@ -96,11 +97,19 @@ export class ContentScript {
   }
 
   private processHighlights(): void {
-    if (!this.isGlobalHighlightEnabled || this.isCurrentSiteException) {
-      this.highlightEngine.clearHighlights();
-      return;
-    }
+    if (this.isProcessing) return;
+    this.isProcessing = true;
 
-    this.highlightEngine.highlight(this.lists, this.matchCase, this.matchWhole);
+    try {
+      if (!this.isGlobalHighlightEnabled || this.isCurrentSiteException) {
+        this.highlightEngine.clearHighlights();
+        this.highlightEngine.stopObserving();
+        return;
+      }
+
+      this.highlightEngine.highlight(this.lists, this.matchCase, this.matchWhole);
+    } finally {
+      this.isProcessing = false;
+    }
   }
 }

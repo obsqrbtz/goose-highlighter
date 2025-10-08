@@ -7,7 +7,23 @@ export class HighlightEngine {
   private observer: MutationObserver;
 
   constructor(private onUpdate: () => void) {
-    this.observer = new MutationObserver(DOMUtils.debounce(onUpdate, 300));
+    this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
+      const hasRelevantChanges = mutations.some((mutation: MutationRecord) => {
+        if (mutation.target instanceof Element && mutation.target.hasAttribute('data-gh')) {
+          return false;
+        }
+        const addedNodes = Array.from(mutation.addedNodes);
+        const removedNodes = Array.from(mutation.removedNodes);
+        const isOurChange = [...addedNodes, ...removedNodes].some(node => 
+          node instanceof Element && (node.hasAttribute('data-gh') || node.querySelector('[data-gh]'))
+        );
+        return !isOurChange;
+      });
+      
+      if (hasRelevantChanges) {
+        onUpdate();
+      }
+    }, 300));
   }
 
   private initializeStyleSheet(): void {
@@ -45,14 +61,8 @@ export class HighlightEngine {
   }
 
   clearHighlights(): void {
-    const highlightedElements = document.querySelectorAll('[data-gh]');
-    highlightedElements.forEach(element => {
-      const parent = element.parentNode;
-      if (parent) {
-        parent.replaceChild(document.createTextNode(element.textContent || ''), element);
-        parent.normalize();
-      }
-    });
+    this.observer.disconnect();
+    this.clearHighlightsInternal();
   }
 
   private getTextNodes(): Text[] {
@@ -100,7 +110,8 @@ export class HighlightEngine {
 
   highlight(lists: HighlightList[], matchCase: boolean, matchWhole: boolean): void {
     this.observer.disconnect();
-    this.clearHighlights();
+    
+    this.clearHighlightsInternal();
 
     const activeWords = this.extractActiveWords(lists);
     if (activeWords.length === 0) {
@@ -146,11 +157,34 @@ export class HighlightEngine {
     this.startObserving();
   }
 
+  private clearHighlightsInternal(): void {
+    const highlightedElements = document.querySelectorAll('[data-gh]');
+    highlightedElements.forEach(element => {
+      const parent = element.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(element.textContent || ''), element);
+        parent.normalize();
+      }
+    });
+    
+    if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
+      while (this.styleSheet.cssRules.length > 0) {
+        this.styleSheet.deleteRule(0);
+      }
+    }
+  }
+
+  stopObserving(): void {
+    this.observer.disconnect();
+  }
+
   private startObserving(): void {
     this.observer.observe(document.body, {
       childList: true,
       subtree: true,
-      characterData: true
+      characterData: true,
+      // Don't observe attribute changes to avoid triggering on our own style changes
+      attributes: false
     });
   }
 
