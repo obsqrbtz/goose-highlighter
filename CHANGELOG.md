@@ -1,3 +1,11 @@
+## [1.8.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.1...v1.8.2) (2025-10-08)
+
+
+### Bug Fixes
+
+* do not call save() on all keypresses in textboxes ([687d7c9](https://github.com/obsqrbtz/goose-highlighter/commit/687d7c9e62f0f282ce73e86cdc62aaf275c9dafe))
+* do not save anything in list settings section until presses the apply button ([0734bf3](https://github.com/obsqrbtz/goose-highlighter/commit/0734bf330824c60f0d5c4784e99660b9e652efd6))
+
 # [1.8.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.2...v1.8.0) (2025-10-07)
 
 
