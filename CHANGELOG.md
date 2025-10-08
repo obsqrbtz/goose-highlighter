@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.2...v1.8.3) (2025-10-08)
+
+
+### Bug Fixes
+
+* stop observing when highlightting is disabled ([d7c8dbb](https://github.com/obsqrbtz/goose-highlighter/commit/d7c8dbb5f0011afe83739841218aa737794074e3))
+
 ## [1.8.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.1...v1.8.2) (2025-10-08)
 
 
