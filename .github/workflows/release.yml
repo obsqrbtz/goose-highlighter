@@ -1,0 +1,103 @@
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create Release with Extension Files
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Update manifest version
+        run: node scripts/update-manifest-version.js
+
+      - name: Create extension zip
+        run: |
+          zip -r goose-highlighter-${{ steps.version.outputs.VERSION }}.zip . \
+            -x '*.git*' 'node_modules/*' 'src/*' 'versioning.md' '.releaserc.json' \
+               'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' \
+               'eslint.config.mjs' '.github/*' 'CHANGELOG.md' 'PRIVACY.MD'
+
+      - name: Install Chrome extension packaging tool
+        run: npm install -g crx3
+
+      - name: Generate private key for CRX
+        run: |
+          openssl genrsa -out key.pem 2048
+          
+      - name: Create CRX file
+        run: |
+          # Create a temporary directory for the extension
+          mkdir temp_extension
+          
+          # Copy all files except excluded ones to temp directory
+          rsync -av --exclude='.git*' --exclude='node_modules' --exclude='src' \
+                --exclude='versioning.md' --exclude='.releaserc.json' \
+                --exclude='package.json' --exclude='package-lock.json' \
+                --exclude='README.md' --exclude='tsconfig.json' \
+                --exclude='eslint.config.mjs' --exclude='.github' \
+                --exclude='CHANGELOG.md' --exclude='PRIVACY.MD' \
+                --exclude='key.pem' --exclude='temp_extension' \
+                ./ temp_extension/
+          
+          # Create CRX file
+          crx3 temp_extension -o goose-highlighter-${{ steps.version.outputs.VERSION }}.crx -p key.pem
+          
+          # Clean up
+          rm -rf temp_extension key.pem
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          if [ -f CHANGELOG.md ]; then
+            # Extract the latest version's changes from CHANGELOG.md
+            awk '/^## \[${{ steps.version.outputs.VERSION }}\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md > release_notes.txt
+            if [ -s release_notes.txt ]; then
+              echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+              cat release_notes.txt >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+            else
+              echo "RELEASE_NOTES=Release ${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "RELEASE_NOTES=Release ${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ steps.version.outputs.VERSION }}
+          body: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+          files: |
+            goose-highlighter-${{ steps.version.outputs.VERSION }}.zip
+            goose-highlighter-${{ steps.version.outputs.VERSION }}.crx
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
