@@ -34,7 +34,7 @@ jobs:
 
       - name: Create zip package
         run: |
-          zip -r goose-highlighter.zip . -x '*.git*' 'node_modules/*' 'src/*' 'versioning.md' '.releaserc.json' 'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' 'eslint.config.mjs'
+          zip -r goose-highlighter.zip . -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'versioning.md' '.releaserc.json' 'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' 'eslint.config.mjs'
 
       - name: Install webstore upload CLI
         run: npm install -g chrome-webstore-upload-cli
