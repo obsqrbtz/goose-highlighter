@@ -1,13 +1,13 @@
-const fs = require("fs");
+import fs from 'fs';
 
 const version = process.argv[2];
 if (!version) {
-    console.error("❌ No version passed");
-    process.exit(1);
+    console.log('ℹ️ No version passed, skipping manifest update');
+    process.exit(0);
 }
 
-const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf-8"));
+const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf-8'));
 manifest.version = version;
-fs.writeFileSync("manifest.json", JSON.stringify(manifest, null, 2));
+fs.writeFileSync('manifest.json', JSON.stringify(manifest, null, 2));
 
 console.log(`✅ Updated manifest.json to version ${version}`);
