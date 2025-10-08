@@ -15,8 +15,17 @@ function localizePage(): void {
   });
 }
 
+function displayVersion(): void {
+  const manifest = chrome.runtime.getManifest();
+  const versionElement = document.getElementById('version-number');
+  if (versionElement && manifest.version) {
+    versionElement.textContent = manifest.version;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   localizePage();
+  displayVersion();
   const controller = new PopupController();
   await controller.initialize();
 });
