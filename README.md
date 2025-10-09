@@ -1,4 +1,4 @@
-# Goose Highlighter
+# <img src="img/logo.png" alt="Goose Highlighter Logo" width="32" style="vertical-align: middle;"> Goose Highlighter
 
 Goose Highlighter is a browser extension that allows you to highlight words on any webpage.
 
