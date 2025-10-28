@@ -1,3 +1,10 @@
+## [1.8.4](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.3...v1.8.4) (2025-10-28)
+
+
+### Bug Fixes
+
+* do not re-highlight when already processing highlights ([8be53f3](https://github.com/obsqrbtz/goose-highlighter/commit/8be53f32402c2f0f228ca003ef3805c5ff0b6e88))
+
 ## [1.8.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.2...v1.8.3) (2025-10-08)
 
 
