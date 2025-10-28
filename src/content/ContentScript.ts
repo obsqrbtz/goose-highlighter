@@ -68,7 +68,7 @@ export class ContentScript {
   }
 
   private setupScrollHandler(): void {
-    const debouncedProcess = DOMUtils.debounce(() => this.processHighlights(), 300);
+    const debouncedProcess = DOMUtils.debounce(() => this.processHighlights(), CONSTANTS.DEBOUNCE_DELAY);
     window.addEventListener('scroll', debouncedProcess);
   }
 

@@ -5,25 +5,31 @@ export class HighlightEngine {
   private styleSheet: CSSStyleSheet | null = null;
   private wordStyleMap = new Map<string, string>();
   private observer: MutationObserver;
+  private isHighlighting = false;
 
   constructor(private onUpdate: () => void) {
     this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
-      const hasRelevantChanges = mutations.some((mutation: MutationRecord) => {
+      if (this.isHighlighting) return;
+
+      const hasContentChanges = mutations.some((mutation: MutationRecord) => {
+        if (mutation.type !== 'childList') return false;
+
         if (mutation.target instanceof Element && mutation.target.hasAttribute('data-gh')) {
           return false;
         }
-        const addedNodes = Array.from(mutation.addedNodes);
-        const removedNodes = Array.from(mutation.removedNodes);
-        const isOurChange = [...addedNodes, ...removedNodes].some(node => 
-          node instanceof Element && (node.hasAttribute('data-gh') || node.querySelector('[data-gh]'))
-        );
-        return !isOurChange;
+
+        const allNodes = [...Array.from(mutation.addedNodes), ...Array.from(mutation.removedNodes)];
+        return allNodes.some(node => {
+          if (node.nodeType === Node.TEXT_NODE) return true;
+          if (node instanceof Element && !node.hasAttribute('data-gh')) return true;
+          return false;
+        });
       });
-      
-      if (hasRelevantChanges) {
-        onUpdate();
+
+      if (hasContentChanges) {
+        this.onUpdate();
       }
-    }, 300));
+    }, CONSTANTS.DEBOUNCE_DELAY));
   }
 
   private initializeStyleSheet(): void {
@@ -37,24 +43,24 @@ export class HighlightEngine {
 
   private updateWordStyles(activeWords: ActiveWord[]): void {
     this.initializeStyleSheet();
-    
+
     while (this.styleSheet!.cssRules.length > 0) {
       this.styleSheet!.deleteRule(0);
     }
-    
+
     this.wordStyleMap.clear();
     const uniqueStyles = new Map<string, string>();
-    
+
     for (const word of activeWords) {
       const styleKey = `${word.background}-${word.foreground}`;
       if (!uniqueStyles.has(styleKey)) {
         const className = `highlighted-word-${uniqueStyles.size}`;
         uniqueStyles.set(styleKey, className);
-        
+
         const rule = `.${className} { background: ${word.background}; color: ${word.foreground}; padding: 0 2px; }`;
         this.styleSheet!.insertRule(rule, this.styleSheet!.cssRules.length);
       }
-      
+
       const lookup = word.text;
       this.wordStyleMap.set(lookup, uniqueStyles.get(styleKey)!);
     }
@@ -68,8 +74,8 @@ export class HighlightEngine {
   private getTextNodes(): Text[] {
     const textNodes: Text[] = [];
     const walker = document.createTreeWalker(
-      document.body, 
-      NodeFilter.SHOW_TEXT, 
+      document.body,
+      NodeFilter.SHOW_TEXT,
       {
         acceptNode: (node: Text) => {
           if (node.parentNode && (node.parentNode as Element).hasAttribute('data-gh')) {
@@ -109,18 +115,22 @@ export class HighlightEngine {
   }
 
   highlight(lists: HighlightList[], matchCase: boolean, matchWhole: boolean): void {
+    if (this.isHighlighting) return;
+    this.isHighlighting = true;
+
     this.observer.disconnect();
-    
+
     this.clearHighlightsInternal();
 
     const activeWords = this.extractActiveWords(lists);
     if (activeWords.length === 0) {
       this.startObserving();
+      this.isHighlighting = false;
       return;
     }
 
     this.updateWordStyles(activeWords);
-    
+
     const wordMap = new Map<string, ActiveWord>();
     for (const word of activeWords) {
       const key = matchCase ? word.text : word.text.toLowerCase();
@@ -129,11 +139,11 @@ export class HighlightEngine {
 
     const flags = matchCase ? 'gu' : 'giu';
     let wordsPattern = Array.from(wordMap.keys()).map(DOMUtils.escapeRegex).join('|');
-    
+
     if (matchWhole) {
       wordsPattern = `(?:(?<!\\p{L})|^)(${wordsPattern})(?:(?!\\p{L})|$)`;
     }
-    
+
     try {
       const pattern = new RegExp(`(${wordsPattern})`, flags);
       const textNodes = this.getTextNodes();
@@ -155,6 +165,7 @@ export class HighlightEngine {
     }
 
     this.startObserving();
+    this.isHighlighting = false;
   }
 
   private clearHighlightsInternal(): void {
@@ -166,7 +177,7 @@ export class HighlightEngine {
         parent.normalize();
       }
     });
-    
+
     if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
       while (this.styleSheet.cssRules.length > 0) {
         this.styleSheet.deleteRule(0);
@@ -182,8 +193,6 @@ export class HighlightEngine {
     this.observer.observe(document.body, {
       childList: true,
       subtree: true,
-      characterData: true,
-      // Don't observe attribute changes to avoid triggering on our own style changes
       attributes: false
     });
   }
