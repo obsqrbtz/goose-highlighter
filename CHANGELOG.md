@@ -1,3 +1,10 @@
+## [1.8.5](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.4...v1.8.5) (2025-10-29)
+
+
+### Bug Fixes
+
+* highlight colors when multiple list have different configurations ([67577c8](https://github.com/obsqrbtz/goose-highlighter/commit/67577c89cffca1ab6d40a8913e51b7c3c6f91c85))
+
 ## [1.8.4](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.3...v1.8.4) (2025-10-28)
 
 
