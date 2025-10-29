@@ -41,7 +41,7 @@ export class HighlightEngine {
     }
   }
 
-  private updateWordStyles(activeWords: ActiveWord[]): void {
+  private updateWordStyles(activeWords: ActiveWord[], matchCase: boolean): void {
     this.initializeStyleSheet();
 
     while (this.styleSheet!.cssRules.length > 0) {
@@ -61,7 +61,7 @@ export class HighlightEngine {
         this.styleSheet!.insertRule(rule, this.styleSheet!.cssRules.length);
       }
 
-      const lookup = word.text;
+      const lookup = matchCase ? word.text : word.text.toLowerCase();
       this.wordStyleMap.set(lookup, uniqueStyles.get(styleKey)!);
     }
   }
@@ -129,7 +129,7 @@ export class HighlightEngine {
       return;
     }
 
-    this.updateWordStyles(activeWords);
+    this.updateWordStyles(activeWords, matchCase);
 
     const wordMap = new Map<string, ActiveWord>();
     for (const word of activeWords) {
