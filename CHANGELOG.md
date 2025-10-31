@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.5...v1.9.0) (2025-10-31)
+
+
+### Features
+
+* haloween styling ([5ef380e](https://github.com/obsqrbtz/goose-highlighter/commit/5ef380e54447f45f7360dd4b7b84456aae55bfee))
+
 ## [1.8.5](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.4...v1.8.5) (2025-10-29)
 
 
