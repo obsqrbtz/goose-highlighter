@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="popup.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
 </head>
 
 <body class="dark">
@@ -16,9 +15,7 @@
 
     <div class="header-bar">
       <span class="title">
-        <video class="flying-pumpkin-video header-pumpkin" autoplay loop muted>
-          <source src="../img/pumpkin.webm" type="video/webm">
-        </video> Goose Highlighter
+        <i class="fa-solid fa-highlighter"></i> Goose Highlighter
       </span>
       <div class="icon-toggles">
         <label class="icon-toggle" title="Toggle highlighting">
@@ -34,31 +31,27 @@
 
     <div class="section" data-section="exceptions">
       <div class="section-header">
-        <h2><i class="fa-solid fa-ban halloween-icon"></i> <span data-i18n="site_exceptions">Site Exceptions</span></h2>
+        <h2><i class="fa-solid fa-ban"></i> <span data-i18n="site_exceptions">Site Exceptions</span></h2>
         <button class="collapse-toggle" data-target="exceptions">
           <i class="fa-solid fa-chevron-up"></i>
         </button>
       </div>
       <div class="section-content" id="exceptions-content">
         <div class="button-row">
-          <button id="toggleExceptionBtn"><i class="fa-solid fa-ban"></i> <span id="exceptionBtnText"
-              data-i18n="add_exception">Add to Exceptions</span></button>
-          <button id="manageExceptionsBtn"><i class="fa-solid fa-list"></i> <span
-              data-i18n="manage_exceptions">Manage</span></button>
+          <button id="toggleExceptionBtn"><i class="fa-solid fa-ban"></i> <span id="exceptionBtnText" data-i18n="add_exception">Add to Exceptions</span></button>
+          <button id="manageExceptionsBtn"><i class="fa-solid fa-list"></i> <span data-i18n="manage_exceptions">Manage</span></button>
         </div>
         <div id="exceptionsPanel" class="exceptions-panel" style="display: none;">
           <h3 data-i18n="exceptions_list">Exception Sites:</h3>
           <div id="exceptionsList" class="exceptions-list"></div>
-          <button id="clearExceptionsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span
-              data-i18n="clear_all">Clear All</span></button>
+          <button id="clearExceptionsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span data-i18n="clear_all">Clear All</span></button>
         </div>
       </div>
     </div>
 
     <div class="section" data-section="lists">
       <div class="section-header">
-        <h2><i class="fa-solid fa-list halloween-icon"></i> <span data-i18n="highlight_lists">Highlight Lists</span>
-        </h2>
+        <h2><i class="fa-solid fa-list"></i> <span data-i18n="highlight_lists">Highlight Lists</span></h2>
         <button class="collapse-toggle" data-target="lists">
           <i class="fa-solid fa-chevron-up"></i>
         </button>
@@ -76,7 +69,7 @@
 
     <div class="section" data-section="settings">
       <div class="section-header">
-        <h2><i class="fa-solid fa-gear halloween-icon"></i> <span data-i18n="list_settings">List Settings</span></h2>
+        <h2><i class="fa-solid fa-gear"></i> <span data-i18n="list_settings">List Settings</span></h2>
         <button class="collapse-toggle" data-target="settings">
           <i class="fa-solid fa-chevron-up"></i>
         </button>
@@ -97,14 +90,13 @@
           <span data-i18n="enable_highlight">Enable Highlighting</span>
           <input type="checkbox" class="switch" id="listActive" />
         </label>
-        <button id="applyListSettingsBtn"><i class="fa-solid fa-check"></i> <span
-            data-i18n="apply">Apply</span></button>
+        <button id="applyListSettingsBtn"><i class="fa-solid fa-check"></i> <span data-i18n="apply">Apply</span></button>
       </div>
     </div>
 
     <div class="section" data-section="addwords">
       <div class="section-header">
-        <h2><i class="fa-solid fa-pen halloween-icon"></i> <span data-i18n="add_words">Add Words</span></h2>
+        <h2><i class="fa-solid fa-pen"></i> <span data-i18n="add_words">Add Words</span></h2>
         <button class="collapse-toggle" data-target="addwords">
           <i class="fa-solid fa-chevron-up"></i>
         </button>
@@ -117,8 +109,7 @@
 
     <div class="section" data-section="wordlist">
       <div class="section-header">
-        <h2><i class="fa-solid fa-tags halloween-icon"></i> <span data-i18n="word_list">Word List</span>(<span
-            id="wordCount">0</span>)
+        <h2><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span>(<span id="wordCount">0</span>)
         </h2>
         <button class="collapse-toggle" data-target="wordlist">
           <i class="fa-solid fa-chevron-up"></i>
@@ -139,7 +130,7 @@
 
     <div class="section" data-section="options">
       <div class="section-header">
-        <h2><i class="fa-solid fa-sliders halloween-icon"></i> <span data-i18n="options">Options</span></h2>
+        <h2><i class="fa-solid fa-sliders"></i> <span data-i18n="options">Options</span></h2>
         <button class="collapse-toggle" data-target="options">
           <i class="fa-solid fa-chevron-up"></i>
         </button>
@@ -152,8 +143,7 @@
         <div class="button-row">
           <button id="importBtn"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import</span></button>
           <input type="file" id="importInput" accept="application/json" hidden />
-          <button id="exportBtn"><i class="fa-solid fa-download"></i> <span
-              data-i18n="export_list">Export</span></button>
+          <button id="exportBtn"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export</span></button>
         </div>
       </div>
     </div>
