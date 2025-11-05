@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.0...v1.9.1) (2025-11-05)
+
+
+### Bug Fixes
+
+* remove halowen styling ([172aa75](https://github.com/obsqrbtz/goose-highlighter/commit/172aa7583b325761af43c780db4ac61dc4bda99b))
+
 # [1.9.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.5...v1.9.0) (2025-10-31)
 
 
