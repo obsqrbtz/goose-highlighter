@@ -151,14 +151,34 @@ export class HighlightEngine {
       for (const node of textNodes) {
         if (!node.nodeValue || !pattern.test(node.nodeValue)) continue;
 
-        const span = document.createElement('span');
-        span.innerHTML = node.nodeValue.replace(pattern, (match) => {
-          const lookup = matchCase ? match : match.toLowerCase();
+        const fragment = document.createDocumentFragment();
+        const text = node.nodeValue;
+        let lastIndex = 0;
+        
+        pattern.lastIndex = 0;
+        let match;
+        
+        while ((match = pattern.exec(text)) !== null) {
+          if (match.index > lastIndex) {
+            fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+          }
+          
+          const lookup = matchCase ? match[0] : match[0].toLowerCase();
           const className = this.wordStyleMap.get(lookup) || 'highlighted-word-0';
-          return `<span data-gh class="${className}">${match}</span>`;
-        });
+          const highlightSpan = document.createElement('span');
+          highlightSpan.setAttribute('data-gh', '');
+          highlightSpan.className = className;
+          highlightSpan.textContent = match[0];
+          fragment.appendChild(highlightSpan);
+          
+          lastIndex = pattern.lastIndex;
+        }
+        
+        if (lastIndex < text.length) {
+          fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+        }
 
-        node.parentNode?.replaceChild(span, node);
+        node.parentNode?.replaceChild(fragment, node);
       }
     } catch (e) {
       console.error('Regex error:', e);
