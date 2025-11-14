@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.1...v1.9.2) (2025-11-14)
+
+
+### Bug Fixes
+
+* **highlight:** prevent creating extra <span>'s ([#1](https://github.com/obsqrbtz/goose-highlighter/issues/1)) ([affddd3](https://github.com/obsqrbtz/goose-highlighter/commit/affddd3dbc7de30100ca134ec65f4dc090275ca5))
+
 ## [1.9.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.0...v1.9.1) (2025-11-05)
 
 
