@@ -1,3 +1,10 @@
+## [1.9.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.2...v1.9.3) (2025-11-18)
+
+
+### Bug Fixes
+
+* use CSS Custom Highlight API to avoid dom modifications (fixes [#1](https://github.com/obsqrbtz/goose-highlighter/issues/1)) ([3f2bb60](https://github.com/obsqrbtz/goose-highlighter/commit/3f2bb6080ba3a9ac0599ad6594f0d877c12bb62f))
+
 ## [1.9.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.1...v1.9.2) (2025-11-14)
 
 
