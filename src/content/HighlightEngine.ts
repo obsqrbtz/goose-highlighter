@@ -1,9 +1,9 @@
-import { HighlightList, ActiveWord } from '../types.js';
+import { HighlightList, ActiveWord, CONSTANTS } from '../types.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
 
 export class HighlightEngine {
   private styleSheet: CSSStyleSheet | null = null;
-  private wordStyleMap = new Map<string, string>();
+  private highlights = new Map<string, Highlight>();
   private observer: MutationObserver;
   private isHighlighting = false;
 
@@ -13,15 +13,10 @@ export class HighlightEngine {
 
       const hasContentChanges = mutations.some((mutation: MutationRecord) => {
         if (mutation.type !== 'childList') return false;
-
-        if (mutation.target instanceof Element && mutation.target.hasAttribute('data-gh')) {
-          return false;
-        }
-
         const allNodes = [...Array.from(mutation.addedNodes), ...Array.from(mutation.removedNodes)];
         return allNodes.some(node => {
           if (node.nodeType === Node.TEXT_NODE) return true;
-          if (node instanceof Element && !node.hasAttribute('data-gh')) return true;
+          if (node instanceof Element) return true;
           return false;
         });
       });
@@ -41,28 +36,24 @@ export class HighlightEngine {
     }
   }
 
-  private updateWordStyles(activeWords: ActiveWord[], matchCase: boolean): void {
+  private updateHighlightStyles(activeWords: ActiveWord[]): void {
     this.initializeStyleSheet();
 
     while (this.styleSheet!.cssRules.length > 0) {
       this.styleSheet!.deleteRule(0);
     }
 
-    this.wordStyleMap.clear();
-    const uniqueStyles = new Map<string, string>();
+    const uniqueStyles = new Map<string, number>();
+    let styleIndex = 0;
 
     for (const word of activeWords) {
       const styleKey = `${word.background}-${word.foreground}`;
       if (!uniqueStyles.has(styleKey)) {
-        const className = `highlighted-word-${uniqueStyles.size}`;
-        uniqueStyles.set(styleKey, className);
-
-        const rule = `.${className} { background: ${word.background}; color: ${word.foreground}; padding: 0 2px; }`;
+        uniqueStyles.set(styleKey, styleIndex);
+        const rule = `::highlight(gh-${styleIndex}) { background-color: ${word.background}; color: ${word.foreground}; }`;
         this.styleSheet!.insertRule(rule, this.styleSheet!.cssRules.length);
+        styleIndex++;
       }
-
-      const lookup = matchCase ? word.text : word.text.toLowerCase();
-      this.wordStyleMap.set(lookup, uniqueStyles.get(styleKey)!);
     }
   }
 
@@ -78,9 +69,6 @@ export class HighlightEngine {
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: (node: Text) => {
-          if (node.parentNode && (node.parentNode as Element).hasAttribute('data-gh')) {
-            return NodeFilter.FILTER_REJECT;
-          }
           if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME'].includes(node.parentNode.nodeName)) {
             return NodeFilter.FILTER_REJECT;
           }
@@ -119,7 +107,6 @@ export class HighlightEngine {
     this.isHighlighting = true;
 
     this.observer.disconnect();
-
     this.clearHighlightsInternal();
 
     const activeWords = this.extractActiveWords(lists);
@@ -129,16 +116,23 @@ export class HighlightEngine {
       return;
     }
 
-    this.updateWordStyles(activeWords, matchCase);
+    this.updateHighlightStyles(activeWords);
 
-    const wordMap = new Map<string, ActiveWord>();
+    const styleMap = new Map<string, number>();
+    const uniqueStyles = new Map<string, number>();
+    let styleIndex = 0;
+
     for (const word of activeWords) {
-      const key = matchCase ? word.text : word.text.toLowerCase();
-      wordMap.set(key, word);
+      const styleKey = `${word.background}-${word.foreground}`;
+      if (!uniqueStyles.has(styleKey)) {
+        uniqueStyles.set(styleKey, styleIndex++);
+      }
+      const lookup = matchCase ? word.text : word.text.toLowerCase();
+      styleMap.set(lookup, uniqueStyles.get(styleKey)!);
     }
 
     const flags = matchCase ? 'gu' : 'giu';
-    let wordsPattern = Array.from(wordMap.keys()).map(DOMUtils.escapeRegex).join('|');
+    let wordsPattern = Array.from(styleMap.keys()).map(DOMUtils.escapeRegex).join('|');
 
     if (matchWhole) {
       wordsPattern = `(?:(?<!\\p{L})|^)(${wordsPattern})(?:(?!\\p{L})|$)`;
@@ -148,37 +142,37 @@ export class HighlightEngine {
       const pattern = new RegExp(`(${wordsPattern})`, flags);
       const textNodes = this.getTextNodes();
 
-      for (const node of textNodes) {
-        if (!node.nodeValue || !pattern.test(node.nodeValue)) continue;
+      const rangesByStyle = new Map<number, Range[]>();
 
-        const fragment = document.createDocumentFragment();
+      for (const node of textNodes) {
+        if (!node.nodeValue) continue;
+
         const text = node.nodeValue;
-        let lastIndex = 0;
-        
         pattern.lastIndex = 0;
         let match;
-        
-        while ((match = pattern.exec(text)) !== null) {
-          if (match.index > lastIndex) {
-            fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
-          }
-          
-          const lookup = matchCase ? match[0] : match[0].toLowerCase();
-          const className = this.wordStyleMap.get(lookup) || 'highlighted-word-0';
-          const highlightSpan = document.createElement('span');
-          highlightSpan.setAttribute('data-gh', '');
-          highlightSpan.className = className;
-          highlightSpan.textContent = match[0];
-          fragment.appendChild(highlightSpan);
-          
-          lastIndex = pattern.lastIndex;
-        }
-        
-        if (lastIndex < text.length) {
-          fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
-        }
 
-        node.parentNode?.replaceChild(fragment, node);
+        while ((match = pattern.exec(text)) !== null) {
+          const lookup = matchCase ? match[0] : match[0].toLowerCase();
+          const styleIdx = styleMap.get(lookup);
+
+          if (styleIdx !== undefined) {
+            const range = new Range();
+            range.setStart(node, match.index);
+            range.setEnd(node, match.index + match[0].length);
+
+            if (!rangesByStyle.has(styleIdx)) {
+              rangesByStyle.set(styleIdx, []);
+            }
+            rangesByStyle.get(styleIdx)!.push(range);
+          }
+        }
+      }
+
+      for (const [styleIdx, ranges] of rangesByStyle) {
+        const highlight = new Highlight(...ranges);
+        const highlightName = `gh-${styleIdx}`;
+        this.highlights.set(highlightName, highlight);
+        CSS.highlights.set(highlightName, highlight);
       }
     } catch (e) {
       console.error('Regex error:', e);
@@ -189,14 +183,10 @@ export class HighlightEngine {
   }
 
   private clearHighlightsInternal(): void {
-    const highlightedElements = document.querySelectorAll('[data-gh]');
-    highlightedElements.forEach(element => {
-      const parent = element.parentNode;
-      if (parent) {
-        parent.replaceChild(document.createTextNode(element.textContent || ''), element);
-        parent.normalize();
-      }
-    });
+    for (const name of this.highlights.keys()) {
+      CSS.highlights.delete(name);
+    }
+    this.highlights.clear();
 
     if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
       while (this.styleSheet.cssRules.length > 0) {
