@@ -26,6 +26,9 @@
   "enable_highlight": {
     "message": "启用高亮"
   },
+  "apply": {
+    "message": "应用"
+  },
   "paste_hint": {
     "message": "在此粘贴单词"
   },

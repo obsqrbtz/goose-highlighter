@@ -26,6 +26,9 @@
     "enable_highlight": {
         "message": "Hervorhebung aktivieren"
     },
+    "apply": {
+        "message": "Anwenden"
+    },
     "paste_hint": {
         "message": "Wörter hier einfügen"
     },

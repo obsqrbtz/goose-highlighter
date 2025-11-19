@@ -26,6 +26,9 @@
   "enable_highlight": {
     "message": "Включить выделение"
   },
+  "apply": {
+    "message": "Применить"
+  },
   "paste_hint": {
     "message": "Вставьте список слов здесь"
   },

@@ -26,6 +26,9 @@
   "enable_highlight": {
     "message": "Enable Highlight"
   },
+  "apply": {
+    "message": "Apply"
+  },
   "paste_hint": {
     "message": "Paste words here"
   },

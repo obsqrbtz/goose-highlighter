@@ -26,6 +26,9 @@
   "enable_highlight": {
     "message": "Vurgulamayı Etkinleştir"
   },
+  "apply": {
+    "message": "Uygula"
+  },
   "paste_hint": {
     "message": "Kelimeleri buraya yapıştırın"
   },

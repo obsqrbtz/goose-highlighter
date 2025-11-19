@@ -26,6 +26,9 @@
     "enable_highlight": {
         "message": "하이라이트 활성화"
     },
+    "apply": {
+        "message": "적용"
+    },
     "paste_hint": {
         "message": "여기에 단어를 붙여넣기"
     },

@@ -26,6 +26,9 @@
   "enable_highlight": {
     "message": "Markeren inschakelen"
   },
+  "apply": {
+    "message": "Toepassen"
+  },
   "paste_hint": {
     "message": "Plak hier de woorden"
   },

@@ -26,6 +26,9 @@
     "enable_highlight": {
         "message": "ハイライトを有効にする"
     },
+    "apply": {
+        "message": "適用"
+    },
     "paste_hint": {
         "message": "ここに単語を貼り付けてください"
     },

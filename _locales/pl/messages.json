@@ -26,6 +26,9 @@
   "enable_highlight": {
     "message": "Włącz podświetlanie"
   },
+  "apply": {
+    "message": "Zastosuj"
+  },
   "paste_hint": {
     "message": "Wklej tutaj słowa"
   },

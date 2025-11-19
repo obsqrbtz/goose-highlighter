@@ -26,6 +26,9 @@
     "enable_highlight": {
         "message": "हाइलाइट सक्षम करें"
     },
+    "apply": {
+        "message": "लागू करें"
+    },
     "paste_hint": {
         "message": "यहाँ शब्द चिपकाएँ"
     },

@@ -26,6 +26,9 @@
     "enable_highlight": {
         "message": "Ativar destaque"
     },
+    "apply": {
+        "message": "Aplicar"
+    },
     "paste_hint": {
         "message": "Cole as palavras aqui"
     },

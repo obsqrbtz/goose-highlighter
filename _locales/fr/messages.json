@@ -26,6 +26,9 @@
     "enable_highlight": {
         "message": "Activer la surbrillance"
     },
+    "apply": {
+        "message": "Appliquer"
+    },
     "paste_hint": {
         "message": "Collez les mots ici"
     },
