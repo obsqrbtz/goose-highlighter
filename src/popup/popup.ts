@@ -6,7 +6,7 @@ function localizePage(): void {
     const message = (element as HTMLElement).dataset.i18n!;
     const localizedText = chrome.i18n.getMessage(message);
     if (localizedText) {
-      if (element.tagName === 'INPUT' && (element as HTMLInputElement).hasAttribute('placeholder')) {
+      if ((element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') && (element as HTMLInputElement).hasAttribute('placeholder')) {
         (element as HTMLInputElement).placeholder = localizedText;
       } else {
         element.textContent = localizedText;
