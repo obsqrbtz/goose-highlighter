@@ -1,3 +1,12 @@
+## [1.10.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.10.0...v1.10.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* add fake highlighting for textareas ([f3c999a](https://github.com/obsqrbtz/goose-highlighter/commit/f3c999ad192d20ad4024261d8b3c8628de21382a))
+* correct matches list buttons handling ([f895327](https://github.com/obsqrbtz/goose-highlighter/commit/f895327eb0efc325309fea02eb4030eb8301916a))
+* go to textarea match ([fc4ef86](https://github.com/obsqrbtz/goose-highlighter/commit/fc4ef8655d0a4bce8ef6b67e45f5929e21c9b746))
+
 # [1.10.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.3...v1.10.0) (2025-11-20)
 
 
