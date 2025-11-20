@@ -30,7 +30,7 @@
         "message": "적용"
     },
     "paste_hint": {
-        "message": "여기에 단어를 붙여넣기"
+        "message": "여기에 단어나 구문을 붙여넣으세요. 각 새 단어/구문은 다음 줄에서 시작해야 합니다."
     },
     "apply_paste": {
         "message": "단어 추가"

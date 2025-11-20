@@ -30,7 +30,7 @@
         "message": "Applica"
     },
     "paste_hint": {
-        "message": "Incolla le parole qui"
+        "message": "Incolla parole o frasi qui. Ogni nuova parola/frase deve iniziare dalla riga successiva."
     },
     "apply_paste": {
         "message": "Aggiungi parole"

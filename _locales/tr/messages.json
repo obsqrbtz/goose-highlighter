@@ -30,7 +30,7 @@
     "message": "Uygula"
   },
   "paste_hint": {
-    "message": "Kelimeleri buraya yapıştırın"
+    "message": "Kelimeleri veya ifadeleri buraya yapıştırın. Her yeni kelime/ifade bir sonraki satırdan başlamalıdır."
   },
   "apply_paste": {
     "message": "Kelimeleri Ekle"

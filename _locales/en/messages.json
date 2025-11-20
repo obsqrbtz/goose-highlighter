@@ -30,7 +30,7 @@
     "message": "Apply"
   },
   "paste_hint": {
-    "message": "Paste words here"
+    "message": "Paste words or phrases here. Each new word/phrase should start from next line."
   },
   "apply_paste": {
     "message": "Add Words"

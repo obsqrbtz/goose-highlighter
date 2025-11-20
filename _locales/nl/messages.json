@@ -30,7 +30,7 @@
     "message": "Toepassen"
   },
   "paste_hint": {
-    "message": "Plak hier de woorden"
+    "message": "Plak hier woorden of zinnen. Elk nieuw woord/zin moet op de volgende regel beginnen."
   },
   "apply_paste": {
     "message": "Woorden toevoegen"

@@ -30,7 +30,7 @@
     "message": "Aplicar"
   },
   "paste_hint": {
-    "message": "Pega las palabras aquí"
+    "message": "Pegue palabras o frases aquí. Cada nueva palabra/frase debe comenzar en la siguiente línea."
   },
   "apply_paste": {
     "message": "Agregar palabras"

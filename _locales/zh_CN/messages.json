@@ -30,7 +30,7 @@
     "message": "应用"
   },
   "paste_hint": {
-    "message": "在此粘贴单词"
+    "message": "在此粘贴单词或短语。每个新单词/短语应从下一行开始。"
   },
   "apply_paste": {
     "message": "添加单词"
