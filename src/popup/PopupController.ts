@@ -22,6 +22,15 @@ export class PopupController {
     this.translateTitles();
     this.setupEventListeners();
     this.render();
+    this.hideLoadingOverlay();
+  }
+
+  private hideLoadingOverlay(): void {
+    const overlay = document.querySelector('.loading-overlay');
+    if (overlay) {
+      overlay.classList.add('hidden');
+      setTimeout(() => overlay.remove(), 200);
+    }
   }
 
   private async loadData(): Promise<void> {
