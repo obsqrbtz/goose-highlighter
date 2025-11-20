@@ -157,5 +157,26 @@
   },
   "text_color_title": {
     "message": "Color de texto"
+  },
+  "tab_page_highlights": {
+    "message": "En página"
+  },
+  "highlights_on_page": {
+    "message": "Resaltados en esta página"
+  },
+  "total_highlights": {
+    "message": "Total"
+  },
+  "refresh": {
+    "message": "Actualizar"
+  },
+  "no_highlights_on_page": {
+    "message": "No se encontraron resaltados en esta página"
+  },
+  "previous": {
+    "message": "Anterior"
+  },
+  "next": {
+    "message": "Siguiente"
   }
 }

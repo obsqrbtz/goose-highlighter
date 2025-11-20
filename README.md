@@ -8,6 +8,7 @@ Goose Highlighter is a browser extension that allows you to highlight words on a
 - **Custom Colors:** Set background and foreground for each list or individual word.
 - **Bulk Add:** Paste multiple words at once.
 - **Enable/Disable:** Toggle highlighting globally, per list, or per word.
+- **Page Navigation:** View all highlights on the current page and jump to any occurrence with a single click.
 - **Site Exceptions:** Add specific websites to an exceptions list to disable highlighting there.
 - **Import/Export:** Backup or share your highlight lists and exceptions as JSON files.
 

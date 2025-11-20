@@ -157,5 +157,26 @@
     },
     "text_color_title": {
         "message": "Couleur du texte"
+    },
+    "tab_page_highlights": {
+        "message": "Sur la page"
+    },
+    "highlights_on_page": {
+        "message": "Surlignages sur cette page"
+    },
+    "total_highlights": {
+        "message": "Total"
+    },
+    "refresh": {
+        "message": "Actualiser"
+    },
+    "no_highlights_on_page": {
+        "message": "Aucun surlignage trouvé sur cette page"
+    },
+    "previous": {
+        "message": "Précédent"
+    },
+    "next": {
+        "message": "Suivant"
     }
 }

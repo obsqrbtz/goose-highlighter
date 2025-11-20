@@ -157,5 +157,26 @@
   },
   "text_color_title": {
     "message": "Metin rengi"
+  },
+  "tab_page_highlights": {
+    "message": "Sayfada"
+  },
+  "highlights_on_page": {
+    "message": "Bu sayfadaki vurgular"
+  },
+  "total_highlights": {
+    "message": "Toplam"
+  },
+  "refresh": {
+    "message": "Yenile"
+  },
+  "no_highlights_on_page": {
+    "message": "Bu sayfada vurgu bulunamadı"
+  },
+  "previous": {
+    "message": "Önceki"
+  },
+  "next": {
+    "message": "Sonraki"
   }
 }

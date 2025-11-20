@@ -157,5 +157,26 @@
   },
   "text_color_title": {
     "message": "文字颜色"
+  },
+  "tab_page_highlights": {
+    "message": "页面上"
+  },
+  "highlights_on_page": {
+    "message": "此页面上的高亮"
+  },
+  "total_highlights": {
+    "message": "总计"
+  },
+  "refresh": {
+    "message": "刷新"
+  },
+  "no_highlights_on_page": {
+    "message": "此页面上未找到高亮"
+  },
+  "previous": {
+    "message": "上一个"
+  },
+  "next": {
+    "message": "下一个"
   }
 }

@@ -157,5 +157,26 @@
   },
   "text_color_title": {
     "message": "Tekstkleur"
+  },
+  "tab_page_highlights": {
+    "message": "Op pagina"
+  },
+  "highlights_on_page": {
+    "message": "Markeringen op deze pagina"
+  },
+  "total_highlights": {
+    "message": "Totaal"
+  },
+  "refresh": {
+    "message": "Vernieuwen"
+  },
+  "no_highlights_on_page": {
+    "message": "Geen markeringen gevonden op deze pagina"
+  },
+  "previous": {
+    "message": "Vorige"
+  },
+  "next": {
+    "message": "Volgende"
   }
 }

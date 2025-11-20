@@ -306,8 +306,8 @@ input[type="color"] {
   border: 1.5px solid var(--input-border);
   border-radius: 6px;
   box-shadow: var(--shadow-sm);
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   margin-left: 6px;
   cursor: pointer;
   padding: 0;
@@ -597,13 +597,14 @@ input[type="file"] {
 }
 
 #wordList input[type="color"] {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border-radius: 3px;
   border: 1px solid var(--input-border);
   cursor: pointer;
   transition: border-color 0.2s;
+  align-self: center;
 }
 
 #wordList input[type="color"]:hover {
@@ -769,4 +770,105 @@ body::-webkit-scrollbar-corner,
 #wordList::-webkit-scrollbar-corner,
 .exceptions-list::-webkit-scrollbar-corner {
   background: var(--section-bg);
+}
+
+/* Page Highlights Section */
+.section[data-section="page-highlights"] {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.page-highlights-info {
+  font-size: 0.85em;
+  padding: 6px 8px;
+  background: var(--input-bg);
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  margin-bottom: 8px;
+}
+
+.page-highlights-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  min-height: 0;
+}
+
+.page-highlight-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--input-border);
+  font-size: 0.85em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.page-highlight-item:last-child {
+  border-bottom: none;
+}
+
+.page-highlight-item:hover {
+  background: var(--highlight-tag);
+  border-left: 3px solid var(--accent);
+  padding-left: 7px;
+}
+
+.page-highlight-word {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  word-break: break-word;
+  font-weight: 500;
+}
+
+.page-highlight-preview {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.page-highlight-count {
+  background: var(--accent);
+  color: var(--accent-text);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75em;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.page-highlight-nav {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.page-highlight-nav button {
+  padding: 4px 8px;
+  font-size: 0.75em;
+  min-width: 28px;
+}
+
+.page-highlight-position {
+  font-size: 0.7em;
+  color: var(--text-color);
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+.page-highlights-empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.5;
+  font-size: 0.85em;
 }

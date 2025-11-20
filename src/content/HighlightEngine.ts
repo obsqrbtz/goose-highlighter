@@ -4,8 +4,10 @@ import { DOMUtils } from '../utils/DOMUtils.js';
 export class HighlightEngine {
   private styleSheet: CSSStyleSheet | null = null;
   private highlights = new Map<string, Highlight>();
+  private highlightsByWord = new Map<string, Range[]>();
   private observer: MutationObserver;
   private isHighlighting = false;
+  private currentMatchCase = false;
 
   constructor(private onUpdate: () => void) {
     this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
@@ -106,6 +108,8 @@ export class HighlightEngine {
     if (this.isHighlighting) return;
     this.isHighlighting = true;
 
+    this.currentMatchCase = matchCase;
+
     this.observer.disconnect();
     this.clearHighlightsInternal();
 
@@ -143,6 +147,7 @@ export class HighlightEngine {
       const textNodes = this.getTextNodes();
 
       const rangesByStyle = new Map<number, Range[]>();
+      this.highlightsByWord.clear();
 
       for (const node of textNodes) {
         if (!node.nodeValue) continue;
@@ -164,6 +169,11 @@ export class HighlightEngine {
               rangesByStyle.set(styleIdx, []);
             }
             rangesByStyle.get(styleIdx)!.push(range);
+
+            if (!this.highlightsByWord.has(lookup)) {
+              this.highlightsByWord.set(lookup, []);
+            }
+            this.highlightsByWord.get(lookup)!.push(range);
           }
         }
       }
@@ -187,11 +197,73 @@ export class HighlightEngine {
       CSS.highlights.delete(name);
     }
     this.highlights.clear();
+    this.highlightsByWord.clear();
 
     if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
       while (this.styleSheet.cssRules.length > 0) {
         this.styleSheet.deleteRule(0);
       }
+    }
+  }
+
+  getPageHighlights(activeWords: ActiveWord[]): Array<{ word: string; count: number; background: string; foreground: string }> {
+    const seen = new Map<string, { word: string; count: number; background: string; foreground: string }>();
+    
+    for (const activeWord of activeWords) {
+      const lookup = this.currentMatchCase ? activeWord.text : activeWord.text.toLowerCase();
+      const ranges = this.highlightsByWord.get(lookup);
+      
+      if (ranges && ranges.length > 0 && !seen.has(lookup)) {
+        seen.set(lookup, {
+          word: activeWord.text,
+          count: ranges.length,
+          background: activeWord.background,
+          foreground: activeWord.foreground
+        });
+      }
+    }
+    
+    return Array.from(seen.values());
+  }
+
+  scrollToHighlight(word: string, index: number): void {
+    const lookup = this.currentMatchCase ? word : word.toLowerCase();
+    const ranges = this.highlightsByWord.get(lookup);
+    
+    if (!ranges || ranges.length === 0) return;
+    
+    const targetIndex = Math.min(index, ranges.length - 1);
+    const range = ranges[targetIndex];
+    
+    if (!range) return;
+
+    try {
+      const rect = range.getBoundingClientRect();
+      
+      const absoluteTop = window.pageYOffset + rect.top;
+      const middle = absoluteTop - (window.innerHeight / 2) + (rect.height / 2);
+      
+      window.scrollTo({
+        top: middle,
+        behavior: 'smooth'
+      });
+      
+      const flashHighlight = new Highlight(range);
+      CSS.highlights.set('gh-flash', flashHighlight);
+      
+      if (this.styleSheet) {
+        const flashRule = '::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); box-shadow: 0 0 10px 3px rgba(255, 165, 0, 0.8); }';
+        const ruleIndex = this.styleSheet.insertRule(flashRule, this.styleSheet.cssRules.length);
+        
+        setTimeout(() => {
+          CSS.highlights.delete('gh-flash');
+          if (this.styleSheet && ruleIndex < this.styleSheet.cssRules.length) {
+            this.styleSheet.deleteRule(ruleIndex);
+          }
+        }, 600);
+      }
+    } catch (e) {
+      console.error('Error scrolling to highlight:', e);
     }
   }
 

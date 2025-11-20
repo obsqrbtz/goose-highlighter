@@ -157,5 +157,26 @@
   },
   "text_color_title": {
     "message": "Цвет текста"
+  },
+  "tab_page_highlights": {
+    "message": "На странице"
+  },
+  "highlights_on_page": {
+    "message": "Найдено на этой странице"
+  },
+  "total_highlights": {
+    "message": "Всего"
+  },
+  "refresh": {
+    "message": "Обновить"
+  },
+  "no_highlights_on_page": {
+    "message": "На этой странице не найдены слова из списка"
+  },
+  "previous": {
+    "message": "Предыдущее"
+  },
+  "next": {
+    "message": "Следующее"
   }
 }

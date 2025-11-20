@@ -157,5 +157,26 @@
   },
   "text_color_title": {
     "message": "Text color"
+  },
+  "tab_page_highlights": {
+    "message": "On Page"
+  },
+  "highlights_on_page": {
+    "message": "Highlights on This Page"
+  },
+  "total_highlights": {
+    "message": "Total"
+  },
+  "refresh": {
+    "message": "Refresh"
+  },
+  "no_highlights_on_page": {
+    "message": "No highlights found on this page"
+  },
+  "previous": {
+    "message": "Previous"
+  },
+  "next": {
+    "message": "Next"
   }
 }

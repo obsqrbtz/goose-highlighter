@@ -157,5 +157,26 @@
     },
     "text_color_title": {
         "message": "文字色"
+    },
+    "tab_page_highlights": {
+        "message": "ページ上"
+    },
+    "highlights_on_page": {
+        "message": "このページのハイライト"
+    },
+    "total_highlights": {
+        "message": "合計"
+    },
+    "refresh": {
+        "message": "更新"
+    },
+    "no_highlights_on_page": {
+        "message": "このページにハイライトが見つかりません"
+    },
+    "previous": {
+        "message": "前へ"
+    },
+    "next": {
+        "message": "次へ"
     }
 }

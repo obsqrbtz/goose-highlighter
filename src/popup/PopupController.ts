@@ -1,4 +1,4 @@
-import { HighlightList, HighlightWord, ExportData } from '../types.js';
+import { HighlightList, HighlightWord, ExportData, HighlightInfo } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
@@ -14,6 +14,8 @@ export class PopupController {
   private exceptionsList: string[] = [];
   private currentTabHost = '';
   private activeTab = 'lists';
+  private pageHighlights: Array<{ word: string; count: number; background: string; foreground: string }> = [];
+  private highlightIndices = new Map<string, number>();
 
   async initialize(): Promise<void> {
     await this.loadData();
@@ -99,6 +101,10 @@ export class PopupController {
     document.querySelectorAll('.tab-content').forEach(content => {
       content.classList.toggle('active', content.getAttribute('data-tab-content') === tabName);
     });
+
+    if (tabName === 'page-highlights') {
+      this.loadPageHighlights();
+    }
   }
 
   private setupEventListeners(): void {
@@ -106,6 +112,7 @@ export class PopupController {
     this.setupListManagement();
     this.setupWordManagement();
     this.setupSettings();
+    this.setupPageHighlights();
     this.setupExceptions();
     this.setupImportExport();
     this.setupTheme();
@@ -316,6 +323,110 @@ export class PopupController {
         matchWhole: this.matchWholeEnabled
       });
     });
+  }
+
+  private setupPageHighlights(): void {
+    document.getElementById('refreshHighlightsBtn')?.addEventListener('click', async () => {
+      await this.loadPageHighlights();
+    });
+
+    document.getElementById('pageHighlightsList')?.addEventListener('click', async (e) => {
+      const target = e.target as HTMLElement;
+      const item = target.closest('.page-highlight-item') as HTMLElement;
+      
+      if (!item) return;
+
+      const word = item.dataset.word;
+      if (!word) return;
+
+      if (target.classList.contains('highlight-prev')) {
+        await this.navigateHighlight(word, -1);
+      } else if (target.classList.contains('highlight-next')) {
+        await this.navigateHighlight(word, 1);
+      } else {
+        await this.jumpToHighlight(word, 0);
+      }
+    });
+  }
+
+  private async loadPageHighlights(): Promise<void> {
+    try {
+      const response = await MessageService.sendToActiveTab({ type: 'GET_PAGE_HIGHLIGHTS' });
+      
+      if (response && response.highlights) {
+        this.pageHighlights = response.highlights;
+        this.highlightIndices.clear();
+        this.pageHighlights.forEach(h => this.highlightIndices.set(h.word, 0));
+        this.renderPageHighlights();
+      }
+    } catch (e) {
+      console.error('Error loading page highlights:', e);
+      this.pageHighlights = [];
+      this.renderPageHighlights();
+    }
+  }
+
+  private async jumpToHighlight(word: string, index: number): Promise<void> {
+    this.highlightIndices.set(word, index);
+    await MessageService.sendToActiveTab({
+      type: 'SCROLL_TO_HIGHLIGHT',
+      word,
+      index
+    });
+    this.renderPageHighlights();
+  }
+
+  private async navigateHighlight(word: string, direction: number): Promise<void> {
+    const highlight = this.pageHighlights.find(h => h.word === word);
+    if (!highlight) return;
+
+    const currentIndex = this.highlightIndices.get(word) || 0;
+    let newIndex = currentIndex + direction;
+
+    if (newIndex < 0) newIndex = highlight.count - 1;
+    if (newIndex >= highlight.count) newIndex = 0;
+
+    await this.jumpToHighlight(word, newIndex);
+  }
+
+  private renderPageHighlights(): void {
+    const container = document.getElementById('pageHighlightsList');
+    const countElement = document.getElementById('totalHighlightsCount');
+    
+    if (!container || !countElement) return;
+
+    const totalCount = this.pageHighlights.reduce((sum, h) => sum + h.count, 0);
+    countElement.textContent = totalCount.toString();
+
+    if (this.pageHighlights.length === 0) {
+      container.innerHTML = `<div class="page-highlights-empty">${chrome.i18n.getMessage('no_highlights_on_page') || 'No highlights on this page'}</div>`;
+      return;
+    }
+
+    container.innerHTML = this.pageHighlights.map(highlight => {
+      const currentIndex = this.highlightIndices.get(highlight.word) || 0;
+      return `
+        <div class="page-highlight-item" data-word="${DOMUtils.escapeHtml(highlight.word)}">
+          <div class="page-highlight-word">
+            <span class="page-highlight-preview" style="background-color: ${highlight.background}; color: ${highlight.foreground};">
+              ${DOMUtils.escapeHtml(highlight.word)}
+            </span>
+            ${highlight.count > 1 ? `<span class="page-highlight-position">${currentIndex + 1}/${highlight.count}</span>` : ''}
+          </div>
+          <span class="page-highlight-count">${highlight.count}</span>
+          ${highlight.count > 1 ? `
+            <div class="page-highlight-nav">
+              <button class="highlight-prev" title="${chrome.i18n.getMessage('previous') || 'Previous'}">
+                <i class="fa-solid fa-chevron-up"></i>
+              </button>
+              <button class="highlight-next" title="${chrome.i18n.getMessage('next') || 'Next'}">
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
   }
 
   private setupExceptions(): void {

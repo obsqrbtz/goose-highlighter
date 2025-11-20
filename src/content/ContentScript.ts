@@ -47,21 +47,28 @@ export class ContentScript {
   }
 
   private setupMessageListener(): void {
-    MessageService.onMessage((message: MessageData) => {
+    MessageService.onMessage((message: MessageData, sender: any, sendResponse: (response?: any) => void) => {
       switch (message.type) {
         case 'WORD_LIST_UPDATED':
           this.handleWordListUpdate();
-          break;
+          return false;
         case 'GLOBAL_TOGGLE_UPDATED':
           this.handleGlobalToggleUpdate(message.enabled!);
-          break;
+          return false;
         case 'MATCH_OPTIONS_UPDATED':
           this.handleMatchOptionsUpdate(message.matchCase!, message.matchWhole!);
-          break;
+          return false;
         case 'EXCEPTIONS_LIST_UPDATED':
           this.handleExceptionsUpdate();
-          break;
+          return false;
+        case 'GET_PAGE_HIGHLIGHTS':
+          this.handleGetPageHighlights(sendResponse);
+          return true;
+        case 'SCROLL_TO_HIGHLIGHT':
+          this.handleScrollToHighlight(message.word!, message.index!);
+          return false;
       }
+      return false;
     });
   }
 
@@ -105,5 +112,28 @@ export class ContentScript {
     } finally {
       this.isProcessing = false;
     }
+  }
+
+  private handleGetPageHighlights(sendResponse: (response: any) => void): void {
+    const activeWords: ActiveWord[] = [];
+    
+    for (const list of this.lists) {
+      if (!list.active) continue;
+      for (const word of list.words) {
+        if (!word.active) continue;
+        activeWords.push({
+          text: word.wordStr,
+          background: word.background || list.background,
+          foreground: word.foreground || list.foreground
+        });
+      }
+    }
+
+    const highlights = this.highlightEngine.getPageHighlights(activeWords);
+    sendResponse({ highlights });
+  }
+
+  private handleScrollToHighlight(word: string, index: number): void {
+    this.highlightEngine.scrollToHighlight(word, index);
   }
 }

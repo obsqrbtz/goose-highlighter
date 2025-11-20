@@ -157,5 +157,26 @@
     },
     "text_color_title": {
         "message": "글자색"
+    },
+    "tab_page_highlights": {
+        "message": "페이지에서"
+    },
+    "highlights_on_page": {
+        "message": "이 페이지의 하이라이트"
+    },
+    "total_highlights": {
+        "message": "전체"
+    },
+    "refresh": {
+        "message": "새로고침"
+    },
+    "no_highlights_on_page": {
+        "message": "이 페이지에서 하이라이트를 찾을 수 없습니다"
+    },
+    "previous": {
+        "message": "이전"
+    },
+    "next": {
+        "message": "다음"
     }
 }

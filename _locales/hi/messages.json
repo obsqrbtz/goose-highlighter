@@ -157,5 +157,26 @@
     },
     "text_color_title": {
         "message": "पाठ रंग"
+    },
+    "tab_page_highlights": {
+        "message": "पृष्ठ पर"
+    },
+    "highlights_on_page": {
+        "message": "इस पृष्ठ पर हाइलाइट"
+    },
+    "total_highlights": {
+        "message": "कुल"
+    },
+    "refresh": {
+        "message": "रीफ्रेश करें"
+    },
+    "no_highlights_on_page": {
+        "message": "इस पृष्ठ पर कोई हाइलाइट नहीं मिला"
+    },
+    "previous": {
+        "message": "पिछला"
+    },
+    "next": {
+        "message": "अगला"
     }
 }

@@ -28,11 +28,21 @@ export interface ActiveWord {
   foreground: string;
 }
 
+export interface HighlightInfo {
+  word: string;
+  count: number;
+  background: string;
+  foreground: string;
+}
+
 export interface MessageData {
-  type: 'WORD_LIST_UPDATED' | 'GLOBAL_TOGGLE_UPDATED' | 'MATCH_OPTIONS_UPDATED' | 'EXCEPTIONS_LIST_UPDATED';
+  type: 'WORD_LIST_UPDATED' | 'GLOBAL_TOGGLE_UPDATED' | 'MATCH_OPTIONS_UPDATED' | 'EXCEPTIONS_LIST_UPDATED' | 'GET_PAGE_HIGHLIGHTS' | 'PAGE_HIGHLIGHTS_RESPONSE' | 'SCROLL_TO_HIGHLIGHT';
   enabled?: boolean;
   matchCase?: boolean;
   matchWhole?: boolean;
+  highlights?: HighlightInfo[];
+  word?: string;
+  index?: number;
 }
 
 export interface ExportData {

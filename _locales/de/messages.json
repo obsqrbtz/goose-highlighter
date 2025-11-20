@@ -151,5 +151,26 @@
   },
   "text_color_title": {
     "message": "Textfarbe"
+  },
+  "tab_page_highlights": {
+    "message": "Auf Seite"
+  },
+  "highlights_on_page": {
+    "message": "Hervorhebungen auf dieser Seite"
+  },
+  "total_highlights": {
+    "message": "Gesamt"
+  },
+  "refresh": {
+    "message": "Aktualisieren"
+  },
+  "no_highlights_on_page": {
+    "message": "Keine Hervorhebungen auf dieser Seite gefunden"
+  },
+  "previous": {
+    "message": "Vorherige"
+  },
+  "next": {
+    "message": "Nächste"
   }
 }

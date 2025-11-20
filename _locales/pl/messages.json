@@ -157,5 +157,26 @@
   },
   "text_color_title": {
     "message": "Kolor tekstu"
+  },
+  "tab_page_highlights": {
+    "message": "Na stronie"
+  },
+  "highlights_on_page": {
+    "message": "Podświetlenia na tej stronie"
+  },
+  "total_highlights": {
+    "message": "Łącznie"
+  },
+  "refresh": {
+    "message": "Odśwież"
+  },
+  "no_highlights_on_page": {
+    "message": "Nie znaleziono podświetleń na tej stronie"
+  },
+  "previous": {
+    "message": "Poprzedni"
+  },
+  "next": {
+    "message": "Następny"
   }
 }

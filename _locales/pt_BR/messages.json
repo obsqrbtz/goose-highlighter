@@ -151,5 +151,26 @@
   },
   "text_color_title": {
     "message": "Cor do texto"
+  },
+  "tab_page_highlights": {
+    "message": "Na página"
+  },
+  "highlights_on_page": {
+    "message": "Destaques nesta página"
+  },
+  "total_highlights": {
+    "message": "Total"
+  },
+  "refresh": {
+    "message": "Atualizar"
+  },
+  "no_highlights_on_page": {
+    "message": "Nenhum destaque encontrado nesta página"
+  },
+  "previous": {
+    "message": "Anterior"
+  },
+  "next": {
+    "message": "Próximo"
   }
 }
