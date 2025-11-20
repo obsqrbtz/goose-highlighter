@@ -8,6 +8,8 @@ export class HighlightEngine {
   private observer: MutationObserver;
   private isHighlighting = false;
   private currentMatchCase = false;
+  private textareaOverlays = new Map<HTMLTextAreaElement | HTMLInputElement, HTMLElement>();
+  private resizeObserver: ResizeObserver;
 
   constructor(private onUpdate: () => void) {
     this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
@@ -27,6 +29,16 @@ export class HighlightEngine {
         this.onUpdate();
       }
     }, CONSTANTS.DEBOUNCE_DELAY));
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const input = entry.target as HTMLTextAreaElement | HTMLInputElement;
+        const overlay = this.textareaOverlays.get(input);
+        if (overlay) {
+          this.updateOverlayPosition(input, overlay);
+        }
+      }
+    });
   }
 
   private initializeStyleSheet(): void {
@@ -62,6 +74,23 @@ export class HighlightEngine {
   clearHighlights(): void {
     this.observer.disconnect();
     this.clearHighlightsInternal();
+    this.clearTextareaOverlays();
+  }
+
+  private clearTextareaOverlays(): void {
+    for (const [input, overlay] of this.textareaOverlays.entries()) {
+      this.resizeObserver.unobserve(input);
+      overlay.remove();
+    }
+    this.textareaOverlays.clear();
+  }
+
+  private updateOverlayPosition(input: HTMLTextAreaElement | HTMLInputElement, overlay: HTMLElement): void {
+    const rect = input.getBoundingClientRect();
+    overlay.style.width = `${input.clientWidth}px`;
+    overlay.style.height = `${input.clientHeight}px`;
+    overlay.style.top = `${rect.top + window.scrollY}px`;
+    overlay.style.left = `${rect.left + window.scrollX}px`;
   }
 
   private getTextNodes(): Text[] {
@@ -112,6 +141,7 @@ export class HighlightEngine {
 
     this.observer.disconnect();
     this.clearHighlightsInternal();
+    this.clearTextareaOverlays();
 
     const activeWords = this.extractActiveWords(lists);
     if (activeWords.length === 0) {
@@ -184,12 +214,113 @@ export class HighlightEngine {
         this.highlights.set(highlightName, highlight);
         CSS.highlights.set(highlightName, highlight);
       }
+
+      this.highlightTextareas(pattern, styleMap, activeWords);
     } catch (e) {
       console.error('Regex error:', e);
     }
 
     this.startObserving();
     this.isHighlighting = false;
+  }
+
+  private highlightTextareas(pattern: RegExp, styleMap: Map<string, number>, activeWords: ActiveWord[]): void {
+    const textareas = document.querySelectorAll('textarea, input[type="text"], input[type="search"], input[type="email"], input[type="url"]');
+
+    for (const element of Array.from(textareas)) {
+      const input = element as HTMLTextAreaElement | HTMLInputElement;
+      const text = input.value;
+
+      if (!text) continue;
+
+      const matches: Array<{ start: number; end: number; background: string; foreground: string }> = [];
+      pattern.lastIndex = 0;
+      let match;
+
+      while ((match = pattern.exec(text)) !== null) {
+        const lookup = this.currentMatchCase ? match[0] : match[0].toLowerCase();
+        const styleIdx = styleMap.get(lookup);
+
+        if (styleIdx !== undefined) {
+          const activeWord = activeWords.find(w =>
+            (this.currentMatchCase ? w.text : w.text.toLowerCase()) === lookup
+          );
+          if (activeWord) {
+            matches.push({
+              start: match.index,
+              end: match.index + match[0].length,
+              background: activeWord.background,
+              foreground: activeWord.foreground
+            });
+          }
+        }
+      }
+
+      if (matches.length > 0) {
+        this.createTextareaOverlay(input, text, matches);
+      }
+    }
+  }
+
+  private createTextareaOverlay(input: HTMLTextAreaElement | HTMLInputElement, text: string, matches: Array<{ start: number; end: number; background: string; foreground: string }>): void {
+    const overlay = document.createElement('div');
+    overlay.className = 'goose-highlighter-textarea-overlay';
+
+    const computedStyle = window.getComputedStyle(input);
+    const styles = [
+      'font-family', 'font-size', 'font-weight', 'font-style',
+      'line-height', 'letter-spacing', 'word-spacing',
+      'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+      'border-top-width', 'border-right-width', 'border-bottom-width', 'border-left-width',
+      'white-space', 'word-wrap', 'overflow-wrap'
+    ];
+
+    overlay.style.position = 'absolute';
+    overlay.style.pointerEvents = 'none';
+    overlay.style.color = 'transparent';
+    overlay.style.overflow = 'hidden';
+    overlay.style.whiteSpace = input.tagName === 'TEXTAREA' ? 'pre-wrap' : 'pre';
+    overlay.style.overflowWrap = 'break-word';
+
+    for (const prop of styles) {
+      overlay.style.setProperty(prop, computedStyle.getPropertyValue(prop));
+    }
+
+    this.updateOverlayPosition(input, overlay);
+
+    let html = '';
+    let lastIndex = 0;
+
+    for (const match of matches) {
+      html += this.escapeHtml(text.substring(lastIndex, match.start));
+      html += `<mark style="background-color: ${match.background}; color: ${match.foreground}; padding: 0; margin: 0;">${this.escapeHtml(text.substring(match.start, match.end))}</mark>`;
+      lastIndex = match.end;
+    }
+    html += this.escapeHtml(text.substring(lastIndex));
+
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+    this.textareaOverlays.set(input, overlay);
+
+    this.resizeObserver.observe(input);
+
+    const updateOverlay = () => {
+      this.resizeObserver.unobserve(input);
+      overlay.remove();
+      this.textareaOverlays.delete(input);
+    };
+
+    input.addEventListener('input', updateOverlay, { once: true });
+    input.addEventListener('scroll', () => {
+      overlay.scrollTop = input.scrollTop;
+      overlay.scrollLeft = input.scrollLeft;
+    });
+  }
+
+  private escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   private clearHighlightsInternal(): void {
@@ -208,11 +339,11 @@ export class HighlightEngine {
 
   getPageHighlights(activeWords: ActiveWord[]): Array<{ word: string; count: number; background: string; foreground: string }> {
     const seen = new Map<string, { word: string; count: number; background: string; foreground: string }>();
-    
+
     for (const activeWord of activeWords) {
       const lookup = this.currentMatchCase ? activeWord.text : activeWord.text.toLowerCase();
       const ranges = this.highlightsByWord.get(lookup);
-      
+
       if (ranges && ranges.length > 0 && !seen.has(lookup)) {
         seen.set(lookup, {
           word: activeWord.text,
@@ -222,39 +353,39 @@ export class HighlightEngine {
         });
       }
     }
-    
+
     return Array.from(seen.values());
   }
 
   scrollToHighlight(word: string, index: number): void {
     const lookup = this.currentMatchCase ? word : word.toLowerCase();
     const ranges = this.highlightsByWord.get(lookup);
-    
+
     if (!ranges || ranges.length === 0) return;
-    
+
     const targetIndex = Math.min(index, ranges.length - 1);
     const range = ranges[targetIndex];
-    
+
     if (!range) return;
 
     try {
       const rect = range.getBoundingClientRect();
-      
+
       const absoluteTop = window.pageYOffset + rect.top;
       const middle = absoluteTop - (window.innerHeight / 2) + (rect.height / 2);
-      
+
       window.scrollTo({
         top: middle,
         behavior: 'smooth'
       });
-      
+
       const flashHighlight = new Highlight(range);
       CSS.highlights.set('gh-flash', flashHighlight);
-      
+
       if (this.styleSheet) {
         const flashRule = '::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); box-shadow: 0 0 10px 3px rgba(255, 165, 0, 0.8); }';
         const ruleIndex = this.styleSheet.insertRule(flashRule, this.styleSheet.cssRules.length);
-        
+
         setTimeout(() => {
           CSS.highlights.delete('gh-flash');
           if (this.styleSheet && ruleIndex < this.styleSheet.cssRules.length) {
@@ -281,6 +412,8 @@ export class HighlightEngine {
 
   destroy(): void {
     this.observer.disconnect();
+    this.resizeObserver.disconnect();
     this.clearHighlights();
+    this.clearTextareaOverlays();
   }
 }
