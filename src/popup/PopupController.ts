@@ -339,12 +339,17 @@ export class PopupController {
       const word = item.dataset.word;
       if (!word) return;
 
-      if (target.classList.contains('highlight-prev')) {
+      const button = target.closest('button');
+      
+      if (button?.classList.contains('highlight-prev')) {
+        e.stopPropagation();
         await this.navigateHighlight(word, -1);
-      } else if (target.classList.contains('highlight-next')) {
+      } else if (button?.classList.contains('highlight-next')) {
+        e.stopPropagation();
         await this.navigateHighlight(word, 1);
-      } else {
-        await this.jumpToHighlight(word, 0);
+      } else if (!button) {
+        const currentIndex = this.highlightIndices.get(word) || 0;
+        await this.jumpToHighlight(word, currentIndex);
       }
     });
   }
