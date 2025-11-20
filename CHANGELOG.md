@@ -1,3 +1,17 @@
+# [1.10.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.3...v1.10.0) (2025-11-20)
+
+
+### Bug Fixes
+
+* lighten debounce() usage, do not do full re-render on every change ([348d64f](https://github.com/obsqrbtz/goose-highlighter/commit/348d64f35693c11e7b14edcbe59b910195974950))
+* made placeholder for textarea, added outline offset ([4f32be0](https://github.com/obsqrbtz/goose-highlighter/commit/4f32be0b93b5a39dcb034b4a15bbeca05add0a1f))
+
+
+### Features
+
+* new tabbed layout ([18e167c](https://github.com/obsqrbtz/goose-highlighter/commit/18e167cb7f2e758e09b201f7eff4cdbad080774e))
+* show all found words and allow jump to them (beta) ([1a4c91f](https://github.com/obsqrbtz/goose-highlighter/commit/1a4c91fd5e35cc2227a580465ba9078200200623))
+
 ## [1.9.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.2...v1.9.3) (2025-11-18)
 
 
