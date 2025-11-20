@@ -5,6 +5,7 @@ export class HighlightEngine {
   private styleSheet: CSSStyleSheet | null = null;
   private highlights = new Map<string, Highlight>();
   private highlightsByWord = new Map<string, Range[]>();
+  private textareaMatchesByWord = new Map<string, Array<{ input: HTMLTextAreaElement | HTMLInputElement; position: number }>>();
   private observer: MutationObserver;
   private isHighlighting = false;
   private currentMatchCase = false;
@@ -100,7 +101,7 @@ export class HighlightEngine {
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: (node: Text) => {
-          if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME'].includes(node.parentNode.nodeName)) {
+          if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'TEXTAREA', 'INPUT'].includes(node.parentNode.nodeName)) {
             return NodeFilter.FILTER_REJECT;
           }
           if (!node.nodeValue?.trim()) {
@@ -178,6 +179,7 @@ export class HighlightEngine {
 
       const rangesByStyle = new Map<number, Range[]>();
       this.highlightsByWord.clear();
+      this.textareaMatchesByWord.clear();
 
       for (const node of textNodes) {
         if (!node.nodeValue) continue;
@@ -251,6 +253,15 @@ export class HighlightEngine {
               end: match.index + match[0].length,
               background: activeWord.background,
               foreground: activeWord.foreground
+            });
+
+            // Track textarea matches for navigation
+            if (!this.textareaMatchesByWord.has(lookup)) {
+              this.textareaMatchesByWord.set(lookup, []);
+            }
+            this.textareaMatchesByWord.get(lookup)!.push({
+              input,
+              position: match.index
             });
           }
         }
@@ -329,6 +340,7 @@ export class HighlightEngine {
     }
     this.highlights.clear();
     this.highlightsByWord.clear();
+    this.textareaMatchesByWord.clear();
 
     if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
       while (this.styleSheet.cssRules.length > 0) {
@@ -343,11 +355,14 @@ export class HighlightEngine {
     for (const activeWord of activeWords) {
       const lookup = this.currentMatchCase ? activeWord.text : activeWord.text.toLowerCase();
       const ranges = this.highlightsByWord.get(lookup);
+      const textareaMatches = this.textareaMatchesByWord.get(lookup);
 
-      if (ranges && ranges.length > 0 && !seen.has(lookup)) {
+      const totalCount = (ranges?.length || 0) + (textareaMatches?.length || 0);
+
+      if (totalCount > 0 && !seen.has(lookup)) {
         seen.set(lookup, {
           word: activeWord.text,
-          count: ranges.length,
+          count: totalCount,
           background: activeWord.background,
           foreground: activeWord.foreground
         });
@@ -359,18 +374,36 @@ export class HighlightEngine {
 
   scrollToHighlight(word: string, index: number): void {
     const lookup = this.currentMatchCase ? word : word.toLowerCase();
-    const ranges = this.highlightsByWord.get(lookup);
+    const ranges = this.highlightsByWord.get(lookup) || [];
+    const textareaMatches = this.textareaMatchesByWord.get(lookup) || [];
 
-    if (!ranges || ranges.length === 0) return;
+    const totalMatches = ranges.length + textareaMatches.length;
+    if (totalMatches === 0) return;
 
-    const targetIndex = Math.min(index, ranges.length - 1);
-    const range = ranges[targetIndex];
-
-    if (!range) return;
+    const targetIndex = Math.min(index, totalMatches - 1);
 
     try {
-      const rect = range.getBoundingClientRect();
+      if (targetIndex >= ranges.length) {
+        const textareaIndex = targetIndex - ranges.length;
+        const textareaMatch = textareaMatches[textareaIndex];
+        this.scrollToTextareaMatch(textareaMatch.input, textareaMatch.position, word.length);
+        return;
+      }
 
+      const range = ranges[targetIndex];
+      if (!range) return;
+
+      // First, scroll any scrollable containers
+      const element = range.commonAncestorContainer.nodeType === Node.TEXT_NODE
+        ? range.commonAncestorContainer.parentElement
+        : range.commonAncestorContainer as Element;
+
+      if (element) {
+        this.scrollIntoViewInContainers(element);
+      }
+
+      // Then scroll the main window
+      const rect = range.getBoundingClientRect();
       const absoluteTop = window.pageYOffset + rect.top;
       const middle = absoluteTop - (window.innerHeight / 2) + (rect.height / 2);
 
@@ -395,6 +428,102 @@ export class HighlightEngine {
       }
     } catch (e) {
       console.error('Error scrolling to highlight:', e);
+    }
+  }
+
+  private scrollToTextareaMatch(input: HTMLTextAreaElement | HTMLInputElement, position: number, wordLength: number): void {
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    if (input.tagName === 'TEXTAREA') {
+      const textarea = input as HTMLTextAreaElement;
+      const text = textarea.value;
+      const beforeText = text.substring(0, position);
+      const lines = beforeText.split('\n');
+      const lineNumber = lines.length - 1;
+
+      const computedStyle = window.getComputedStyle(textarea);
+      const lineHeight = parseFloat(computedStyle.lineHeight) || parseFloat(computedStyle.fontSize) * 1.2;
+
+      const targetScrollTop = lineNumber * lineHeight - (textarea.clientHeight / 2);
+      textarea.scrollTop = Math.max(0, targetScrollTop);
+    }
+
+    input.focus();
+    input.setSelectionRange(position, position + wordLength);
+
+    const overlay = this.textareaOverlays.get(input);
+    if (overlay) {
+      const marks = overlay.querySelectorAll('mark');
+      for (const mark of Array.from(marks)) {
+        const markElement = mark as HTMLElement;
+        const markText = markElement.textContent || '';
+        const markStart = this.getTextPosition(overlay, markElement);
+
+        if (markStart === position) {
+          const originalBackground = markElement.style.backgroundColor;
+          markElement.style.backgroundColor = 'rgba(255, 165, 0, 0.8)';
+          markElement.style.boxShadow = '0 0 10px 3px rgba(255, 165, 0, 0.8)';
+
+          setTimeout(() => {
+            markElement.style.backgroundColor = originalBackground;
+            markElement.style.boxShadow = '';
+          }, 600);
+          break;
+        }
+      }
+    }
+  }
+
+  private getTextPosition(overlay: HTMLElement, targetMark: HTMLElement): number {
+    let position = 0;
+    const walker = document.createTreeWalker(overlay, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+      if (node === targetMark) {
+        return position;
+      }
+      if (node.nodeType === Node.TEXT_NODE) {
+        position += node.textContent?.length || 0;
+      }
+    }
+
+    return position;
+  }
+
+  private scrollIntoViewInContainers(element: Element): void {
+    let current: Element | null = element;
+
+    while (current && current !== document.body) {
+      const parent: HTMLElement | null = current.parentElement;
+      if (!parent) break;
+
+      const parentStyle = window.getComputedStyle(parent);
+      const isScrollable = (
+        (parentStyle.overflow === 'auto' || parentStyle.overflow === 'scroll' ||
+          parentStyle.overflowY === 'auto' || parentStyle.overflowY === 'scroll' ||
+          parentStyle.overflowX === 'auto' || parentStyle.overflowX === 'scroll') &&
+        (parent.scrollHeight > parent.clientHeight || parent.scrollWidth > parent.clientWidth)
+      );
+
+      if (isScrollable) {
+        const parentRect = parent.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        if (elementRect.top < parentRect.top) {
+          parent.scrollTop -= (parentRect.top - elementRect.top) + 20;
+        } else if (elementRect.bottom > parentRect.bottom) {
+          parent.scrollTop += (elementRect.bottom - parentRect.bottom) + 20;
+        }
+
+        if (elementRect.left < parentRect.left) {
+          parent.scrollLeft -= (parentRect.left - elementRect.left) + 20;
+        } else if (elementRect.right > parentRect.right) {
+          parent.scrollLeft += (elementRect.right - parentRect.right) + 20;
+        }
+      }
+
+      current = parent;
     }
   }
 
