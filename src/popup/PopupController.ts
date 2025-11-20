@@ -193,7 +193,7 @@ export class PopupController {
       }
     });
 
-    wordList.addEventListener('input', (e) => {
+    wordList.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement;
       const index = +(target.dataset.bgEdit ?? target.dataset.fgEdit ?? -1);
       if (index === -1) return;
@@ -219,13 +219,14 @@ export class PopupController {
       }
     });
 
-    let scrollTimeout: number;
+    let scrolling = false;
     wordList.addEventListener('scroll', () => {
-      if (scrollTimeout) return;
-      scrollTimeout = window.setTimeout(() => {
-        requestAnimationFrame(() => this.renderWords());
-        scrollTimeout = 0;
-      }, 16);
+      if (scrolling) return;
+      scrolling = true;
+      requestAnimationFrame(() => {
+        this.renderWords();
+        scrolling = false;
+      });
     });
   }
 
@@ -278,24 +279,38 @@ export class PopupController {
     const matchCase = document.getElementById('matchCase') as HTMLInputElement;
     const matchWhole = document.getElementById('matchWhole') as HTMLInputElement;
 
-    globalToggle.addEventListener('change', () => {
+    globalToggle.addEventListener('change', async () => {
       this.globalHighlightEnabled = globalToggle.checked;
-      this.updateGlobalToggleState();
+      await StorageService.update('globalHighlightEnabled', this.globalHighlightEnabled);
+      MessageService.sendToAllTabs({
+        type: 'GLOBAL_TOGGLE_UPDATED',
+        enabled: this.globalHighlightEnabled
+      });
     });
 
-    matchCase.addEventListener('change', () => {
+    matchCase.addEventListener('change', async () => {
       this.matchCaseEnabled = matchCase.checked;
-      this.save();
+      await StorageService.update('matchCaseEnabled', this.matchCaseEnabled);
+      MessageService.sendToAllTabs({
+        type: 'MATCH_OPTIONS_UPDATED',
+        matchCase: this.matchCaseEnabled,
+        matchWhole: this.matchWholeEnabled
+      });
     });
 
-    matchWhole.addEventListener('change', () => {
+    matchWhole.addEventListener('change', async () => {
       this.matchWholeEnabled = matchWhole.checked;
-      this.save();
+      await StorageService.update('matchWholeEnabled', this.matchWholeEnabled);
+      MessageService.sendToAllTabs({
+        type: 'MATCH_OPTIONS_UPDATED',
+        matchCase: this.matchCaseEnabled,
+        matchWhole: this.matchWholeEnabled
+      });
     });
   }
 
   private setupExceptions(): void {
-    document.getElementById('toggleExceptionBtn')?.addEventListener('click', () => {
+    document.getElementById('toggleExceptionBtn')?.addEventListener('click', async () => {
       if (!this.currentTabHost) return;
 
       const isException = this.exceptionsList.includes(this.currentTabHost);
@@ -308,26 +323,29 @@ export class PopupController {
 
       this.updateExceptionButton();
       this.renderExceptions();
-      this.save();
+      await StorageService.update('exceptionsList', this.exceptionsList);
+      MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
     });
 
-    document.getElementById('clearExceptionsBtn')?.addEventListener('click', () => {
+    document.getElementById('clearExceptionsBtn')?.addEventListener('click', async () => {
       if (confirm(chrome.i18n.getMessage('confirm_clear_exceptions') || 'Clear all exceptions?')) {
         this.exceptionsList = [];
         this.updateExceptionButton();
         this.renderExceptions();
-        this.save();
+        await StorageService.update('exceptionsList', this.exceptionsList);
+        MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       }
     });
 
-    document.getElementById('exceptionsList')?.addEventListener('click', (e) => {
+    document.getElementById('exceptionsList')?.addEventListener('click', async (e) => {
       const target = e.target as HTMLElement;
       if (target.classList.contains('exception-remove')) {
         const domain = target.dataset.domain!;
         this.exceptionsList = this.exceptionsList.filter(d => d !== domain);
         this.updateExceptionButton();
         this.renderExceptions();
-        this.save();
+        await StorageService.update('exceptionsList', this.exceptionsList);
+        MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       }
     });
   }
@@ -436,29 +454,13 @@ export class PopupController {
       exceptionsList: this.exceptionsList
     });
 
-    this.render();
+    this.renderLists();
     MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
-    MessageService.sendToAllTabs({
-      type: 'GLOBAL_TOGGLE_UPDATED',
-      enabled: this.globalHighlightEnabled
-    });
-    MessageService.sendToAllTabs({
-      type: 'MATCH_OPTIONS_UPDATED',
-      matchCase: this.matchCaseEnabled,
-      matchWhole: this.matchWholeEnabled
-    });
-    MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
   }
 
 
 
-  private async updateGlobalToggleState(): Promise<void> {
-    await StorageService.update('globalHighlightEnabled', this.globalHighlightEnabled);
-    MessageService.sendToAllTabs({
-      type: 'GLOBAL_TOGGLE_UPDATED',
-      enabled: this.globalHighlightEnabled
-    });
-  }
+
 
   private render(): void {
     this.renderLists();
@@ -500,11 +502,9 @@ export class PopupController {
     const totalItemHeight = itemHeight + itemSpacing;
     const containerHeight = wordList.clientHeight || 250;
     const scrollTop = wordList.scrollTop;
-    const startIndex = Math.floor(scrollTop / totalItemHeight);
-    const endIndex = Math.min(
-      startIndex + Math.ceil(containerHeight / totalItemHeight) + 2,
-      filteredWords.length
-    );
+    const startIndex = Math.max(0, Math.floor(scrollTop / totalItemHeight) - 1);
+    const visibleCount = Math.ceil(containerHeight / totalItemHeight);
+    const endIndex = Math.min(startIndex + visibleCount + 2, filteredWords.length);
 
     wordList.innerHTML = '';
 

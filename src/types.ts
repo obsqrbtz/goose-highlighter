@@ -50,6 +50,6 @@ export const DEFAULT_STORAGE: StorageData = {
 
 export const CONSTANTS = {
   WORD_ITEM_HEIGHT: 32,
-  DEBOUNCE_DELAY: 300,
+  DEBOUNCE_DELAY: 150,
   SCROLL_THROTTLE: 16
 } as const;

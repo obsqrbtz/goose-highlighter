@@ -2,7 +2,6 @@ import { HighlightList, MessageData } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { HighlightEngine } from './HighlightEngine.js';
-import { DOMUtils } from '../utils/DOMUtils.js';
 
 export class ContentScript {
   private lists: HighlightList[] = [];
@@ -22,7 +21,6 @@ export class ContentScript {
   private async initialize(): Promise<void> {
     await this.loadSettings();
     this.setupMessageListener();
-    this.setupScrollHandler();
     this.processHighlights();
   }
 
@@ -67,10 +65,6 @@ export class ContentScript {
     });
   }
 
-  private setupScrollHandler(): void {
-    const debouncedProcess = DOMUtils.debounce(() => this.processHighlights(), CONSTANTS.DEBOUNCE_DELAY);
-    window.addEventListener('scroll', debouncedProcess);
-  }
 
   private async handleWordListUpdate(): Promise<void> {
     const data = await StorageService.get(['lists']);
