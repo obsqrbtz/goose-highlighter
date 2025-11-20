@@ -111,7 +111,7 @@
     "message": "Add to Exceptions"
   },
   "remove_exception": {
-    "message": "Remove from Exceptions"
+    "message": "Remove current"
   },
   "manage_exceptions": {
     "message": "Manage"
@@ -127,5 +127,35 @@
   },
   "remove": {
     "message": "Remove"
+  },
+  "tab_lists": {
+    "message": "Lists"
+  },
+  "tab_words": {
+    "message": "Words"
+  },
+  "tab_exceptions": {
+    "message": "Exceptions"
+  },
+  "no_exceptions": {
+    "message": "No exceptions"
+  },
+  "toggle_highlighting_title": {
+    "message": "Toggle highlighting"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Toggle dark mode"
+  },
+  "select_title": {
+    "message": "Select"
+  },
+  "word_placeholder": {
+    "message": "Word or phrase"
+  },
+  "background_color_title": {
+    "message": "Background color"
+  },
+  "text_color_title": {
+    "message": "Text color"
   }
 }

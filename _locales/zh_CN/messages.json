@@ -111,7 +111,7 @@
     "message": "添加到例外"
   },
   "remove_exception": {
-    "message": "从例外中移除"
+    "message": "移除当前"
   },
   "manage_exceptions": {
     "message": "管理"
@@ -127,5 +127,35 @@
   },
   "remove": {
     "message": "移除"
+  },
+  "tab_lists": {
+    "message": "列表"
+  },
+  "tab_words": {
+    "message": "单词"
+  },
+  "tab_exceptions": {
+    "message": "例外"
+  },
+  "no_exceptions": {
+    "message": "无例外"
+  },
+  "toggle_highlighting_title": {
+    "message": "切换高亮"
+  },
+  "toggle_dark_mode_title": {
+    "message": "切换暗黑模式"
+  },
+  "select_title": {
+    "message": "选择"
+  },
+  "word_placeholder": {
+    "message": "单词或短语"
+  },
+  "background_color_title": {
+    "message": "背景颜色"
+  },
+  "text_color_title": {
+    "message": "文字颜色"
   }
 }

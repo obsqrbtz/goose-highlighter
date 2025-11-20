@@ -111,7 +111,7 @@
         "message": "अपवादों में जोड़ें"
     },
     "remove_exception": {
-        "message": "अपवादों से हटाएं"
+        "message": "वर्तमान हटाएं"
     },
     "manage_exceptions": {
         "message": "प्रबंधित करें"
@@ -127,5 +127,35 @@
     },
     "remove": {
         "message": "हटाएं"
+    },
+    "tab_lists": {
+        "message": "सूचियाँ"
+    },
+    "tab_words": {
+        "message": "शब्द"
+    },
+    "tab_exceptions": {
+        "message": "अपवाद"
+    },
+    "no_exceptions": {
+        "message": "कोई अपवाद नहीं"
+    },
+    "toggle_highlighting_title": {
+        "message": "हाइलाइटिंग टॉगल करें"
+    },
+    "toggle_dark_mode_title": {
+        "message": "डार्क मोड टॉगल करें"
+    },
+    "select_title": {
+        "message": "चुनें"
+    },
+    "word_placeholder": {
+        "message": "शब्द या वाक्यांश"
+    },
+    "background_color_title": {
+        "message": "पृष्ठभूमि रंग"
+    },
+    "text_color_title": {
+        "message": "पाठ रंग"
     }
 }

@@ -13,13 +13,13 @@ export class PopupController {
   private matchWholeEnabled = false;
   private exceptionsList: string[] = [];
   private currentTabHost = '';
-  private sectionStates: Record<string, boolean> = {};
+  private activeTab = 'lists';
 
   async initialize(): Promise<void> {
     await this.loadData();
     await this.getCurrentTab();
-    this.loadSectionStates();
-    this.initializeSectionStates();
+    this.loadActiveTab();
+    this.translateTitles();
     this.setupEventListeners();
     this.render();
   }
@@ -56,32 +56,44 @@ export class PopupController {
     }
   }
 
-  private loadSectionStates(): void {
-    const saved = localStorage.getItem('goose-highlighter-section-states');
+  private loadActiveTab(): void {
+    const saved = localStorage.getItem('goose-highlighter-active-tab');
     if (saved) {
-      try {
-        this.sectionStates = JSON.parse(saved);
-      } catch {
-        this.sectionStates = {};
-      }
+      this.activeTab = saved;
     }
   }
 
-  private saveSectionStates(): void {
-    localStorage.setItem('goose-highlighter-section-states', JSON.stringify(this.sectionStates));
-  }
-
-  private initializeSectionStates(): void {
-    Object.keys(this.sectionStates).forEach(sectionName => {
-      const section = document.querySelector(`[data-section="${sectionName}"]`);
-      if (section && this.sectionStates[sectionName]) {
-        section.classList.add('collapsed');
+  private translateTitles(): void {
+    document.querySelectorAll('[data-i18n-title]').forEach(element => {
+      const key = element.getAttribute('data-i18n-title');
+      if (key) {
+        const translation = chrome.i18n.getMessage(key);
+        if (translation) {
+          element.setAttribute('title', translation);
+        }
       }
     });
   }
 
+  private saveActiveTab(): void {
+    localStorage.setItem('goose-highlighter-active-tab', this.activeTab);
+  }
+
+  private switchTab(tabName: string): void {
+    this.activeTab = tabName;
+    this.saveActiveTab();
+
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+    });
+
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.toggle('active', content.getAttribute('data-tab-content') === tabName);
+    });
+  }
+
   private setupEventListeners(): void {
-    this.setupSectionToggles();
+    this.setupTabs();
     this.setupListManagement();
     this.setupWordManagement();
     this.setupSettings();
@@ -90,44 +102,15 @@ export class PopupController {
     this.setupTheme();
   }
 
-  private setupSectionToggles(): void {
-    document.querySelectorAll('.collapse-toggle').forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const targetSection = (button as HTMLElement).getAttribute('data-target');
-        if (targetSection) this.toggleSection(targetSection);
+  private setupTabs(): void {
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const tabName = (button as HTMLElement).getAttribute('data-tab');
+        if (tabName) this.switchTab(tabName);
       });
     });
 
-    document.querySelectorAll('.section-header').forEach(header => {
-      header.addEventListener('click', (e) => {
-        if ((e.target as HTMLElement).tagName === 'BUTTON' ||
-          (e.target as HTMLElement).tagName === 'INPUT' ||
-          (e.target as HTMLElement).closest('button')) {
-          return;
-        }
-        const section = (header as HTMLElement).closest('.section');
-        const sectionName = section?.getAttribute('data-section');
-        if (sectionName) this.toggleSection(sectionName);
-      });
-    });
-  }
-
-  private toggleSection(sectionName: string): void {
-    const section = document.querySelector(`[data-section="${sectionName}"]`);
-    if (!section) return;
-
-    const isCollapsed = section.classList.contains('collapsed');
-
-    if (isCollapsed) {
-      section.classList.remove('collapsed');
-      this.sectionStates[sectionName] = false;
-    } else {
-      section.classList.add('collapsed');
-      this.sectionStates[sectionName] = true;
-    }
-
-    this.saveSectionStates();
+    this.switchTab(this.activeTab);
   }
 
   private setupListManagement(): void {
@@ -199,20 +182,14 @@ export class PopupController {
   private setupWordListEvents(wordList: HTMLDivElement): void {
     wordList.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement;
-      if (target.type === 'checkbox') {
-        if (target.dataset.index != null) {
-          const index = +target.dataset.index;
-          if (target.checked) {
-            this.selectedCheckboxes.add(index);
-          } else {
-            this.selectedCheckboxes.delete(index);
-          }
-          this.renderWords();
-        } else if (target.dataset.activeEdit != null) {
-          const index = +target.dataset.activeEdit;
-          this.lists[this.currentListIndex].words[index].active = target.checked;
-          this.save();
+      if (target.type === 'checkbox' && target.dataset.index != null) {
+        const index = +target.dataset.index;
+        if (target.checked) {
+          this.selectedCheckboxes.add(index);
+        } else {
+          this.selectedCheckboxes.delete(index);
         }
+        this.renderWords();
       }
     });
 
@@ -332,14 +309,6 @@ export class PopupController {
       this.updateExceptionButton();
       this.renderExceptions();
       this.save();
-    });
-
-    document.getElementById('manageExceptionsBtn')?.addEventListener('click', () => {
-      const panel = document.getElementById('exceptionsPanel');
-      if (panel) {
-        const isVisible = panel.style.display !== 'none';
-        panel.style.display = isVisible ? 'none' : 'block';
-      }
     });
 
     document.getElementById('clearExceptionsBtn')?.addEventListener('click', () => {
@@ -527,11 +496,13 @@ export class PopupController {
     }
 
     const itemHeight = 32;
-    const containerHeight = wordList.clientHeight;
+    const itemSpacing = 2;
+    const totalItemHeight = itemHeight + itemSpacing;
+    const containerHeight = wordList.clientHeight || 250;
     const scrollTop = wordList.scrollTop;
-    const startIndex = Math.floor(scrollTop / itemHeight);
+    const startIndex = Math.floor(scrollTop / totalItemHeight);
     const endIndex = Math.min(
-      startIndex + Math.ceil(containerHeight / itemHeight) + 2,
+      startIndex + Math.ceil(containerHeight / totalItemHeight) + 2,
       filteredWords.length
     );
 
@@ -539,7 +510,7 @@ export class PopupController {
 
     const spacer = document.createElement('div');
     spacer.style.position = 'relative';
-    spacer.style.height = `${filteredWords.length * itemHeight}px`;
+    spacer.style.height = `${filteredWords.length * totalItemHeight}px`;
     spacer.style.width = '100%';
 
     for (let i = startIndex; i < endIndex; i++) {
@@ -561,32 +532,22 @@ export class PopupController {
 
   private createWordItem(word: HighlightWord, realIndex: number, displayIndex: number, itemHeight: number): HTMLDivElement {
     const container = document.createElement('div');
+    container.className = 'word-item';
+    if (word.active === false) {
+      container.classList.add('disabled');
+    }
     container.style.cssText = `
-      height: ${itemHeight}px;
       position: absolute;
-      top: ${displayIndex * itemHeight}px;
-      width: calc(100% - 8px);
-      left: 4px;
-      right: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 4px;
-      box-sizing: border-box;
-      background: var(--highlight-tag);
-      border: 1px solid var(--highlight-tag-border);
+      top: ${displayIndex * (itemHeight + 2)}px;
     `;
 
     const list = this.lists[this.currentListIndex];
 
     container.innerHTML = `
-      <input type="checkbox" class="word-checkbox" data-index="${realIndex}" ${this.selectedCheckboxes.has(realIndex) ? 'checked' : ''}>
-      <input type="text" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${realIndex}" style="flex-grow: 1; min-width: 0; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--input-border); background-color: var(--input-bg); color: var(--text-color);">
-      <input type="color" value="${word.background || list.background}" data-bg-edit="${realIndex}" style="width: 24px; height: 24px; flex-shrink: 0;">
-      <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${realIndex}" style="width: 24px; height: 24px; flex-shrink: 0;">
-      <label class="word-active" style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
-        <input type="checkbox" ${word.active !== false ? 'checked' : ''} data-active-edit="${realIndex}" class="switch">
-      </label>
+      <input type="checkbox" class="word-checkbox" data-index="${realIndex}" ${this.selectedCheckboxes.has(realIndex) ? 'checked' : ''} title="${chrome.i18n.getMessage('select_title') || 'Select'}">
+      <input type="text" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${realIndex}" placeholder="${chrome.i18n.getMessage('word_placeholder') || 'Word or phrase'}">
+      <input type="color" value="${word.background || list.background}" data-bg-edit="${realIndex}" title="${chrome.i18n.getMessage('background_color_title') || 'Background color'}">
+      <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${realIndex}" title="${chrome.i18n.getMessage('text_color_title') || 'Text color'}">
     `;
 
     return container;
@@ -604,12 +565,12 @@ export class PopupController {
       btnText.textContent = chrome.i18n.getMessage('remove_exception') || 'Remove from Exceptions';
       toggleBtn.className = 'danger';
       const icon = toggleBtn.querySelector('i');
-      if (icon) icon.className = 'fa-solid fa-check';
+      if (icon) icon.className = 'fa-solid fa-trash';
     } else {
       btnText.textContent = chrome.i18n.getMessage('add_exception') || 'Add to Exceptions';
       toggleBtn.className = '';
       const icon = toggleBtn.querySelector('i');
-      if (icon) icon.className = 'fa-solid fa-ban';
+      if (icon) icon.className = 'fa-solid fa-plus';
     }
   }
 
@@ -618,7 +579,7 @@ export class PopupController {
     if (!container) return;
 
     if (this.exceptionsList.length === 0) {
-      container.innerHTML = '<div class="exception-item">No exceptions</div>';
+      container.innerHTML = `<div class="exception-item">${chrome.i18n.getMessage('no_exceptions') || 'No exceptions'}</div>`;
       return;
     }
 

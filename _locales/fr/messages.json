@@ -111,7 +111,7 @@
         "message": "Ajouter aux exceptions"
     },
     "remove_exception": {
-        "message": "Retirer des exceptions"
+        "message": "Supprimer l'actuel"
     },
     "manage_exceptions": {
         "message": "Gérer"
@@ -127,5 +127,35 @@
     },
     "remove": {
         "message": "Supprimer"
+    },
+    "tab_lists": {
+        "message": "Listes"
+    },
+    "tab_words": {
+        "message": "Mots"
+    },
+    "tab_exceptions": {
+        "message": "Exceptions"
+    },
+    "no_exceptions": {
+        "message": "Aucune exception"
+    },
+    "toggle_highlighting_title": {
+        "message": "Activer/désactiver la surbrillance"
+    },
+    "toggle_dark_mode_title": {
+        "message": "Activer/désactiver le mode sombre"
+    },
+    "select_title": {
+        "message": "Sélectionner"
+    },
+    "word_placeholder": {
+        "message": "Mot ou phrase"
+    },
+    "background_color_title": {
+        "message": "Couleur d'arrière-plan"
+    },
+    "text_color_title": {
+        "message": "Couleur du texte"
     }
 }

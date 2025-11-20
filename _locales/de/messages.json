@@ -105,7 +105,7 @@
     "message": "Zu Ausnahmen hinzufügen"
   },
   "remove_exception": {
-    "message": "Aus Ausnahmen entfernen"
+    "message": "Aktuelle entfernen"
   },
   "manage_exceptions": {
     "message": "Verwalten"
@@ -121,5 +121,35 @@
   },
   "remove": {
     "message": "Entfernen"
+  },
+  "tab_lists": {
+    "message": "Listen"
+  },
+  "tab_words": {
+    "message": "Wörter"
+  },
+  "tab_exceptions": {
+    "message": "Ausnahmen"
+  },
+  "no_exceptions": {
+    "message": "Keine Ausnahmen"
+  },
+  "toggle_highlighting_title": {
+    "message": "Hervorhebung umschalten"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Dunkelmodus umschalten"
+  },
+  "select_title": {
+    "message": "Auswählen"
+  },
+  "word_placeholder": {
+    "message": "Wort oder Phrase"
+  },
+  "background_color_title": {
+    "message": "Hintergrundfarbe"
+  },
+  "text_color_title": {
+    "message": "Textfarbe"
   }
 }

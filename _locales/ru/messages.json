@@ -127,5 +127,35 @@
   },
   "remove": {
     "message": "Удалить"
+  },
+  "tab_lists": {
+    "message": "Списки"
+  },
+  "tab_words": {
+    "message": "Слова"
+  },
+  "tab_exceptions": {
+    "message": "Исключения"
+  },
+  "no_exceptions": {
+    "message": "Нет исключений"
+  },
+  "toggle_highlighting_title": {
+    "message": "Выделение(вкл/выкл)"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Темная/светлая тема"
+  },
+  "select_title": {
+    "message": "Выбрать"
+  },
+  "word_placeholder": {
+    "message": "Слово или фраза"
+  },
+  "background_color_title": {
+    "message": "Цвет фона"
+  },
+  "text_color_title": {
+    "message": "Цвет текста"
   }
 }

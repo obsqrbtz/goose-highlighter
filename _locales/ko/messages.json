@@ -111,7 +111,7 @@
         "message": "예외에 추가"
     },
     "remove_exception": {
-        "message": "예외에서 제거"
+        "message": "현재 제거"
     },
     "manage_exceptions": {
         "message": "관리"
@@ -127,5 +127,35 @@
     },
     "remove": {
         "message": "제거"
+    },
+    "tab_lists": {
+        "message": "리스트"
+    },
+    "tab_words": {
+        "message": "단어"
+    },
+    "tab_exceptions": {
+        "message": "예외"
+    },
+    "no_exceptions": {
+        "message": "예외 없음"
+    },
+    "toggle_highlighting_title": {
+        "message": "하이라이트 전환"
+    },
+    "toggle_dark_mode_title": {
+        "message": "다크 모드 전환"
+    },
+    "select_title": {
+        "message": "선택"
+    },
+    "word_placeholder": {
+        "message": "단어 또는 구문"
+    },
+    "background_color_title": {
+        "message": "배경색"
+    },
+    "text_color_title": {
+        "message": "글자색"
     }
 }

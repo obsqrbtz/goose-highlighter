@@ -111,7 +111,7 @@
         "message": "例外に追加"
     },
     "remove_exception": {
-        "message": "例外から削除"
+        "message": "現在を削除"
     },
     "manage_exceptions": {
         "message": "管理"
@@ -127,5 +127,35 @@
     },
     "remove": {
         "message": "削除"
+    },
+    "tab_lists": {
+        "message": "リスト"
+    },
+    "tab_words": {
+        "message": "単語"
+    },
+    "tab_exceptions": {
+        "message": "例外"
+    },
+    "no_exceptions": {
+        "message": "例外なし"
+    },
+    "toggle_highlighting_title": {
+        "message": "ハイライトの切り替え"
+    },
+    "toggle_dark_mode_title": {
+        "message": "ダークモードの切り替え"
+    },
+    "select_title": {
+        "message": "選択"
+    },
+    "word_placeholder": {
+        "message": "単語またはフレーズ"
+    },
+    "background_color_title": {
+        "message": "背景色"
+    },
+    "text_color_title": {
+        "message": "文字色"
     }
 }

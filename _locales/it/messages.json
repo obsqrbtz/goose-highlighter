@@ -111,7 +111,7 @@
         "message": "Aggiungi alle eccezioni"
     },
     "remove_exception": {
-        "message": "Rimuovi dalle eccezioni"
+        "message": "Rimuovi corrente"
     },
     "manage_exceptions": {
         "message": "Gestisci"
@@ -127,5 +127,35 @@
     },
     "remove": {
         "message": "Rimuovi"
+    },
+    "tab_lists": {
+        "message": "Elenchi"
+    },
+    "tab_words": {
+        "message": "Parole"
+    },
+    "tab_exceptions": {
+        "message": "Eccezioni"
+    },
+    "no_exceptions": {
+        "message": "Nessuna eccezione"
+    },
+    "toggle_highlighting_title": {
+        "message": "Attiva/disattiva evidenziazione"
+    },
+    "toggle_dark_mode_title": {
+        "message": "Attiva/disattiva modalità scura"
+    },
+    "select_title": {
+        "message": "Seleziona"
+    },
+    "word_placeholder": {
+        "message": "Parola o frase"
+    },
+    "background_color_title": {
+        "message": "Colore di sfondo"
+    },
+    "text_color_title": {
+        "message": "Colore del testo"
     }
 }

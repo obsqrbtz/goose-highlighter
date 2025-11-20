@@ -111,7 +111,7 @@
     "message": "İstisnalara Ekle"
   },
   "remove_exception": {
-    "message": "İstisnalardan Çıkar"
+    "message": "Mevcut olanı kaldır"
   },
   "manage_exceptions": {
     "message": "Yönet"
@@ -127,5 +127,35 @@
   },
   "remove": {
     "message": "Kaldır"
+  },
+  "tab_lists": {
+    "message": "Listeler"
+  },
+  "tab_words": {
+    "message": "Kelimeler"
+  },
+  "tab_exceptions": {
+    "message": "İstisnalar"
+  },
+  "no_exceptions": {
+    "message": "İstisna yok"
+  },
+  "toggle_highlighting_title": {
+    "message": "Vurgulamayı aç/kapat"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Karanlık modu aç/kapat"
+  },
+  "select_title": {
+    "message": "Seç"
+  },
+  "word_placeholder": {
+    "message": "Kelime veya ifade"
+  },
+  "background_color_title": {
+    "message": "Arka plan rengi"
+  },
+  "text_color_title": {
+    "message": "Metin rengi"
   }
 }

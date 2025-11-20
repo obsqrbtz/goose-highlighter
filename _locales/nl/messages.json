@@ -111,7 +111,7 @@
     "message": "Toevoegen aan uitzonderingen"
   },
   "remove_exception": {
-    "message": "Verwijderen uit uitzonderingen"
+    "message": "Huidige verwijderen"
   },
   "manage_exceptions": {
     "message": "Beheren"
@@ -127,5 +127,35 @@
   },
   "remove": {
     "message": "Verwijderen"
+  },
+  "tab_lists": {
+    "message": "Lijsten"
+  },
+  "tab_words": {
+    "message": "Woorden"
+  },
+  "tab_exceptions": {
+    "message": "Uitzonderingen"
+  },
+  "no_exceptions": {
+    "message": "Geen uitzonderingen"
+  },
+  "toggle_highlighting_title": {
+    "message": "Markeren in-/uitschakelen"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Donkere modus in-/uitschakelen"
+  },
+  "select_title": {
+    "message": "Selecteren"
+  },
+  "word_placeholder": {
+    "message": "Woord of zin"
+  },
+  "background_color_title": {
+    "message": "Achtergrondkleur"
+  },
+  "text_color_title": {
+    "message": "Tekstkleur"
   }
 }

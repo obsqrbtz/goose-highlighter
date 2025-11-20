@@ -111,7 +111,7 @@
     "message": "Agregar a excepciones"
   },
   "remove_exception": {
-    "message": "Quitar de excepciones"
+    "message": "Eliminar actual"
   },
   "manage_exceptions": {
     "message": "Gestionar"
@@ -127,5 +127,35 @@
   },
   "remove": {
     "message": "Eliminar"
+  },
+  "tab_lists": {
+    "message": "Listas"
+  },
+  "tab_words": {
+    "message": "Palabras"
+  },
+  "tab_exceptions": {
+    "message": "Excepciones"
+  },
+  "no_exceptions": {
+    "message": "Sin excepciones"
+  },
+  "toggle_highlighting_title": {
+    "message": "Alternar resaltado"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Alternar modo oscuro"
+  },
+  "select_title": {
+    "message": "Seleccionar"
+  },
+  "word_placeholder": {
+    "message": "Palabra o frase"
+  },
+  "background_color_title": {
+    "message": "Color de fondo"
+  },
+  "text_color_title": {
+    "message": "Color de texto"
   }
 }
