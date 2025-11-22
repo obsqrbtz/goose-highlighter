@@ -1,7 +1,9 @@
 import { HighlightList, ActiveWord, CONSTANTS } from '../types.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
 
+
 export class HighlightEngine {
+    private _textareaMatchInfo: Array<{ input: HTMLTextAreaElement | HTMLInputElement; count: number; text: string }> = [];
   private styleSheet: CSSStyleSheet | null = null;
   private highlights = new Map<string, Highlight>();
   private highlightsByWord = new Map<string, Range[]>();
@@ -9,13 +11,10 @@ export class HighlightEngine {
   private observer: MutationObserver;
   private isHighlighting = false;
   private currentMatchCase = false;
-  private textareaOverlays = new Map<HTMLTextAreaElement | HTMLInputElement, HTMLElement>();
-  private resizeObserver: ResizeObserver;
 
   constructor(private onUpdate: () => void) {
     this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
       if (this.isHighlighting) return;
-
       const hasContentChanges = mutations.some((mutation: MutationRecord) => {
         if (mutation.type !== 'childList') return false;
         const allNodes = [...Array.from(mutation.addedNodes), ...Array.from(mutation.removedNodes)];
@@ -25,21 +24,10 @@ export class HighlightEngine {
           return false;
         });
       });
-
       if (hasContentChanges) {
         this.onUpdate();
       }
     }, CONSTANTS.DEBOUNCE_DELAY));
-
-    this.resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const input = entry.target as HTMLTextAreaElement | HTMLInputElement;
-        const overlay = this.textareaOverlays.get(input);
-        if (overlay) {
-          this.updateOverlayPosition(input, overlay);
-        }
-      }
-    });
   }
 
   private initializeStyleSheet(): void {
@@ -75,24 +63,8 @@ export class HighlightEngine {
   clearHighlights(): void {
     this.observer.disconnect();
     this.clearHighlightsInternal();
-    this.clearTextareaOverlays();
   }
 
-  private clearTextareaOverlays(): void {
-    for (const [input, overlay] of this.textareaOverlays.entries()) {
-      this.resizeObserver.unobserve(input);
-      overlay.remove();
-    }
-    this.textareaOverlays.clear();
-  }
-
-  private updateOverlayPosition(input: HTMLTextAreaElement | HTMLInputElement, overlay: HTMLElement): void {
-    const rect = input.getBoundingClientRect();
-    overlay.style.width = `${input.clientWidth}px`;
-    overlay.style.height = `${input.clientHeight}px`;
-    overlay.style.top = `${rect.top + window.scrollY}px`;
-    overlay.style.left = `${rect.left + window.scrollX}px`;
-  }
 
   private getTextNodes(): Text[] {
     const textNodes: Text[] = [];
@@ -142,7 +114,6 @@ export class HighlightEngine {
 
     this.observer.disconnect();
     this.clearHighlightsInternal();
-    this.clearTextareaOverlays();
 
     const activeWords = this.extractActiveWords(lists);
     if (activeWords.length === 0) {
@@ -227,112 +198,203 @@ export class HighlightEngine {
   }
 
   private highlightTextareas(pattern: RegExp, styleMap: Map<string, number>, activeWords: ActiveWord[]): void {
-    const textareas = document.querySelectorAll('textarea, input[type="text"], input[type="search"], input[type="email"], input[type="url"]');
+    if (!document.getElementById('gh-textarea-badge-style')) {
+      const style = document.createElement('style');
+      style.id = 'gh-textarea-badge-style';
+      style.textContent = `
+        :root {
+          --gh-badge-accent: #ec9c23;
+          --gh-badge-text: #000;
+          --gh-badge-border: #2d2d2d;
+          --gh-popup-bg: #161616;
+          --gh-popup-border: #ec9c23;
+          --gh-popup-radius: 10px;
+          --gh-popup-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .goose-highlighter-textarea-badge {
+          position: absolute !important;
+          left: 4px !important;
+          top: 4px !important;
+          background: var(--gh-badge-accent);
+          color: var(--gh-badge-text);
+          font-family: inherit;
+          font-weight: bold;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+          cursor: pointer;
+          z-index: 10000;
+          padding: 0 10px;
+          height: 22px;
+          min-width: 22px;
+          border-radius: 12px;
+          border: 2px solid var(--gh-badge-border);
+          transition: box-shadow 0.2s, background 0.2s;
+        }
+        .goose-highlighter-textarea-badge[data-round="true"] {
+          border-radius: 50%;
+          padding: 0;
+          min-width: 22px;
+        }
+        .goose-highlighter-textarea-badge:hover {
+          box-shadow: 0 4px 12px rgba(236,156,35,0.25);
+          background: #ffb84d;
+        }
+        .goose-highlighter-textarea-popup {
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          background: var(--gh-popup-bg);
+          border: 2px solid var(--gh-popup-border);
+          border-radius: var(--gh-popup-radius);
+          box-shadow: var(--gh-popup-shadow);
+          padding: 0 0 20px 0;
+          z-index: 10001;
+          max-width: 420px;
+          max-height: 70vh;
+          overflow: auto;
+          color: #e8e8e8;
+          font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+        .gh-popup-titlebar {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          background: #191919;
+          border-top-left-radius: var(--gh-popup-radius);
+          border-top-right-radius: var(--gh-popup-radius);
+          height: 32px;
+          padding: 0 8px 0 0;
+          border-bottom: 1px solid #222;
+          position: relative;
+        }
+        .gh-popup-close {
+          background: none;
+          color: #e8e8e8;
+          border: none;
+          font-size: 22px;
+          font-weight: bold;
+          cursor: pointer;
+          padding: 0 6px;
+          border-radius: 4px;
+          transition: background 0.2s, color 0.2s;
+          z-index: 10002;
+          line-height: 1;
+        }
+        .gh-popup-close:hover {
+          background: #ec9c23;
+          color: #222;
+        }
+        .goose-highlighter-textarea-popup::-webkit-scrollbar {
+          width: 10px;
+          background: #222;
+          border-radius: 8px;
+        }
+        .goose-highlighter-textarea-popup::-webkit-scrollbar-thumb {
+          background: var(--gh-badge-accent);
+          border-radius: 8px;
+          border: 2px solid #222;
+        }
+        .goose-highlighter-textarea-popup::-webkit-scrollbar-thumb:hover {
+          background: #ffb84d;
+        }
+        .goose-highlighter-textarea-popup {
+          scrollbar-width: thin;
+          scrollbar-color: var(--gh-badge-accent) #222;
+        }
+        .gh-popup-pre {
+          background: #222;
+          border-radius: 7px;
+          padding: 10px 12px;
+          border: 1px solid #333;
+          color: #e8e8e8;
+          font-size: 15px;
+          font-family: inherit;
+          margin: 16px 16px 0 16px;
+          white-space: pre-wrap;
+          word-break: break-word;
+          overflow-wrap: break-word;
+        }
+        .gh-popup-pre mark {
+          background: none;
+          color: #ec9c23;
+          font-weight: bold;
+          border-radius: 0;
+          padding: 0;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+        // Helper to escape HTML
+        function escapeHtml(text: string): string {
+          const div = document.createElement('div');
+          div.textContent = text;
+          return div.innerHTML;
+        }
 
+    function renderHighlighted(text: string): string {
+      let html = '';
+      let lastIndex = 0;
+      pattern.lastIndex = 0;
+      let match;
+      while ((match = pattern.exec(text)) !== null) {
+        html += escapeHtml(text.substring(lastIndex, match.index));
+        html += `<mark>${escapeHtml(match[0])}</mark>`;
+        lastIndex = match.index + match[0].length;
+      }
+      html += escapeHtml(text.substring(lastIndex));
+      return html;
+    }
+    const textareas = document.querySelectorAll('textarea, input[type="text"], input[type="search"], input[type="email"], input[type="url"]');
+    this._textareaMatchInfo = [];
+    document.querySelectorAll('.goose-highlighter-textarea-badge').forEach(badge => badge.remove());
     for (const element of Array.from(textareas)) {
       const input = element as HTMLTextAreaElement | HTMLInputElement;
       const text = input.value;
-
       if (!text) continue;
-
-      const matches: Array<{ start: number; end: number; background: string; foreground: string }> = [];
+      let matchCount = 0;
       pattern.lastIndex = 0;
       let match;
-
       while ((match = pattern.exec(text)) !== null) {
-        const lookup = this.currentMatchCase ? match[0] : match[0].toLowerCase();
-        const styleIdx = styleMap.get(lookup);
-
-        if (styleIdx !== undefined) {
-          const activeWord = activeWords.find(w =>
-            (this.currentMatchCase ? w.text : w.text.toLowerCase()) === lookup
-          );
-          if (activeWord) {
-            matches.push({
-              start: match.index,
-              end: match.index + match[0].length,
-              background: activeWord.background,
-              foreground: activeWord.foreground
-            });
-
-            // Track textarea matches for navigation
-            if (!this.textareaMatchesByWord.has(lookup)) {
-              this.textareaMatchesByWord.set(lookup, []);
-            }
-            this.textareaMatchesByWord.get(lookup)!.push({
-              input,
-              position: match.index
-            });
-          }
+        matchCount++;
+      }
+      if (matchCount > 0) {
+        this._textareaMatchInfo.push({ input, count: matchCount, text });
+        const badge = document.createElement('div');
+        badge.className = 'goose-highlighter-textarea-badge';
+        badge.textContent = matchCount.toString();
+        badge.setAttribute('data-round', matchCount > 9 ? 'false' : 'true');
+        badge.style.position = 'absolute';
+        badge.style.left = '4px';
+        badge.style.top = '4px';
+        badge.style.zIndex = '10000';
+        const parent = input.parentElement;
+        if (parent && window.getComputedStyle(parent).position === 'static') {
+          parent.style.position = 'relative';
         }
+        parent?.appendChild(badge);
+
+        badge.addEventListener('click', () => {
+          document.querySelectorAll('.goose-highlighter-textarea-popup').forEach(p => p.remove());
+          const popup = document.createElement('div');
+          popup.className = 'goose-highlighter-textarea-popup';
+          popup.innerHTML = `
+            <div class="gh-popup-titlebar">
+              <button class="gh-popup-close" title="Close">&times;</button>
+            </div>
+            <pre class="gh-popup-pre">${renderHighlighted(text)}</pre>
+          `;
+          document.body.appendChild(popup);
+          const closeBtn = popup.querySelector('.gh-popup-close');
+          closeBtn?.addEventListener('click', () => popup.remove());
+        });
       }
-
-      if (matches.length > 0) {
-        this.createTextareaOverlay(input, text, matches);
-      }
     }
   }
 
-  private createTextareaOverlay(input: HTMLTextAreaElement | HTMLInputElement, text: string, matches: Array<{ start: number; end: number; background: string; foreground: string }>): void {
-    const overlay = document.createElement('div');
-    overlay.className = 'goose-highlighter-textarea-overlay';
-
-    const computedStyle = window.getComputedStyle(input);
-    const styles = [
-      'font-family', 'font-size', 'font-weight', 'font-style',
-      'line-height', 'letter-spacing', 'word-spacing',
-      'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-      'border-top-width', 'border-right-width', 'border-bottom-width', 'border-left-width',
-      'white-space', 'word-wrap', 'overflow-wrap'
-    ];
-
-    overlay.style.position = 'absolute';
-    overlay.style.pointerEvents = 'none';
-    overlay.style.color = 'transparent';
-    overlay.style.overflow = 'hidden';
-    overlay.style.whiteSpace = input.tagName === 'TEXTAREA' ? 'pre-wrap' : 'pre';
-    overlay.style.overflowWrap = 'break-word';
-
-    for (const prop of styles) {
-      overlay.style.setProperty(prop, computedStyle.getPropertyValue(prop));
-    }
-
-    this.updateOverlayPosition(input, overlay);
-
-    let html = '';
-    let lastIndex = 0;
-
-    for (const match of matches) {
-      html += this.escapeHtml(text.substring(lastIndex, match.start));
-      html += `<mark style="background-color: ${match.background}; color: ${match.foreground}; padding: 0; margin: 0;">${this.escapeHtml(text.substring(match.start, match.end))}</mark>`;
-      lastIndex = match.end;
-    }
-    html += this.escapeHtml(text.substring(lastIndex));
-
-    overlay.innerHTML = html;
-    document.body.appendChild(overlay);
-    this.textareaOverlays.set(input, overlay);
-
-    this.resizeObserver.observe(input);
-
-    const updateOverlay = () => {
-      this.resizeObserver.unobserve(input);
-      overlay.remove();
-      this.textareaOverlays.delete(input);
-    };
-
-    input.addEventListener('input', updateOverlay, { once: true });
-    input.addEventListener('scroll', () => {
-      overlay.scrollTop = input.scrollTop;
-      overlay.scrollLeft = input.scrollLeft;
-    });
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 
   private clearHighlightsInternal(): void {
     for (const name of this.highlights.keys()) {
@@ -341,7 +403,6 @@ export class HighlightEngine {
     this.highlights.clear();
     this.highlightsByWord.clear();
     this.textareaMatchesByWord.clear();
-
     if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
       while (this.styleSheet.cssRules.length > 0) {
         this.styleSheet.deleteRule(0);
@@ -451,27 +512,6 @@ export class HighlightEngine {
     input.focus();
     input.setSelectionRange(position, position + wordLength);
 
-    const overlay = this.textareaOverlays.get(input);
-    if (overlay) {
-      const marks = overlay.querySelectorAll('mark');
-      for (const mark of Array.from(marks)) {
-        const markElement = mark as HTMLElement;
-        const markText = markElement.textContent || '';
-        const markStart = this.getTextPosition(overlay, markElement);
-
-        if (markStart === position) {
-          const originalBackground = markElement.style.backgroundColor;
-          markElement.style.backgroundColor = 'rgba(255, 165, 0, 0.8)';
-          markElement.style.boxShadow = '0 0 10px 3px rgba(255, 165, 0, 0.8)';
-
-          setTimeout(() => {
-            markElement.style.backgroundColor = originalBackground;
-            markElement.style.boxShadow = '';
-          }, 600);
-          break;
-        }
-      }
-    }
   }
 
   private getTextPosition(overlay: HTMLElement, targetMark: HTMLElement): number {
@@ -541,8 +581,6 @@ export class HighlightEngine {
 
   destroy(): void {
     this.observer.disconnect();
-    this.resizeObserver.disconnect();
     this.clearHighlights();
-    this.clearTextareaOverlays();
   }
 }
