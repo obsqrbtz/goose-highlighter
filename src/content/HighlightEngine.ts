@@ -392,6 +392,49 @@ export class HighlightEngine {
           closeBtn?.addEventListener('click', () => popup.remove());
         });
       }
+        const updateBadge = () => {
+          const text = input.value;
+          let matchCount = 0;
+          pattern.lastIndex = 0;
+          let match;
+          while ((match = pattern.exec(text)) !== null) {
+            matchCount++;
+          }
+          const oldBadge = input.parentElement?.querySelector('.goose-highlighter-textarea-badge');
+          if (oldBadge) oldBadge.remove();
+          if (matchCount > 0) {
+            const badge = document.createElement('div');
+            badge.className = 'goose-highlighter-textarea-badge';
+            badge.textContent = matchCount.toString();
+            badge.setAttribute('data-round', matchCount > 9 ? 'false' : 'true');
+            badge.style.position = 'absolute';
+            badge.style.left = '4px';
+            badge.style.top = '4px';
+            badge.style.zIndex = '10000';
+            const parent = input.parentElement;
+            if (parent && window.getComputedStyle(parent).position === 'static') {
+              parent.style.position = 'relative';
+            }
+            parent?.appendChild(badge);
+            badge.addEventListener('click', () => {
+              document.querySelectorAll('.goose-highlighter-textarea-popup').forEach(p => p.remove());
+              const popup = document.createElement('div');
+              popup.className = 'goose-highlighter-textarea-popup';
+              popup.innerHTML = `
+                <div class="gh-popup-titlebar">
+                  <button class="gh-popup-close" title="Close">&times;</button>
+                </div>
+                <pre class="gh-popup-pre">${renderHighlighted(text)}</pre>
+              `;
+              document.body.appendChild(popup);
+              const closeBtn = popup.querySelector('.gh-popup-close');
+              closeBtn?.addEventListener('click', () => popup.remove());
+            });
+          }
+        };
+        updateBadge();
+        input.removeEventListener('input', updateBadge);
+        input.addEventListener('input', updateBadge);
     }
   }
 
