@@ -1,3 +1,11 @@
+## [1.10.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.10.1...v1.10.2) (2025-11-22)
+
+
+### Bug Fixes
+
+* do not highlight textareas. create badge with popup instead ([f800318](https://github.com/obsqrbtz/goose-highlighter/commit/f800318e66aba17eb95d60c3bfa44c5215989314))
+* update badge when textarea text changes ([5d7766d](https://github.com/obsqrbtz/goose-highlighter/commit/5d7766d5fd3df0204f64eb15f938cb2a459897ad))
+
 ## [1.10.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.10.0...v1.10.1) (2025-11-20)
 
 
