@@ -25,6 +25,7 @@ export class PopupController {
     this.setupEventListeners();
     this.render();
     this.hideLoadingOverlay();
+    this.startSnow();
   }
 
   private hideLoadingOverlay(): void {
@@ -333,14 +334,14 @@ export class PopupController {
     document.getElementById('pageHighlightsList')?.addEventListener('click', async (e) => {
       const target = e.target as HTMLElement;
       const item = target.closest('.page-highlight-item') as HTMLElement;
-      
+
       if (!item) return;
 
       const word = item.dataset.word;
       if (!word) return;
 
       const button = target.closest('button');
-      
+
       if (button?.classList.contains('highlight-prev')) {
         e.stopPropagation();
         await this.navigateHighlight(word, -1);
@@ -357,7 +358,7 @@ export class PopupController {
   private async loadPageHighlights(): Promise<void> {
     try {
       const response = await MessageService.sendToActiveTab({ type: 'GET_PAGE_HIGHLIGHTS' });
-      
+
       if (response && response.highlights) {
         this.pageHighlights = response.highlights;
         this.highlightIndices.clear();
@@ -397,7 +398,7 @@ export class PopupController {
   private renderPageHighlights(): void {
     const container = document.getElementById('pageHighlightsList');
     const countElement = document.getElementById('totalHighlightsCount');
-    
+
     if (!container || !countElement) return;
 
     const totalCount = this.pageHighlights.reduce((sum, h) => sum + h.count, 0);
@@ -721,4 +722,86 @@ export class PopupController {
     (document.getElementById('matchCase') as HTMLInputElement).checked = this.matchCaseEnabled;
     (document.getElementById('matchWhole') as HTMLInputElement).checked = this.matchWholeEnabled;
   }
+
+  // Ney year stuff
+
+  private snowflakes: HTMLSpanElement[] = [];
+
+private startSnow(): void {
+  const maxFlakes = 20; 
+  const spawnInterval = 500; 
+
+  const spawnFlake = () => {
+    if (this.snowflakes.length >= maxFlakes) return;
+
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.style.position = 'fixed';
+    flake.style.pointerEvents = 'none';
+    flake.style.zIndex = '9999';
+    flake.style.fontSize = `${8 + Math.random() * 8}px`;
+    flake.textContent = '❄';
+
+    const isLightTheme = document.body.classList.contains('light');
+    flake.style.color = isLightTheme ? 'rgba(90, 181, 255, 0.78)' : 'rgba(255, 255, 255, 0.8)';
+
+    flake.dataset.x = `${Math.random() * window.innerWidth}`;
+    flake.dataset.y = `${-10}`;
+    flake.dataset.speed = `${0.1 + Math.random() * 0.2}`;
+    flake.dataset.wind = `${Math.random() * 0.2 - 0.1}`;
+    flake.dataset.amplitude = `${1 + Math.random() * 1}`;
+    flake.dataset.angle = `${Math.random() * Math.PI * 2}`;
+    flake.dataset.angleSpeed = `${(Math.random() * 0.02 - 0.01)}`;
+    flake.dataset.opacity = `${0.2 + Math.random() * 0.3}`;
+    flake.style.opacity = flake.dataset.opacity!;
+    flake.dataset.fadeSpeed = `${0.002 + Math.random() * 0.003}`;
+
+    document.body.appendChild(flake);
+    this.snowflakes.push(flake);
+  };
+
+  setInterval(spawnFlake, spawnInterval);
+  this.animateSnow();
+}
+
+private animateSnow(): void {
+  const animate = () => {
+    this.snowflakes.forEach((flake) => {
+      let x = parseFloat(flake.dataset.x!);
+      let y = parseFloat(flake.dataset.y!);
+      const speed = parseFloat(flake.dataset.speed!);
+      let wind = parseFloat(flake.dataset.wind!);
+      const amp = parseFloat(flake.dataset.amplitude!);
+      let angle = parseFloat(flake.dataset.angle!);
+      const angleSpeed = parseFloat(flake.dataset.angleSpeed!);
+
+      y += speed;
+      angle += angleSpeed;
+      wind += (Math.random() * 0.002 - 0.001);
+      wind = Math.max(-0.1, Math.min(0.1, wind));
+      x += Math.sin(angle) * amp + wind;
+
+      if (y > window.innerHeight) {
+        y = -10;
+        x = Math.random() * window.innerWidth;
+
+        if (Math.random() < 0.2) {
+          flake.remove();
+          this.snowflakes = this.snowflakes.filter(f => f !== flake);
+          return;
+        }
+      }
+
+      flake.dataset.x = `${x}`;
+      flake.dataset.y = `${y}`;
+      flake.dataset.angle = `${angle}`;
+      flake.dataset.wind = `${wind}`;
+      flake.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    requestAnimationFrame(animate);
+  };
+
+  requestAnimationFrame(animate);
+}
 }

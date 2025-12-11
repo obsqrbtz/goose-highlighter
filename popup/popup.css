@@ -1,14 +1,14 @@
 :root {
-  --bg-color: #0f0f0f;
+  --bg-color: #0d0f13;
   --text-color: #e8e8e8;
-  --input-bg: #1c1c1c;
+  --input-bg: #171b22;
   --input-border: #2d2d2d;
   --button-bg: #252525;
   --button-hover: #333333;
   --button-text: #e8e8e8;
-  --accent: #ec9c23;
-  --accent-hover: #ffb84d;
-  --accent-text: #000;
+  --accent: #7dc7ff;
+  --accent-hover: #a9ddff;
+  --accent-text: #000000;
   --highlight-tag: #222222;
   --highlight-tag-border: #3a3a3a;
   --danger: #ef4444;
@@ -16,7 +16,7 @@
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
   --border-radius: 10px;
-  --section-bg: #161616;
+  --section-bg: #13161c;
   --switch-bg: #3a3a3a;
   --checkbox-accent: #ec9c23;
   --checkbox-border: #4a4a4a;
@@ -73,22 +73,23 @@ body {
 }
 
 body.light {
-  --bg-color: #f8f9fa;
+  --bg-color: #eef6ff;
   --text-color: #1a1a1a;
-  --input-bg: #ffffff;
-  --input-border: #e0e0e0;
-  --button-bg: #f0f0f0;
-  --button-hover: #e5e5e5;
+  --input-bg: #f3f8ff;
+  --input-border: #d0e4ff;
+  --button-bg: #e0f0ff;
+  --button-hover: #cde8ff;
   --button-text: #1a1a1a;
-  --accent: #ec9c23;
+  --accent: #5ab6ff;
   --accent-text: #000;
-  --highlight-tag: #f5f5f5;
-  --highlight-tag-border: #e0e0e0;
+  --accent-hover: #8ccfff;
+  --highlight-tag: #d8edff;
+  --highlight-tag-border: #c0e0ff;
   --danger: #ef4444;
   --success: #10b981;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --section-bg: #ffffff;
+  --section-bg: #f3f8ff;
   --switch-bg: #d1d5db;
   --checkbox-accent: #ec9c23;
   --checkbox-border: #9ca3af;
@@ -871,4 +872,26 @@ body::-webkit-scrollbar-corner,
   color: var(--text-color);
   opacity: 0.5;
   font-size: 0.85em;
+}
+
+.snow {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #d0e7ff;
+  font-size: 6px;
+  opacity: 0.5;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
 }

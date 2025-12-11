@@ -11,6 +11,7 @@
 </head>
 
 <body class="dark">
+  <div class="snow" id="snowContainer"></div>
   <div class="loading-overlay">
     <div class="loading-spinner"></div>
   </div>
@@ -18,7 +19,8 @@
 
     <div class="header-bar">
       <span class="title">
-        <img src="../img/logo-outlined.png" alt="Goose Highlighter" style="height: 28px; vertical-align: middle; margin-right: 8px;"> Goose Highlighter
+        <img src="../img/logo-outlined-winter.png" alt="Goose Highlighter"
+          style="height: 28px; vertical-align: middle; margin-right: 8px;"> Goose Highlighter
       </span>
       <div class="icon-toggles">
         <label class="icon-toggle" data-i18n-title="toggle_highlighting_title" title="Toggle highlighting">
@@ -33,11 +35,16 @@
     </div>
 
     <div class="tabs">
-      <button class="tab-button active" data-tab="lists"><i class="fa-solid fa-list"></i> <span data-i18n="tab_lists">Lists</span></button>
-      <button class="tab-button" data-tab="words"><i class="fa-solid fa-tags"></i> <span data-i18n="tab_words">Words</span></button>
-      <button class="tab-button" data-tab="page-highlights"><i class="fa-solid fa-location-dot"></i> <span data-i18n="tab_page_highlights">On Page</span></button>
-      <button class="tab-button" data-tab="exceptions"><i class="fa-solid fa-ban"></i> <span data-i18n="tab_exceptions">Exceptions</span></button>
-      <button class="tab-button" data-tab="options"><i class="fa-solid fa-sliders"></i> <span data-i18n="options">Options</span></button>
+      <button class="tab-button active" data-tab="lists"><i class="fa-solid fa-list"></i> <span
+          data-i18n="tab_lists">Lists</span></button>
+      <button class="tab-button" data-tab="words"><i class="fa-solid fa-tags"></i> <span
+          data-i18n="tab_words">Words</span></button>
+      <button class="tab-button" data-tab="page-highlights"><i class="fa-solid fa-location-dot"></i> <span
+          data-i18n="tab_page_highlights">On Page</span></button>
+      <button class="tab-button" data-tab="exceptions"><i class="fa-solid fa-ban"></i> <span
+          data-i18n="tab_exceptions">Exceptions</span></button>
+      <button class="tab-button" data-tab="options"><i class="fa-solid fa-sliders"></i> <span
+          data-i18n="options">Options</span></button>
     </div>
 
     <div class="tab-content active" data-tab-content="lists">
@@ -68,7 +75,8 @@
           <span data-i18n="enable_highlight">Enable Highlighting</span>
           <input type="checkbox" class="switch" id="listActive" />
         </label>
-        <button id="applyListSettingsBtn"><i class="fa-solid fa-check"></i> <span data-i18n="apply">Apply</span></button>
+        <button id="applyListSettingsBtn"><i class="fa-solid fa-check"></i> <span
+            data-i18n="apply">Apply</span></button>
       </div>
     </div>
 
@@ -80,7 +88,8 @@
       </div>
 
       <div class="section" data-section="wordlist">
-        <h3><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span> (<span id="wordCount">0</span>)</h3>
+        <h3><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span> (<span
+            id="wordCount">0</span>)</h3>
         <div class="button-row wrap">
           <button id="selectAllBtn"><span data-i18n="select_all">Select All</span></button>
           <button id="deselectAllBtn"><span data-i18n="deselect_all">Clear</span></button>
@@ -95,11 +104,13 @@
 
     <div class="tab-content" data-tab-content="page-highlights">
       <div class="section" data-section="page-highlights">
-        <h3><i class="fa-solid fa-location-dot"></i> <span data-i18n="highlights_on_page">Highlights on This Page</span></h3>
+        <h3><i class="fa-solid fa-location-dot"></i> <span data-i18n="highlights_on_page">Highlights on This Page</span>
+        </h3>
         <div class="page-highlights-info">
           <span data-i18n="total_highlights">Total:</span> <strong id="totalHighlightsCount">0</strong>
         </div>
-        <button id="refreshHighlightsBtn"><i class="fa-solid fa-rotate"></i> <span data-i18n="refresh">Refresh</span></button>
+        <button id="refreshHighlightsBtn"><i class="fa-solid fa-rotate"></i> <span
+            data-i18n="refresh">Refresh</span></button>
         <div id="pageHighlightsList" class="page-highlights-list"></div>
       </div>
     </div>
@@ -108,11 +119,13 @@
       <div class="section" data-section="exceptions">
         <h3><i class="fa-solid fa-ban"></i> <span data-i18n="site_exceptions">Site Exceptions</span></h3>
         <div class="button-row">
-          <button id="toggleExceptionBtn"><i class="fa-solid fa-plus"></i> <span id="exceptionBtnText" data-i18n="add_exception">Add to Exceptions</span></button>
+          <button id="toggleExceptionBtn"><i class="fa-solid fa-plus"></i> <span id="exceptionBtnText"
+              data-i18n="add_exception">Add to Exceptions</span></button>
         </div>
         <h3 data-i18n="exceptions_list">Exception Sites:</h3>
         <div id="exceptionsList" class="exceptions-list"></div>
-        <button id="clearExceptionsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span data-i18n="clear_all">Clear All</span></button>
+        <button id="clearExceptionsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span
+            data-i18n="clear_all">Clear All</span></button>
       </div>
     </div>
 
@@ -126,7 +139,8 @@
         <div class="button-row">
           <button id="importBtn"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import</span></button>
           <input type="file" id="importInput" accept="application/json" hidden />
-          <button id="exportBtn"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export</span></button>
+          <button id="exportBtn"><i class="fa-solid fa-download"></i> <span
+              data-i18n="export_list">Export</span></button>
         </div>
       </div>
     </div>
