@@ -8,6 +8,7 @@ class BackgroundService {
     private initialize(): void {
         this.setupTabUpdateListener();
         this.setupInstallListener();
+        this.setupContextMenu();
     }
 
     private setupTabUpdateListener(): void {
@@ -29,6 +30,31 @@ class BackgroundService {
             if (!data.exceptionsList) {
                 await StorageService.update('exceptionsList', []);
             }
+            chrome.contextMenus.removeAll(() => {
+                chrome.contextMenus.create({
+                    id: 'manage-lists',
+                    title: 'Manage Lists',
+                    contexts: ['action']
+                });
+            });
+        });
+    }
+
+    private setupContextMenu(): void {
+        chrome.contextMenus.onClicked.addListener((info) => {
+            if (info.menuItemId === 'manage-lists') {
+                this.openListManagerWindow();
+            }
+        });
+    }
+
+    private openListManagerWindow(): void {
+        chrome.windows.create({
+            url: chrome.runtime.getURL('list-manager/list-manager.html'),
+            type: 'popup',
+            width: 800,
+            height: 600,
+            focused: true
         });
     }
 }

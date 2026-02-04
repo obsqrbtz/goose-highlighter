@@ -116,6 +116,7 @@ export class PopupController {
     this.setupExceptions();
     this.setupImportExport();
     this.setupTheme();
+    this.setupStorageSync();
   }
 
   private setupTabs(): void {
@@ -163,6 +164,10 @@ export class PopupController {
         this.currentListIndex = Math.max(0, this.currentListIndex - 1);
         this.save();
       }
+    });
+
+    document.getElementById('manageListsBtn')?.addEventListener('click', () => {
+      this.openListManagerWindow();
     });
   }
 
@@ -581,6 +586,48 @@ export class PopupController {
 
     this.renderLists();
     MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
+  }
+
+  private openListManagerWindow(): void {
+    chrome.windows.create({
+      url: chrome.runtime.getURL('list-manager/list-manager.html'),
+      type: 'popup',
+      width: 800,
+      height: 600,
+      focused: true
+    });
+  }
+
+  private setupStorageSync(): void {
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+      if (areaName !== 'local') return;
+      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || changes.matchWholeEnabled || changes.exceptionsList) {
+        this.reloadFromStorage();
+      }
+    });
+  }
+
+  private async reloadFromStorage(): Promise<void> {
+    const data = await StorageService.get();
+    this.lists = data.lists || [];
+    this.globalHighlightEnabled = data.globalHighlightEnabled ?? true;
+    this.matchCaseEnabled = data.matchCaseEnabled ?? false;
+    this.matchWholeEnabled = data.matchWholeEnabled ?? false;
+    this.exceptionsList = data.exceptionsList || [];
+
+    if (this.lists.length === 0) {
+      this.lists.push({
+        id: Date.now(),
+        name: chrome.i18n.getMessage('default_list_name') || 'Default List',
+        background: '#ffff00',
+        foreground: '#000000',
+        active: true,
+        words: []
+      });
+    }
+
+    this.currentListIndex = Math.min(this.currentListIndex, this.lists.length - 1);
+    this.render();
   }
 
 

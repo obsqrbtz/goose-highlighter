@@ -5,9 +5,11 @@
   "version": "1.11.0",
   "default_locale": "en",
   "permissions": [
+    "contextMenus",
     "scripting",
     "storage",
-    "tabs"
+    "tabs",
+    "windows"
   ],
   "host_permissions": [
     "<all_urls>"

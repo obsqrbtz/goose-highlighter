@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goose Highlighter - List Manager</title>
+  <link rel="stylesheet" href="list-manager.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title">
+        <img src="../img/logo-outlined.png" alt="Goose Highlighter" />
+        <div>
+          <div class="name">Goose Highlighter</div>
+          <div class="subtitle">List Manager</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button id="exportListBtn" class="ghost"><i class="fa-solid fa-download"></i> Export List</button>
+        <button id="newListBtn" class="primary"><i class="fa-solid fa-plus"></i> New List</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel lists-panel">
+        <div class="panel-header">
+          <h2>Lists</h2>
+          <div class="panel-actions">
+            <button id="duplicateListBtn"><i class="fa-solid fa-clone"></i> Duplicate</button>
+            <button id="mergeListsBtn"><i class="fa-solid fa-code-merge"></i> Merge</button>
+            <button id="deleteListsBtn" class="danger"><i class="fa-solid fa-trash"></i> Delete</button>
+          </div>
+        </div>
+        <div class="panel-actions secondary">
+          <button id="activateListsBtn"><i class="fa-solid fa-circle-check"></i> Activate</button>
+          <button id="deactivateListsBtn"><i class="fa-solid fa-circle-xmark"></i> Deactivate</button>
+        </div>
+        <div class="list-hint">Drag lists to reorder</div>
+        <div id="listsContainer" class="lists"></div>
+      </section>
+
+      <section class="panel details-panel">
+        <div class="panel-header">
+          <h2>Selected List</h2>
+          <div class="stats" id="listStats">0 words</div>
+        </div>
+        <div class="list-settings">
+          <label>
+            Name
+            <input type="text" id="listName" />
+          </label>
+          <div class="colors">
+            <label>
+              Background
+              <input type="color" id="listBg" />
+            </label>
+            <label>
+              Foreground
+              <input type="color" id="listFg" />
+            </label>
+          </div>
+          <button id="applyListSettingsBtn" class="primary"><i class="fa-solid fa-check"></i> Apply</button>
+        </div>
+
+        <div class="word-controls">
+          <div class="add-words">
+            <textarea id="bulkAddWords" placeholder="Paste words here..."></textarea>
+            <button id="addWordsBtn" class="primary"><i class="fa-solid fa-plus"></i> Add Words</button>
+          </div>
+          <div class="row">
+            <button id="selectAllWordsBtn">Select All</button>
+            <button id="clearSelectedWordsBtn">Clear</button>
+            <button id="enableWordsBtn">Enable</button>
+            <button id="disableWordsBtn">Disable</button>
+            <button id="deleteWordsBtn" class="danger">Delete</button>
+          </div>
+          <div class="row">
+            <input type="text" id="wordSearch" placeholder="Search words..." />
+            <select id="targetListSelect"></select>
+            <button id="moveWordsBtn"><i class="fa-solid fa-arrow-right"></i> Move</button>
+            <button id="copyWordsBtn"><i class="fa-solid fa-copy"></i> Copy</button>
+          </div>
+        </div>
+
+        <div id="wordList" class="word-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../dist/list-manager/list-manager.js"></script>
+</body>
+
+</html>
