@@ -272,8 +272,16 @@ body.light {
   overflow: hidden;
   min-height: 0;
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr auto;
   row-gap: 6px;
+}
+
+.selection-hint {
+  font-size: 0.7em;
+  opacity: 0.6;
+  text-align: center;
+  font-style: italic;
+  padding: 4px 0 0 0;
 }
 
 .section[data-section="addwords"] textarea {
@@ -589,21 +597,27 @@ input[type="file"] {
   left: 4px;
   height: 34px;
   display: grid;
-  grid-template-columns: 18px 1fr 26px 26px;
+  grid-template-columns: 1fr auto auto auto auto;
   align-items: center;
   gap: 6px;
   padding: 6px 8px;
   box-sizing: border-box;
   border-radius: 8px;
   background: var(--input-bg);
-  border: 1px solid var(--input-border);
+  border: 2px solid transparent;
   transition: all 0.2s;
+  cursor: pointer;
 }
 
 #wordList .word-item:hover {
   background: var(--highlight-tag);
-  border-color: var(--accent);
+  border-color: rgba(242, 168, 101, 0.3);
   box-shadow: var(--shadow-sm);
+}
+
+#wordList .word-item.selected {
+  background: rgba(242, 168, 101, 0.15);
+  border-color: rgba(242, 168, 101, 0.6);
 }
 
 #wordList .word-item.disabled {
@@ -615,18 +629,30 @@ input[type="file"] {
   opacity: 0.65;
 }
 
-#wordList .word-item.disabled input[type="text"] {
-  color: var(--text-color) !important;
-  opacity: 0.6;
+#wordList .word-item.disabled .word-text {
   text-decoration: line-through;
 }
 
-#wordList input[type="text"] {
+#wordList .word-text {
+  font-size: 0.8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+  min-width: 0;
+}
+
+#wordList .word-text.editing {
+  display: none;
+}
+
+#wordList .word-edit-input {
+  display: none;
   min-width: 0;
   width: 100%;
   background-color: var(--section-bg) !important;
   color: var(--text-color) !important;
-  border: 1px solid var(--input-border) !important;
+  border: 1px solid var(--accent) !important;
   padding: 4px 6px;
   border-radius: 6px;
   font-size: 0.8em;
@@ -634,9 +660,86 @@ input[type="file"] {
   margin: 0;
 }
 
-#wordList input[type="text"]:focus {
+#wordList .word-edit-input.active {
+  display: block;
+}
+
+#wordList .word-edit-input:focus {
   border-color: var(--accent) !important;
   outline: none;
+}
+
+#wordList .word-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  pointer-events: auto;
+}
+
+#wordList .word-actions > * {
+  pointer-events: auto;
+}
+
+#wordList .icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.75em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  min-height: 22px;
+}
+
+#wordList .icon-btn:hover {
+  opacity: 1;
+  background: rgba(242, 168, 101, 0.15);
+  color: var(--accent);
+}
+
+#wordList .icon-btn i {
+  pointer-events: none;
+}
+
+#wordList .toggle-btn {
+  width: 32px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--input-border);
+  border-radius: 9px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+#wordList .toggle-btn::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--text-color);
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: all 0.2s ease;
+}
+
+#wordList .toggle-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+#wordList .toggle-btn.active::after {
+  left: 16px;
+  background: var(--accent-text);
 }
 
 #wordList input[type="color"] {
@@ -646,18 +749,14 @@ input[type="file"] {
   border-radius: 3px;
   border: 1px solid var(--input-border);
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   align-self: center;
+  flex-shrink: 0;
 }
 
 #wordList input[type="color"]:hover {
   border-color: var(--accent);
-}
-
-#wordList input[type="checkbox"] {
-  margin: 0;
-  width: 16px;
-  height: 16px;
+  transform: scale(1.05);
 }
 
 #wordCount {

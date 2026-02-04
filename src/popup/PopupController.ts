@@ -201,17 +201,79 @@ export class PopupController {
   }
 
   private setupWordListEvents(wordList: HTMLDivElement): void {
-    wordList.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement;
-      if (target.type === 'checkbox' && target.dataset.index != null) {
-        const index = +target.dataset.index;
-        if (target.checked) {
-          this.selectedCheckboxes.add(index);
-        } else {
+    wordList.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const list = this.lists[this.currentListIndex];
+      if (!list) return;
+
+      // Handle edit button click
+      const editBtn = target.closest('.icon-btn.edit-word-btn') as HTMLElement | null;
+      if (editBtn) {
+        e.stopPropagation();
+        const index = Number(editBtn.dataset.index);
+        if (!Number.isNaN(index)) {
+          this.startEditingWord(index);
+        }
+        return;
+      }
+
+      // Handle toggle button click
+      if (target.classList.contains('toggle-btn')) {
+        e.stopPropagation();
+        const index = Number(target.dataset.index);
+        if (!Number.isNaN(index)) {
+          const word = list.words[index];
+          if (word) {
+            word.active = !word.active;
+            this.save();
+          }
+        }
+        return;
+      }
+
+      // Don't select if clicking on color inputs or edit input
+      if (target.tagName === 'INPUT') {
+        if ((target as HTMLInputElement).type === 'color') {
+          e.stopPropagation();
+          return;
+        }
+        if (target.classList.contains('word-edit-input')) {
+          e.stopPropagation();
+          return;
+        }
+      }
+
+      // Don't select if clicking inside word-actions area
+      if (target.closest('.word-actions') && !target.classList.contains('word-item')) {
+        return;
+      }
+
+      // Handle word item selection
+      const wordItem = target.closest('.word-item') as HTMLElement | null;
+      if (!wordItem) return;
+
+      const index = Number(wordItem.dataset.index);
+      if (Number.isNaN(index)) return;
+
+      const mouseEvent = e as MouseEvent;
+      // Ctrl/Cmd + click for multi-select
+      if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
+        if (this.selectedCheckboxes.has(index)) {
           this.selectedCheckboxes.delete(index);
+        } else {
+          this.selectedCheckboxes.add(index);
         }
         this.renderWords();
+        return;
       }
+
+      // Regular click - toggle selection
+      if (this.selectedCheckboxes.has(index)) {
+        this.selectedCheckboxes.delete(index);
+      } else {
+        this.selectedCheckboxes.add(index);
+      }
+      this.renderWords();
     });
 
     wordList.addEventListener('change', (e) => {
@@ -227,18 +289,39 @@ export class PopupController {
     });
 
     wordList.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const target = e.target as HTMLInputElement;
-        const index = +(target.dataset.wordEdit ?? -1);
-        if (index === -1) return;
+      const target = e.target as HTMLInputElement;
+      if (!target.classList.contains('word-edit-input')) return;
 
-        const word = this.lists[this.currentListIndex].words[index];
-        if (target.dataset.wordEdit != null) {
-          word.wordStr = target.value;
-          this.save();
-        }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        target.blur();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        this.renderWords();
       }
     });
+
+    wordList.addEventListener('blur', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (!target.classList.contains('word-edit-input')) return;
+
+      const list = this.lists[this.currentListIndex];
+      if (!list) return;
+
+      const index = Number(target.dataset.wordEdit ?? -1);
+      if (Number.isNaN(index) || index < 0) return;
+
+      const word = list.words[index];
+      if (!word) return;
+
+      const newValue = target.value.trim();
+      if (newValue && newValue !== word.wordStr) {
+        word.wordStr = newValue;
+        this.save();
+      } else {
+        this.renderWords();
+      }
+    }, true);
 
     let scrolling = false;
     wordList.addEventListener('scroll', () => {
@@ -249,6 +332,20 @@ export class PopupController {
         scrolling = false;
       });
     });
+  }
+
+  private startEditingWord(index: number): void {
+    const wordItem = document.querySelector(`.word-item[data-index="${index}"]`);
+    if (!wordItem) return;
+
+    const textSpan = wordItem.querySelector('.word-text') as HTMLElement;
+    const input = wordItem.querySelector('.word-edit-input') as HTMLInputElement;
+    if (!textSpan || !input) return;
+
+    textSpan.classList.add('editing');
+    input.classList.add('active');
+    input.focus();
+    input.select();
   }
 
   private setupWordSelection(): void {
@@ -670,7 +767,7 @@ export class PopupController {
     }
 
     const itemHeight = 32;
-    const itemSpacing = 2;
+    const itemSpacing = 4;
     const totalItemHeight = itemHeight + itemSpacing;
     const containerHeight = wordList.clientHeight || 250;
     const scrollTop = wordList.scrollTop;
@@ -682,7 +779,7 @@ export class PopupController {
 
     const spacer = document.createElement('div');
     spacer.style.position = 'relative';
-    spacer.style.height = `${filteredWords.length * totalItemHeight}px`;
+    spacer.style.height = `${filteredWords.length * totalItemHeight - itemSpacing}px`;
     spacer.style.width = '100%';
 
     for (let i = startIndex; i < endIndex; i++) {
@@ -705,21 +802,31 @@ export class PopupController {
   private createWordItem(word: HighlightWord, realIndex: number, displayIndex: number, itemHeight: number): HTMLDivElement {
     const container = document.createElement('div');
     container.className = 'word-item';
+    if (this.selectedCheckboxes.has(realIndex)) {
+      container.classList.add('selected');
+    }
     if (word.active === false) {
       container.classList.add('disabled');
     }
     container.style.cssText = `
       position: absolute;
-      top: ${displayIndex * (itemHeight + 2)}px;
+      top: ${displayIndex * (itemHeight + 4)}px;
     `;
+    container.dataset.index = realIndex.toString();
 
     const list = this.lists[this.currentListIndex];
 
     container.innerHTML = `
-      <input type="checkbox" class="word-checkbox" data-index="${realIndex}" ${this.selectedCheckboxes.has(realIndex) ? 'checked' : ''} title="${chrome.i18n.getMessage('select_title') || 'Select'}">
-      <input type="text" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${realIndex}" placeholder="${chrome.i18n.getMessage('word_placeholder') || 'Word or phrase'}">
-      <input type="color" value="${word.background || list.background}" data-bg-edit="${realIndex}" title="${chrome.i18n.getMessage('background_color_title') || 'Background color'}">
-      <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${realIndex}" title="${chrome.i18n.getMessage('text_color_title') || 'Text color'}">
+      <span class="word-text">${DOMUtils.escapeHtml(word.wordStr)}</span>
+      <input type="text" class="word-edit-input" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${realIndex}">
+      <div class="word-actions">
+        <button class="icon-btn edit-word-btn" data-index="${realIndex}" title="${chrome.i18n.getMessage('edit') || 'Edit'}">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <input type="color" value="${word.background || list.background}" data-bg-edit="${realIndex}" title="${chrome.i18n.getMessage('background_color_title') || 'Background color'}">
+        <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${realIndex}" title="${chrome.i18n.getMessage('text_color_title') || 'Text color'}">
+        <button class="toggle-btn ${word.active !== false ? 'active' : ''}" data-index="${realIndex}" title="${chrome.i18n.getMessage('toggle_active') || 'Toggle active'}"></button>
+      </div>
     `;
 
     return container;

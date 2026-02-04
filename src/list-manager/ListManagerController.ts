@@ -64,15 +64,16 @@ export class ListManagerController {
 
     const listsContainer = document.getElementById('listsContainer');
     listsContainer?.addEventListener('click', (e) => this.handleListClick(e));
-    listsContainer?.addEventListener('change', (e) => this.handleListCheckboxChange(e));
     listsContainer?.addEventListener('dragstart', (e) => this.handleDragStart(e));
     listsContainer?.addEventListener('dragover', (e) => this.handleDragOver(e));
     listsContainer?.addEventListener('drop', (e) => this.handleDrop(e));
     listsContainer?.addEventListener('dragend', () => this.clearDragState());
 
     const wordList = document.getElementById('wordList');
+    wordList?.addEventListener('click', (e) => this.handleWordListClick(e));
     wordList?.addEventListener('change', (e) => this.handleWordListChange(e));
     wordList?.addEventListener('keydown', (e) => this.handleWordListKeydown(e));
+    wordList?.addEventListener('blur', (e) => this.handleWordListBlur(e), true);
   }
 
   private setupStorageSync(): void {
@@ -313,27 +314,26 @@ export class ListManagerController {
     const listItem = target.closest('.list-item') as HTMLElement | null;
     if (!listItem) return;
 
-    if (target.tagName === 'INPUT' || target.tagName === 'BUTTON') return;
-
     const index = Number(listItem.dataset.index);
     if (Number.isNaN(index)) return;
 
+    const mouseEvent = event as MouseEvent;
+    // Ctrl/Cmd + click for multi-select
+    if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
+      if (this.selectedLists.has(index)) {
+        this.selectedLists.delete(index);
+      } else {
+        this.selectedLists.add(index);
+      }
+      this.renderLists();
+      return;
+    }
+
+    // Regular click - set as current and clear multi-selection
     this.currentListIndex = index;
+    this.selectedLists.clear();
     this.selectedWords.clear();
     this.render();
-  }
-
-  private handleListCheckboxChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    if (!target.classList.contains('list-checkbox')) return;
-    const index = Number(target.dataset.index);
-    if (Number.isNaN(index)) return;
-
-    if (target.checked) {
-      this.selectedLists.add(index);
-    } else {
-      this.selectedLists.delete(index);
-    }
   }
 
   private handleDragStart(event: DragEvent): void {
@@ -384,23 +384,84 @@ export class ListManagerController {
     document.querySelectorAll('.list-item.drag-over').forEach(item => item.classList.remove('drag-over'));
   }
 
-  private handleWordListChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
+  private handleWordListClick(event: Event): void {
+    const target = event.target as HTMLElement;
     const list = this.lists[this.currentListIndex];
     if (!list) return;
 
-    if (target.classList.contains('word-checkbox') && target.dataset.index != null) {
+    const editBtn = target.closest('.edit-word-btn') as HTMLElement | null;
+    if (editBtn) {
+      event.stopPropagation();
+      const index = Number(editBtn.dataset.index);
+      if (Number.isNaN(index)) return;
+      this.startEditingWord(index);
+      return;
+    }
+
+    // Handle toggle button click
+    if (target.classList.contains('toggle-btn')) {
+      event.stopPropagation();
       const index = Number(target.dataset.index);
-      if (target.checked) {
-        this.selectedWords.add(index);
-      } else {
+      if (Number.isNaN(index)) return;
+      const word = list.words[index];
+      if (word) {
+        word.active = !word.active;
+        this.save();
+      }
+      return;
+    }
+
+    // Don't select if clicking on color inputs or edit input
+    if (target.tagName === 'INPUT') {
+      if ((target as HTMLInputElement).type === 'color') {
+        event.stopPropagation();
+        return;
+      }
+      if (target.classList.contains('word-edit-input')) {
+        event.stopPropagation();
+        return;
+      }
+    }
+
+    // Don't select if clicking inside word-actions area (except on the word item itself)
+    if (target.closest('.word-actions') && !target.classList.contains('word-item')) {
+      return;
+    }
+
+    // Handle word item selection
+    const wordItem = target.closest('.word-item') as HTMLElement | null;
+    if (!wordItem) return;
+
+    const index = Number(wordItem.dataset.index);
+    if (Number.isNaN(index)) return;
+
+    const mouseEvent = event as MouseEvent;
+    // Ctrl/Cmd + click for multi-select
+    if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
+      if (this.selectedWords.has(index)) {
         this.selectedWords.delete(index);
+      } else {
+        this.selectedWords.add(index);
       }
       this.renderWords();
       return;
     }
 
-    const editIndex = Number(target.dataset.bgEdit ?? target.dataset.fgEdit ?? target.dataset.activeEdit ?? -1);
+    // Regular click - toggle selection
+    if (this.selectedWords.has(index)) {
+      this.selectedWords.delete(index);
+    } else {
+      this.selectedWords.add(index);
+    }
+    this.renderWords();
+  }
+
+  private handleWordListChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const list = this.lists[this.currentListIndex];
+    if (!list) return;
+
+    const editIndex = Number(target.dataset.bgEdit ?? target.dataset.fgEdit ?? -1);
     if (Number.isNaN(editIndex) || editIndex < 0) return;
 
     const word = list.words[editIndex];
@@ -408,14 +469,28 @@ export class ListManagerController {
 
     if (target.dataset.bgEdit != null) word.background = target.value;
     if (target.dataset.fgEdit != null) word.foreground = target.value;
-    if (target.dataset.activeEdit != null) word.active = target.checked;
 
     this.save();
   }
 
-  private handleWordListKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter') return;
+  private startEditingWord(index: number): void {
+    const wordItem = document.querySelector(`.word-item[data-index="${index}"]`);
+    if (!wordItem) return;
+
+    const textSpan = wordItem.querySelector('.word-text') as HTMLElement;
+    const input = wordItem.querySelector('.word-edit-input') as HTMLInputElement;
+    if (!textSpan || !input) return;
+
+    textSpan.classList.add('editing');
+    input.classList.add('active');
+    input.focus();
+    input.select();
+  }
+
+  private handleWordListBlur(event: Event): void {
     const target = event.target as HTMLInputElement;
+    if (!target.classList.contains('word-edit-input')) return;
+
     const list = this.lists[this.currentListIndex];
     if (!list) return;
 
@@ -425,8 +500,26 @@ export class ListManagerController {
     const word = list.words[index];
     if (!word) return;
 
-    word.wordStr = target.value;
-    this.save();
+    const newValue = target.value.trim();
+    if (newValue && newValue !== word.wordStr) {
+      word.wordStr = newValue;
+      this.save();
+    } else {
+      this.renderWords();
+    }
+  }
+
+  private handleWordListKeydown(event: KeyboardEvent): void {
+    const target = event.target as HTMLInputElement;
+    if (!target.classList.contains('word-edit-input')) return;
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      target.blur();
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      this.renderWords();
+    }
   }
 
   private getSelectedListIndices(): number[] {
@@ -459,10 +552,10 @@ export class ListManagerController {
       const item = document.createElement('div');
       item.className = 'list-item';
       if (index === this.currentListIndex) item.classList.add('active');
+      if (this.selectedLists.has(index)) item.classList.add('selected');
       item.draggable = true;
       item.dataset.index = index.toString();
       item.innerHTML = `
-        <input type="checkbox" class="list-checkbox" data-index="${index}" ${this.selectedLists.has(index) ? 'checked' : ''}>
         <div class="list-meta">
           <div class="list-name">${DOMUtils.escapeHtml(list.name)}</div>
           <div class="list-stats">${total} words • ${activeCount} active</div>
@@ -519,13 +612,19 @@ export class ListManagerController {
     wordList.innerHTML = entries.map(entry => {
       const word = entry.word;
       const index = entry.index;
+      const isSelected = this.selectedWords.has(index);
       return `
-        <div class="word-item ${word.active ? '' : 'disabled'}">
-          <input type="checkbox" class="word-checkbox" data-index="${index}" ${this.selectedWords.has(index) ? 'checked' : ''}>
-          <input type="text" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${index}">
-          <input type="color" value="${word.background || list.background}" data-bg-edit="${index}">
-          <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${index}">
-          <input type="checkbox" data-active-edit="${index}" ${word.active ? 'checked' : ''} title="Active">
+        <div class="word-item ${word.active ? '' : 'disabled'} ${isSelected ? 'selected' : ''}" data-index="${index}">
+          <span class="word-text">${DOMUtils.escapeHtml(word.wordStr)}</span>
+          <input type="text" class="word-edit-input" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${index}">
+          <div class="word-actions">
+            <button class="icon-btn edit-word-btn" data-index="${index}" title="Edit word">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <input type="color" value="${word.background || list.background}" data-bg-edit="${index}" title="Background color">
+            <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${index}" title="Foreground color">
+            <button class="toggle-btn ${word.active ? 'active' : ''}" data-index="${index}" title="Toggle active"></button>
+          </div>
         </div>
       `;
     }).join('');
