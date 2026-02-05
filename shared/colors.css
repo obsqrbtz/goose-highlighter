@@ -1,0 +1,52 @@
+/* Shared Color Scheme */
+:root {
+  --bg-color: #fbf6f1;
+  --text-color: #3b2a21;
+  --input-bg: #ffffff;
+  --input-border: #e6d7cc;
+  --button-bg: #f6eee7;
+  --button-hover: #efe3d9;
+  --button-text: #3b2a21;
+  --accent: #cc6a2a;
+  --accent-text: #ffffff;
+  --accent-hover: #e07b36;
+  --highlight-tag: #f2e7dd;
+  --highlight-tag-border: #e7d2c1;
+  --danger: #ef4444;
+  --success: #10b981;
+  --shadow: 0 10px 22px rgba(59, 42, 33, 0.12);
+  --shadow-sm: 0 4px 10px rgba(59, 42, 33, 0.08);
+  --border-radius: 12px;
+  --section-bg: #fffaf6;
+  --panel-bg: #fffaf6;
+  --switch-bg: #e1d5cb;
+  --checkbox-accent: #cc6a2a;
+  --checkbox-border: #d8c8bb;
+  --focus-ring: 0 0 0 3px rgba(204, 106, 42, 0.2);
+}
+
+html.dark,
+body.dark {
+  --bg-color: #12100e;
+  --text-color: #f4ede6;
+  --input-bg: #1a1714;
+  --input-border: #3a2e26;
+  --button-bg: #2b211b;
+  --button-hover: #3a2c24;
+  --button-text: #f7efe9;
+  --accent: #f2a865;
+  --accent-hover: #f7c38a;
+  --accent-text: #1b120b;
+  --highlight-tag: #231a14;
+  --highlight-tag-border: #46372c;
+  --danger: #f87171;
+  --success: #4ade80;
+  --shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.4);
+  --section-bg: #17130f;
+  --panel-bg: #17130f;
+  --switch-bg: #4b3a2f;
+  --checkbox-accent: #f2a865;
+  --checkbox-border: #5a483b;
+  --focus-ring: 0 0 0 3px rgba(242, 168, 101, 0.2);
+}

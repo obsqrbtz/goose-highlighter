@@ -10,10 +10,14 @@ export class ListManagerController {
   private selectedWords = new Set<number>();
   private wordSearchQuery = '';
   private isReloading = false;
+  private currentPage = 1;
+  private pageSize = 100;
+  private totalWords = 0;
 
-  async initialize(): Promise<void> {
+async initialize(): Promise<void> {
     await this.loadData();
     this.setupEventListeners();
+    this.setupTheme();
     this.render();
     this.setupStorageSync();
   }
@@ -56,9 +60,10 @@ export class ListManagerController {
     document.getElementById('moveWordsBtn')?.addEventListener('click', () => this.moveOrCopySelectedWords(false));
     document.getElementById('copyWordsBtn')?.addEventListener('click', () => this.moveOrCopySelectedWords(true));
 
-    const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
+const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     wordSearch.addEventListener('input', (e) => {
       this.wordSearchQuery = (e.target as HTMLInputElement).value;
+      this.currentPage = 1;
       this.renderWords();
     });
 
@@ -597,19 +602,25 @@ export class ListManagerController {
     select.disabled = options.length === 0;
   }
 
-  private renderWords(): void {
+private renderWords(): void {
     const list = this.lists[this.currentListIndex];
     const wordList = document.getElementById('wordList');
     if (!list || !wordList) return;
 
     const entries = this.getFilteredWordEntries(list);
+    this.totalWords = entries.length;
 
     if (entries.length === 0) {
       wordList.innerHTML = '<div class="empty">No words in this list.</div>';
+      this.renderPaginationControls();
       return;
     }
 
-    wordList.innerHTML = entries.map(entry => {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = Math.min(startIndex + this.pageSize, this.totalWords);
+    const paginatedEntries = entries.slice(startIndex, endIndex);
+
+    wordList.innerHTML = paginatedEntries.map(entry => {
       const word = entry.word;
       const index = entry.index;
       const isSelected = this.selectedWords.has(index);
@@ -628,13 +639,134 @@ export class ListManagerController {
         </div>
       `;
     }).join('');
+
+    this.renderPaginationControls();
   }
 
-  private async save(): Promise<void> {
+  private renderPaginationControls(): void {
+    const paginationContainer = document.getElementById('paginationControls');
+    if (!paginationContainer) return;
+
+    const totalPages = Math.ceil(this.totalWords / this.pageSize);
+    
+if (totalPages <= 1) {
+      paginationContainer.style.display = 'none';
+      return;
+    }
+
+const startItem = (this.currentPage - 1) * this.pageSize + 1;
+    const endItem = Math.min(this.currentPage * this.pageSize, this.totalWords);
+
+    paginationContainer.style.display = 'flex';
+    paginationContainer.innerHTML = `
+      <div class="pagination-info">
+        Showing ${startItem}-${endItem} of ${this.totalWords} words
+      </div>
+      <div class="pagination-controls">
+        <button class="pagination-btn" id="firstPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="First page">
+          <i class="fa-solid fa-angles-left"></i>
+        </button>
+        <button class="pagination-btn" id="prevPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="Previous page">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
+        <div class="pagination-pages">
+          <span class="page-info">Page ${this.currentPage} of ${totalPages}</span>
+        </div>
+        <button class="pagination-btn" id="nextPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="Next page">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+        <button class="pagination-btn" id="lastPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="Last page">
+          <i class="fa-solid fa-angles-right"></i>
+        </button>
+      </div>
+      <div class="page-size-controls">
+        <label for="pageSizeSelect">Items per page:</label>
+        <select id="pageSizeSelect" class="page-size-select">
+          <option value="25" ${this.pageSize === 25 ? 'selected' : ''}>25</option>
+          <option value="50" ${this.pageSize === 50 ? 'selected' : ''}>50</option>
+          <option value="100" ${this.pageSize === 100 ? 'selected' : ''}>100</option>
+          <option value="200" ${this.pageSize === 200 ? 'selected' : ''}>200</option>
+        </select>
+      </div>
+    `;
+
+    this.setupPaginationEventListeners();
+  }
+
+  private setupPaginationEventListeners(): void {
+    document.getElementById('firstPageBtn')?.addEventListener('click', () => {
+      this.goToPage(1);
+    });
+
+    document.getElementById('prevPageBtn')?.addEventListener('click', () => {
+      this.goToPage(this.currentPage - 1);
+    });
+
+    document.getElementById('nextPageBtn')?.addEventListener('click', () => {
+      this.goToPage(this.currentPage + 1);
+    });
+
+    document.getElementById('lastPageBtn')?.addEventListener('click', () => {
+      const totalPages = Math.ceil(this.totalWords / this.pageSize);
+      this.goToPage(totalPages);
+    });
+
+    const pageSizeSelect = document.getElementById('pageSizeSelect') as HTMLSelectElement;
+    pageSizeSelect?.addEventListener('change', (e) => {
+      const newSize = Number((e.target as HTMLSelectElement).value);
+      if (!Number.isNaN(newSize) && newSize > 0) {
+        this.pageSize = newSize;
+        this.currentPage = 1;
+        this.renderWords();
+      }
+    });
+  }
+
+  private goToPage(page: number): void {
+    const totalPages = Math.ceil(this.totalWords / this.pageSize);
+    if (page < 1 || page > totalPages) return;
+    
+    this.currentPage = page;
+    this.renderWords();
+  }
+
+private async save(): Promise<void> {
     await StorageService.set({
       lists: this.lists
     });
     this.render();
     MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
+  }
+
+  private setupTheme(): void {
+    const toggle = document.getElementById('themeToggle') as HTMLInputElement;
+    const body = document.body;
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      body.classList.remove('dark');
+      body.classList.add('light');
+      toggle.checked = false;
+    } else {
+      body.classList.add('dark');
+      body.classList.remove('light');
+      toggle.checked = true;
+    }
+
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
+        body.classList.add('dark');
+        body.classList.remove('light');
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark');
+        body.classList.add('light');
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+        localStorage.setItem('theme', 'light');
+      }
+    });
   }
 }

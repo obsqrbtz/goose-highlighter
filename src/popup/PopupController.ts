@@ -649,10 +649,14 @@ export class PopupController {
       if (toggle.checked) {
         body.classList.add('dark');
         body.classList.remove('light');
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
         localStorage.setItem('theme', 'dark');
       } else {
         body.classList.remove('dark');
         body.classList.add('light');
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
         localStorage.setItem('theme', 'light');
       }
     });

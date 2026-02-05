@@ -1,0 +1,354 @@
+/* Buttons */
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  font-family: inherit;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+button:hover {
+  background: var(--button-hover);
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+button.primary:hover {
+  background: var(--accent-hover);
+}
+
+button.danger {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--danger);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+}
+
+button.danger:hover {
+  background: rgba(248, 113, 113, 0.25);
+}
+
+button.ghost {
+  background: transparent;
+  border: 1px solid var(--input-border);
+}
+
+button.ghost:hover {
+  background: var(--button-hover);
+}
+
+button i {
+  display: flex;
+  align-items: center;
+  font-size: 0.95em;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+  background: rgba(242, 168, 101, 0.15);
+  color: var(--accent);
+}
+
+.icon-btn i {
+  pointer-events: none;
+}
+
+/* Toggle Switches */
+.toggle-btn {
+  width: 40px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--input-border);
+  border-radius: 11px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.toggle-btn::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--text-color);
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.toggle-btn.active::after {
+  left: 20px;
+  background: var(--accent-text);
+}
+
+/* Switch Toggle (Checkbox Style) */
+input[type="checkbox"].switch {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 36px;
+  height: 20px;
+  background: var(--switch-bg);
+  border: none;
+  border-radius: 20px;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+input[type="checkbox"].switch::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: left 0.2s;
+}
+
+input[type="checkbox"].switch:checked {
+  background: var(--accent);
+}
+
+input[type="checkbox"].switch:checked::before {
+  left: 18px;
+}
+
+input[type="checkbox"].switch:hover {
+  opacity: 0.9;
+}
+
+input[type="checkbox"].switch::after {
+  content: none !important;
+}
+
+label:has(input.switch) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+/* Checkboxes */
+input[type="checkbox"]:not(.switch) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--input-bg);
+  border: 1.5px solid var(--checkbox-border);
+  border-radius: 4px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:not(.switch):hover {
+  border-color: var(--accent);
+}
+
+input[type="checkbox"]:not(.switch):checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+input[type="checkbox"]:not(.switch):checked::before {
+  content: "✓";
+  position: absolute;
+  top: -3px;
+  left: 2px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--section-bg);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 8px;
+  min-height: 24px;
+  border: 2px solid var(--section-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--section-bg);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--section-bg);
+}
+
+/* Form Inputs */
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.85em;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* Color Inputs */
+input[type="color"] {
+  background: none;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+}
+
+input[type="color"]:hover {
+  border-color: var(--accent);
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border-radius: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border-radius: 0;
+  border: none;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Theme Toggle Icon */
+.icon-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  color: var(--accent);
+  font-size: 16px;
+  border: 1px solid transparent;
+}
+
+.icon-toggle:hover {
+  background: var(--highlight-tag);
+  border-color: var(--highlight-tag-border);
+  color: var(--accent-hover);
+}
+
+.hidden-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.toggle-icon {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.theme-icon::before {
+  content: "\f185"; /* sun icon */
+}
+
+#themeToggle:checked + .theme-icon::before {
+  content: "\f186"; /* moon icon */
+}

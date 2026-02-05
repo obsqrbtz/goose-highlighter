@@ -20,7 +20,11 @@
           <div class="subtitle">List Manager</div>
         </div>
       </div>
-      <div class="topbar-actions">
+<div class="topbar-actions">
+        <label class="icon-toggle" title="Toggle dark mode">
+          <input type="checkbox" class="hidden-toggle" id="themeToggle" />
+          <i class="toggle-icon theme-icon fa-solid"></i>
+        </label>
         <button id="exportListBtn" class="ghost"><i class="fa-solid fa-download"></i> Export List</button>
         <button id="newListBtn" class="primary"><i class="fa-solid fa-plus"></i> New List</button>
       </div>
@@ -88,7 +92,8 @@
           <div class="selection-hint">Click to select • Ctrl/Cmd+Click for multi-select • Click edit icon to rename</div>
         </div>
 
-        <div id="wordList" class="word-list"></div>
+<div id="wordList" class="word-list"></div>
+        <div id="paginationControls" class="pagination-container"></div>
       </section>
     </main>
   </div>

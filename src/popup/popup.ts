@@ -1,5 +1,12 @@
 import { PopupController } from './PopupController.js';
 
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+  document.documentElement.classList.add('light');
+} else {
+  document.documentElement.classList.add('dark');
+}
+
 function localizePage(): void {
   const elements = document.querySelectorAll('[data-i18n]');
   elements.forEach(element => {
