@@ -4,10 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=1280" />
-  <title>Goose Highlighter - List Manager</title>
+  <title data-i18n="extension_name">Goose Highlighter - List Manager</title>
   <link rel="stylesheet" href="list-manager.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,18 +15,18 @@
       <div class="title">
         <img src="../img/logo-outlined.png" alt="Goose Highlighter" />
         <div>
-          <div class="name">Goose Highlighter</div>
-          <div class="subtitle">List Manager</div>
+          <div class="name" data-i18n="extension_name">Goose Highlighter</div>
+          <div class="subtitle" data-i18n="list_manager_title">List Manager</div>
         </div>
       </div>
 <div class="topbar-actions">
-        <label class="icon-toggle" title="Toggle dark mode">
+        <label class="icon-toggle" data-i18n-title="toggle_dark_mode_title" title="Toggle dark mode">
           <input type="checkbox" class="hidden-toggle" id="themeToggle" />
           <i class="toggle-icon theme-icon fa-solid"></i>
         </label>
-        <button id="importListBtn" class="ghost"><i class="fa-solid fa-upload"></i> Import List</button>
-        <button id="exportListBtn" class="ghost"><i class="fa-solid fa-download"></i> Export List</button>
-        <button id="newListBtn" class="primary"><i class="fa-solid fa-plus"></i> New List</button>
+        <button id="importListBtn" class="ghost"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import List</span></button>
+        <button id="exportListBtn" class="ghost"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export List</span></button>
+        <button id="newListBtn" class="primary"><i class="fa-solid fa-plus"></i> <span data-i18n="new_list">New List</span></button>
       </div>
       <input type="file" id="importFileInput" accept=".json" style="display: none;" />
     </header>
@@ -35,18 +34,14 @@
     <main class="layout">
       <section class="panel lists-panel">
         <div class="panel-header">
-          <h2>Lists</h2>
+          <h2 data-i18n="tab_lists">Lists</h2>
           <div class="panel-actions">
-            <button id="duplicateListBtn"><i class="fa-solid fa-clone"></i> Duplicate</button>
-            <button id="mergeListsBtn"><i class="fa-solid fa-code-merge"></i> Merge</button>
-            <button id="deleteListsBtn" class="danger"><i class="fa-solid fa-trash"></i> Delete</button>
+            <button id="duplicateListBtn"><i class="fa-solid fa-clone"></i> <span data-i18n="duplicate">Duplicate</span></button>
+            <button id="mergeListsBtn"><i class="fa-solid fa-code-merge"></i> <span data-i18n="merge">Merge</span></button>
+            <button id="deleteListsBtn" class="danger"><i class="fa-solid fa-trash"></i> <span data-i18n="delete_selected">Delete</span></button>
           </div>
         </div>
-        <div class="panel-actions secondary">
-          <button id="activateListsBtn"><i class="fa-solid fa-circle-check"></i> Activate</button>
-          <button id="deactivateListsBtn"><i class="fa-solid fa-circle-xmark"></i> Deactivate</button>
-        </div>
-        <div class="list-hint">Drag lists to reorder • Ctrl+Click for multi-select</div>
+        <div class="list-hint" data-i18n="drag_lists_hint">Drag lists to reorder • Ctrl+Click for multi-select</div>
         <div id="listsContainer" class="lists"></div>
       </section>
 
@@ -54,22 +49,22 @@
         <div class="panel-header compact-header">
           <div class="list-title-section">
             <h2 id="selectedListName">Selected List</h2>
-            <button id="editListNameBtn" class="icon-btn" title="Edit list name and colors">
+            <button id="editListNameBtn" class="icon-btn" data-i18n-title="edit_list_name_and_colors_title" title="Edit list name and colors">
               <i class="fa-solid fa-pen"></i>
             </button>
           </div>
           <div class="stats" id="listStats">0 words</div>
         </div>
         <div class="list-settings collapsed" id="listSettingsPanel">
-          <input type="text" id="listName" placeholder="List name" />
+          <input type="text" id="listName" data-i18n="list_name" placeholder="List name" />
           <div class="color-row">
             <label class="compact-label">
-              <span>BG</span>
-              <input type="color" id="listBg" />
+              <span data-i18n="background">BG</span>
+              <input type="color" id="listBg" data-i18n-title="background_color_title" />
             </label>
             <label class="compact-label">
-              <span>FG</span>
-              <input type="color" id="listFg" />
+              <span data-i18n="foreground">FG</span>
+              <input type="color" id="listFg" data-i18n-title="text_color_title" />
             </label>
             <button id="applyListSettingsBtn" class="compact-btn primary"><i class="fa-solid fa-check"></i></button>
           </div>
@@ -77,23 +72,23 @@
 
         <div class="word-controls">
           <div class="add-words">
-            <textarea id="bulkAddWords" placeholder="Paste words here..."></textarea>
-            <button id="addWordsBtn" class="primary"><i class="fa-solid fa-plus"></i> Add Words</button>
+            <textarea id="bulkAddWords" data-i18n="paste_hint" placeholder="Paste words here..."></textarea>
+            <button id="addWordsBtn" class="primary"><i class="fa-solid fa-plus"></i> <span data-i18n="add_words">Add Words</span></button>
           </div>
           <div class="row">
-            <button id="selectAllWordsBtn">Select All</button>
-            <button id="clearSelectedWordsBtn">Clear</button>
-            <button id="enableWordsBtn">Enable</button>
-            <button id="disableWordsBtn">Disable</button>
-            <button id="deleteWordsBtn" class="danger">Delete</button>
+            <button id="selectAllWordsBtn" data-i18n="select_all">Select All</button>
+            <button id="clearSelectedWordsBtn" data-i18n="deselect_all">Clear</button>
+            <button id="enableWordsBtn" data-i18n="enable_selected">Enable</button>
+            <button id="disableWordsBtn" data-i18n="disable_selected">Disable</button>
+            <button id="deleteWordsBtn" class="danger" data-i18n="delete_selected">Delete</button>
           </div>
           <div class="row">
-            <input type="text" id="wordSearch" placeholder="Search words..." />
+            <input type="text" id="wordSearch" data-i18n="search_placeholder" placeholder="Search words..." />
             <select id="targetListSelect"></select>
-            <button id="moveWordsBtn"><i class="fa-solid fa-arrow-right"></i> Move</button>
-            <button id="copyWordsBtn"><i class="fa-solid fa-copy"></i> Copy</button>
+            <button id="moveWordsBtn"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="move">Move</span></button>
+            <button id="copyWordsBtn"><i class="fa-solid fa-copy"></i> <span data-i18n="copy">Copy</span></button>
           </div>
-          <div class="selection-hint">Click to select • Ctrl/Cmd+Click for multi-select • Drag words to lists to copy</div>
+          <div class="selection-hint" data-i18n="drag_words_hint">Click to select • Ctrl/Cmd+Click for multi-select • Drag words to lists to copy</div>
         </div>
 
 <div id="wordList" class="word-list"></div>

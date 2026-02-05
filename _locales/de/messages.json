@@ -172,5 +172,131 @@
   },
   "next": {
     "message": "Nächste"
+  },
+  "duplicate": {
+    "message": "Duplizieren"
+  },
+  "merge": {
+    "message": "Zusammenführen"
+  },
+  "move": {
+    "message": "Verschieben"
+  },
+  "copy": {
+    "message": "Kopieren"
+  },
+  "merge_lists_min_two": {
+    "message": "Wählen Sie mindestens zwei Listen zum Zusammenführen aus."
+  },
+  "merge_lists_confirm": {
+    "message": "{count} Liste(n) in \"{target}\" zusammenführen? Quelllisten werden entfernt."
+  },
+  "delete_current_list": {
+    "message": "Aktuelle Liste löschen?"
+  },
+  "delete_lists_confirm": {
+    "message": "{count} ausgewählte Liste(n) löschen?"
+  },
+  "invalid_import_format": {
+    "message": "Ungültiges Dateiformat. Bitte wählen Sie eine gültige Goose Highlighter-Exportdatei."
+  },
+  "import_failed": {
+    "message": "Import der Datei fehlgeschlagen. Bitte stellen Sie sicher, dass es sich um eine gültige JSON-Datei handelt."
+  },
+  "import_confirm": {
+    "message": "{count} Liste(n) mit insgesamt {words} Wort/Wörtern importieren?"
+  },
+  "import_success": {
+    "message": "{count} Liste(n) mit {words} Wort/Wörtern erfolgreich importiert."
+  },
+  "preview_label": {
+    "message": "Vorschau"
+  },
+  "preview_text": {
+    "message": "So wird Ihr hervorgehobener Text angezeigt."
+  },
+  "preview_text_before": {
+    "message": "So wird Ihr"
+  },
+  "preview_text_highlight": {
+    "message": "hervorgehobener Text"
+  },
+  "preview_text_after": {
+    "message": "angezeigt."
+  },
+  "enable_highlighting_title": {
+    "message": "Hervorhebung aktivieren"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Hervorhebungen auf Seiten anzeigen"
+  },
+  "manage_lists": {
+    "message": "Listen verwalten"
+  },
+  "background_label": {
+    "message": "Hintergrund"
+  },
+  "foreground_label": {
+    "message": "Vordergrund"
+  },
+  "multi_select_hint": {
+    "message": "Klicken zum Auswählen • Strg/Cmd+Klick für Mehrfachauswahl"
+  },
+  "dark_mode_title": {
+    "message": "Dunkelmodus"
+  },
+  "dark_mode_subtitle": {
+    "message": "Zwischen hellem und dunklem Design wechseln"
+  },
+  "list_manager_title": {
+    "message": "Listenverwaltung"
+  },
+  "words_label": {
+    "message": "Wörter"
+  },
+  "active_label": {
+    "message": "aktiv"
+  },
+  "inactive_label": {
+    "message": "inaktiv"
+  },
+  "drag_words_hint": {
+    "message": "Klicken zum Auswählen • Strg/Cmd+Klick für Mehrfachauswahl • Wörter zu Listen ziehen zum Kopieren"
+  },
+  "drag_lists_hint": {
+    "message": "Listen ziehen zum Neuordnen • Strg+Klick für Mehrfachauswahl"
+  },
+  "showing_items": {
+    "message": "Zeige {start}-{end} von {total} Wörtern"
+  },
+  "items_per_page": {
+    "message": "Elemente pro Seite:"
+  },
+  "page_info": {
+    "message": "Seite {current} von {total}"
+  },
+  "toggle_active": {
+    "message": "Aktiv umschalten"
+  },
+  "rename_list_title": {
+    "message": "Liste umbenennen"
+  },
+  "new_list_title": {
+    "message": "Neue Liste"
+  },
+  "delete_list_title": {
+    "message": "Liste löschen"
+  },
+  "list_active_badge": {
+    "message": "Aktiv"
+  },
+  "list_paused_badge": {
+    "message": "Pausiert"
+  },
+  "words_stats": {
+    "message": "{total} Wörter • {active} aktiv • {inactive} inaktiv"
+  },
+  "rename_list": {
+    "message": "Liste umbenennen"
   }
 }

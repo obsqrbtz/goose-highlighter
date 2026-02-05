@@ -178,5 +178,131 @@
     },
     "next": {
         "message": "次へ"
+    },
+    "duplicate": {
+        "message": "複製"
+    },
+    "merge": {
+        "message": "統合"
+    },
+    "move": {
+        "message": "移動"
+    },
+    "copy": {
+        "message": "コピー"
+    },
+    "merge_lists_min_two": {
+        "message": "統合するには少なくとも2つのリストを選択してください。"
+    },
+    "merge_lists_confirm": {
+        "message": "{count}個のリストを\"{target}\"に統合しますか？ソースリストは削除されます。"
+    },
+    "delete_current_list": {
+        "message": "現在のリストを削除しますか？"
+    },
+    "delete_lists_confirm": {
+        "message": "選択した{count}個のリストを削除しますか？"
+    },
+    "invalid_import_format": {
+        "message": "無効なファイル形式です。有効なGoose Highlighterエクスポートファイルを選択してください。"
+    },
+    "import_failed": {
+        "message": "ファイルのインポートに失敗しました。有効なJSONファイルであることを確認してください。"
+    },
+    "import_confirm": {
+        "message": "合計{words}個の単語を含む{count}個のリストをインポートしますか？"
+    },
+    "import_success": {
+        "message": "{words}個の単語を含む{count}個のリストを正常にインポートしました。"
+    },
+    "preview_label": {
+        "message": "プレビュー"
+    },
+    "preview_text": {
+        "message": "ハイライトされたテキストはこのように表示されます。"
+    },
+    "preview_text_before": {
+        "message": ""
+    },
+    "preview_text_highlight": {
+        "message": "ハイライトされたテキスト"
+    },
+    "preview_text_after": {
+        "message": "はこのように表示されます。"
+    },
+    "enable_highlighting_title": {
+        "message": "ハイライトを有効にする"
+    },
+    "enable_highlighting_subtitle": {
+        "message": "ページにハイライトを表示"
+    },
+    "manage_lists": {
+        "message": "リストを管理"
+    },
+    "background_label": {
+        "message": "背景"
+    },
+    "foreground_label": {
+        "message": "前景"
+    },
+    "multi_select_hint": {
+        "message": "クリックして選択 • Ctrl/Cmd+クリックで複数選択"
+    },
+    "dark_mode_title": {
+        "message": "ダークモード"
+    },
+    "dark_mode_subtitle": {
+        "message": "ライト/ダークテーマを切り替え"
+    },
+    "list_manager_title": {
+        "message": "リストマネージャー"
+    },
+    "words_label": {
+        "message": "単語"
+    },
+    "active_label": {
+        "message": "有効"
+    },
+    "inactive_label": {
+        "message": "無効"
+    },
+    "drag_words_hint": {
+        "message": "クリックして選択 • Ctrl/Cmd+クリックで複数選択 • 単語をリストにドラッグしてコピー"
+    },
+    "drag_lists_hint": {
+        "message": "リストをドラッグして並べ替え • Ctrl+クリックで複数選択"
+    },
+    "showing_items": {
+        "message": "{total}単語中{start}-{end}を表示"
+    },
+    "items_per_page": {
+        "message": "ページあたりのアイテム数:"
+    },
+    "page_info": {
+        "message": "ページ{current}/{total}"
+    },
+    "toggle_active": {
+        "message": "有効/無効を切り替え"
+    },
+    "rename_list_title": {
+        "message": "リスト名を変更"
+    },
+    "new_list_title": {
+        "message": "新しいリスト"
+    },
+    "delete_list_title": {
+        "message": "リストを削除"
+    },
+    "list_active_badge": {
+        "message": "有効"
+    },
+    "list_paused_badge": {
+        "message": "一時停止"
+    },
+    "words_stats": {
+        "message": "{total}単語 • {active}有効 • {inactive}無効"
+    },
+    "rename_list": {
+        "message": "リスト名を変更"
     }
 }

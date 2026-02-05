@@ -178,5 +178,161 @@
   },
   "next": {
     "message": "Next"
+  },
+  "duplicate": {
+    "message": "Duplicate"
+  },
+  "merge": {
+    "message": "Merge"
+  },
+  "move": {
+    "message": "Move"
+  },
+  "copy": {
+    "message": "Copy"
+  },
+  "merge_lists_min_two": {
+    "message": "Select at least two lists to merge."
+  },
+  "merge_lists_confirm": {
+    "message": "Merge {count} list(s) into \"{target}\"? Source lists will be removed."
+  },
+  "delete_current_list": {
+    "message": "Delete current list?"
+  },
+  "delete_lists_confirm": {
+    "message": "Delete {count} selected list(s)?"
+  },
+  "invalid_import_format": {
+    "message": "Invalid file format. Please select a valid Goose Highlighter export file."
+  },
+  "import_failed": {
+    "message": "Failed to import file. Please ensure it is a valid JSON file."
+  },
+  "import_confirm": {
+    "message": "Import {count} list(s) with {words} total word(s)?"
+  },
+  "import_success": {
+    "message": "Successfully imported {count} list(s) with {words} word(s)."
+  },
+  "preview_label": {
+    "message": "Preview"
+  },
+  "preview_text": {
+    "message": "This is how your highlighted text will appear."
+  },
+  "preview_text_before": {
+    "message": "This is how your"
+  },
+  "preview_text_highlight": {
+    "message": "highlighted text"
+  },
+  "preview_text_after": {
+    "message": "will appear."
+  },
+  "enable_highlighting_title": {
+    "message": "Enable Highlighting"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Show highlights on pages"
+  },
+  "manage_lists": {
+    "message": "Manage Lists"
+  },
+  "background_label": {
+    "message": "Background"
+  },
+  "foreground_label": {
+    "message": "Foreground"
+  },
+  "multi_select_hint": {
+    "message": "Click to select • Ctrl/Cmd+Click for multi-select"
+  },
+  "dark_mode_title": {
+    "message": "Dark Mode"
+  },
+  "dark_mode_subtitle": {
+    "message": "Toggle dark/light theme"
+  },
+  "list_manager_title": {
+    "message": "List Manager"
+  },
+  "words_label": {
+    "message": "words"
+  },
+  "active_label": {
+    "message": "active"
+  },
+  "inactive_label": {
+    "message": "inactive"
+  },
+  "drag_words_hint": {
+    "message": "Click to select • Ctrl/Cmd+Click for multi-select • Drag words to lists to copy"
+  },
+  "drag_lists_hint": {
+    "message": "Drag lists to reorder • Ctrl+Click for multi-select"
+  },
+  "showing_items": {
+    "message": "Showing {start}-{end} of {total} words"
+  },
+  "items_per_page": {
+    "message": "Items per page:"
+  },
+  "page_info": {
+    "message": "Page {current} of {total}"
+  },
+  "toggle_active": {
+    "message": "toggle active"
+  },
+  "rename_list_title": {
+    "message": "Rename list"
+  },
+  "new_list_title": {
+    "message": "New list"
+  },
+  "delete_list_title": {
+    "message": "Delete list"
+  },
+  "list_active_badge": {
+    "message": "Active"
+  },
+  "list_paused_badge": {
+    "message": "Paused"
+  },
+  "words_stats": {
+    "message": "{total} words • {active} active • {inactive} inactive"
+  },
+  "rename_list": {
+    "message": "Rename List"
+  },
+  "no_words_in_list": {
+    "message": "No words in this list."
+  },
+  "edit_word": {
+    "message": "Edit word"
+  },
+  "first_page": {
+    "message": "First page"
+  },
+  "previous_page": {
+    "message": "Previous page"
+  },
+  "next_page": {
+    "message": "Next page"
+  },
+  "last_page": {
+    "message": "Last page"
+  },
+  "enter_list_name": {
+    "message": "Enter list name:"
+  },
+  "cannot_delete_last_list": {
+    "message": "Cannot delete the last list"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Edit list name and colors"
+  },
+  "close": {
+    "message": "Close"
   }
 }

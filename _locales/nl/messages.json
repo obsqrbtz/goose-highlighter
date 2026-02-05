@@ -178,5 +178,131 @@
   },
   "next": {
     "message": "Volgende"
+  },
+  "duplicate": {
+    "message": "Dupliceren"
+  },
+  "merge": {
+    "message": "Samenvoegen"
+  },
+  "move": {
+    "message": "Verplaatsen"
+  },
+  "copy": {
+    "message": "Kopiëren"
+  },
+  "merge_lists_min_two": {
+    "message": "Selecteer minimaal twee lijsten om samen te voegen."
+  },
+  "merge_lists_confirm": {
+    "message": "{count} lijst(en) samenvoegen in \"{target}\"? Bronlijsten worden verwijderd."
+  },
+  "delete_current_list": {
+    "message": "Huidige lijst verwijderen?"
+  },
+  "delete_lists_confirm": {
+    "message": "{count} geselecteerde lijst(en) verwijderen?"
+  },
+  "invalid_import_format": {
+    "message": "Ongeldig bestandsformaat. Selecteer een geldig Goose Highlighter exportbestand."
+  },
+  "import_failed": {
+    "message": "Importeren van bestand mislukt. Zorg ervoor dat het een geldig JSON-bestand is."
+  },
+  "import_confirm": {
+    "message": "{count} lijst(en) met in totaal {words} woord(en) importeren?"
+  },
+  "import_success": {
+    "message": "{count} lijst(en) met {words} woord(en) succesvol geïmporteerd."
+  },
+  "preview_label": {
+    "message": "Voorbeeld"
+  },
+  "preview_text": {
+    "message": "Zo zal uw gemarkeerde tekst verschijnen."
+  },
+  "preview_text_before": {
+    "message": "Zo zal uw"
+  },
+  "preview_text_highlight": {
+    "message": "gemarkeerde tekst"
+  },
+  "preview_text_after": {
+    "message": "verschijnen."
+  },
+  "enable_highlighting_title": {
+    "message": "Markeren inschakelen"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Markeringen op pagina's weergeven"
+  },
+  "manage_lists": {
+    "message": "Lijsten beheren"
+  },
+  "background_label": {
+    "message": "Achtergrond"
+  },
+  "foreground_label": {
+    "message": "Voorgrond"
+  },
+  "multi_select_hint": {
+    "message": "Klik om te selecteren • Ctrl/Cmd+Klik voor meervoudige selectie"
+  },
+  "dark_mode_title": {
+    "message": "Donkere modus"
+  },
+  "dark_mode_subtitle": {
+    "message": "Schakel tussen licht/donker thema"
+  },
+  "list_manager_title": {
+    "message": "Lijstbeheerder"
+  },
+  "words_label": {
+    "message": "woorden"
+  },
+  "active_label": {
+    "message": "actief"
+  },
+  "inactive_label": {
+    "message": "inactief"
+  },
+  "drag_words_hint": {
+    "message": "Klik om te selecteren • Ctrl/Cmd+Klik voor meervoudige selectie • Sleep woorden naar lijsten om te kopiëren"
+  },
+  "drag_lists_hint": {
+    "message": "Sleep lijsten om te herschikken • Ctrl+Klik voor meervoudige selectie"
+  },
+  "showing_items": {
+    "message": "{start}-{end} van {total} woorden weergegeven"
+  },
+  "items_per_page": {
+    "message": "Items per pagina:"
+  },
+  "page_info": {
+    "message": "Pagina {current} van {total}"
+  },
+  "toggle_active": {
+    "message": "actief schakelen"
+  },
+  "rename_list_title": {
+    "message": "Lijst hernoemen"
+  },
+  "new_list_title": {
+    "message": "Nieuwe lijst"
+  },
+  "delete_list_title": {
+    "message": "Lijst verwijderen"
+  },
+  "list_active_badge": {
+    "message": "Actief"
+  },
+  "list_paused_badge": {
+    "message": "Gepauzeerd"
+  },
+  "words_stats": {
+    "message": "{total} woorden • {active} actief • {inactive} inactief"
+  },
+  "rename_list": {
+    "message": "Lijst hernoemen"
   }
 }

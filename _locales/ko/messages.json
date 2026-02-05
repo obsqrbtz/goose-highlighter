@@ -178,5 +178,131 @@
     },
     "next": {
         "message": "다음"
+    },
+    "duplicate": {
+        "message": "복제"
+    },
+    "merge": {
+        "message": "병합"
+    },
+    "move": {
+        "message": "이동"
+    },
+    "copy": {
+        "message": "복사"
+    },
+    "merge_lists_min_two": {
+        "message": "병합하려면 최소 두 개의 리스트를 선택하세요."
+    },
+    "merge_lists_confirm": {
+        "message": "{count}개의 리스트를 \"{target}\"에 병합하시겠습니까? 소스 리스트는 제거됩니다."
+    },
+    "delete_current_list": {
+        "message": "현재 리스트를 삭제하시겠습니까?"
+    },
+    "delete_lists_confirm": {
+        "message": "선택한 {count}개의 리스트를 삭제하시겠습니까?"
+    },
+    "invalid_import_format": {
+        "message": "잘못된 파일 형식입니다. 유효한 Goose Highlighter 내보내기 파일을 선택하세요."
+    },
+    "import_failed": {
+        "message": "파일 가져오기에 실패했습니다. 유효한 JSON 파일인지 확인하세요."
+    },
+    "import_confirm": {
+        "message": "총 {words}개의 단어가 포함된 {count}개의 리스트를 가져오시겠습니까?"
+    },
+    "import_success": {
+        "message": "{words}개의 단어가 포함된 {count}개의 리스트를 성공적으로 가져왔습니다."
+    },
+    "preview_label": {
+        "message": "미리보기"
+    },
+    "preview_text": {
+        "message": "하이라이트된 텍스트가 이렇게 표시됩니다."
+    },
+    "preview_text_before": {
+        "message": ""
+    },
+    "preview_text_highlight": {
+        "message": "하이라이트된 텍스트"
+    },
+    "preview_text_after": {
+        "message": "가 이렇게 표시됩니다."
+    },
+    "enable_highlighting_title": {
+        "message": "하이라이트 활성화"
+    },
+    "enable_highlighting_subtitle": {
+        "message": "페이지에 하이라이트 표시"
+    },
+    "manage_lists": {
+        "message": "리스트 관리"
+    },
+    "background_label": {
+        "message": "배경"
+    },
+    "foreground_label": {
+        "message": "전경"
+    },
+    "multi_select_hint": {
+        "message": "클릭하여 선택 • Ctrl/Cmd+클릭으로 다중 선택"
+    },
+    "dark_mode_title": {
+        "message": "다크 모드"
+    },
+    "dark_mode_subtitle": {
+        "message": "밝은/어두운 테마 전환"
+    },
+    "list_manager_title": {
+        "message": "리스트 관리자"
+    },
+    "words_label": {
+        "message": "단어"
+    },
+    "active_label": {
+        "message": "활성"
+    },
+    "inactive_label": {
+        "message": "비활성"
+    },
+    "drag_words_hint": {
+        "message": "클릭하여 선택 • Ctrl/Cmd+클릭으로 다중 선택 • 단어를 리스트로 드래그하여 복사"
+    },
+    "drag_lists_hint": {
+        "message": "리스트를 드래그하여 재정렬 • Ctrl+클릭으로 다중 선택"
+    },
+    "showing_items": {
+        "message": "{total}개 단어 중 {start}-{end} 표시"
+    },
+    "items_per_page": {
+        "message": "페이지당 항목 수:"
+    },
+    "page_info": {
+        "message": "페이지 {current}/{total}"
+    },
+    "toggle_active": {
+        "message": "활성 전환"
+    },
+    "rename_list_title": {
+        "message": "리스트 이름 변경"
+    },
+    "new_list_title": {
+        "message": "새 리스트"
+    },
+    "delete_list_title": {
+        "message": "리스트 삭제"
+    },
+    "list_active_badge": {
+        "message": "활성"
+    },
+    "list_paused_badge": {
+        "message": "일시정지"
+    },
+    "words_stats": {
+        "message": "{total}개 단어 • {active}개 활성 • {inactive}개 비활성"
+    },
+    "rename_list": {
+        "message": "리스트 이름 변경"
     }
 }

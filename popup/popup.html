@@ -19,14 +19,21 @@
     <div class="header">
       <div class="header-content">
         <div class="header-logo">
-          <img src="../img/logo-outlined.png" alt="Goose" style="width: 20px; height: 20px;">
+          <img src="../img/logo-outlined.png" alt="Goose" style="width: 18px; height: 18px;">
         </div>
         <span class="header-title" data-i18n="extension_name">Goose Highlighter</span>
       </div>
-      <label class="switch-wrapper">
-        <input type="checkbox" id="globalHighlightToggle" class="switch-input" />
-        <span class="switch-slider"></span>
-      </label>
+      <div class="header-actions">
+        <button class="icon-button header-settings-btn" id="settingsBtn" data-i18n-title="options" title="Options" aria-label="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+        <label class="header-power-toggle" title="Toggle highlighting" aria-label="Toggle highlighting">
+          <input type="checkbox" id="globalHighlightToggle" class="header-power-input" />
+          <span class="power-icon-wrapper">
+            <i class="fa-solid fa-power-off"></i>
+          </span>
+        </label>
+      </div>
     </div>
 
     <!-- Tabs -->
@@ -46,10 +53,6 @@
       <button class="tab-button" data-tab="exceptions">
         <i class="fa-solid fa-ban"></i>
         <span data-i18n="tab_exceptions">Exceptions</span>
-      </button>
-      <button class="tab-button" data-tab="options">
-        <i class="fa-solid fa-sliders"></i>
-        <span data-i18n="options">Options</span>
       </button>
     </div>
 
@@ -71,13 +74,13 @@
                 <!-- Populated dynamically -->
               </div>
             </div>
-            <button class="icon-button" id="renameListBtn" title="Rename List">
+            <button class="icon-button" id="renameListBtn" data-i18n-title="rename_list_title" title="Rename list">
               <i class="fa-solid fa-pen"></i>
             </button>
-            <button class="icon-button" id="newListBtn" title="New List">
+            <button class="icon-button" id="newListBtn" data-i18n-title="new_list_title" title="New list">
               <i class="fa-solid fa-plus"></i>
             </button>
-            <button class="icon-button danger" id="deleteListBtn" title="Delete List">
+            <button class="icon-button danger" id="deleteListBtn" data-i18n-title="delete_list_title" title="Delete list">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -85,20 +88,20 @@
           <!-- Manage Lists Button -->
           <button class="manage-lists-btn" id="manageListsBtn">
             <i class="fa-solid fa-layer-group"></i>
-            <span>Manage Lists</span>
+            <span data-i18n="manage_lists">Manage Lists</span>
           </button>
 
           <!-- Color Pickers -->
           <div class="color-pickers-row">
             <div class="color-picker-group">
-              <label class="color-picker-label">Background</label>
+              <label class="color-picker-label" data-i18n="background_label">Background</label>
               <div class="color-picker-input-group">
                 <input type="color" id="listBg" class="color-picker-swatch" />
                 <input type="text" id="listBgText" class="color-picker-text" maxlength="7" />
               </div>
             </div>
             <div class="color-picker-group">
-              <label class="color-picker-label">Foreground</label>
+              <label class="color-picker-label" data-i18n="foreground_label">Foreground</label>
               <div class="color-picker-input-group">
                 <input type="color" id="listFg" class="color-picker-swatch" />
                 <input type="text" id="listFgText" class="color-picker-text" maxlength="7" />
@@ -108,10 +111,12 @@
 
           <!-- Preview -->
           <div class="preview-section">
-            <label class="preview-label">Preview</label>
+            <label class="preview-label" data-i18n="preview_label">Preview</label>
             <div class="preview-box">
               <p class="preview-text">
-                This is how your <span class="preview-highlight" id="previewHighlight">highlighted text</span> will appear.
+                <span data-i18n="preview_text_before">This is how your</span>
+                <span class="preview-highlight" id="previewHighlight" data-i18n="preview_text_highlight">highlighted text</span>
+                <span data-i18n="preview_text_after">will appear.</span>
               </p>
             </div>
           </div>
@@ -120,8 +125,8 @@
           <div class="enable-toggle-section">
             <div class="enable-toggle-content">
               <div class="enable-toggle-text">
-                <p class="enable-toggle-title">Enable Highlighting</p>
-                <p class="enable-toggle-subtitle">Show highlights on pages</p>
+                <p class="enable-toggle-title" data-i18n="enable_highlighting_title">Enable Highlighting</p>
+                <p class="enable-toggle-subtitle" data-i18n="enable_highlighting_subtitle">Show highlights on pages</p>
               </div>
               <label class="switch-wrapper">
                 <input type="checkbox" id="listActive" class="switch-input" />
@@ -185,7 +190,6 @@
 
           <!-- Search -->
           <div class="word-search-wrapper">
-            <i class="fa-solid fa-search word-search-icon"></i>
             <input type="text" id="wordSearch" class="word-search-input" data-i18n="search_placeholder" placeholder="Search..." />
           </div>
 
@@ -193,7 +197,7 @@
           <div id="wordList" class="word-list-container"></div>
 
           <!-- Help text -->
-          <p class="word-list-hint">Click to select • Ctrl/Cmd+Click for multi-select</p>
+          <p class="word-list-hint" data-i18n="multi_select_hint">Click to select • Ctrl/Cmd+Click for multi-select</p>
         </div>
       </div>
     </div>
@@ -246,15 +250,16 @@
       </div>
     </div>
 
-    <!-- Options Tab -->
-    <div class="tab-content" data-tab-content="options">
-      <div class="tab-inner">
-        <div class="options-section">
-          <label class="section-label">
-            <i class="fa-solid fa-sliders"></i>
-            <span data-i18n="options">Options</span>
-          </label>
-          
+    <!-- Settings Overlay -->
+    <div class="settings-overlay" id="settingsOverlay">
+      <div class="settings-overlay-content">
+        <div class="settings-overlay-header">
+          <h3 class="settings-overlay-title" data-i18n="options">Options</h3>
+          <button class="icon-button settings-close-btn" id="settingsCloseBtn" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="settings-overlay-body">
           <div class="options-checkboxes">
             <label class="option-checkbox-label">
               <input type="checkbox" id="matchCase" class="option-checkbox" />
@@ -264,6 +269,19 @@
               <input type="checkbox" id="matchWhole" class="option-checkbox" />
               <span data-i18n="match_whole">Match Whole Word</span>
             </label>
+          </div>
+
+          <div class="theme-toggle-section">
+            <div class="theme-toggle-content">
+              <div class="theme-toggle-text">
+                <p class="theme-toggle-title" data-i18n="dark_mode_title">Dark Mode</p>
+                <p class="theme-toggle-subtitle" data-i18n="dark_mode_subtitle">Toggle dark/light theme</p>
+              </div>
+              <label class="switch-wrapper">
+                <input type="checkbox" id="themeToggle" class="switch-input" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
           </div>
 
           <div class="options-buttons">

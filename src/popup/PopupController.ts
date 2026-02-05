@@ -69,7 +69,7 @@ export class PopupController {
 
   private loadActiveTab(): void {
     const saved = localStorage.getItem('goose-highlighter-active-tab');
-    if (saved) {
+    if (saved && saved !== 'options') {
       this.activeTab = saved;
     }
   }
@@ -109,6 +109,7 @@ export class PopupController {
 
   private setupEventListeners(): void {
     this.setupTabs();
+    this.setupSettingsOverlay();
     this.setupListManagement();
     this.setupWordManagement();
     this.setupSettings();
@@ -117,6 +118,26 @@ export class PopupController {
     this.setupImportExport();
     this.setupTheme();
     this.setupStorageSync();
+  }
+
+  private setupSettingsOverlay(): void {
+    const overlay = document.getElementById('settingsOverlay');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const closeBtn = document.getElementById('settingsCloseBtn');
+
+    settingsBtn?.addEventListener('click', () => {
+      overlay?.classList.add('open');
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      overlay?.classList.remove('open');
+    });
+
+    overlay?.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('open');
+      }
+    });
   }
 
   private setupTabs(): void {
@@ -257,20 +278,6 @@ export class PopupController {
       const list = this.lists[this.currentListIndex];
       if (!list) return;
 
-      // Handle checkbox click
-      if (target.classList.contains('word-item-checkbox')) {
-        e.stopPropagation();
-        const wordItem = target.closest('.word-item') as HTMLElement;
-        if (wordItem) {
-          const index = Number(wordItem.dataset.index);
-          if (!Number.isNaN(index)) {
-            const mouseEvent = e as MouseEvent;
-            this.toggleWordSelection(index, mouseEvent.ctrlKey || mouseEvent.metaKey);
-          }
-        }
-        return;
-      }
-
       // Handle edit button click
       const editBtn = target.closest('.word-item-icon-btn.edit-word-btn') as HTMLElement | null;
       if (editBtn) {
@@ -299,8 +306,8 @@ export class PopupController {
         return;
       }
 
-      // Don't select if clicking on switch
-      if (target.closest('.switch-wrapper')) {
+      // Don't select if clicking on eye toggle
+      if (target.closest('.word-item-eye-toggle')) {
         return;
       }
 
@@ -318,9 +325,9 @@ export class PopupController {
     wordList.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement;
       const list = this.lists[this.currentListIndex];
-      
-      // Handle switch toggle
-      if (target.classList.contains('switch-input')) {
+
+      // Handle eye toggle (active/disabled)
+      if (target.classList.contains('word-item-eye-input')) {
         const wordItem = target.closest('.word-item') as HTMLElement;
         if (wordItem) {
           const index = Number(wordItem.dataset.index);
@@ -393,17 +400,16 @@ export class PopupController {
 
   private toggleWordSelection(index: number, multiSelect: boolean): void {
     if (multiSelect) {
+      // Ctrl/Cmd + click for multi-select
       if (this.selectedCheckboxes.has(index)) {
         this.selectedCheckboxes.delete(index);
       } else {
         this.selectedCheckboxes.add(index);
       }
     } else {
-      if (this.selectedCheckboxes.has(index)) {
-        this.selectedCheckboxes.delete(index);
-      } else {
-        this.selectedCheckboxes.add(index);
-      }
+      // Regular click - clear all and select only this one
+      this.selectedCheckboxes.clear();
+      this.selectedCheckboxes.add(index);
     }
     this.renderWords();
   }
@@ -598,10 +604,10 @@ export class PopupController {
           ${highlight.count > 1 ? `
             <div class="page-highlight-nav">
               <button class="highlight-prev" title="${chrome.i18n.getMessage('previous') || 'Previous'}">
-                <i class="lucide lucide-chevron-up"></i>
+                <i class="fa-solid fa-chevron-up"></i>
               </button>
               <button class="highlight-next" title="${chrome.i18n.getMessage('next') || 'Next'}">
-                <i class="lucide lucide-chevron-down"></i>
+                <i class="fa-solid fa-chevron-down"></i>
               </button>
             </div>
           ` : ''}
@@ -705,16 +711,32 @@ export class PopupController {
   }
 
   private setupTheme(): void {
-    // Theme is now controlled by system/browser preference
-    // Remove the manual theme toggle from the UI
+    const themeToggle = document.getElementById('themeToggle') as HTMLInputElement;
+    
+    // Load saved theme
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light');
+      if (themeToggle) themeToggle.checked = false;
     } else {
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light');
+      if (themeToggle) themeToggle.checked = true;
     }
+
+    // Setup toggle listener
+    themeToggle?.addEventListener('change', () => {
+      if (themeToggle.checked) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+        localStorage.setItem('theme', 'light');
+      }
+    });
   }
 
   private applyListSettings(): void {
@@ -904,7 +926,6 @@ export class PopupController {
 
     return `
       <div class="word-item ${isSelected ? 'selected' : ''}" data-index="${realIndex}">
-        <div class="word-item-checkbox ${isSelected ? 'checked' : ''}"></div>
         <span class="word-item-text">${DOMUtils.escapeHtml(word.wordStr)}</span>
         <input type="text" class="word-item-edit-input" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${realIndex}" style="display: none;">
         <div class="word-item-actions">
@@ -913,9 +934,12 @@ export class PopupController {
           </button>
           <input type="color" value="${bgColor}" data-bg-edit="${realIndex}" class="word-item-color-picker" title="${chrome.i18n.getMessage('background_color_title') || 'Background color'}">
           <input type="color" value="${fgColor}" data-fg-edit="${realIndex}" class="word-item-color-picker" title="${chrome.i18n.getMessage('text_color_title') || 'Text color'}">
-          <label class="switch-wrapper word-item-switch">
-            <input type="checkbox" class="switch-input" ${word.active !== false ? 'checked' : ''} title="${chrome.i18n.getMessage('toggle_active') || 'Toggle active'}">
-            <span class="switch-slider"></span>
+          <label class="word-item-eye-toggle" title="${chrome.i18n.getMessage('toggle_active') || 'Toggle active'}" aria-label="${chrome.i18n.getMessage('toggle_active') || 'Toggle active'}">
+            <input type="checkbox" class="word-item-eye-input" ${word.active !== false ? 'checked' : ''} data-index="${realIndex}">
+            <span class="word-item-eye-icon">
+              <i class="fa-solid fa-eye eye-active"></i>
+              <i class="fa-solid fa-eye-slash eye-disabled"></i>
+            </span>
           </label>
         </div>
       </div>
@@ -955,7 +979,10 @@ export class PopupController {
     container.innerHTML = this.exceptionsList.map(domain =>
       `<div class="exception-item">
         <span class="exception-domain">${DOMUtils.escapeHtml(domain)}</span>
-        <button class="exception-remove" data-domain="${DOMUtils.escapeHtml(domain)}">${chrome.i18n.getMessage('remove') || 'Remove'}</button>
+        <button class="exception-remove" data-domain="${DOMUtils.escapeHtml(domain)}">
+          <i class="fa-solid fa-trash"></i>
+          ${chrome.i18n.getMessage('remove') || 'Remove'}
+        </button>
       </div>`
     ).join('');
   }

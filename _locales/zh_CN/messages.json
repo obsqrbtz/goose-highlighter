@@ -178,5 +178,131 @@
   },
   "next": {
     "message": "下一个"
+  },
+  "duplicate": {
+    "message": "复制"
+  },
+  "merge": {
+    "message": "合并"
+  },
+  "move": {
+    "message": "移动"
+  },
+  "copy": {
+    "message": "复制"
+  },
+  "merge_lists_min_two": {
+    "message": "选择至少两个列表进行合并。"
+  },
+  "merge_lists_confirm": {
+    "message": "将 {count} 个列表合并到 \"{target}\"？源列表将被删除。"
+  },
+  "delete_current_list": {
+    "message": "删除当前列表？"
+  },
+  "delete_lists_confirm": {
+    "message": "删除 {count} 个选定的列表？"
+  },
+  "invalid_import_format": {
+    "message": "无效的文件格式。请选择有效的 Goose Highlighter 导出文件。"
+  },
+  "import_failed": {
+    "message": "导入文件失败。请确保它是有效的 JSON 文件。"
+  },
+  "import_confirm": {
+    "message": "导入 {count} 个列表，共 {words} 个单词？"
+  },
+  "import_success": {
+    "message": "成功导入 {count} 个列表，共 {words} 个单词。"
+  },
+  "preview_label": {
+    "message": "预览"
+  },
+  "preview_text": {
+    "message": "您的高亮文本将如此显示。"
+  },
+  "preview_text_before": {
+    "message": "您的"
+  },
+  "preview_text_highlight": {
+    "message": "高亮文本"
+  },
+  "preview_text_after": {
+    "message": "将如此显示。"
+  },
+  "enable_highlighting_title": {
+    "message": "启用高亮"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "在页面上显示高亮"
+  },
+  "manage_lists": {
+    "message": "管理列表"
+  },
+  "background_label": {
+    "message": "背景"
+  },
+  "foreground_label": {
+    "message": "前景"
+  },
+  "multi_select_hint": {
+    "message": "点击选择 • Ctrl/Cmd+点击多选"
+  },
+  "dark_mode_title": {
+    "message": "暗黑模式"
+  },
+  "dark_mode_subtitle": {
+    "message": "切换亮色/暗色主题"
+  },
+  "list_manager_title": {
+    "message": "列表管理器"
+  },
+  "words_label": {
+    "message": "单词"
+  },
+  "active_label": {
+    "message": "激活"
+  },
+  "inactive_label": {
+    "message": "未激活"
+  },
+  "drag_words_hint": {
+    "message": "点击选择 • Ctrl/Cmd+点击多选 • 拖动单词到列表以复制"
+  },
+  "drag_lists_hint": {
+    "message": "拖动列表以重新排序 • Ctrl+点击多选"
+  },
+  "showing_items": {
+    "message": "显示 {start}-{end} / 共 {total} 个单词"
+  },
+  "items_per_page": {
+    "message": "每页项目数："
+  },
+  "page_info": {
+    "message": "第 {current} 页，共 {total} 页"
+  },
+  "toggle_active": {
+    "message": "切换激活状态"
+  },
+  "rename_list_title": {
+    "message": "重命名列表"
+  },
+  "new_list_title": {
+    "message": "新建列表"
+  },
+  "delete_list_title": {
+    "message": "删除列表"
+  },
+  "list_active_badge": {
+    "message": "激活"
+  },
+  "list_paused_badge": {
+    "message": "已暂停"
+  },
+  "words_stats": {
+    "message": "{total} 个单词 • {active} 个激活 • {inactive} 个未激活"
+  },
+  "rename_list": {
+    "message": "重命名列表"
   }
 }

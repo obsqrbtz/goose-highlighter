@@ -178,5 +178,131 @@
     },
     "next": {
         "message": "अगला"
+    },
+    "duplicate": {
+        "message": "डुप्लिकेट"
+    },
+    "merge": {
+        "message": "मर्ज करें"
+    },
+    "move": {
+        "message": "स्थानांतरित करें"
+    },
+    "copy": {
+        "message": "कॉपी करें"
+    },
+    "merge_lists_min_two": {
+        "message": "मर्ज करने के लिए कम से कम दो सूचियाँ चुनें।"
+    },
+    "merge_lists_confirm": {
+        "message": "{count} सूची(याँ) को \"{target}\" में मर्ज करें? स्रोत सूचियाँ हटा दी जाएंगी।"
+    },
+    "delete_current_list": {
+        "message": "वर्तमान सूची हटाएं?"
+    },
+    "delete_lists_confirm": {
+        "message": "{count} चयनित सूची(याँ) हटाएं?"
+    },
+    "invalid_import_format": {
+        "message": "अमान्य फ़ाइल प्रारूप। कृपया एक मान्य Goose Highlighter निर्यात फ़ाइल चुनें।"
+    },
+    "import_failed": {
+        "message": "फ़ाइल आयात करने में विफल। कृपया सुनिश्चित करें कि यह एक मान्य JSON फ़ाइल है।"
+    },
+    "import_confirm": {
+        "message": "कुल {words} शब्द(ों) के साथ {count} सूची(याँ) आयात करें?"
+    },
+    "import_success": {
+        "message": "{words} शब्द(ों) के साथ {count} सूची(याँ) सफलतापूर्वक आयात की गईं।"
+    },
+    "preview_label": {
+        "message": "पूर्वावलोकन"
+    },
+    "preview_text": {
+        "message": "आपका हाइलाइट किया गया टेक्स्ट इस तरह दिखाई देगा।"
+    },
+    "preview_text_before": {
+        "message": "आपका"
+    },
+    "preview_text_highlight": {
+        "message": "हाइलाइट किया गया टेक्स्ट"
+    },
+    "preview_text_after": {
+        "message": "इस तरह दिखाई देगा।"
+    },
+    "enable_highlighting_title": {
+        "message": "हाइलाइटिंग सक्षम करें"
+    },
+    "enable_highlighting_subtitle": {
+        "message": "पृष्ठों पर हाइलाइट दिखाएं"
+    },
+    "manage_lists": {
+        "message": "सूचियाँ प्रबंधित करें"
+    },
+    "background_label": {
+        "message": "पृष्ठभूमि"
+    },
+    "foreground_label": {
+        "message": "अग्रभूमि"
+    },
+    "multi_select_hint": {
+        "message": "चुनने के लिए क्लिक करें • एकाधिक चयन के लिए Ctrl/Cmd+क्लिक"
+    },
+    "dark_mode_title": {
+        "message": "डार्क मोड"
+    },
+    "dark_mode_subtitle": {
+        "message": "हल्की/गहरी थीम टॉगल करें"
+    },
+    "list_manager_title": {
+        "message": "सूची प्रबंधक"
+    },
+    "words_label": {
+        "message": "शब्द"
+    },
+    "active_label": {
+        "message": "सक्रिय"
+    },
+    "inactive_label": {
+        "message": "निष्क्रिय"
+    },
+    "drag_words_hint": {
+        "message": "चुनने के लिए क्लिक करें • एकाधिक चयन के लिए Ctrl/Cmd+क्लिक • कॉपी करने के लिए शब्दों को सूचियों में खींचें"
+    },
+    "drag_lists_hint": {
+        "message": "पुनः क्रमित करने के लिए सूचियों को खींचें • एकाधिक चयन के लिए Ctrl+क्लिक"
+    },
+    "showing_items": {
+        "message": "{total} शब्दों में से {start}-{end} दिखा रहे हैं"
+    },
+    "items_per_page": {
+        "message": "प्रति पृष्ठ आइटम:"
+    },
+    "page_info": {
+        "message": "पृष्ठ {current} का {total}"
+    },
+    "toggle_active": {
+        "message": "सक्रिय टॉगल करें"
+    },
+    "rename_list_title": {
+        "message": "सूची का नाम बदलें"
+    },
+    "new_list_title": {
+        "message": "नई सूची"
+    },
+    "delete_list_title": {
+        "message": "सूची हटाएं"
+    },
+    "list_active_badge": {
+        "message": "सक्रिय"
+    },
+    "list_paused_badge": {
+        "message": "रोका गया"
+    },
+    "words_stats": {
+        "message": "{total} शब्द • {active} सक्रिय • {inactive} निष्क्रिय"
+    },
+    "rename_list": {
+        "message": "सूची का नाम बदलें"
     }
 }

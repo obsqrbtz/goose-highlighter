@@ -178,5 +178,131 @@
   },
   "next": {
     "message": "Następny"
+  },
+  "duplicate": {
+    "message": "Duplikuj"
+  },
+  "merge": {
+    "message": "Scal"
+  },
+  "move": {
+    "message": "Przenieś"
+  },
+  "copy": {
+    "message": "Kopiuj"
+  },
+  "merge_lists_min_two": {
+    "message": "Wybierz co najmniej dwie listy do scalenia."
+  },
+  "merge_lists_confirm": {
+    "message": "Scalić {count} list(y) w \"{target}\"? Listy źródłowe zostaną usunięte."
+  },
+  "delete_current_list": {
+    "message": "Usunąć bieżącą listę?"
+  },
+  "delete_lists_confirm": {
+    "message": "Usunąć {count} wybraną/e listę/y?"
+  },
+  "invalid_import_format": {
+    "message": "Nieprawidłowy format pliku. Wybierz prawidłowy plik eksportu Goose Highlighter."
+  },
+  "import_failed": {
+    "message": "Nie udało się zaimportować pliku. Upewnij się, że jest to prawidłowy plik JSON."
+  },
+  "import_confirm": {
+    "message": "Zaimportować {count} list(y) z łącznie {words} słowami?"
+  },
+  "import_success": {
+    "message": "Pomyślnie zaimportowano {count} list(y) z {words} słowami."
+  },
+  "preview_label": {
+    "message": "Podgląd"
+  },
+  "preview_text": {
+    "message": "Tak będzie wyglądał Twój podświetlony tekst."
+  },
+  "preview_text_before": {
+    "message": "Tak będzie wyglądał Twój"
+  },
+  "preview_text_highlight": {
+    "message": "podświetlony tekst"
+  },
+  "preview_text_after": {
+    "message": "."
+  },
+  "enable_highlighting_title": {
+    "message": "Włącz podświetlanie"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Pokaż podświetlenia na stronach"
+  },
+  "manage_lists": {
+    "message": "Zarządzaj listami"
+  },
+  "background_label": {
+    "message": "Tło"
+  },
+  "foreground_label": {
+    "message": "Pierwszy plan"
+  },
+  "multi_select_hint": {
+    "message": "Kliknij, aby zaznaczyć • Ctrl/Cmd+Klik dla wielokrotnego zaznaczenia"
+  },
+  "dark_mode_title": {
+    "message": "Tryb ciemny"
+  },
+  "dark_mode_subtitle": {
+    "message": "Przełącz między jasnym/ciemnym motywem"
+  },
+  "list_manager_title": {
+    "message": "Menedżer list"
+  },
+  "words_label": {
+    "message": "słowa"
+  },
+  "active_label": {
+    "message": "aktywny"
+  },
+  "inactive_label": {
+    "message": "nieaktywny"
+  },
+  "drag_words_hint": {
+    "message": "Kliknij, aby zaznaczyć • Ctrl/Cmd+Klik dla wielokrotnego zaznaczenia • Przeciągnij słowa do list, aby skopiować"
+  },
+  "drag_lists_hint": {
+    "message": "Przeciągnij listy, aby zmienić kolejność • Ctrl+Klik dla wielokrotnego zaznaczenia"
+  },
+  "showing_items": {
+    "message": "Wyświetlanie {start}-{end} z {total} słów"
+  },
+  "items_per_page": {
+    "message": "Elementów na stronę:"
+  },
+  "page_info": {
+    "message": "Strona {current} z {total}"
+  },
+  "toggle_active": {
+    "message": "przełącz aktywny"
+  },
+  "rename_list_title": {
+    "message": "Zmień nazwę listy"
+  },
+  "new_list_title": {
+    "message": "Nowa lista"
+  },
+  "delete_list_title": {
+    "message": "Usuń listę"
+  },
+  "list_active_badge": {
+    "message": "Aktywny"
+  },
+  "list_paused_badge": {
+    "message": "Wstrzymany"
+  },
+  "words_stats": {
+    "message": "{total} słów • {active} aktywnych • {inactive} nieaktywnych"
+  },
+  "rename_list": {
+    "message": "Zmień nazwę listy"
   }
 }

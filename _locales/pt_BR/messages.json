@@ -1,103 +1,109 @@
 {
-    "extension_name": {
-        "message": "Goose Highlighter"
-    },
-    "extension_description": {
-        "message": "Destaque palavras e frases em qualquer site. Crie listas personalizadas, use cores, importe/exporte e muito mais."
-    },
-    "select_list": {
-        "message": "Selecionar lista:"
-    },
-    "new_list": {
-        "message": "Nova lista"
-    },
-    "delete_list": {
-        "message": "Excluir lista"
-    },
-    "list_name": {
-        "message": "Nome da lista:"
-    },
-    "background": {
-        "message": "Fundo:"
-    },
-    "foreground": {
-        "message": "Texto:"
-    },
-    "enable_highlight": {
-        "message": "Ativar destaque"
-    },
-    "apply": {
-        "message": "Aplicar"
-    },
-    "paste_hint": {
-        "message": "Cole palavras ou frases aqui. Cada nova palavra/frase deve começar na próxima linha."
-    },
-    "apply_paste": {
-        "message": "Adicionar palavras"
-    },
-    "select_all": {
-        "message": "Selecionar"
-    },
-    "delete_selected": {
-        "message": "Excluir"
-    },
-    "disable_selected": {
-        "message": "Desativar"
-    },
-    "enable_selected": {
-        "message": "Ativar"
-    },
-    "import_list": {
-        "message": "Importar JSON"
-    },
-    "export_list": {
-        "message": "Exportar JSON"
-    },
-    "default_list_name": {
-        "message": "Lista padrão"
-    },
-    "new_list_name": {
-        "message": "Nova lista"
-    },
-    "word_active_label": {
-        "message": "ativo"
-    },
-    "invalid_json_error": {
-        "message": "Arquivo JSON inválido"
-    },
-    "confirm_delete_list": {
-        "message": "Tem certeza de que deseja excluir esta lista?"
-    },
-    "confirm_delete_words": {
-        "message": "Tem certeza de que deseja excluir as palavras selecionadas?"
-    },
-    "deselect_all": {
-        "message": "Desmarcar"
-    },
-    "highlight_lists": {
-        "message": "Listas de destaque"
-    },
-    "dark_mode": {
-        "message": "Modo escuro"
-    },
-    "list_settings": {
-        "message": "Configurações da lista"
-    },
-    "word_list": {
-        "message": "Lista de palavras"
-    },
-    "add_words": {
-        "message": "Adicionar palavras"
-    },
-    "global_highlight_toggle": {
-        "message": "Ativar"
-    },
-    "search_placeholder": {
+  "extension_name": {
+    "message": "Goose Highlighter"
+  },
+  "extension_description": {
+    "message": "Destaque palavras e frases em qualquer site. Crie listas personalizadas, use cores, importe/exporte e muito mais."
+  },
+  "select_list": {
+    "message": "Selecionar lista:"
+  },
+  "new_list": {
+    "message": "Nova lista"
+  },
+  "delete_list": {
+    "message": "Excluir lista"
+  },
+  "list_name": {
+    "message": "Nome da lista:"
+  },
+  "background": {
+    "message": "Fundo:"
+  },
+  "foreground": {
+    "message": "Texto:"
+  },
+  "enable_highlight": {
+    "message": "Ativar destaque"
+  },
+  "apply": {
+    "message": "Aplicar"
+  },
+  "paste_hint": {
+    "message": "Cole palavras ou frases aqui. Cada nova palavra/frase deve começar na próxima linha."
+  },
+  "apply_paste": {
+    "message": "Adicionar palavras"
+  },
+  "select_all": {
+    "message": "Selecionar"
+  },
+  "delete_selected": {
+    "message": "Excluir"
+  },
+  "disable_selected": {
+    "message": "Desativar"
+  },
+  "enable_selected": {
+    "message": "Ativar"
+  },
+  "import_list": {
+    "message": "Importar JSON"
+  },
+  "export_list": {
+    "message": "Exportar JSON"
+  },
+  "default_list_name": {
+    "message": "Lista padrão"
+  },
+  "new_list_name": {
+    "message": "Nova lista"
+  },
+  "word_active_label": {
+    "message": "ativo"
+  },
+  "invalid_json_error": {
+    "message": "Arquivo JSON inválido"
+  },
+  "confirm_delete_list": {
+    "message": "Tem certeza de que deseja excluir esta lista?"
+  },
+  "confirm_delete_words": {
+    "message": "Tem certeza de que deseja excluir as palavras selecionadas?"
+  },
+  "deselect_all": {
+    "message": "Desmarcar"
+  },
+  "highlight_lists": {
+    "message": "Listas de destaque"
+  },
+  "dark_mode": {
+    "message": "Modo escuro"
+  },
+  "list_settings": {
+    "message": "Configurações da lista"
+  },
+  "word_list": {
+    "message": "Lista de palavras"
+  },
+  "add_words": {
+    "message": "Adicionar palavras"
+  },
+  "global_highlight_toggle": {
+    "message": "Ativar"
+  },
+  "search_placeholder": {
     "message": "Pesquisar..."
-},
-  "options": { "message": "Opções" },
-  "match_case": { "message": "Diferenciar maiúsculas/minúsculas" },
-  "match_whole": { "message": "Palavra inteira" },
+  },
+  "options": {
+    "message": "Opções"
+  },
+  "match_case": {
+    "message": "Diferenciar maiúsculas/minúsculas"
+  },
+  "match_whole": {
+    "message": "Palavra inteira"
+  },
   "site_exceptions": {
     "message": "Exceções de sites"
   },
@@ -172,5 +178,131 @@
   },
   "next": {
     "message": "Próximo"
+  },
+  "duplicate": {
+    "message": "Duplicar"
+  },
+  "merge": {
+    "message": "Mesclar"
+  },
+  "move": {
+    "message": "Mover"
+  },
+  "copy": {
+    "message": "Copiar"
+  },
+  "merge_lists_min_two": {
+    "message": "Selecione pelo menos duas listas para mesclar."
+  },
+  "merge_lists_confirm": {
+    "message": "Mesclar {count} lista(s) em \"{target}\"? As listas de origem serão removidas."
+  },
+  "delete_current_list": {
+    "message": "Excluir lista atual?"
+  },
+  "delete_lists_confirm": {
+    "message": "Excluir {count} lista(s) selecionada(s)?"
+  },
+  "invalid_import_format": {
+    "message": "Formato de arquivo inválido. Selecione um arquivo de exportação válido do Goose Highlighter."
+  },
+  "import_failed": {
+    "message": "Falha ao importar arquivo. Certifique-se de que é um arquivo JSON válido."
+  },
+  "import_confirm": {
+    "message": "Importar {count} lista(s) com {words} palavra(s) no total?"
+  },
+  "import_success": {
+    "message": "{count} lista(s) com {words} palavra(s) importada(s) com sucesso."
+  },
+  "preview_label": {
+    "message": "Visualização"
+  },
+  "preview_text": {
+    "message": "É assim que seu texto destacado aparecerá."
+  },
+  "preview_text_before": {
+    "message": "É assim que seu"
+  },
+  "preview_text_highlight": {
+    "message": "texto destacado"
+  },
+  "preview_text_after": {
+    "message": "aparecerá."
+  },
+  "enable_highlighting_title": {
+    "message": "Ativar destaque"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Mostrar destaques nas páginas"
+  },
+  "manage_lists": {
+    "message": "Gerenciar listas"
+  },
+  "background_label": {
+    "message": "Fundo"
+  },
+  "foreground_label": {
+    "message": "Texto"
+  },
+  "multi_select_hint": {
+    "message": "Clique para selecionar • Ctrl/Cmd+Clique para seleção múltipla"
+  },
+  "dark_mode_title": {
+    "message": "Modo escuro"
+  },
+  "dark_mode_subtitle": {
+    "message": "Alternar entre tema claro/escuro"
+  },
+  "list_manager_title": {
+    "message": "Gerenciador de listas"
+  },
+  "words_label": {
+    "message": "palavras"
+  },
+  "active_label": {
+    "message": "ativo"
+  },
+  "inactive_label": {
+    "message": "inativo"
+  },
+  "drag_words_hint": {
+    "message": "Clique para selecionar • Ctrl/Cmd+Clique para seleção múltipla • Arraste palavras para listas para copiar"
+  },
+  "drag_lists_hint": {
+    "message": "Arraste listas para reordenar • Ctrl+Clique para seleção múltipla"
+  },
+  "showing_items": {
+    "message": "Mostrando {start}-{end} de {total} palavras"
+  },
+  "items_per_page": {
+    "message": "Itens por página:"
+  },
+  "page_info": {
+    "message": "Página {current} de {total}"
+  },
+  "toggle_active": {
+    "message": "alternar ativo"
+  },
+  "rename_list_title": {
+    "message": "Renomear lista"
+  },
+  "new_list_title": {
+    "message": "Nova lista"
+  },
+  "delete_list_title": {
+    "message": "Excluir lista"
+  },
+  "list_active_badge": {
+    "message": "Ativo"
+  },
+  "list_paused_badge": {
+    "message": "Pausado"
+  },
+  "words_stats": {
+    "message": "{total} palavras • {active} ativas • {inactive} inativas"
+  },
+  "rename_list": {
+    "message": "Renomear lista"
   }
 }

@@ -45,8 +45,6 @@ async initialize(): Promise<void> {
     document.getElementById('duplicateListBtn')?.addEventListener('click', () => this.duplicateCurrentList());
     document.getElementById('mergeListsBtn')?.addEventListener('click', () => this.mergeSelectedLists());
     document.getElementById('deleteListsBtn')?.addEventListener('click', () => this.deleteSelectedLists());
-    document.getElementById('activateListsBtn')?.addEventListener('click', () => this.setSelectedListsActive(true));
-    document.getElementById('deactivateListsBtn')?.addEventListener('click', () => this.setSelectedListsActive(false));
     document.getElementById('editListNameBtn')?.addEventListener('click', () => this.toggleListSettings());
     document.getElementById('applyListSettingsBtn')?.addEventListener('click', () => this.applyListSettings());
     document.getElementById('importListBtn')?.addEventListener('click', () => this.triggerImport());
@@ -74,6 +72,7 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
 
     const listsContainer = document.getElementById('listsContainer');
     listsContainer?.addEventListener('click', (e) => this.handleListClick(e));
+    listsContainer?.addEventListener('keydown', (e) => this.handleListsKeydown(e));
     listsContainer?.addEventListener('dragstart', (e) => this.handleDragStart(e));
     listsContainer?.addEventListener('dragover', (e) => this.handleDragOver(e));
     listsContainer?.addEventListener('drop', (e) => this.handleDrop(e));
@@ -140,7 +139,7 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
   private mergeSelectedLists(): void {
     const selected = this.getSelectedListIndices();
     if (selected.length < 2) {
-      alert('Select at least two lists to merge.');
+      alert(chrome.i18n.getMessage('merge_lists_min_two') || 'Select at least two lists to merge.');
       return;
     }
 
@@ -148,7 +147,10 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     const target = this.lists[targetIndex];
     if (!target) return;
 
-    const confirmMessage = `Merge ${selected.length - 1} list(s) into "${target.name}"? Source lists will be removed.`;
+    const confirmMessage = chrome.i18n.getMessage('merge_lists_confirm')
+      ?.replace('{count}', String(selected.length - 1))
+      .replace('{target}', target.name) 
+      || `Merge ${selected.length - 1} list(s) into "${target.name}"? Source lists will be removed.`;
     if (!confirm(confirmMessage)) return;
 
     const sourceIndices = selected.filter(index => index !== targetIndex).sort((a, b) => b - a);
@@ -169,10 +171,13 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     const selected = this.getSelectedListIndices();
     if (selected.length === 0) {
       if (!this.lists[this.currentListIndex]) return;
-      if (!confirm('Delete current list?')) return;
+      if (!confirm(chrome.i18n.getMessage('delete_current_list') || 'Delete current list?')) return;
       this.lists.splice(this.currentListIndex, 1);
     } else {
-      if (!confirm(`Delete ${selected.length} selected list(s)?`)) return;
+      const confirmMessage = chrome.i18n.getMessage('delete_lists_confirm')
+        ?.replace('{count}', String(selected.length))
+        || `Delete ${selected.length} selected list(s)?`;
+      if (!confirm(confirmMessage)) return;
       selected.sort((a, b) => b - a).forEach(index => this.lists.splice(index, 1));
     }
 
@@ -186,17 +191,12 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     this.save();
   }
 
-  private setSelectedListsActive(active: boolean): void {
-    const selected = this.getSelectedListIndices();
-    if (selected.length === 0) {
-      const list = this.lists[this.currentListIndex];
-      if (list) list.active = active;
-    } else {
-      selected.forEach(index => {
-        if (this.lists[index]) this.lists[index].active = active;
-      });
+  private toggleListActive(index: number): void {
+    const list = this.lists[index];
+    if (list) {
+      list.active = !list.active;
+      this.save();
     }
-    this.save();
   }
 
   private applyListSettings(): void {
@@ -265,13 +265,14 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
       const data = JSON.parse(text);
       
       if (!this.validateImportData(data)) {
-        alert('Invalid file format. Please select a valid Goose Highlighter export file.');
+        alert(chrome.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid Goose Highlighter export file.');
         return;
       }
 
       this.importLists(data);
     } catch (error) {
       console.error('Import error:', error);
+      alert(chrome.i18n.getMessage('import_failed') || 'Failed to import file. Please ensure it is a valid JSON file.');
       alert('Failed to import file. Please ensure it is a valid JSON file.');
     }
   }
@@ -361,7 +362,10 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
   private deleteSelectedWords(): void {
     const list = this.lists[this.currentListIndex];
     if (!list || this.selectedWords.size === 0) return;
-    if (!confirm(`Delete ${this.selectedWords.size} selected word(s)?`)) return;
+    const confirmMessage = chrome.i18n.getMessage('confirm_delete_words')
+      ?.replace('{count}', String(this.selectedWords.size))
+      || `Delete ${this.selectedWords.size} selected word(s)?`;
+    if (!confirm(confirmMessage)) return;
 
     list.words = list.words.filter((_, i) => !this.selectedWords.has(i));
     this.selectedWords.clear();
@@ -429,6 +433,14 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     const index = Number(listItem.dataset.index);
     if (Number.isNaN(index)) return;
 
+    // Click on active/paused badge toggles that list's active state
+    if (target.closest('.list-badge')) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggleListActive(index);
+      return;
+    }
+
     const mouseEvent = event as MouseEvent;
     // Ctrl/Cmd + click for multi-select
     if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
@@ -447,6 +459,18 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     this.selectedWords.clear();
     this.currentPage = 1; // Reset to first page when selecting a list
     this.render();
+  }
+
+  private handleListsKeydown(event: KeyboardEvent): void {
+    const target = event.target as HTMLElement;
+    const badge = target.closest('.list-badge');
+    if (!badge) return;
+    const listItem = badge.closest('.list-item') as HTMLElement | null;
+    if (!listItem) return;
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    const index = Number(listItem.dataset.index);
+    if (!Number.isNaN(index)) this.toggleListActive(index);
   }
 
   private handleDragStart(event: DragEvent): void {
@@ -595,16 +619,8 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
       return;
     }
 
-    // Handle toggle button click
-    if (target.classList.contains('toggle-btn')) {
-      event.stopPropagation();
-      const index = Number(target.dataset.index);
-      if (Number.isNaN(index)) return;
-      const word = list.words[index];
-      if (word) {
-        word.active = !word.active;
-        this.save();
-      }
+    // Don't select if clicking on eye toggle
+    if (target.closest('.word-item-eye-toggle')) {
       return;
     }
 
@@ -654,6 +670,22 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     const target = event.target as HTMLInputElement;
     const list = this.lists[this.currentListIndex];
     if (!list) return;
+
+    // Handle eye toggle (active/disabled)
+    if (target.classList.contains('word-item-eye-input')) {
+      const wordItem = target.closest('.word-item') as HTMLElement;
+      if (wordItem) {
+        const index = Number(wordItem.dataset.index);
+        if (!Number.isNaN(index)) {
+          const word = list.words[index];
+          if (word) {
+            word.active = target.checked;
+            this.save();
+          }
+        }
+      }
+      return;
+    }
 
     const editIndex = Number(target.dataset.bgEdit ?? target.dataset.fgEdit ?? -1);
     if (Number.isNaN(editIndex) || editIndex < 0) return;
@@ -749,12 +781,20 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
       if (this.selectedLists.has(index)) item.classList.add('selected');
       item.draggable = true;
       item.dataset.index = index.toString();
+      
+      const wordsLabel = chrome.i18n.getMessage('words_label') || 'words';
+      const activeLabel = chrome.i18n.getMessage('active_label') || 'active';
+      const badgeText = list.active 
+        ? (chrome.i18n.getMessage('list_active_badge') || 'Active')
+        : (chrome.i18n.getMessage('list_paused_badge') || 'Paused');
+      const toggleBadgeTitle = chrome.i18n.getMessage('toggle_active') || 'Toggle active';
+      
       item.innerHTML = `
         <div class="list-meta">
           <div class="list-name">${DOMUtils.escapeHtml(list.name)}</div>
-          <div class="list-stats">${total} words • ${activeCount} active</div>
+          <div class="list-stats">${total} ${wordsLabel} • ${activeCount} ${activeLabel}</div>
         </div>
-        <div class="list-badge">${list.active ? 'Active' : 'Paused'}</div>
+        <div class="list-badge" role="button" title="${DOMUtils.escapeHtml(toggleBadgeTitle)}" tabindex="0" aria-label="${DOMUtils.escapeHtml(toggleBadgeTitle)}">${badgeText}</div>
       `;
       container.appendChild(item);
     });
@@ -777,7 +817,10 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     if (stats) {
       const activeCount = list.words.filter(word => word.active).length;
       const inactiveCount = list.words.length - activeCount;
-      stats.textContent = `${list.words.length} words • ${activeCount} active • ${inactiveCount} inactive`;
+      const wordsLabel = chrome.i18n.getMessage('words_label') || 'words';
+      const activeLabel = chrome.i18n.getMessage('active_label') || 'active';
+      const inactiveLabel = chrome.i18n.getMessage('inactive_label') || 'inactive';
+      stats.textContent = `${list.words.length} ${wordsLabel} • ${activeCount} ${activeLabel} • ${inactiveCount} ${inactiveLabel}`;
     }
 
     // Collapse settings panel when switching lists
@@ -811,7 +854,8 @@ private renderWords(): void {
     this.totalWords = entries.length;
 
     if (entries.length === 0) {
-      wordList.innerHTML = '<div class="empty">No words in this list.</div>';
+      const emptyMessage = chrome.i18n.getMessage('no_words_in_list') || 'No words in this list.';
+      wordList.innerHTML = `<div class="empty">${emptyMessage}</div>`;
       this.renderPaginationControls();
       return;
     }
@@ -819,6 +863,11 @@ private renderWords(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = Math.min(startIndex + this.pageSize, this.totalWords);
     const paginatedEntries = entries.slice(startIndex, endIndex);
+
+    const editWordTitle = chrome.i18n.getMessage('edit_word') || 'Edit word';
+    const bgColorTitle = chrome.i18n.getMessage('background_color_title') || 'Background color';
+    const fgColorTitle = chrome.i18n.getMessage('text_color_title') || 'Text color';
+    const toggleActiveTitle = chrome.i18n.getMessage('toggle_active') || 'Toggle active';
 
     wordList.innerHTML = paginatedEntries.map(entry => {
       const word = entry.word;
@@ -829,12 +878,18 @@ private renderWords(): void {
           <span class="word-text">${DOMUtils.escapeHtml(word.wordStr)}</span>
           <input type="text" class="word-edit-input" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${index}">
           <div class="word-actions">
-            <button class="icon-btn edit-word-btn" data-index="${index}" title="Edit word">
+            <button class="icon-btn edit-word-btn" data-index="${index}" title="${editWordTitle}">
               <i class="fa-solid fa-pen"></i>
             </button>
-            <input type="color" value="${word.background || list.background}" data-bg-edit="${index}" title="Background color">
-            <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${index}" title="Foreground color">
-            <button class="toggle-btn ${word.active ? 'active' : ''}" data-index="${index}" title="Toggle active"></button>
+            <input type="color" value="${word.background || list.background}" data-bg-edit="${index}" title="${bgColorTitle}">
+            <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${index}" title="${fgColorTitle}">
+            <label class="word-item-eye-toggle" title="${toggleActiveTitle}" aria-label="${toggleActiveTitle}">
+              <input type="checkbox" class="word-item-eye-input" ${word.active ? 'checked' : ''} data-index="${index}">
+              <span class="word-item-eye-icon">
+                <i class="fa-solid fa-eye eye-active"></i>
+                <i class="fa-solid fa-eye-slash eye-disabled"></i>
+              </span>
+            </label>
           </div>
         </div>
       `;
@@ -849,38 +904,55 @@ private renderWords(): void {
 
     const totalPages = Math.ceil(this.totalWords / this.pageSize);
     
-if (totalPages <= 1) {
+    if (totalPages <= 1) {
       paginationContainer.style.display = 'none';
       return;
     }
 
-const startItem = (this.currentPage - 1) * this.pageSize + 1;
+    const startItem = (this.currentPage - 1) * this.pageSize + 1;
     const endItem = Math.min(this.currentPage * this.pageSize, this.totalWords);
+
+    const showingText = chrome.i18n.getMessage('showing_items')
+      ?.replace('{start}', String(startItem))
+      .replace('{end}', String(endItem))
+      .replace('{total}', String(this.totalWords))
+      || `Showing ${startItem}-${endItem} of ${this.totalWords} words`;
+    
+    const pageInfoText = chrome.i18n.getMessage('page_info')
+      ?.replace('{current}', String(this.currentPage))
+      .replace('{total}', String(totalPages))
+      || `Page ${this.currentPage} of ${totalPages}`;
+    
+    const itemsPerPageLabel = chrome.i18n.getMessage('items_per_page') || 'Items per page:';
+    const firstPageTitle = chrome.i18n.getMessage('first_page') || 'First page';
+    const prevPageTitle = chrome.i18n.getMessage('previous_page') || 'Previous page';
+    const nextPageTitle = chrome.i18n.getMessage('next_page') || 'Next page';
+    const lastPageTitle = chrome.i18n.getMessage('last_page') || 'Last page';
 
     paginationContainer.style.display = 'flex';
     paginationContainer.innerHTML = `
       <div class="pagination-info">
-        Showing ${startItem}-${endItem} of ${this.totalWords} words
+        ${showingText}
       </div>
       <div class="pagination-controls">
-        <button class="pagination-btn" id="firstPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="First page">
+        <button class="pagination-btn" id="firstPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="${firstPageTitle}">
           <i class="fa-solid fa-angles-left"></i>
         </button>
-        <button class="pagination-btn" id="prevPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="Previous page">
+        <button class="pagination-btn" id="prevPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="${prevPageTitle}">
           <i class="fa-solid fa-angle-left"></i>
         </button>
         <div class="pagination-pages">
-          <span class="page-info">Page ${this.currentPage} of ${totalPages}</span>
+          <span class="page-info">${pageInfoText}</span>
         </div>
-        <button class="pagination-btn" id="nextPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="Next page">
+        <button class="pagination-btn" id="nextPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="${nextPageTitle}">
           <i class="fa-solid fa-angle-right"></i>
         </button>
-        <button class="pagination-btn" id="lastPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="Last page">
+        <button class="pagination-btn" id="lastPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="${lastPageTitle}">
           <i class="fa-solid fa-angles-right"></i>
         </button>
       </div>
       <div class="page-size-controls">
-        <label for="pageSizeSelect">Items per page:</label>
+        <label for="pageSizeSelect">${itemsPerPageLabel}</label>
         <select id="pageSizeSelect" class="page-size-select">
           <option value="25" ${this.pageSize === 25 ? 'selected' : ''}>25</option>
           <option value="50" ${this.pageSize === 50 ? 'selected' : ''}>50</option>

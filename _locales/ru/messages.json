@@ -178,5 +178,132 @@
   },
   "next": {
     "message": "Следующее"
+  },
+  "duplicate": {
+    "message": "Дублировать"
+  },
+  "merge": {
+    "message": "Объединить"
+  },
+  "move": {
+    "message": "Переместить"
+  },
+  "copy": {
+    "message": "Копировать"
+  },
+  "merge_lists_min_two": {
+    "message": "Выберите как минимум два списка для объединения."
+  },
+  "merge_lists_confirm": {
+    "message": "Объединить {count} список(ов) в \"{target}\"? Исходные списки будут удалены."
+  },
+  "delete_current_list": {
+    "message": "Удалить текущий список?"
+  },
+  "delete_lists_confirm": {
+    "message": "Удалить {count} выбранный(ых) список(ов)?"
+  },
+  "invalid_import_format": {
+    "message": "Неверный формат файла. Выберите действительный файл экспорта Goose Highlighter."
+  },
+  "import_failed": {
+    "message": "Не удалось импортировать файл. Убедитесь, что это действительный файл JSON."
+  },
+  "import_confirm": {
+    "message": "Импортировать {count} список(ов) с {words} словами всего?"
+  },
+  "import_success": {
+    "message": "Успешно импортировано {count} список(ов) с {words} словами."
+}
+,
+  "preview_label": {
+    "message": "Предпросмотр"
+  },
+  "preview_text": {
+    "message": "Так будет выглядеть выделенный текст."
+  },
+  "preview_text_before": {
+    "message": "Так будет выглядеть"
+  },
+  "preview_text_highlight": {
+    "message": "выделенный текст"
+  },
+  "preview_text_after": {
+    "message": "."
+  },
+  "enable_highlighting_title": {
+    "message": "Включить выделение"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Выделять слова из выбранного списка"
+  },
+  "manage_lists": {
+    "message": "Управление списками"
+  },
+  "background_label": {
+    "message": "Фон"
+  },
+  "foreground_label": {
+    "message": "Текст"
+  },
+  "multi_select_hint": {
+    "message": "Нажмите для выбора • Ctrl/Cmd+Клик для множественного выбора"
+  },
+  "dark_mode_title": {
+    "message": "Темная тема"
+  },
+  "dark_mode_subtitle": {
+    "message": "Переключить светлую/темную тему"
+  },
+  "list_manager_title": {
+    "message": "Управление списками"
+  },
+  "words_label": {
+    "message": "слова"
+  },
+  "active_label": {
+    "message": "активно"
+  },
+  "inactive_label": {
+    "message": "неактивно"
+  },
+  "drag_words_hint": {
+    "message": "Нажмите для выбора • Ctrl/Cmd+Клик для множественного выбора • Перетащите слова в списки для копирования"
+  },
+  "drag_lists_hint": {
+    "message": "Перетащите для изменения порядка • Ctrl+Клик для множественного выбора"
+  },
+  "showing_items": {
+    "message": "Показано {start}-{end} из {total} слов"
+  },
+  "items_per_page": {
+    "message": "Элементов на странице:"
+  },
+  "page_info": {
+    "message": "Страница {current} из {total}"
+  },
+  "toggle_active": {
+    "message": "переключить активность"
+  },
+  "rename_list_title": {
+    "message": "Переименовать список"
+  },
+  "new_list_title": {
+    "message": "Новый список"
+  },
+  "delete_list_title": {
+    "message": "Удалить список"
+  },
+  "list_active_badge": {
+    "message": "Активен"
+  },
+  "list_paused_badge": {
+    "message": "Приостановлен"
+  },
+  "words_stats": {
+    "message": "{total} слов • {active} активных • {inactive} неактивных"
+  },
+  "rename_list": {
+    "message": "Переименовать список"
   }
 }

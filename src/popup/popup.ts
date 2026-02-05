@@ -20,6 +20,17 @@ function localizePage(): void {
       }
     }
   });
+
+  const titleElements = document.querySelectorAll('[data-i18n-title]');
+  titleElements.forEach(element => {
+    const key = element.getAttribute('data-i18n-title');
+    if (key) {
+      const translation = chrome.i18n.getMessage(key);
+      if (translation) {
+        element.setAttribute('title', translation);
+      }
+    }
+  });
 }
 
 function displayVersion(): void {

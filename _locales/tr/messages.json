@@ -178,5 +178,131 @@
   },
   "next": {
     "message": "Sonraki"
+  },
+  "duplicate": {
+    "message": "Çoğalt"
+  },
+  "merge": {
+    "message": "Birleştir"
+  },
+  "move": {
+    "message": "Taşı"
+  },
+  "copy": {
+    "message": "Kopyala"
+  },
+  "merge_lists_min_two": {
+    "message": "Birleştirmek için en az iki liste seçin."
+  },
+  "merge_lists_confirm": {
+    "message": "{count} listeyi \"{target}\" ile birleştir? Kaynak listeler kaldırılacak."
+  },
+  "delete_current_list": {
+    "message": "Mevcut listeyi sil?"
+  },
+  "delete_lists_confirm": {
+    "message": "Seçili {count} listeyi sil?"
+  },
+  "invalid_import_format": {
+    "message": "Geçersiz dosya formatı. Lütfen geçerli bir Goose Highlighter dışa aktarma dosyası seçin."
+  },
+  "import_failed": {
+    "message": "Dosya içe aktarılamadı. Lütfen geçerli bir JSON dosyası olduğundan emin olun."
+  },
+  "import_confirm": {
+    "message": "Toplam {words} kelime içeren {count} liste içe aktarılsın mı?"
+  },
+  "import_success": {
+    "message": "{words} kelime içeren {count} liste başarıyla içe aktarıldı."
+  },
+  "preview_label": {
+    "message": "Önizleme"
+  },
+  "preview_text": {
+    "message": "Vurgulanan metniniz böyle görünecek."
+  },
+  "preview_text_before": {
+    "message": "Vurgulanan metniniz"
+  },
+  "preview_text_highlight": {
+    "message": "böyle"
+  },
+  "preview_text_after": {
+    "message": "görünecek."
+  },
+  "enable_highlighting_title": {
+    "message": "Vurgulamayı Etkinleştir"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Sayfalarda vurguları göster"
+  },
+  "manage_lists": {
+    "message": "Listeleri Yönet"
+  },
+  "background_label": {
+    "message": "Arka Plan"
+  },
+  "foreground_label": {
+    "message": "Ön Plan"
+  },
+  "multi_select_hint": {
+    "message": "Seçmek için tıklayın • Çoklu seçim için Ctrl/Cmd+Tıklama"
+  },
+  "dark_mode_title": {
+    "message": "Karanlık Mod"
+  },
+  "dark_mode_subtitle": {
+    "message": "Açık/koyu tema arasında geçiş yap"
+  },
+  "list_manager_title": {
+    "message": "Liste Yöneticisi"
+  },
+  "words_label": {
+    "message": "kelime"
+  },
+  "active_label": {
+    "message": "aktif"
+  },
+  "inactive_label": {
+    "message": "pasif"
+  },
+  "drag_words_hint": {
+    "message": "Seçmek için tıklayın • Çoklu seçim için Ctrl/Cmd+Tıklama • Kopyalamak için kelimeleri listelere sürükleyin"
+  },
+  "drag_lists_hint": {
+    "message": "Yeniden sıralamak için listeleri sürükleyin • Çoklu seçim için Ctrl+Tıklama"
+  },
+  "showing_items": {
+    "message": "{total} kelimeden {start}-{end} gösteriliyor"
+  },
+  "items_per_page": {
+    "message": "Sayfa başına öğe:"
+  },
+  "page_info": {
+    "message": "Sayfa {current} / {total}"
+  },
+  "toggle_active": {
+    "message": "aktif/pasif değiştir"
+  },
+  "rename_list_title": {
+    "message": "Listeyi yeniden adlandır"
+  },
+  "new_list_title": {
+    "message": "Yeni liste"
+  },
+  "delete_list_title": {
+    "message": "Listeyi sil"
+  },
+  "list_active_badge": {
+    "message": "Aktif"
+  },
+  "list_paused_badge": {
+    "message": "Duraklatıldı"
+  },
+  "words_stats": {
+    "message": "{total} kelime • {active} aktif • {inactive} pasif"
+  },
+  "rename_list": {
+    "message": "Listeyi Yeniden Adlandır"
   }
 }

@@ -178,5 +178,131 @@
     },
     "next": {
         "message": "Suivant"
+    },
+    "duplicate": {
+        "message": "Dupliquer"
+    },
+    "merge": {
+        "message": "Fusionner"
+    },
+    "move": {
+        "message": "Déplacer"
+    },
+    "copy": {
+        "message": "Copier"
+    },
+    "merge_lists_min_two": {
+        "message": "Sélectionnez au moins deux listes à fusionner."
+    },
+    "merge_lists_confirm": {
+        "message": "Fusionner {count} liste(s) dans \"{target}\" ? Les listes sources seront supprimées."
+    },
+    "delete_current_list": {
+        "message": "Supprimer la liste actuelle ?"
+    },
+    "delete_lists_confirm": {
+        "message": "Supprimer {count} liste(s) sélectionnée(s) ?"
+    },
+    "invalid_import_format": {
+        "message": "Format de fichier invalide. Veuillez sélectionner un fichier d'exportation Goose Highlighter valide."
+    },
+    "import_failed": {
+        "message": "Échec de l'importation du fichier. Veuillez vous assurer qu'il s'agit d'un fichier JSON valide."
+    },
+    "import_confirm": {
+        "message": "Importer {count} liste(s) avec {words} mot(s) au total ?"
+    },
+    "import_success": {
+        "message": "{count} liste(s) avec {words} mot(s) importée(s) avec succès."
+    },
+    "preview_label": {
+        "message": "Aperçu"
+    },
+    "preview_text": {
+        "message": "Voici comment votre texte surligné apparaîtra."
+    },
+    "preview_text_before": {
+        "message": "Voici comment votre"
+    },
+    "preview_text_highlight": {
+        "message": "texte surligné"
+    },
+    "preview_text_after": {
+        "message": "apparaîtra."
+    },
+    "enable_highlighting_title": {
+        "message": "Activer la surbrillance"
+    },
+    "enable_highlighting_subtitle": {
+        "message": "Afficher les surlignages sur les pages"
+    },
+    "manage_lists": {
+        "message": "Gérer les listes"
+    },
+    "background_label": {
+        "message": "Arrière-plan"
+    },
+    "foreground_label": {
+        "message": "Texte"
+    },
+    "multi_select_hint": {
+        "message": "Cliquer pour sélectionner • Ctrl/Cmd+Clic pour sélection multiple"
+    },
+    "dark_mode_title": {
+        "message": "Mode sombre"
+    },
+    "dark_mode_subtitle": {
+        "message": "Basculer entre thème clair/sombre"
+    },
+    "list_manager_title": {
+        "message": "Gestionnaire de listes"
+    },
+    "words_label": {
+        "message": "mots"
+    },
+    "active_label": {
+        "message": "actif"
+    },
+    "inactive_label": {
+        "message": "inactif"
+    },
+    "drag_words_hint": {
+        "message": "Cliquer pour sélectionner • Ctrl/Cmd+Clic pour sélection multiple • Glisser les mots vers les listes pour copier"
+    },
+    "drag_lists_hint": {
+        "message": "Glisser les listes pour réorganiser • Ctrl+Clic pour sélection multiple"
+    },
+    "showing_items": {
+        "message": "Affichage de {start}-{end} sur {total} mots"
+    },
+    "items_per_page": {
+        "message": "Éléments par page :"
+    },
+    "page_info": {
+        "message": "Page {current} sur {total}"
+    },
+    "toggle_active": {
+        "message": "basculer actif"
+    },
+    "rename_list_title": {
+        "message": "Renommer la liste"
+    },
+    "new_list_title": {
+        "message": "Nouvelle liste"
+    },
+    "delete_list_title": {
+        "message": "Supprimer la liste"
+    },
+    "list_active_badge": {
+        "message": "Actif"
+    },
+    "list_paused_badge": {
+        "message": "En pause"
+    },
+    "words_stats": {
+        "message": "{total} mots • {active} actifs • {inactive} inactifs"
+    },
+    "rename_list": {
+        "message": "Renommer la liste"
     }
 }
