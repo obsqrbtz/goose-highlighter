@@ -131,13 +131,18 @@ export class PopupController {
   }
 
   private setupListManagement(): void {
-    const listSelect = document.getElementById('listSelect') as HTMLSelectElement;
+    const dropdownBtn = document.getElementById('listDropdownBtn');
+    const dropdownMenu = document.getElementById('listDropdownMenu');
 
-    listSelect.addEventListener('change', () => {
-      this.selectedCheckboxes.clear();
-      this.currentListIndex = +listSelect.value;
-      this.renderWords();
-      this.updateListForm();
+    // Toggle dropdown
+    dropdownBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu?.classList.toggle('open');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      dropdownMenu?.classList.remove('open');
     });
 
     // Apply button for list settings
@@ -145,11 +150,21 @@ export class PopupController {
       this.applyListSettings();
     });
 
+    // Rename list
+    document.getElementById('renameListBtn')?.addEventListener('click', () => {
+      const newName = prompt(chrome.i18n.getMessage('enter_list_name') || 'Enter list name:', this.lists[this.currentListIndex].name);
+      if (newName && newName.trim()) {
+        this.lists[this.currentListIndex].name = newName.trim();
+        this.save();
+      }
+    });
+
+    // New list
     document.getElementById('newListBtn')?.addEventListener('click', () => {
       this.lists.push({
         id: Date.now(),
         name: chrome.i18n.getMessage('new_list_name') || 'New List',
-        background: '#ffff00',
+        background: '#22c55e',
         foreground: '#000000',
         active: true,
         words: []
@@ -158,7 +173,12 @@ export class PopupController {
       this.save();
     });
 
+    // Delete list
     document.getElementById('deleteListBtn')?.addEventListener('click', () => {
+      if (this.lists.length <= 1) {
+        alert(chrome.i18n.getMessage('cannot_delete_last_list') || 'Cannot delete the last list');
+        return;
+      }
       if (confirm(chrome.i18n.getMessage('confirm_delete_list') || 'Delete this list?')) {
         this.lists.splice(this.currentListIndex, 1);
         this.currentListIndex = Math.max(0, this.currentListIndex - 1);
@@ -166,8 +186,39 @@ export class PopupController {
       }
     });
 
+    // Manage lists
     document.getElementById('manageListsBtn')?.addEventListener('click', () => {
       this.openListManagerWindow();
+    });
+
+    // Color picker text inputs sync
+    const listBg = document.getElementById('listBg') as HTMLInputElement;
+    const listBgText = document.getElementById('listBgText') as HTMLInputElement;
+    const listFg = document.getElementById('listFg') as HTMLInputElement;
+    const listFgText = document.getElementById('listFgText') as HTMLInputElement;
+
+    listBg?.addEventListener('input', () => {
+      if (listBgText) listBgText.value = listBg.value;
+      this.updatePreview();
+    });
+
+    listBgText?.addEventListener('input', () => {
+      if (listBg && /^#[0-9A-F]{6}$/i.test(listBgText.value)) {
+        listBg.value = listBgText.value;
+        this.updatePreview();
+      }
+    });
+
+    listFg?.addEventListener('input', () => {
+      if (listFgText) listFgText.value = listFg.value;
+      this.updatePreview();
+    });
+
+    listFgText?.addEventListener('input', () => {
+      if (listFg && /^#[0-9A-F]{6}$/i.test(listFgText.value)) {
+        listFg.value = listFgText.value;
+        this.updatePreview();
+      }
     });
   }
 
@@ -206,27 +257,27 @@ export class PopupController {
       const list = this.lists[this.currentListIndex];
       if (!list) return;
 
+      // Handle checkbox click
+      if (target.classList.contains('word-item-checkbox')) {
+        e.stopPropagation();
+        const wordItem = target.closest('.word-item') as HTMLElement;
+        if (wordItem) {
+          const index = Number(wordItem.dataset.index);
+          if (!Number.isNaN(index)) {
+            const mouseEvent = e as MouseEvent;
+            this.toggleWordSelection(index, mouseEvent.ctrlKey || mouseEvent.metaKey);
+          }
+        }
+        return;
+      }
+
       // Handle edit button click
-      const editBtn = target.closest('.icon-btn.edit-word-btn') as HTMLElement | null;
+      const editBtn = target.closest('.word-item-icon-btn.edit-word-btn') as HTMLElement | null;
       if (editBtn) {
         e.stopPropagation();
         const index = Number(editBtn.dataset.index);
         if (!Number.isNaN(index)) {
           this.startEditingWord(index);
-        }
-        return;
-      }
-
-      // Handle toggle button click
-      if (target.classList.contains('toggle-btn')) {
-        e.stopPropagation();
-        const index = Number(target.dataset.index);
-        if (!Number.isNaN(index)) {
-          const word = list.words[index];
-          if (word) {
-            word.active = !word.active;
-            this.save();
-          }
         }
         return;
       }
@@ -237,14 +288,19 @@ export class PopupController {
           e.stopPropagation();
           return;
         }
-        if (target.classList.contains('word-edit-input')) {
+        if (target.classList.contains('word-item-edit-input')) {
           e.stopPropagation();
           return;
         }
       }
 
       // Don't select if clicking inside word-actions area
-      if (target.closest('.word-actions') && !target.classList.contains('word-item')) {
+      if (target.closest('.word-item-actions') && !target.classList.contains('word-item')) {
+        return;
+      }
+
+      // Don't select if clicking on switch
+      if (target.closest('.switch-wrapper')) {
         return;
       }
 
@@ -256,28 +312,29 @@ export class PopupController {
       if (Number.isNaN(index)) return;
 
       const mouseEvent = e as MouseEvent;
-      // Ctrl/Cmd + click for multi-select
-      if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
-        if (this.selectedCheckboxes.has(index)) {
-          this.selectedCheckboxes.delete(index);
-        } else {
-          this.selectedCheckboxes.add(index);
-        }
-        this.renderWords();
-        return;
-      }
-
-      // Regular click - toggle selection
-      if (this.selectedCheckboxes.has(index)) {
-        this.selectedCheckboxes.delete(index);
-      } else {
-        this.selectedCheckboxes.add(index);
-      }
-      this.renderWords();
+      this.toggleWordSelection(index, mouseEvent.ctrlKey || mouseEvent.metaKey);
     });
 
     wordList.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement;
+      const list = this.lists[this.currentListIndex];
+      
+      // Handle switch toggle
+      if (target.classList.contains('switch-input')) {
+        const wordItem = target.closest('.word-item') as HTMLElement;
+        if (wordItem) {
+          const index = Number(wordItem.dataset.index);
+          if (!Number.isNaN(index)) {
+            const word = list.words[index];
+            if (word) {
+              word.active = target.checked;
+              this.save();
+            }
+          }
+        }
+        return;
+      }
+
       const index = +(target.dataset.bgEdit ?? target.dataset.fgEdit ?? -1);
       if (index === -1) return;
 
@@ -290,7 +347,7 @@ export class PopupController {
 
     wordList.addEventListener('keydown', (e) => {
       const target = e.target as HTMLInputElement;
-      if (!target.classList.contains('word-edit-input')) return;
+      if (!target.classList.contains('word-item-edit-input')) return;
 
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -303,7 +360,7 @@ export class PopupController {
 
     wordList.addEventListener('blur', (e) => {
       const target = e.target as HTMLInputElement;
-      if (!target.classList.contains('word-edit-input')) return;
+      if (!target.classList.contains('word-item-edit-input')) return;
 
       const list = this.lists[this.currentListIndex];
       if (!list) return;
@@ -334,16 +391,33 @@ export class PopupController {
     });
   }
 
+  private toggleWordSelection(index: number, multiSelect: boolean): void {
+    if (multiSelect) {
+      if (this.selectedCheckboxes.has(index)) {
+        this.selectedCheckboxes.delete(index);
+      } else {
+        this.selectedCheckboxes.add(index);
+      }
+    } else {
+      if (this.selectedCheckboxes.has(index)) {
+        this.selectedCheckboxes.delete(index);
+      } else {
+        this.selectedCheckboxes.add(index);
+      }
+    }
+    this.renderWords();
+  }
+
   private startEditingWord(index: number): void {
     const wordItem = document.querySelector(`.word-item[data-index="${index}"]`);
     if (!wordItem) return;
 
-    const textSpan = wordItem.querySelector('.word-text') as HTMLElement;
-    const input = wordItem.querySelector('.word-edit-input') as HTMLInputElement;
+    const textSpan = wordItem.querySelector('.word-item-text') as HTMLElement;
+    const input = wordItem.querySelector('.word-item-edit-input') as HTMLInputElement;
     if (!textSpan || !input) return;
 
-    textSpan.classList.add('editing');
-    input.classList.add('active');
+    textSpan.style.display = 'none';
+    input.style.display = 'block';
     input.focus();
     input.select();
   }
@@ -397,7 +471,7 @@ export class PopupController {
     const matchCase = document.getElementById('matchCase') as HTMLInputElement;
     const matchWhole = document.getElementById('matchWhole') as HTMLInputElement;
 
-    globalToggle.addEventListener('change', async () => {
+    globalToggle?.addEventListener('change', async () => {
       this.globalHighlightEnabled = globalToggle.checked;
       await StorageService.update('globalHighlightEnabled', this.globalHighlightEnabled);
       MessageService.sendToAllTabs({
@@ -406,7 +480,7 @@ export class PopupController {
       });
     });
 
-    matchCase.addEventListener('change', async () => {
+    matchCase?.addEventListener('change', async () => {
       this.matchCaseEnabled = matchCase.checked;
       await StorageService.update('matchCaseEnabled', this.matchCaseEnabled);
       MessageService.sendToAllTabs({
@@ -416,7 +490,7 @@ export class PopupController {
       });
     });
 
-    matchWhole.addEventListener('change', async () => {
+    matchWhole?.addEventListener('change', async () => {
       this.matchWholeEnabled = matchWhole.checked;
       await StorageService.update('matchWholeEnabled', this.matchWholeEnabled);
       MessageService.sendToAllTabs({
@@ -524,10 +598,10 @@ export class PopupController {
           ${highlight.count > 1 ? `
             <div class="page-highlight-nav">
               <button class="highlight-prev" title="${chrome.i18n.getMessage('previous') || 'Previous'}">
-                <i class="fa-solid fa-chevron-up"></i>
+                <i class="lucide lucide-chevron-up"></i>
               </button>
               <button class="highlight-next" title="${chrome.i18n.getMessage('next') || 'Next'}">
-                <i class="fa-solid fa-chevron-down"></i>
+                <i class="lucide lucide-chevron-down"></i>
               </button>
             </div>
           ` : ''}
@@ -631,49 +705,39 @@ export class PopupController {
   }
 
   private setupTheme(): void {
-    const toggle = document.getElementById('themeToggle') as HTMLInputElement;
-    const body = document.body;
-
+    // Theme is now controlled by system/browser preference
+    // Remove the manual theme toggle from the UI
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
-      body.classList.remove('dark');
-      body.classList.add('light');
-      toggle.checked = false;
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
     } else {
-      body.classList.add('dark');
-      body.classList.remove('light');
-      toggle.checked = true;
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     }
-
-    toggle.addEventListener('change', () => {
-      if (toggle.checked) {
-        body.classList.add('dark');
-        body.classList.remove('light');
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        body.classList.remove('dark');
-        body.classList.add('light');
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light');
-        localStorage.setItem('theme', 'light');
-      }
-    });
   }
 
   private applyListSettings(): void {
-    const listName = document.getElementById('listName') as HTMLInputElement;
     const listBg = document.getElementById('listBg') as HTMLInputElement;
     const listFg = document.getElementById('listFg') as HTMLInputElement;
     const listActive = document.getElementById('listActive') as HTMLInputElement;
 
-    this.lists[this.currentListIndex].name = listName.value;
     this.lists[this.currentListIndex].background = listBg.value;
     this.lists[this.currentListIndex].foreground = listFg.value;
     this.lists[this.currentListIndex].active = listActive.checked;
 
     this.save();
+  }
+
+  private updatePreview(): void {
+    const listBg = document.getElementById('listBg') as HTMLInputElement;
+    const listFg = document.getElementById('listFg') as HTMLInputElement;
+    const preview = document.getElementById('previewHighlight') as HTMLElement;
+
+    if (preview && listBg && listFg) {
+      preview.style.backgroundColor = listBg.value;
+      preview.style.color = listFg.value;
+    }
   }
 
   private async save(): Promise<void> {
@@ -744,20 +808,64 @@ export class PopupController {
   }
 
   private renderLists(): void {
-    const listSelect = document.getElementById('listSelect') as HTMLSelectElement;
-    listSelect.innerHTML = this.lists.map((list, index) =>
-      `<option value="${index}">${DOMUtils.escapeHtml(list.name)}</option>`
-    ).join('');
-    listSelect.value = this.currentListIndex.toString();
+    const currentListName = document.getElementById('currentListName');
+    const currentListColor = document.getElementById('currentListColor') as HTMLElement;
+    const dropdownMenu = document.getElementById('listDropdownMenu');
+
+    const list = this.lists[this.currentListIndex];
+
+    // Update current list display
+    if (currentListName) {
+      currentListName.textContent = list.name;
+    }
+    if (currentListColor) {
+      currentListColor.style.backgroundColor = list.background;
+    }
+
+    // Update dropdown menu
+    if (dropdownMenu) {
+      dropdownMenu.innerHTML = this.lists.map((l, index) => `
+        <div class="list-dropdown-item ${index === this.currentListIndex ? 'selected' : ''}" data-index="${index}">
+          <div class="list-color-indicator" style="background-color: ${l.background}"></div>
+          <span>${DOMUtils.escapeHtml(l.name)}</span>
+          ${index === this.currentListIndex ? '<i class="fa-solid fa-check list-dropdown-item-check"></i>' : ''}
+        </div>
+      `).join('');
+
+      // Add click handlers to dropdown items
+      dropdownMenu.querySelectorAll('.list-dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const index = Number((item as HTMLElement).dataset.index);
+          if (!Number.isNaN(index)) {
+            this.selectedCheckboxes.clear();
+            this.currentListIndex = index;
+            this.renderWords();
+            this.updateListForm();
+            this.renderLists();
+            dropdownMenu.classList.remove('open');
+          }
+        });
+      });
+    }
+
     this.updateListForm();
   }
 
   private updateListForm(): void {
     const list = this.lists[this.currentListIndex];
-    (document.getElementById('listName') as HTMLInputElement).value = list.name;
-    (document.getElementById('listBg') as HTMLInputElement).value = list.background;
-    (document.getElementById('listFg') as HTMLInputElement).value = list.foreground;
-    (document.getElementById('listActive') as HTMLInputElement).checked = list.active;
+    const listBg = document.getElementById('listBg') as HTMLInputElement;
+    const listBgText = document.getElementById('listBgText') as HTMLInputElement;
+    const listFg = document.getElementById('listFg') as HTMLInputElement;
+    const listFgText = document.getElementById('listFgText') as HTMLInputElement;
+    const listActive = document.getElementById('listActive') as HTMLInputElement;
+
+    if (listBg) listBg.value = list.background;
+    if (listBgText) listBgText.value = list.background;
+    if (listFg) listFg.value = list.foreground;
+    if (listFgText) listFgText.value = list.foreground;
+    if (listActive) listActive.checked = list.active;
+
+    this.updatePreview();
   }
 
   private renderWords(): void {
@@ -770,32 +878,18 @@ export class PopupController {
       filteredWords = list.words.filter(w => w.wordStr.toLowerCase().includes(q));
     }
 
-    const itemHeight = 32;
-    const itemSpacing = 4;
-    const totalItemHeight = itemHeight + itemSpacing;
-    const containerHeight = wordList.clientHeight || 250;
-    const scrollTop = wordList.scrollTop;
-    const startIndex = Math.max(0, Math.floor(scrollTop / totalItemHeight) - 1);
-    const visibleCount = Math.ceil(containerHeight / totalItemHeight);
-    const endIndex = Math.min(startIndex + visibleCount + 2, filteredWords.length);
-
-    wordList.innerHTML = '';
-
-    const spacer = document.createElement('div');
-    spacer.style.position = 'relative';
-    spacer.style.height = `${filteredWords.length * totalItemHeight - itemSpacing}px`;
-    spacer.style.width = '100%';
-
-    for (let i = startIndex; i < endIndex; i++) {
-      const w = filteredWords[i];
-      if (!w) continue;
-
-      const realIndex = list.words.indexOf(w);
-      const container = this.createWordItem(w, realIndex, i, itemHeight);
-      spacer.appendChild(container);
+    if (filteredWords.length === 0) {
+      wordList.innerHTML = '<div class="word-list-empty">No words found</div>';
+      const wordCount = document.getElementById('wordCount');
+      if (wordCount) wordCount.textContent = '0';
+      return;
     }
 
-    wordList.appendChild(spacer);
+    wordList.innerHTML = filteredWords.map(w => {
+      const realIndex = list.words.indexOf(w);
+      const isSelected = this.selectedCheckboxes.has(realIndex);
+      return this.createWordItemHTML(w, realIndex, isSelected);
+    }).join('');
 
     const wordCount = document.getElementById('wordCount');
     if (wordCount) {
@@ -803,37 +897,29 @@ export class PopupController {
     }
   }
 
-  private createWordItem(word: HighlightWord, realIndex: number, displayIndex: number, itemHeight: number): HTMLDivElement {
-    const container = document.createElement('div');
-    container.className = 'word-item';
-    if (this.selectedCheckboxes.has(realIndex)) {
-      container.classList.add('selected');
-    }
-    if (word.active === false) {
-      container.classList.add('disabled');
-    }
-    container.style.cssText = `
-      position: absolute;
-      top: ${displayIndex * (itemHeight + 4)}px;
-    `;
-    container.dataset.index = realIndex.toString();
-
+  private createWordItemHTML(word: HighlightWord, realIndex: number, isSelected: boolean): string {
     const list = this.lists[this.currentListIndex];
+    const bgColor = word.background || list.background;
+    const fgColor = word.foreground || list.foreground;
 
-    container.innerHTML = `
-      <span class="word-text">${DOMUtils.escapeHtml(word.wordStr)}</span>
-      <input type="text" class="word-edit-input" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${realIndex}">
-      <div class="word-actions">
-        <button class="icon-btn edit-word-btn" data-index="${realIndex}" title="${chrome.i18n.getMessage('edit') || 'Edit'}">
-          <i class="fa-solid fa-pen"></i>
-        </button>
-        <input type="color" value="${word.background || list.background}" data-bg-edit="${realIndex}" title="${chrome.i18n.getMessage('background_color_title') || 'Background color'}">
-        <input type="color" value="${word.foreground || list.foreground}" data-fg-edit="${realIndex}" title="${chrome.i18n.getMessage('text_color_title') || 'Text color'}">
-        <button class="toggle-btn ${word.active !== false ? 'active' : ''}" data-index="${realIndex}" title="${chrome.i18n.getMessage('toggle_active') || 'Toggle active'}"></button>
+    return `
+      <div class="word-item ${isSelected ? 'selected' : ''}" data-index="${realIndex}">
+        <div class="word-item-checkbox ${isSelected ? 'checked' : ''}"></div>
+        <span class="word-item-text">${DOMUtils.escapeHtml(word.wordStr)}</span>
+        <input type="text" class="word-item-edit-input" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${realIndex}" style="display: none;">
+        <div class="word-item-actions">
+          <button class="word-item-icon-btn edit-word-btn" data-index="${realIndex}" title="${chrome.i18n.getMessage('edit') || 'Edit'}">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <input type="color" value="${bgColor}" data-bg-edit="${realIndex}" class="word-item-color-picker" title="${chrome.i18n.getMessage('background_color_title') || 'Background color'}">
+          <input type="color" value="${fgColor}" data-fg-edit="${realIndex}" class="word-item-color-picker" title="${chrome.i18n.getMessage('text_color_title') || 'Text color'}">
+          <label class="switch-wrapper word-item-switch">
+            <input type="checkbox" class="switch-input" ${word.active !== false ? 'checked' : ''} title="${chrome.i18n.getMessage('toggle_active') || 'Toggle active'}">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
       </div>
     `;
-
-    return container;
   }
 
   private updateExceptionButton(): void {
@@ -846,12 +932,12 @@ export class PopupController {
 
     if (isException) {
       btnText.textContent = chrome.i18n.getMessage('remove_exception') || 'Remove from Exceptions';
-      toggleBtn.className = 'danger';
+      toggleBtn.classList.add('danger');
       const icon = toggleBtn.querySelector('i');
       if (icon) icon.className = 'fa-solid fa-trash';
     } else {
       btnText.textContent = chrome.i18n.getMessage('add_exception') || 'Add to Exceptions';
-      toggleBtn.className = '';
+      toggleBtn.classList.remove('danger');
       const icon = toggleBtn.querySelector('i');
       if (icon) icon.className = 'fa-solid fa-plus';
     }
