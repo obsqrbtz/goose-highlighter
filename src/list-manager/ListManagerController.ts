@@ -48,7 +48,11 @@ async initialize(): Promise<void> {
     document.getElementById('activateListsBtn')?.addEventListener('click', () => this.setSelectedListsActive(true));
     document.getElementById('deactivateListsBtn')?.addEventListener('click', () => this.setSelectedListsActive(false));
     document.getElementById('applyListSettingsBtn')?.addEventListener('click', () => this.applyListSettings());
+    document.getElementById('importListBtn')?.addEventListener('click', () => this.triggerImport());
     document.getElementById('exportListBtn')?.addEventListener('click', () => this.exportCurrentList());
+
+    const importFileInput = document.getElementById('importFileInput') as HTMLInputElement;
+    importFileInput?.addEventListener('change', (e) => this.handleImportFile(e));
 
     document.getElementById('selectAllWordsBtn')?.addEventListener('click', () => this.selectAllWords());
     document.getElementById('clearSelectedWordsBtn')?.addEventListener('click', () => this.clearSelectedWords());
@@ -223,6 +227,91 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     a.download = `highlight-list-${this.sanitizeFileName(list.name)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  private triggerImport(): void {
+    const fileInput = document.getElementById('importFileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+      fileInput.click();
+    }
+  }
+
+  private async handleImportFile(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      
+      if (!this.validateImportData(data)) {
+        alert('Invalid file format. Please select a valid Goose Highlighter export file.');
+        return;
+      }
+
+      this.importLists(data);
+    } catch (error) {
+      console.error('Import error:', error);
+      alert('Failed to import file. Please ensure it is a valid JSON file.');
+    }
+  }
+
+  private validateImportData(data: any): data is ExportData {
+    if (!data || typeof data !== 'object') return false;
+    if (!Array.isArray(data.lists)) return false;
+    
+    return data.lists.every((list: any) => 
+      list &&
+      typeof list === 'object' &&
+      typeof list.name === 'string' &&
+      typeof list.background === 'string' &&
+      typeof list.foreground === 'string' &&
+      typeof list.active === 'boolean' &&
+      Array.isArray(list.words) &&
+      list.words.every((word: any) =>
+        word &&
+        typeof word === 'object' &&
+        typeof word.wordStr === 'string' &&
+        typeof word.background === 'string' &&
+        typeof word.foreground === 'string' &&
+        typeof word.active === 'boolean'
+      )
+    );
+  }
+
+  private importLists(data: ExportData): void {
+    const importedLists = data.lists.map(list => ({
+      ...list,
+      id: Date.now() + Math.random(),
+      name: this.getUniqueListName(list.name)
+    }));
+
+    const count = importedLists.length;
+    const wordCount = importedLists.reduce((sum, list) => sum + list.words.length, 0);
+
+    if (!confirm(`Import ${count} list(s) with ${wordCount} total word(s)?`)) return;
+
+    this.lists.push(...importedLists);
+    this.currentListIndex = this.lists.length - 1;
+    this.selectedLists.clear();
+    this.save();
+
+    alert(`Successfully imported ${count} list(s) with ${wordCount} word(s).`);
+  }
+
+  private getUniqueListName(baseName: string): string {
+    const existingNames = new Set(this.lists.map(list => list.name));
+    if (!existingNames.has(baseName)) return baseName;
+
+    let counter = 1;
+    let newName = `${baseName} (${counter})`;
+    while (existingNames.has(newName)) {
+      counter++;
+      newName = `${baseName} (${counter})`;
+    }
+    return newName;
   }
 
   private sanitizeFileName(name: string): string {
