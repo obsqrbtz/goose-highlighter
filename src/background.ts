@@ -52,8 +52,8 @@ class BackgroundService {
         chrome.windows.create({
             url: chrome.runtime.getURL('list-manager/list-manager.html'),
             type: 'popup',
-            width: 800,
-            height: 600,
+            width: 1280,
+            height: 700,
             focused: true
         });
     }

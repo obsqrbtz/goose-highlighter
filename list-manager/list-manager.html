@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=1280" />
   <title>Goose Highlighter - List Manager</title>
   <link rel="stylesheet" href="list-manager.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -46,31 +46,33 @@
           <button id="activateListsBtn"><i class="fa-solid fa-circle-check"></i> Activate</button>
           <button id="deactivateListsBtn"><i class="fa-solid fa-circle-xmark"></i> Deactivate</button>
         </div>
-        <div class="list-hint">Drag lists to reorder</div>
+        <div class="list-hint">Drag lists to reorder • Ctrl+Click for multi-select</div>
         <div id="listsContainer" class="lists"></div>
       </section>
 
       <section class="panel details-panel">
-        <div class="panel-header">
-          <h2>Selected List</h2>
+        <div class="panel-header compact-header">
+          <div class="list-title-section">
+            <h2 id="selectedListName">Selected List</h2>
+            <button id="editListNameBtn" class="icon-btn" title="Edit list name and colors">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+          </div>
           <div class="stats" id="listStats">0 words</div>
         </div>
-        <div class="list-settings">
-          <label>
-            Name
-            <input type="text" id="listName" />
-          </label>
-          <div class="colors">
-            <label>
-              Background
+        <div class="list-settings collapsed" id="listSettingsPanel">
+          <input type="text" id="listName" placeholder="List name" />
+          <div class="color-row">
+            <label class="compact-label">
+              <span>BG</span>
               <input type="color" id="listBg" />
             </label>
-            <label>
-              Foreground
+            <label class="compact-label">
+              <span>FG</span>
               <input type="color" id="listFg" />
             </label>
+            <button id="applyListSettingsBtn" class="compact-btn primary"><i class="fa-solid fa-check"></i></button>
           </div>
-          <button id="applyListSettingsBtn" class="primary"><i class="fa-solid fa-check"></i> Apply</button>
         </div>
 
         <div class="word-controls">
@@ -91,7 +93,7 @@
             <button id="moveWordsBtn"><i class="fa-solid fa-arrow-right"></i> Move</button>
             <button id="copyWordsBtn"><i class="fa-solid fa-copy"></i> Copy</button>
           </div>
-          <div class="selection-hint">Click to select • Ctrl/Cmd+Click for multi-select • Click edit icon to rename</div>
+          <div class="selection-hint">Click to select • Ctrl/Cmd+Click for multi-select • Drag words to lists to copy</div>
         </div>
 
 <div id="wordList" class="word-list"></div>

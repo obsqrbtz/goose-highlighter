@@ -5,14 +5,18 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   margin: 0;
   background: radial-gradient(120% 120% at 10% 0%, rgba(204, 106, 42, 0.08) 0%, transparent 45%),
     linear-gradient(180deg, var(--bg-color) 0%, #f5efe9 100%);
   color: var(--text-color);
-  min-width: 800px;
-  min-height: 600px;
+  height: 100%;
+  overflow: hidden;
 }
 
 html.dark body,
@@ -25,6 +29,7 @@ body.dark {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 
 .topbar {
@@ -70,10 +75,12 @@ body.dark .topbar {
 
 .layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: minmax(280px, 25%) 1fr;
   gap: 16px;
   padding: 16px;
-  height: calc(100vh - 72px);
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .panel {
@@ -85,6 +92,7 @@ body.dark .topbar {
   flex-direction: column;
   gap: 12px;
   overflow: hidden;
+  min-height: 0;
 }
 
 .panel-header {
@@ -149,6 +157,8 @@ body.dark .topbar {
   gap: 10px;
   overflow-y: auto;
   padding-right: 4px;
+  flex: 1;
+  min-height: 0;
 }
 
 /* Custom scrollbar styling - List Manager Specific */
@@ -291,35 +301,85 @@ body.dark .list-item.selected.active {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .list-settings {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: end;
+  display: none;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(204, 106, 42, 0.05);
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
 }
 
-.list-settings label {
+html.dark .list-settings,
+body.dark .list-settings {
+  background: rgba(242, 168, 101, 0.08);
+}
+
+.list-settings.expanded {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 0.85rem;
 }
 
 .list-settings input[type="text"] {
   width: 100%;
+  padding: 6px 10px;
+  font-size: 0.9rem;
 }
 
-.colors {
+.color-row {
   display: flex;
-  gap: 12px;
-  grid-column: span 2;
-  align-items: end;
+  gap: 8px;
+  align-items: center;
 }
 
-.colors label {
+.compact-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
   flex: 1;
+}
+
+.compact-label span {
+  min-width: 24px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.compact-label input[type="color"] {
+  flex: 1;
+  height: 32px;
+}
+
+.compact-btn {
+  padding: 6px 12px;
+  min-width: auto;
+  height: 32px;
+}
+
+.compact-header {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-title-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list-title-section h2 {
+  margin: 0;
+  font-size: 1rem;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 
@@ -371,6 +431,8 @@ body.dark .list-item.selected.active {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 html.dark .word-list,
@@ -502,13 +564,16 @@ input[type="color"] {
 
 .pagination-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 12px;
+  padding: 8px 12px;
   background: #f9f4f0;
   border: 1px solid var(--input-border);
   border-radius: 12px;
-  margin-top: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 html.dark .pagination-container,
@@ -517,32 +582,31 @@ body.dark .pagination-container {
 }
 
 .pagination-info {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   opacity: 0.8;
-  text-align: center;
+  white-space: nowrap;
 }
 
 .pagination-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .pagination-btn {
   background: var(--button-bg);
   border: 1px solid var(--input-border);
   color: var(--button-text);
-  border-radius: 8px;
-  padding: 6px 8px;
+  border-radius: 6px;
+  padding: 4px 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  min-height: 32px;
-  font-size: 0.8rem;
+  min-width: 28px;
+  min-height: 28px;
+  font-size: 0.75rem;
 }
 
 .pagination-btn:hover:not(:disabled) {
@@ -558,11 +622,11 @@ body.dark .pagination-container {
 .pagination-pages {
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 8px;
 }
 
 .page-info {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   opacity: 0.9;
   font-weight: 500;
 }
@@ -570,23 +634,23 @@ body.dark .pagination-container {
 .page-size-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 0.85rem;
+  gap: 6px;
+  font-size: 0.8rem;
 }
 
 .page-size-controls label {
   opacity: 0.8;
+  white-space: nowrap;
 }
 
 .page-size-select {
   background: var(--input-bg);
   color: var(--text-color);
   border: 1px solid var(--input-border);
-  border-radius: 8px;
-  padding: 4px 8px;
-  font-size: 0.85rem;
-  min-width: 60px;
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-size: 0.8rem;
+  min-width: 55px;
 }
 
 .page-size-select:focus {
@@ -596,31 +660,4 @@ body.dark .pagination-container {
 
 
 
-@media (max-width: 920px) {
-  body {
-    min-width: 100%;
-  }
-
-  .layout {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
-
-  .pagination-container {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .pagination-controls {
-    order: 2;
-  }
-
-  .pagination-info {
-    order: 1;
-    width: 100%;
-  }
-
-  .page-size-controls {
-    order: 3;
-  }
-}
+/* Removed single column layout - minimum width enforced for two-column layout */

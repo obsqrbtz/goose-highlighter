@@ -47,6 +47,7 @@ async initialize(): Promise<void> {
     document.getElementById('deleteListsBtn')?.addEventListener('click', () => this.deleteSelectedLists());
     document.getElementById('activateListsBtn')?.addEventListener('click', () => this.setSelectedListsActive(true));
     document.getElementById('deactivateListsBtn')?.addEventListener('click', () => this.setSelectedListsActive(false));
+    document.getElementById('editListNameBtn')?.addEventListener('click', () => this.toggleListSettings());
     document.getElementById('applyListSettingsBtn')?.addEventListener('click', () => this.applyListSettings());
     document.getElementById('importListBtn')?.addEventListener('click', () => this.triggerImport());
     document.getElementById('exportListBtn')?.addEventListener('click', () => this.exportCurrentList());
@@ -83,6 +84,8 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     wordList?.addEventListener('change', (e) => this.handleWordListChange(e));
     wordList?.addEventListener('keydown', (e) => this.handleWordListKeydown(e));
     wordList?.addEventListener('blur', (e) => this.handleWordListBlur(e), true);
+    wordList?.addEventListener('dragstart', (e) => this.handleWordDragStart(e));
+    wordList?.addEventListener('dragend', () => this.clearDragState());
   }
 
   private setupStorageSync(): void {
@@ -208,7 +211,22 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     list.background = listBg.value;
     list.foreground = listFg.value;
 
+    this.toggleListSettings();
     this.save();
+  }
+
+  private toggleListSettings(): void {
+    const panel = document.getElementById('listSettingsPanel');
+    if (!panel) return;
+    
+    if (panel.classList.contains('expanded')) {
+      panel.classList.remove('expanded');
+    } else {
+      panel.classList.add('expanded');
+      const listName = document.getElementById('listName') as HTMLInputElement;
+      listName?.focus();
+      listName?.select();
+    }
   }
 
   private exportCurrentList(): void {
@@ -427,6 +445,7 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     this.currentListIndex = index;
     this.selectedLists.clear();
     this.selectedWords.clear();
+    this.currentPage = 1; // Reset to first page when selecting a list
     this.render();
   }
 
@@ -436,15 +455,26 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     const index = Number(target.dataset.index);
     if (Number.isNaN(index)) return;
 
-    event.dataTransfer?.setData('text/plain', index.toString());
+    event.dataTransfer?.setData('text/plain', JSON.stringify({ type: 'list', index }));
     event.dataTransfer?.setDragImage(target, 10, 10);
   }
 
   private handleDragOver(event: DragEvent): void {
     event.preventDefault();
     const target = (event.target as HTMLElement).closest('.list-item') as HTMLElement | null;
-    if (!target) return;
-    target.classList.add('drag-over');
+    if (!target) {
+      this.clearDragState();
+      return;
+    }
+    
+    // Clear drag state from all items first
+    this.clearDragState();
+    
+    // Check if we're dragging words or lists
+    const data = event.dataTransfer?.types.includes('text/plain');
+    if (data) {
+      target.classList.add('drag-over');
+    }
   }
 
   private handleDrop(event: DragEvent): void {
@@ -452,30 +482,103 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     const target = (event.target as HTMLElement).closest('.list-item') as HTMLElement | null;
     if (!target) return;
 
-    const sourceIndex = Number(event.dataTransfer?.getData('text/plain'));
     const targetIndex = Number(target.dataset.index);
-    if (Number.isNaN(sourceIndex) || Number.isNaN(targetIndex) || sourceIndex === targetIndex) {
+    if (Number.isNaN(targetIndex)) {
       this.clearDragState();
       return;
     }
 
-    const [moved] = this.lists.splice(sourceIndex, 1);
-    this.lists.splice(targetIndex, 0, moved);
+    try {
+      const dataStr = event.dataTransfer?.getData('text/plain');
+      if (!dataStr) {
+        this.clearDragState();
+        return;
+      }
 
-    if (this.currentListIndex === sourceIndex) {
-      this.currentListIndex = targetIndex;
-    } else if (sourceIndex < this.currentListIndex && targetIndex >= this.currentListIndex) {
-      this.currentListIndex -= 1;
-    } else if (sourceIndex > this.currentListIndex && targetIndex <= this.currentListIndex) {
-      this.currentListIndex += 1;
+      const data = JSON.parse(dataStr);
+
+      // Handle word drag
+      if (data.type === 'words') {
+        this.dropWordsOnList(data.wordIndices, targetIndex);
+        this.clearDragState();
+        return;
+      }
+
+      // Handle list drag (reordering)
+      if (data.type === 'list') {
+        const sourceIndex = data.index;
+        if (sourceIndex === targetIndex) {
+          this.clearDragState();
+          return;
+        }
+
+        const [moved] = this.lists.splice(sourceIndex, 1);
+        this.lists.splice(targetIndex, 0, moved);
+
+        if (this.currentListIndex === sourceIndex) {
+          this.currentListIndex = targetIndex;
+        } else if (sourceIndex < this.currentListIndex && targetIndex >= this.currentListIndex) {
+          this.currentListIndex -= 1;
+        } else if (sourceIndex > this.currentListIndex && targetIndex <= this.currentListIndex) {
+          this.currentListIndex += 1;
+        }
+
+        this.selectedLists.clear();
+        this.save();
+      }
+    } catch (error) {
+      console.error('Drop error:', error);
     }
 
-    this.selectedLists.clear();
-    this.save();
+    this.clearDragState();
   }
 
   private clearDragState(): void {
     document.querySelectorAll('.list-item.drag-over').forEach(item => item.classList.remove('drag-over'));
+  }
+
+  private handleWordDragStart(event: DragEvent): void {
+    const target = (event.target as HTMLElement).closest('.word-item') as HTMLElement | null;
+    if (!target) return;
+    
+    const index = Number(target.dataset.index);
+    if (Number.isNaN(index)) return;
+
+    // If dragging a selected word, drag all selected words
+    let wordIndices: number[];
+    if (this.selectedWords.has(index)) {
+      wordIndices = Array.from(this.selectedWords);
+    } else {
+      wordIndices = [index];
+    }
+
+    event.dataTransfer?.setData('text/plain', JSON.stringify({ type: 'words', wordIndices }));
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'copy';
+    }
+  }
+
+  private dropWordsOnList(wordIndices: number[], targetListIndex: number): void {
+    const sourceList = this.lists[this.currentListIndex];
+    const targetList = this.lists[targetListIndex];
+    
+    if (!sourceList || !targetList) return;
+    if (targetListIndex === this.currentListIndex) return; // Can't drop on same list
+
+    const wordsToCopy = wordIndices
+      .map(index => sourceList.words[index])
+      .filter(Boolean)
+      .map(word => ({ ...word })); // Create copies
+
+    if (wordsToCopy.length === 0) return;
+
+    targetList.words.push(...wordsToCopy);
+    this.save();
+
+    // Show feedback
+    const count = wordsToCopy.length;
+    const message = `Copied ${count} word${count > 1 ? 's' : ''} to "${targetList.name}"`;
+    console.log(message);
   }
 
   private handleWordListClick(event: Event): void {
@@ -541,12 +644,9 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
       return;
     }
 
-    // Regular click - toggle selection
-    if (this.selectedWords.has(index)) {
-      this.selectedWords.delete(index);
-    } else {
-      this.selectedWords.add(index);
-    }
+    // Regular click - clear all and select only this one
+    this.selectedWords.clear();
+    this.selectedWords.add(index);
     this.renderWords();
   }
 
@@ -664,6 +764,11 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
     const list = this.lists[this.currentListIndex];
     if (!list) return;
 
+    const selectedListName = document.getElementById('selectedListName');
+    if (selectedListName) {
+      selectedListName.textContent = list.name;
+    }
+
     (document.getElementById('listName') as HTMLInputElement).value = list.name;
     (document.getElementById('listBg') as HTMLInputElement).value = list.background;
     (document.getElementById('listFg') as HTMLInputElement).value = list.foreground;
@@ -673,6 +778,12 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
       const activeCount = list.words.filter(word => word.active).length;
       const inactiveCount = list.words.length - activeCount;
       stats.textContent = `${list.words.length} words • ${activeCount} active • ${inactiveCount} inactive`;
+    }
+
+    // Collapse settings panel when switching lists
+    const panel = document.getElementById('listSettingsPanel');
+    if (panel) {
+      panel.classList.remove('expanded');
     }
 
     this.renderTargetListOptions();
@@ -714,7 +825,7 @@ private renderWords(): void {
       const index = entry.index;
       const isSelected = this.selectedWords.has(index);
       return `
-        <div class="word-item ${word.active ? '' : 'disabled'} ${isSelected ? 'selected' : ''}" data-index="${index}">
+        <div class="word-item ${word.active ? '' : 'disabled'} ${isSelected ? 'selected' : ''}" data-index="${index}" draggable="true">
           <span class="word-text">${DOMUtils.escapeHtml(word.wordStr)}</span>
           <input type="text" class="word-edit-input" value="${DOMUtils.escapeHtml(word.wordStr)}" data-word-edit="${index}">
           <div class="word-actions">
