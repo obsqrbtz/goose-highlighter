@@ -84,6 +84,12 @@ body.dark .title img {
   opacity: 0.6;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .topbar-actions button {
   min-height: 28px;
   padding: 4px 10px;
@@ -95,13 +101,26 @@ body.dark .title img {
 }
 
 .topbar-actions button.primary {
-  background: var(--accent);
-  color: var(--accent-text);
-  border: none;
+  background: rgba(255, 140, 0, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 0, 0.35);
 }
 
 .topbar-actions button.primary:hover {
-  background: var(--accent-hover);
+  background: rgba(255, 140, 0, 0.18);
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+html.dark .topbar-actions button.primary,
+body.dark .topbar-actions button.primary {
+  background: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.4);
+}
+
+html.dark .topbar-actions button.primary:hover,
+body.dark .topbar-actions button.primary:hover {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.55);
 }
 
 .topbar-actions button.ghost {
@@ -186,6 +205,27 @@ body.dark .title img {
   font-size: 12px;
   border-radius: 6px;
   min-height: 28px;
+}
+
+.lists-panel .panel-actions button.ghost {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+}
+
+.lists-panel .panel-actions button.ghost:hover {
+  background: var(--section-bg);
+}
+
+.lists-panel .panel-actions button.danger {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+}
+
+.lists-panel .panel-actions button.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.45);
 }
 
 .panel-actions.secondary {
@@ -426,6 +466,29 @@ body.dark .list-item.selected {
   flex-shrink: 0;
 }
 
+.add-words button.primary {
+  background: rgba(255, 140, 0, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 0, 0.35);
+}
+
+.add-words button.primary:hover {
+  background: rgba(255, 140, 0, 0.18);
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+html.dark .add-words button.primary,
+body.dark .add-words button.primary {
+  background: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.4);
+}
+
+html.dark .add-words button.primary:hover,
+body.dark .add-words button.primary:hover {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.55);
+}
+
 /* Word controls: action row matches popup .word-actions-row / .word-action-btn */
 .word-controls .row {
   display: flex;
@@ -456,6 +519,30 @@ body.dark .list-item.selected {
 
 .word-controls .row button.danger:hover {
   background: rgba(239, 68, 68, 0.2);
+}
+
+/* Subdued primary/danger in list manager – outline style, less distracting */
+.compact-btn.primary {
+  background: rgba(255, 140, 0, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 0, 0.35);
+}
+
+.compact-btn.primary:hover {
+  background: rgba(255, 140, 0, 0.18);
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+html.dark .compact-btn.primary,
+body.dark .compact-btn.primary {
+  background: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.4);
+}
+
+html.dark .compact-btn.primary:hover,
+body.dark .compact-btn.primary:hover {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.55);
 }
 
 .word-controls input[type="text"],

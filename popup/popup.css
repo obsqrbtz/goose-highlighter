@@ -590,7 +590,7 @@ body.dark .header-logo {
   opacity: 0.6;
 }
 
-/* Apply Button */
+/* Apply Button – same subdued primary style as list-manager */
 .apply-button {
   width: 100%;
   height: 32px;
@@ -598,9 +598,9 @@ body.dark .header-logo {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--accent);
-  color: var(--accent-text);
-  border: none;
+  background: rgba(255, 140, 0, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 0, 0.35);
   border-radius: 6px;
   cursor: pointer;
   font-size: var(--text-base);
@@ -610,7 +610,20 @@ body.dark .header-logo {
 }
 
 .apply-button:hover {
-  background: var(--accent-hover);
+  background: rgba(255, 140, 0, 0.18);
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+html.dark .apply-button,
+body.dark .apply-button {
+  background: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.4);
+}
+
+html.dark .apply-button:hover,
+body.dark .apply-button:hover {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.55);
 }
 
 .apply-button i {
@@ -673,9 +686,9 @@ body.dark .header-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent);
-  color: var(--accent-text);
-  border: none;
+  background: rgba(255, 140, 0, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 0, 0.35);
   border-radius: 8px;
   cursor: pointer;
   font-size: var(--text-md);
@@ -684,7 +697,20 @@ body.dark .header-logo {
 }
 
 .add-words-button:hover {
-  background: var(--accent-hover);
+  background: rgba(255, 140, 0, 0.18);
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+html.dark .add-words-button,
+body.dark .add-words-button {
+  background: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.4);
+}
+
+html.dark .add-words-button:hover,
+body.dark .add-words-button:hover {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.55);
 }
 
 .add-words-button:disabled {
