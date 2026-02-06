@@ -11,22 +11,24 @@
 
 <body>
   <div class="app">
-    <header class="topbar">
-      <div class="title">
-        <img src="../img/logo-outlined.png" alt="Goose Highlighter" />
+    <header class="topbar app-header">
+      <div class="title app-header-content">
+        <div class="app-logo">
+          <img src="../img/logo-outlined.png" alt="Goose Highlighter" />
+        </div>
         <div>
-          <div class="name" data-i18n="extension_name">Goose Highlighter</div>
-          <div class="subtitle" data-i18n="list_manager_title">List Manager</div>
+          <div class="name app-title" data-i18n="extension_name">Goose Highlighter</div>
+          <div class="subtitle app-subtitle" data-i18n="list_manager_title">List Manager</div>
         </div>
       </div>
-<div class="topbar-actions">
+      <div class="topbar-actions app-header-actions">
         <label class="icon-toggle" data-i18n-title="toggle_dark_mode_title" title="Toggle dark mode">
           <input type="checkbox" class="hidden-toggle" id="themeToggle" />
           <i class="toggle-icon theme-icon fa-solid"></i>
         </label>
         <button id="importListBtn" class="ghost"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import List</span></button>
         <button id="exportListBtn" class="ghost"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export List</span></button>
-        <button id="newListBtn" class="primary"><i class="fa-solid fa-plus"></i> <span data-i18n="new_list">New List</span></button>
+        <button id="newListBtn" class="btn-primary-subdued"><i class="fa-solid fa-plus"></i> <span data-i18n="new_list">New List</span></button>
       </div>
       <input type="file" id="importFileInput" accept=".json" style="display: none;" />
     </header>
@@ -73,7 +75,7 @@
         <div class="word-controls">
           <div class="add-words">
             <textarea id="bulkAddWords" data-i18n="paste_hint" placeholder="Paste words here..."></textarea>
-            <button id="addWordsBtn" class="primary"><i class="fa-solid fa-plus"></i> <span data-i18n="add_words">Add Words</span></button>
+            <button id="addWordsBtn" class="btn-primary-subdued"><i class="fa-solid fa-plus"></i> <span data-i18n="add_words">Add Words</span></button>
           </div>
           <div class="row">
             <button id="selectAllWordsBtn" data-i18n="select_all">Select All</button>

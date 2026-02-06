@@ -1,29 +1,17 @@
 @import url('../shared/fonts.css');
 @import url('../shared/colors.css');
+@import url('../shared/base.css');
+@import url('../shared/layout.css');
+@import url('../shared/word-list.css');
 @import url('../shared/ui-components.css');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
 html {
   height: 100%;
 }
 
 body {
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  line-height: var(--leading-normal);
-  letter-spacing: var(--tracking-tight);
-  margin: 0;
-  background: var(--bg-color);
-  color: var(--text-color);
   height: 100%;
   overflow: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .app {
@@ -43,94 +31,13 @@ body {
   border-radius: 6px;
 }
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* List-manager–specific: compact header padding; shared .app-header does the rest */
+.topbar.app-header {
   padding: 8px 16px;
-  background: var(--bg-color);
-  border-bottom: 1px solid var(--input-border);
-  flex-shrink: 0;
 }
 
-.title {
-  display: flex;
-  align-items: center;
+.title.app-header-content {
   gap: 10px;
-}
-
-.title img {
-  height: 28px;
-  width: 28px;
-  border-radius: 8px;
-  background: var(--text-color);
-  padding: 4px;
-  object-fit: contain;
-}
-
-html.dark .title img,
-body.dark .title img {
-  background: var(--highlight-tag);
-}
-
-.name {
-  font-weight: 600;
-  font-size: 13px;
-  color: var(--text-color);
-}
-
-.subtitle {
-  font-size: 11px;
-  opacity: 0.6;
-}
-
-.topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.topbar-actions button {
-  min-height: 28px;
-  padding: 4px 10px;
-  font-size: 12px;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.topbar-actions button.primary {
-  background: rgba(255, 140, 0, 0.1);
-  color: var(--accent);
-  border: 1px solid rgba(255, 140, 0, 0.35);
-}
-
-.topbar-actions button.primary:hover {
-  background: rgba(255, 140, 0, 0.18);
-  border-color: rgba(255, 140, 0, 0.5);
-}
-
-html.dark .topbar-actions button.primary,
-body.dark .topbar-actions button.primary {
-  background: rgba(255, 140, 0, 0.12);
-  border-color: rgba(255, 140, 0, 0.4);
-}
-
-html.dark .topbar-actions button.primary:hover,
-body.dark .topbar-actions button.primary:hover {
-  background: rgba(255, 140, 0, 0.2);
-  border-color: rgba(255, 140, 0, 0.55);
-}
-
-.topbar-actions button.ghost {
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  color: var(--text-color);
-}
-
-.topbar-actions button.ghost:hover {
-  background: var(--section-bg);
 }
 
 .topbar-actions .icon-toggle {
@@ -215,17 +122,6 @@ body.dark .topbar-actions button.primary:hover {
 
 .lists-panel .panel-actions button.ghost:hover {
   background: var(--section-bg);
-}
-
-.lists-panel .panel-actions button.danger {
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: var(--danger);
-}
-
-.lists-panel .panel-actions button.danger:hover {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.45);
 }
 
 .panel-actions.secondary {
@@ -441,23 +337,7 @@ body.dark .list-item.selected {
   align-items: flex-start;
 }
 
-.add-words textarea {
-  flex: 1;
-  min-height: 56px;
-  resize: vertical;
-  background: var(--input-bg);
-  color: var(--text-color);
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 13px;
-}
-
-.add-words textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-
+/* List-manager–specific: add-words button width; shared word-list.css does the rest */
 .add-words button {
   min-width: 100px;
   height: 32px;
@@ -466,62 +346,38 @@ body.dark .list-item.selected {
   flex-shrink: 0;
 }
 
-.add-words button.primary {
-  background: rgba(255, 140, 0, 0.1);
-  color: var(--accent);
-  border: 1px solid rgba(255, 140, 0, 0.35);
+.word-controls input[type="text"],
+.word-controls select {
+  flex: 1;
+  min-width: 140px;
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 14px;
+  border-radius: 8px;
 }
 
-.add-words button.primary:hover {
-  background: rgba(255, 140, 0, 0.18);
-  border-color: rgba(255, 140, 0, 0.5);
+/* Search/move row: align input, select and buttons to same height */
+.word-controls .row:has(#wordSearch) button {
+  height: 32px;
 }
 
-html.dark .add-words button.primary,
-body.dark .add-words button.primary {
-  background: rgba(255, 140, 0, 0.12);
-  border-color: rgba(255, 140, 0, 0.4);
+.word-item .word-item-eye-toggle {
+  flex-shrink: 0;
 }
 
-html.dark .add-words button.primary:hover,
-body.dark .add-words button.primary:hover {
-  background: rgba(255, 140, 0, 0.2);
-  border-color: rgba(255, 140, 0, 0.55);
-}
-
-/* Word controls: action row matches popup .word-actions-row / .word-action-btn */
-.word-controls .row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-}
-
-.word-controls .row button {
-  height: 26px;
-  padding: 0 8px;
-  font-size: 12px;
+.app input[type="color"] {
+  padding: 0;
+  height: 32px;
   border-radius: 6px;
-  background: var(--input-bg);
   border: 1px solid var(--input-border);
-  color: var(--text-color);
+  cursor: pointer;
 }
 
-.word-controls .row button:hover {
-  background: var(--section-bg);
+.app input[type="color"]:hover {
+  border-color: var(--accent);
 }
 
-.word-controls .row button.danger {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: var(--danger);
-}
-
-.word-controls .row button.danger:hover {
-  background: rgba(239, 68, 68, 0.2);
-}
-
-/* Subdued primary/danger in list manager – outline style, less distracting */
+/* Subdued primary for compact buttons (e.g. Apply list settings) */
 .compact-btn.primary {
   background: rgba(255, 140, 0, 0.1);
   color: var(--accent);
@@ -543,193 +399,6 @@ html.dark .compact-btn.primary:hover,
 body.dark .compact-btn.primary:hover {
   background: rgba(255, 140, 0, 0.2);
   border-color: rgba(255, 140, 0, 0.55);
-}
-
-.word-controls input[type="text"],
-.word-controls select {
-  flex: 1;
-  min-width: 140px;
-  min-height: 32px;
-  padding: 0 10px;
-  font-size: 14px;
-  border-radius: 8px;
-}
-
-#wordSearch {
-  height: 32px;
-  padding: 0 10px;
-  font-size: 14px;
-  border-radius: 8px;
-}
-
-/* Search/move row: align input, select and buttons to same height */
-.word-controls .row:has(#wordSearch) button {
-  height: 32px;
-}
-
-/* Word list container – matches popup .word-list-container */
-.word-list {
-  flex: 1;
-  overflow-y: auto;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.word-list .empty {
-  padding: 16px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-color);
-  opacity: 0.6;
-}
-
-/* Word item – matches popup .word-item (flex row, border-bottom, left accent when selected) */
-.word-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-bottom: 1px solid var(--input-border);
-  min-width: 0;
-}
-
-.word-item:last-child {
-  border-bottom: none;
-}
-
-.word-item:hover {
-  background: var(--highlight-tag);
-}
-
-.word-item.selected {
-  background: var(--section-bg);
-  border-left: 3px solid var(--accent);
-  padding-left: 9px;
-}
-
-.word-item.disabled {
-  opacity: 0.5;
-}
-
-.word-text {
-  flex: 1;
-  font-size: 14px;
-  color: var(--text-color);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-  user-select: none;
-}
-
-.word-text.editing {
-  display: none;
-}
-
-.word-edit-input {
-  display: none;
-  flex: 1;
-  height: 28px;
-  padding: 0 8px;
-  background: var(--bg-color);
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-  font-size: 14px;
-  color: var(--text-color);
-  min-width: 0;
-}
-
-.word-edit-input:focus {
-  outline: none;
-}
-
-.word-edit-input.active {
-  display: block;
-}
-
-.word-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-  pointer-events: auto;
-}
-
-.word-actions > * {
-  pointer-events: auto;
-}
-
-/* Word item icon button – matches popup .word-item-icon-btn */
-.word-item .icon-btn {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  color: var(--text-color);
-  opacity: 0.6;
-}
-
-.word-item .icon-btn:hover {
-  opacity: 1;
-  background: var(--highlight-tag);
-  color: var(--accent);
-}
-
-.word-item .icon-btn i {
-  font-size: 14px;
-}
-
-/* Word item color picker – matches popup .word-item-color-picker */
-.word-item input[type="color"] {
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
-  border: 1px solid var(--input-border);
-  cursor: pointer;
-  padding: 0;
-  flex-shrink: 0;
-}
-
-.word-item input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 0;
-  border-radius: 3px;
-}
-
-.word-item input[type="color"]::-webkit-color-swatch {
-  border: none;
-  border-radius: 3px;
-}
-
-.word-item input[type="color"]:hover {
-  border-color: var(--accent);
-}
-
-.word-item .word-item-eye-toggle {
-  flex-shrink: 0;
-}
-
-
-
-.app input[type="color"] {
-  padding: 0;
-  height: 32px;
-  border-radius: 6px;
-  border: 1px solid var(--input-border);
-  cursor: pointer;
-}
-
-.app input[type="color"]:hover {
-  border-color: var(--accent);
 }
 
 .colors input[type="color"] {
