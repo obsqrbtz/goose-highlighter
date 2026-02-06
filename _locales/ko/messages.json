@@ -191,6 +191,18 @@
     "copy": {
         "message": "복사"
     },
+    "move_to_list": {
+        "message": "목록으로 이동"
+    },
+    "copy_to_list": {
+        "message": "목록에 복사"
+    },
+    "no_other_lists": {
+        "message": "다른 목록 없음"
+    },
+    "word_actions": {
+        "message": "다른 목록으로 이동 또는 복사"
+    },
     "merge_lists_min_two": {
         "message": "병합하려면 최소 두 개의 리스트를 선택하세요."
     },

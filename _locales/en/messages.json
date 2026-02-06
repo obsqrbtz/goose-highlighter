@@ -191,6 +191,18 @@
   "copy": {
     "message": "Copy"
   },
+  "move_to_list": {
+    "message": "Move to list"
+  },
+  "copy_to_list": {
+    "message": "Copy to list"
+  },
+  "no_other_lists": {
+    "message": "No other lists"
+  },
+  "word_actions": {
+    "message": "Move or copy to another list"
+  },
   "merge_lists_min_two": {
     "message": "Select at least two lists to merge."
   },

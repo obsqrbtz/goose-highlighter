@@ -191,6 +191,18 @@
     "copy": {
         "message": "कॉपी करें"
     },
+    "move_to_list": {
+        "message": "सूची में ले जाएं"
+    },
+    "copy_to_list": {
+        "message": "सूची में कॉपी करें"
+    },
+    "no_other_lists": {
+        "message": "कोई अन्य सूची नहीं"
+    },
+    "word_actions": {
+        "message": "किसी अन्य सूची में ले जाएं या कॉपी करें"
+    },
     "merge_lists_min_two": {
         "message": "मर्ज करने के लिए कम से कम दो सूचियाँ चुनें।"
     },

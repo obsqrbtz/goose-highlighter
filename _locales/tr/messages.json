@@ -191,6 +191,18 @@
   "copy": {
     "message": "Kopyala"
   },
+  "move_to_list": {
+    "message": "Listeye taşı"
+  },
+  "copy_to_list": {
+    "message": "Listeye kopyala"
+  },
+  "no_other_lists": {
+    "message": "Başka liste yok"
+  },
+  "word_actions": {
+    "message": "Başka bir listeye taşı veya kopyala"
+  },
   "merge_lists_min_two": {
     "message": "Birleştirmek için en az iki liste seçin."
   },

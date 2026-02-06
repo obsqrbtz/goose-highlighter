@@ -645,6 +645,60 @@ body {
   text-align: center;
 }
 
+/* Word item 3-dot menu dropdown */
+.word-item-menu-dropdown {
+  display: none;
+  position: fixed;
+  min-width: 160px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.word-item-menu-dropdown.open {
+  display: block;
+}
+
+.word-item-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  color: var(--text-color);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.word-item-menu-item:hover:not(.disabled) {
+  background: var(--section-bg);
+}
+
+.word-item-menu-item.disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.word-item-menu-item i {
+  font-size: 12px;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.word-item-menu-item .list-color-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 /* Empty State */
 .empty-state {
   flex: 1;

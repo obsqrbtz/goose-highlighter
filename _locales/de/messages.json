@@ -185,6 +185,18 @@
   "copy": {
     "message": "Kopieren"
   },
+  "move_to_list": {
+    "message": "Zur Liste verschieben"
+  },
+  "copy_to_list": {
+    "message": "In Liste kopieren"
+  },
+  "no_other_lists": {
+    "message": "Keine anderen Listen"
+  },
+  "word_actions": {
+    "message": "In eine andere Liste verschieben oder kopieren"
+  },
   "merge_lists_min_two": {
     "message": "Wählen Sie mindestens zwei Listen zum Zusammenführen aus."
   },

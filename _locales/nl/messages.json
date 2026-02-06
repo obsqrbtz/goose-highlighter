@@ -191,6 +191,18 @@
   "copy": {
     "message": "Kopiëren"
   },
+  "move_to_list": {
+    "message": "Verplaats naar lijst"
+  },
+  "copy_to_list": {
+    "message": "Kopieer naar lijst"
+  },
+  "no_other_lists": {
+    "message": "Geen andere lijsten"
+  },
+  "word_actions": {
+    "message": "Verplaats of kopieer naar een andere lijst"
+  },
   "merge_lists_min_two": {
     "message": "Selecteer minimaal twee lijsten om samen te voegen."
   },

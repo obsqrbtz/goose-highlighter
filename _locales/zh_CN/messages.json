@@ -191,6 +191,18 @@
   "copy": {
     "message": "复制"
   },
+  "move_to_list": {
+    "message": "移动到列表"
+  },
+  "copy_to_list": {
+    "message": "复制到列表"
+  },
+  "no_other_lists": {
+    "message": "没有其他列表"
+  },
+  "word_actions": {
+    "message": "移动或复制到另一个列表"
+  },
   "merge_lists_min_two": {
     "message": "选择至少两个列表进行合并。"
   },

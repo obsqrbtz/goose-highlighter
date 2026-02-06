@@ -16,6 +16,9 @@ export class PopupController {
   private activeTab = 'lists';
   private pageHighlights: Array<{ word: string; count: number; background: string; foreground: string }> = [];
   private highlightIndices = new Map<string, number>();
+  private wordMenuOpenForIndex: number | null = null;
+  private wordMenuCopyOnly = false;
+  private wordMenuCloseListener: (() => void) | null = null;
 
   async initialize(): Promise<void> {
     await this.loadData();
@@ -278,6 +281,17 @@ export class PopupController {
       const list = this.lists[this.currentListIndex];
       if (!list) return;
 
+      // Handle 3-dot menu button click
+      const menuBtn = target.closest('.word-item-menu-btn') as HTMLElement | null;
+      if (menuBtn) {
+        e.stopPropagation();
+        const index = Number(menuBtn.dataset.index);
+        if (!Number.isNaN(index)) {
+          this.openWordItemMenu(index, menuBtn);
+        }
+        return;
+      }
+
       // Handle edit button click
       const editBtn = target.closest('.word-item-icon-btn.edit-word-btn') as HTMLElement | null;
       if (editBtn) {
@@ -426,6 +440,155 @@ export class PopupController {
     input.style.display = 'block';
     input.focus();
     input.select();
+  }
+
+  private openWordItemMenu(wordIndex: number, buttonEl: HTMLElement): void {
+    const dropdown = document.getElementById('wordItemMenuDropdown');
+    if (!dropdown) return;
+
+    this.closeWordItemMenu();
+
+    const rect = buttonEl.getBoundingClientRect();
+    const padding = 8;
+    dropdown.style.left = `${rect.left}px`;
+    dropdown.style.top = `${rect.bottom + 4}px`;
+    dropdown.style.right = '';
+
+    const moveLabel = chrome.i18n.getMessage('move_to_list') || 'Move to list';
+    const copyLabel = chrome.i18n.getMessage('copy_to_list') || 'Copy to list';
+
+    dropdown.innerHTML = `
+      <button type="button" class="word-item-menu-item" data-action="move">
+        <i class="fa-solid fa-arrow-right"></i>
+        <span>${DOMUtils.escapeHtml(moveLabel)}</span>
+      </button>
+      <button type="button" class="word-item-menu-item" data-action="copy">
+        <i class="fa-solid fa-copy"></i>
+        <span>${DOMUtils.escapeHtml(copyLabel)}</span>
+      </button>
+    `;
+
+    dropdown.querySelectorAll('.word-item-menu-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const action = (item as HTMLElement).dataset.action;
+        if (action === 'move') {
+          this.showWordMenuListPicker(wordIndex, false);
+        } else if (action === 'copy') {
+          this.showWordMenuListPicker(wordIndex, true);
+        }
+      });
+    });
+
+    this.wordMenuOpenForIndex = wordIndex;
+    dropdown.classList.add('open');
+    dropdown.setAttribute('aria-hidden', 'false');
+
+    requestAnimationFrame(() => {
+      const dr = dropdown.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      if (dr.right > vw - padding) {
+        dropdown.style.left = `${vw - dr.width - padding}px`;
+      }
+      if (dr.left < padding) {
+        dropdown.style.left = `${padding}px`;
+      }
+      if (dr.bottom > vh - padding) {
+        dropdown.style.top = `${vh - dr.height - padding}px`;
+      }
+      if (dr.top < padding) {
+        dropdown.style.top = `${padding}px`;
+      }
+    });
+
+    const closeHandler = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (dropdown.contains(target) || buttonEl.contains(target)) return;
+      this.closeWordItemMenu();
+      document.removeEventListener('click', closeHandler);
+      this.wordMenuCloseListener = null;
+    };
+    this.wordMenuCloseListener = () => {
+      document.removeEventListener('click', closeHandler);
+      this.wordMenuCloseListener = null;
+    };
+    setTimeout(() => document.addEventListener('click', closeHandler), 0);
+  }
+
+  private showWordMenuListPicker(wordIndex: number, copyOnly: boolean): void {
+    const dropdown = document.getElementById('wordItemMenuDropdown');
+    if (!dropdown || this.wordMenuOpenForIndex === null) return;
+
+    this.wordMenuCopyOnly = copyOnly;
+    const currentList = this.lists[this.currentListIndex];
+    const otherLists = this.lists
+      .map((list, index) => ({ list, index }))
+      .filter(({ index }) => index !== this.currentListIndex);
+
+    if (otherLists.length === 0) {
+      const noOtherLabel = chrome.i18n.getMessage('no_other_lists') || 'No other lists';
+      dropdown.innerHTML = `
+        <div class="word-item-menu-item disabled">
+          <span>${DOMUtils.escapeHtml(noOtherLabel)}</span>
+        </div>
+      `;
+      return;
+    }
+
+    dropdown.innerHTML = otherLists.map(({ list, index }) => `
+      <button type="button" class="word-item-menu-item" data-target-index="${index}">
+        <span class="list-color-indicator" style="background-color: ${DOMUtils.escapeHtml(list.background)}"></span>
+        <span>${DOMUtils.escapeHtml(list.name)}</span>
+      </button>
+    `).join('');
+
+    dropdown.querySelectorAll('.word-item-menu-item[data-target-index]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetIndex = Number((item as HTMLElement).dataset.targetIndex);
+        if (Number.isNaN(targetIndex)) return;
+        if (this.wordMenuCopyOnly) {
+          this.copyWordToOtherList(wordIndex, targetIndex);
+        } else {
+          this.moveWordToOtherList(wordIndex, targetIndex);
+        }
+        this.closeWordItemMenu();
+        this.save();
+        this.renderWords();
+        this.renderLists();
+      });
+    });
+  }
+
+  private closeWordItemMenu(): void {
+    const dropdown = document.getElementById('wordItemMenuDropdown');
+    if (dropdown) {
+      dropdown.classList.remove('open');
+      dropdown.setAttribute('aria-hidden', 'true');
+      dropdown.innerHTML = '';
+    }
+    this.wordMenuOpenForIndex = null;
+    if (this.wordMenuCloseListener) {
+      this.wordMenuCloseListener();
+    }
+  }
+
+  private moveWordToOtherList(wordIndex: number, targetListIndex: number): void {
+    const list = this.lists[this.currentListIndex];
+    const targetList = this.lists[targetListIndex];
+    const word = list.words[wordIndex];
+    if (!word || !targetList) return;
+    targetList.words.push({ ...word });
+    list.words.splice(wordIndex, 1);
+  }
+
+  private copyWordToOtherList(wordIndex: number, targetListIndex: number): void {
+    const list = this.lists[this.currentListIndex];
+    const targetList = this.lists[targetListIndex];
+    const word = list.words[wordIndex];
+    if (!word || !targetList) return;
+    targetList.words.push({ ...word });
   }
 
   private setupWordSelection(): void {
@@ -890,6 +1053,7 @@ export class PopupController {
   }
 
   private renderWords(): void {
+    this.closeWordItemMenu();
     const list = this.lists[this.currentListIndex];
     const wordList = document.getElementById('wordList') as HTMLDivElement;
 
@@ -922,6 +1086,7 @@ export class PopupController {
     const list = this.lists[this.currentListIndex];
     const bgColor = word.background || list.background;
     const fgColor = word.foreground || list.foreground;
+    const menuTitle = chrome.i18n.getMessage('word_actions') || 'Actions';
 
     return `
       <div class="word-item ${isSelected ? 'selected' : ''}" data-index="${realIndex}">
@@ -940,6 +1105,9 @@ export class PopupController {
               <i class="fa-solid fa-eye-slash eye-disabled"></i>
             </span>
           </label>
+          <button type="button" class="word-item-icon-btn word-item-menu-btn" data-index="${realIndex}" title="${DOMUtils.escapeHtml(menuTitle)}" aria-label="${DOMUtils.escapeHtml(menuTitle)}">
+            <i class="fa-solid fa-ellipsis-v"></i>
+          </button>
         </div>
       </div>
     `;

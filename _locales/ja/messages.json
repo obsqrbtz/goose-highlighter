@@ -191,6 +191,18 @@
     "copy": {
         "message": "コピー"
     },
+    "move_to_list": {
+        "message": "リストに移動"
+    },
+    "copy_to_list": {
+        "message": "リストにコピー"
+    },
+    "no_other_lists": {
+        "message": "他のリストはありません"
+    },
+    "word_actions": {
+        "message": "別のリストに移動またはコピー"
+    },
     "merge_lists_min_two": {
         "message": "統合するには少なくとも2つのリストを選択してください。"
     },
