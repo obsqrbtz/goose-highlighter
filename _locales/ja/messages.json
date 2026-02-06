@@ -30,7 +30,7 @@
         "message": "適用"
     },
     "paste_hint": {
-        "message": "ここに単語またはフレーズを貼り付けてください。各新しい単語/フレーズは次の行から始める必要があります。"
+        "message": "1行に1単語または1フレーズ"
     },
     "apply_paste": {
         "message": "単語を追加"
@@ -264,7 +264,7 @@
         "message": "前景"
     },
     "multi_select_hint": {
-        "message": "クリックして選択 • Ctrl/Cmd+クリックで複数選択"
+        "message": "クリック - 選択 • Ctrl+クリック - 複数"
     },
     "dark_mode_title": {
         "message": "ダークモード"
@@ -285,10 +285,10 @@
         "message": "無効"
     },
     "drag_words_hint": {
-        "message": "クリックして選択 • Ctrl/Cmd+クリックで複数選択 • 単語をリストにドラッグしてコピー"
+        "message": "クリック - 選択 • Ctrl+クリック - 複数 • リストへドラッグ - 移動"
     },
     "drag_lists_hint": {
-        "message": "リストをドラッグして並べ替え • Ctrl+クリックで複数選択"
+        "message": "ドラッグ - 並べ替え • Ctrl+クリック - 複数"
     },
     "showing_items": {
         "message": "{total}単語中{start}-{end}を表示"

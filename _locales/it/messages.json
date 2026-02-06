@@ -30,7 +30,7 @@
         "message": "Applica"
     },
     "paste_hint": {
-        "message": "Incolla parole o frasi qui. Ogni nuova parola/frase deve iniziare dalla riga successiva."
+        "message": "Una parola o frase per riga"
     },
     "apply_paste": {
         "message": "Aggiungi parole"
@@ -264,7 +264,7 @@
         "message": "Testo"
     },
     "multi_select_hint": {
-        "message": "Clicca per selezionare • Ctrl/Cmd+Clic per selezione multipla"
+        "message": "Clic - seleziona • Ctrl+clic - più"
     },
     "dark_mode_title": {
         "message": "Modalità scura"
@@ -285,10 +285,10 @@
         "message": "inattivo"
     },
     "drag_words_hint": {
-        "message": "Clicca per selezionare • Ctrl/Cmd+Clic per selezione multipla • Trascina parole negli elenchi per copiare"
+        "message": "Clic - seleziona • Ctrl+clic - più • Trascina in lista - sposta"
     },
     "drag_lists_hint": {
-        "message": "Trascina elenchi per riordinare • Ctrl+Clic per selezione multipla"
+        "message": "Trascina - riordina • Ctrl+clic - più"
     },
     "showing_items": {
         "message": "Visualizzazione di {start}-{end} su {total} parole"

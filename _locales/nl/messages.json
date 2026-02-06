@@ -30,7 +30,7 @@
     "message": "Toepassen"
   },
   "paste_hint": {
-    "message": "Plak hier woorden of zinnen. Elk nieuw woord/zin moet op de volgende regel beginnen."
+    "message": "Eén woord of zin per regel"
   },
   "apply_paste": {
     "message": "Woorden toevoegen"
@@ -264,7 +264,7 @@
     "message": "Voorgrond"
   },
   "multi_select_hint": {
-    "message": "Klik om te selecteren • Ctrl/Cmd+Klik voor meervoudige selectie"
+    "message": "Klik - selecteren • Ctrl+klik - meerdere"
   },
   "dark_mode_title": {
     "message": "Donkere modus"
@@ -285,10 +285,10 @@
     "message": "inactief"
   },
   "drag_words_hint": {
-    "message": "Klik om te selecteren • Ctrl/Cmd+Klik voor meervoudige selectie • Sleep woorden naar lijsten om te kopiëren"
+    "message": "Klik - selecteren • Ctrl+klik - meerdere • Sleep naar lijst - verplaatsen"
   },
   "drag_lists_hint": {
-    "message": "Sleep lijsten om te herschikken • Ctrl+Klik voor meervoudige selectie"
+    "message": "Sleep - herschikken • Ctrl+klik - meerdere"
   },
   "showing_items": {
     "message": "{start}-{end} van {total} woorden weergegeven"

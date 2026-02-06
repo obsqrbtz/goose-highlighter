@@ -30,7 +30,7 @@
     "message": "Zastosuj"
   },
   "paste_hint": {
-    "message": "Wklej tutaj słowa lub frazy. Każde nowe słowo/fraza powinno zaczynać się od następnej linii."
+    "message": "Jedno słowo lub fraza na linię"
   },
   "apply_paste": {
     "message": "Dodaj słowa"
@@ -264,7 +264,7 @@
     "message": "Pierwszy plan"
   },
   "multi_select_hint": {
-    "message": "Kliknij, aby zaznaczyć • Ctrl/Cmd+Klik dla wielokrotnego zaznaczenia"
+    "message": "Klik - zaznacz • Ctrl+klik - kilka"
   },
   "dark_mode_title": {
     "message": "Tryb ciemny"
@@ -285,10 +285,10 @@
     "message": "nieaktywny"
   },
   "drag_words_hint": {
-    "message": "Kliknij, aby zaznaczyć • Ctrl/Cmd+Klik dla wielokrotnego zaznaczenia • Przeciągnij słowa do list, aby skopiować"
+    "message": "Klik - zaznacz • Ctrl+klik - kilka • Przeciągnij do listy - przenieś"
   },
   "drag_lists_hint": {
-    "message": "Przeciągnij listy, aby zmienić kolejność • Ctrl+Klik dla wielokrotnego zaznaczenia"
+    "message": "Przeciągnij - zmień kolejność • Ctrl+klik - kilka"
   },
   "showing_items": {
     "message": "Wyświetlanie {start}-{end} z {total} słów"

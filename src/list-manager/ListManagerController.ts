@@ -579,30 +579,32 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
 
     event.dataTransfer?.setData('text/plain', JSON.stringify({ type: 'words', wordIndices }));
     if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'copy';
+      event.dataTransfer.effectAllowed = 'move';
     }
   }
 
   private dropWordsOnList(wordIndices: number[], targetListIndex: number): void {
     const sourceList = this.lists[this.currentListIndex];
     const targetList = this.lists[targetListIndex];
-    
+
     if (!sourceList || !targetList) return;
     if (targetListIndex === this.currentListIndex) return; // Can't drop on same list
 
-    const wordsToCopy = wordIndices
+    const wordsToMove = wordIndices
       .map(index => sourceList.words[index])
       .filter(Boolean)
-      .map(word => ({ ...word })); // Create copies
+      .map(word => ({ ...word }));
 
-    if (wordsToCopy.length === 0) return;
+    if (wordsToMove.length === 0) return;
 
-    targetList.words.push(...wordsToCopy);
+    targetList.words.push(...wordsToMove);
+    const indicesToRemove = new Set(wordIndices);
+    sourceList.words = sourceList.words.filter((_, i) => !indicesToRemove.has(i));
+    wordIndices.forEach(i => this.selectedWords.delete(i));
     this.save();
 
-    // Show feedback
-    const count = wordsToCopy.length;
-    const message = `Copied ${count} word${count > 1 ? 's' : ''} to "${targetList.name}"`;
+    const count = wordsToMove.length;
+    const message = `Moved ${count} word${count > 1 ? 's' : ''} to "${targetList.name}"`;
     console.log(message);
   }
 

@@ -30,7 +30,7 @@
     "message": "应用"
   },
   "paste_hint": {
-    "message": "在此粘贴单词或短语。每个新单词/短语应从下一行开始。"
+    "message": "每行一个词或短语"
   },
   "apply_paste": {
     "message": "添加单词"
@@ -264,7 +264,7 @@
     "message": "前景"
   },
   "multi_select_hint": {
-    "message": "点击选择 • Ctrl/Cmd+点击多选"
+    "message": "点击 - 选择 • Ctrl+点击 - 多选"
   },
   "dark_mode_title": {
     "message": "暗黑模式"
@@ -285,10 +285,10 @@
     "message": "未激活"
   },
   "drag_words_hint": {
-    "message": "点击选择 • Ctrl/Cmd+点击多选 • 拖动单词到列表以复制"
+    "message": "点击 - 选择 • Ctrl+点击 - 多选 • 拖到列表 - 移动"
   },
   "drag_lists_hint": {
-    "message": "拖动列表以重新排序 • Ctrl+点击多选"
+    "message": "拖动 - 排序 • Ctrl+点击 - 多选"
   },
   "showing_items": {
     "message": "显示 {start}-{end} / 共 {total} 个单词"

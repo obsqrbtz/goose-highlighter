@@ -30,7 +30,7 @@
         "message": "적용"
     },
     "paste_hint": {
-        "message": "여기에 단어나 구문을 붙여넣으세요. 각 새 단어/구문은 다음 줄에서 시작해야 합니다."
+        "message": "한 줄에 단어 또는 구문 하나"
     },
     "apply_paste": {
         "message": "단어 추가"
@@ -264,7 +264,7 @@
         "message": "전경"
     },
     "multi_select_hint": {
-        "message": "클릭하여 선택 • Ctrl/Cmd+클릭으로 다중 선택"
+        "message": "클릭 - 선택 • Ctrl+클릭 - 여러 개"
     },
     "dark_mode_title": {
         "message": "다크 모드"
@@ -285,10 +285,10 @@
         "message": "비활성"
     },
     "drag_words_hint": {
-        "message": "클릭하여 선택 • Ctrl/Cmd+클릭으로 다중 선택 • 단어를 리스트로 드래그하여 복사"
+        "message": "클릭 - 선택 • Ctrl+클릭 - 여러 개 • 리스트로 드래그 - 이동"
     },
     "drag_lists_hint": {
-        "message": "리스트를 드래그하여 재정렬 • Ctrl+클릭으로 다중 선택"
+        "message": "드래그 - 순서 변경 • Ctrl+클릭 - 여러 개"
     },
     "showing_items": {
         "message": "{total}개 단어 중 {start}-{end} 표시"

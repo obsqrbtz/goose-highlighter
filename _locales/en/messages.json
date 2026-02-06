@@ -30,7 +30,7 @@
     "message": "Apply"
   },
   "paste_hint": {
-    "message": "Paste words or phrases here. Each new word/phrase should start from next line."
+    "message": "One word or phrase per line"
   },
   "apply_paste": {
     "message": "Add Words"
@@ -264,7 +264,7 @@
     "message": "Foreground"
   },
   "multi_select_hint": {
-    "message": "Click to select • Ctrl/Cmd+Click for multi-select"
+    "message": "Click - select • Ctrl+click - select multiple"
   },
   "dark_mode_title": {
     "message": "Dark Mode"
@@ -285,10 +285,10 @@
     "message": "inactive"
   },
   "drag_words_hint": {
-    "message": "Click to select • Ctrl/Cmd+Click for multi-select • Drag words to lists to copy"
+    "message": "Click - select • Ctrl+click - multiple • Drag to list - move"
   },
   "drag_lists_hint": {
-    "message": "Drag lists to reorder • Ctrl+Click for multi-select"
+    "message": "Drag - reorder • Ctrl+click - select multiple"
   },
   "showing_items": {
     "message": "Showing {start}-{end} of {total} words"

@@ -30,7 +30,7 @@
         "message": "Anwenden"
     },
     "paste_hint": {
-        "message": "Fügen Sie hier Wörter oder Phrasen ein. Jedes neue Wort/jede neue Phrase sollte in der nächsten Zeile beginnen."
+        "message": "Ein Wort oder Ausdruck pro Zeile"
     },
     "apply_paste": {
         "message": "Wörter hinzufügen"
@@ -258,7 +258,7 @@
     "message": "Vordergrund"
   },
   "multi_select_hint": {
-    "message": "Klicken zum Auswählen • Strg/Cmd+Klick für Mehrfachauswahl"
+    "message": "Klick - auswählen • Strg+Klick - mehrere"
   },
   "dark_mode_title": {
     "message": "Dunkelmodus"
@@ -279,10 +279,10 @@
     "message": "inaktiv"
   },
   "drag_words_hint": {
-    "message": "Klicken zum Auswählen • Strg/Cmd+Klick für Mehrfachauswahl • Wörter zu Listen ziehen zum Kopieren"
+    "message": "Klick - auswählen • Strg+Klick - mehrere • Ziehen in Liste - verschieben"
   },
   "drag_lists_hint": {
-    "message": "Listen ziehen zum Neuordnen • Strg+Klick für Mehrfachauswahl"
+    "message": "Ziehen - neu ordnen • Strg+Klick - mehrere"
   },
   "showing_items": {
     "message": "Zeige {start}-{end} von {total} Wörtern"

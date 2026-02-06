@@ -30,7 +30,7 @@
     "message": "Uygula"
   },
   "paste_hint": {
-    "message": "Kelimeleri veya ifadeleri buraya yapıştırın. Her yeni kelime/ifade bir sonraki satırdan başlamalıdır."
+    "message": "Satır başına bir kelime veya ifade"
   },
   "apply_paste": {
     "message": "Kelimeleri Ekle"
@@ -264,7 +264,7 @@
     "message": "Ön Plan"
   },
   "multi_select_hint": {
-    "message": "Seçmek için tıklayın • Çoklu seçim için Ctrl/Cmd+Tıklama"
+    "message": "Tıklama - seç • Ctrl+tıklama - birden fazla"
   },
   "dark_mode_title": {
     "message": "Karanlık Mod"
@@ -285,10 +285,10 @@
     "message": "pasif"
   },
   "drag_words_hint": {
-    "message": "Seçmek için tıklayın • Çoklu seçim için Ctrl/Cmd+Tıklama • Kopyalamak için kelimeleri listelere sürükleyin"
+    "message": "Tıklama - seç • Ctrl+tıklama - birden fazla • Listeye sürükle - taşı"
   },
   "drag_lists_hint": {
-    "message": "Yeniden sıralamak için listeleri sürükleyin • Çoklu seçim için Ctrl+Tıklama"
+    "message": "Sürükle - sırala • Ctrl+tıklama - birden fazla"
   },
   "showing_items": {
     "message": "{total} kelimeden {start}-{end} gösteriliyor"
