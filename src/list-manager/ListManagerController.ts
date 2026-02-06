@@ -120,24 +120,30 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
   }
 
   private duplicateCurrentList(): void {
-    const list = this.lists[this.currentListIndex];
-    if (!list) return;
-    const newList: HighlightList = {
-      id: Date.now(),
-      name: `${list.name} (Copy)`,
-      background: list.background,
-      foreground: list.foreground,
-      active: list.active,
-      words: list.words.map(word => ({ ...word }))
-    };
-    this.lists.splice(this.currentListIndex + 1, 0, newList);
-    this.currentListIndex = this.currentListIndex + 1;
+    const toDuplicate = this.getEffectiveSelectedListIndices();
+    if (toDuplicate.length === 0) return;
+    const sortedDesc = [...toDuplicate].sort((a, b) => b - a);
+    sortedDesc.forEach(index => {
+      const list = this.lists[index];
+      if (!list) return;
+      const newList: HighlightList = {
+        id: Date.now() + Math.random(),
+        name: `${list.name} (Copy)`,
+        background: list.background,
+        foreground: list.foreground,
+        active: list.active,
+        words: list.words.map(word => ({ ...word }))
+      };
+      this.lists.splice(index + 1, 0, newList);
+    });
+    const firstInsertedIndex = Math.min(...toDuplicate) + 1;
+    this.currentListIndex = Math.min(firstInsertedIndex, this.lists.length - 1);
     this.selectedLists.clear();
     this.save();
   }
 
   private mergeSelectedLists(): void {
-    const selected = this.getSelectedListIndices();
+    const selected = this.getEffectiveSelectedListIndices();
     if (selected.length < 2) {
       alert(chrome.i18n.getMessage('merge_lists_min_two') || 'Select at least two lists to merge.');
       return;
@@ -168,18 +174,13 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
   }
 
   private deleteSelectedLists(): void {
-    const selected = this.getSelectedListIndices();
-    if (selected.length === 0) {
-      if (!this.lists[this.currentListIndex]) return;
-      if (!confirm(chrome.i18n.getMessage('delete_current_list') || 'Delete current list?')) return;
-      this.lists.splice(this.currentListIndex, 1);
-    } else {
-      const confirmMessage = chrome.i18n.getMessage('delete_lists_confirm')
-        ?.replace('{count}', String(selected.length))
-        || `Delete ${selected.length} selected list(s)?`;
-      if (!confirm(confirmMessage)) return;
-      selected.sort((a, b) => b - a).forEach(index => this.lists.splice(index, 1));
-    }
+    const selected = this.getEffectiveSelectedListIndices();
+    if (selected.length === 0) return;
+    const confirmMessage = chrome.i18n.getMessage('delete_lists_confirm')
+      ?.replace('{count}', String(selected.length))
+      || `Delete ${selected.length} selected list(s)?`;
+    if (!confirm(confirmMessage)) return;
+    selected.sort((a, b) => b - a).forEach(index => this.lists.splice(index, 1));
 
     if (this.lists.length === 0) {
       this.createList();
@@ -750,6 +751,13 @@ const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
 
   private getSelectedListIndices(): number[] {
     return Array.from(this.selectedLists).filter(index => this.lists[index]);
+  }
+
+  /** Current list plus any Ctrl+clicked lists (effective selection for merge/duplicate/delete). */
+  private getEffectiveSelectedListIndices(): number[] {
+    const indices = new Set(this.getSelectedListIndices());
+    indices.add(this.currentListIndex);
+    return Array.from(indices).filter(index => this.lists[index]);
   }
 
   private getFilteredWordEntries(list: HighlightList): Array<{ word: HighlightWord; index: number }> {
