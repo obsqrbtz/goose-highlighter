@@ -978,9 +978,8 @@ export class PopupController {
     container.innerHTML = this.exceptionsList.map(domain =>
       `<div class="exception-item">
         <span class="exception-domain">${DOMUtils.escapeHtml(domain)}</span>
-        <button class="exception-remove" data-domain="${DOMUtils.escapeHtml(domain)}">
+        <button type="button" class="exception-remove" data-domain="${DOMUtils.escapeHtml(domain)}" title="${DOMUtils.escapeHtml(chrome.i18n.getMessage('remove') || 'Remove')}" aria-label="${DOMUtils.escapeHtml(chrome.i18n.getMessage('remove') || 'Remove')}">
           <i class="fa-solid fa-trash"></i>
-          ${chrome.i18n.getMessage('remove') || 'Remove'}
         </button>
       </div>`
     ).join('');
