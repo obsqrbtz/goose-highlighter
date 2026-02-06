@@ -53,6 +53,12 @@
   "export_list": {
     "message": "JSON Dışa Aktar"
   },
+  "import_list_list_manager": {
+    "message": "Listeyi içe aktar"
+  },
+  "export_list_list_manager": {
+    "message": "Listeyi dışa aktar"
+  },
   "default_list_name": {
     "message": "Varsayılan Liste"
   },

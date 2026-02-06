@@ -53,6 +53,12 @@
   "export_list": {
     "message": "导出 JSON"
   },
+  "import_list_list_manager": {
+    "message": "导入列表"
+  },
+  "export_list_list_manager": {
+    "message": "导出列表"
+  },
   "default_list_name": {
     "message": "默认列表"
   },

@@ -53,6 +53,12 @@
     "export_list": {
         "message": "Exporter JSON"
     },
+    "import_list_list_manager": {
+        "message": "Importer la liste"
+    },
+    "export_list_list_manager": {
+        "message": "Exporter la liste"
+    },
     "default_list_name": {
         "message": "Liste par défaut"
     },

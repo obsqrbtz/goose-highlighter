@@ -53,6 +53,12 @@
     "export_list": {
         "message": "JSON 내보내기"
     },
+    "import_list_list_manager": {
+        "message": "목록 가져오기"
+    },
+    "export_list_list_manager": {
+        "message": "목록 내보내기"
+    },
     "default_list_name": {
         "message": "기본 리스트"
     },

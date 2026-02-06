@@ -53,6 +53,12 @@
     "export_list": {
         "message": "JSONをエクスポート"
     },
+    "import_list_list_manager": {
+        "message": "リストをインポート"
+    },
+    "export_list_list_manager": {
+        "message": "リストをエクスポート"
+    },
     "default_list_name": {
         "message": "デフォルトリスト"
     },

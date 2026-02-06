@@ -53,6 +53,12 @@
     "export_list": {
         "message": "JSON निर्यात करें"
     },
+    "import_list_list_manager": {
+        "message": "सूची आयात करें"
+    },
+    "export_list_list_manager": {
+        "message": "सूची निर्यात करें"
+    },
     "default_list_name": {
         "message": "डिफ़ॉल्ट सूची"
     },
