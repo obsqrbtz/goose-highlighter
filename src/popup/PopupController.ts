@@ -600,7 +600,6 @@ export class PopupController {
             </span>
             ${highlight.count > 1 ? `<span class="page-highlight-position">${currentIndex + 1}/${highlight.count}</span>` : ''}
           </div>
-          <span class="page-highlight-count">${highlight.count}</span>
           ${highlight.count > 1 ? `
             <div class="page-highlight-nav">
               <button class="highlight-prev" title="${chrome.i18n.getMessage('previous') || 'Previous'}">
