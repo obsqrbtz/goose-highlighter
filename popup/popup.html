@@ -85,11 +85,18 @@
             </button>
           </div>
 
-          <!-- Manage Lists Button -->
-          <button class="manage-lists-btn" id="manageListsBtn">
-            <i class="fa-solid fa-layer-group"></i>
-            <span data-i18n="manage_lists">Manage Lists</span>
-          </button>
+          <!-- Export / Import (Lists tab) -->
+          <div class="list-export-import-row">
+            <button class="list-export-import-btn" id="exportListBtn">
+              <i class="fa-solid fa-download"></i>
+              <span data-i18n="export_list">Export</span>
+            </button>
+            <button class="list-export-import-btn" id="importListBtn">
+              <i class="fa-solid fa-upload"></i>
+              <span data-i18n="import_list">Import</span>
+            </button>
+            <input type="file" id="importListInput" accept="application/json" hidden />
+          </div>
 
           <!-- Color Pickers -->
           <div class="color-pickers-row">
@@ -167,25 +174,6 @@
               <span data-i18n="word_list">Word List</span>
               <span class="word-count-badge" id="wordCount">0</span>
             </label>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="word-actions-row">
-            <button class="word-action-btn" id="selectAllBtn">
-              <span data-i18n="select_all">Select</span>
-            </button>
-            <button class="word-action-btn" id="deselectAllBtn">
-              <span data-i18n="deselect_all">Deselect</span>
-            </button>
-            <button class="word-action-btn" id="enableSelectedBtn">
-              <span data-i18n="enable_selected">Enable</span>
-            </button>
-            <button class="word-action-btn" id="disableSelectedBtn">
-              <span data-i18n="disable_selected">Disable</span>
-            </button>
-            <button class="word-action-btn danger" id="deleteSelectedBtn">
-              <span data-i18n="delete_selected">Delete</span>
-            </button>
           </div>
 
           <!-- Search -->
@@ -288,17 +276,6 @@
             </div>
           </div>
 
-          <div class="options-buttons">
-            <button class="option-button" id="importBtn">
-              <i class="fa-solid fa-upload"></i>
-              <span data-i18n="import_list">Import</span>
-            </button>
-            <input type="file" id="importInput" accept="application/json" hidden />
-            <button class="option-button" id="exportBtn">
-              <i class="fa-solid fa-download"></i>
-              <span data-i18n="export_list">Export</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>

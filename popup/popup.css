@@ -366,8 +366,14 @@ body {
   color: var(--danger);
 }
 
-.manage-lists-btn {
-  width: 100%;
+.list-export-import-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.list-export-import-btn {
+  flex: 1;
   height: 28px;
   display: flex;
   align-items: center;
@@ -383,11 +389,11 @@ body {
   color: var(--text-color);
 }
 
-.manage-lists-btn:hover {
+.list-export-import-btn:hover {
   background: var(--section-bg);
 }
 
-.manage-lists-btn i {
+.list-export-import-btn i {
   font-size: 14px;
 }
 
@@ -750,6 +756,14 @@ body {
 .word-item-menu-item.disabled {
   opacity: 0.6;
   cursor: default;
+}
+
+.word-item-menu-item.danger {
+  color: var(--danger);
+}
+
+.word-item-menu-item.danger:hover:not(.disabled) {
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .word-item-menu-item i {

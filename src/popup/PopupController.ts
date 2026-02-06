@@ -1,4 +1,4 @@
-import { HighlightList, HighlightWord, ExportData, HighlightInfo } from '../types.js';
+import { HighlightList, HighlightWord, HighlightInfo } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
@@ -213,11 +213,6 @@ export class PopupController {
       }
     });
 
-    // Manage lists
-    document.getElementById('manageListsBtn')?.addEventListener('click', () => {
-      void this.openListManager();
-    });
-
     // Color picker text inputs sync
     const listBg = document.getElementById('listBg') as HTMLInputElement;
     const listBgText = document.getElementById('listBgText') as HTMLInputElement;
@@ -270,7 +265,6 @@ export class PopupController {
     });
 
     this.setupWordListEvents(wordList);
-    this.setupWordSelection();
 
     wordSearch.addEventListener('input', (e) => {
       this.wordSearchQuery = (e.target as HTMLInputElement).value;
@@ -446,11 +440,22 @@ export class PopupController {
     input.select();
   }
 
+  /** Effective selection for menu actions: multiple selected ? those indices : [wordIndex]. */
+  private getEffectiveSelectionForMenu(wordIndex: number): number[] {
+    if (this.selectedCheckboxes.size > 1 && this.selectedCheckboxes.has(wordIndex)) {
+      return Array.from(this.selectedCheckboxes);
+    }
+    return [wordIndex];
+  }
+
   private openWordItemMenu(wordIndex: number, buttonEl: HTMLElement): void {
     const dropdown = document.getElementById('wordItemMenuDropdown');
     if (!dropdown) return;
 
     this.closeWordItemMenu();
+
+    const effectiveIndices = this.getEffectiveSelectionForMenu(wordIndex);
+    const isMultiple = effectiveIndices.length > 1;
 
     const rect = buttonEl.getBoundingClientRect();
     const padding = 8;
@@ -458,8 +463,30 @@ export class PopupController {
     dropdown.style.top = `${rect.bottom + 4}px`;
     dropdown.style.right = '';
 
-    const moveLabel = chrome.i18n.getMessage('move_to_list') || 'Move to list';
-    const copyLabel = chrome.i18n.getMessage('copy_to_list') || 'Copy to list';
+    const moveLabel = isMultiple
+      ? (chrome.i18n.getMessage('move_selected') || 'Move selected')
+      : (chrome.i18n.getMessage('move_to_list') || 'Move to list');
+    const copyLabel = isMultiple
+      ? (chrome.i18n.getMessage('copy_selected') || 'Copy selected')
+      : (chrome.i18n.getMessage('copy_to_list') || 'Copy to list');
+    const enableSelectedLabel = chrome.i18n.getMessage('enable_selected') || 'Enable selected';
+    const disableSelectedLabel = chrome.i18n.getMessage('disable_selected') || 'Disable selected';
+    const deleteLabel = isMultiple
+      ? (chrome.i18n.getMessage('delete_selected') || 'Delete selected')
+      : (chrome.i18n.getMessage('delete_selected') || 'Delete');
+
+    const enableDisableItems = isMultiple
+      ? `
+      <button type="button" class="word-item-menu-item" data-action="enable">
+        <i class="fa-solid fa-eye"></i>
+        <span>${DOMUtils.escapeHtml(enableSelectedLabel)}</span>
+      </button>
+      <button type="button" class="word-item-menu-item" data-action="disable">
+        <i class="fa-solid fa-eye-slash"></i>
+        <span>${DOMUtils.escapeHtml(disableSelectedLabel)}</span>
+      </button>
+      `
+      : '';
 
     dropdown.innerHTML = `
       <button type="button" class="word-item-menu-item" data-action="move">
@@ -470,6 +497,11 @@ export class PopupController {
         <i class="fa-solid fa-copy"></i>
         <span>${DOMUtils.escapeHtml(copyLabel)}</span>
       </button>
+      ${enableDisableItems}
+      <button type="button" class="word-item-menu-item danger" data-action="delete">
+        <i class="fa-solid fa-trash"></i>
+        <span>${DOMUtils.escapeHtml(deleteLabel)}</span>
+      </button>
     `;
 
     dropdown.querySelectorAll('.word-item-menu-item').forEach(item => {
@@ -477,14 +509,33 @@ export class PopupController {
         e.stopPropagation();
         const action = (item as HTMLElement).dataset.action;
         if (action === 'move') {
-          this.showWordMenuListPicker(wordIndex, false);
+          this.showWordMenuListPickerForIndices(effectiveIndices, false);
         } else if (action === 'copy') {
-          this.showWordMenuListPicker(wordIndex, true);
+          this.showWordMenuListPickerForIndices(effectiveIndices, true);
+        } else if (action === 'enable') {
+          this.setSelectedWordsActive(effectiveIndices, true);
+          this.closeWordItemMenu();
+          this.save();
+          this.renderWords();
+        } else if (action === 'disable') {
+          this.setSelectedWordsActive(effectiveIndices, false);
+          this.closeWordItemMenu();
+          this.save();
+          this.renderWords();
+        } else if (action === 'delete') {
+          if (confirm(chrome.i18n.getMessage('confirm_delete_words') || 'Delete selected words?')) {
+            this.deleteWordsByIndices(effectiveIndices);
+            this.selectedCheckboxes.clear();
+            this.closeWordItemMenu();
+            this.save();
+            this.renderWords();
+          }
         }
       });
     });
 
     this.wordMenuOpenForIndex = wordIndex;
+    this.wordMenuCopyOnly = false;
     dropdown.classList.add('open');
     dropdown.setAttribute('aria-hidden', 'false');
 
@@ -520,12 +571,11 @@ export class PopupController {
     setTimeout(() => document.addEventListener('click', closeHandler), 0);
   }
 
-  private showWordMenuListPicker(wordIndex: number, copyOnly: boolean): void {
+  private showWordMenuListPickerForIndices(indices: number[], copyOnly: boolean): void {
     const dropdown = document.getElementById('wordItemMenuDropdown');
     if (!dropdown || this.wordMenuOpenForIndex === null) return;
 
     this.wordMenuCopyOnly = copyOnly;
-    const currentList = this.lists[this.currentListIndex];
     const otherLists = this.lists
       .map((list, index) => ({ list, index }))
       .filter(({ index }) => index !== this.currentListIndex);
@@ -553,15 +603,51 @@ export class PopupController {
         const targetIndex = Number((item as HTMLElement).dataset.targetIndex);
         if (Number.isNaN(targetIndex)) return;
         if (this.wordMenuCopyOnly) {
-          this.copyWordToOtherList(wordIndex, targetIndex);
+          this.copyWordsToOtherList(indices, targetIndex);
         } else {
-          this.moveWordToOtherList(wordIndex, targetIndex);
+          this.moveWordsToOtherList(indices, targetIndex);
         }
         this.closeWordItemMenu();
         this.save();
         this.renderWords();
         this.renderLists();
       });
+    });
+  }
+
+  private setSelectedWordsActive(indices: number[], active: boolean): void {
+    const list = this.lists[this.currentListIndex];
+    if (!list) return;
+    indices.forEach(index => {
+      const word = list.words[index];
+      if (word) word.active = active;
+    });
+  }
+
+  private deleteWordsByIndices(indices: number[]): void {
+    const list = this.lists[this.currentListIndex];
+    if (!list) return;
+    const toDelete = new Set(indices);
+    this.lists[this.currentListIndex].words = list.words.filter((_, i) => !toDelete.has(i));
+  }
+
+  private moveWordsToOtherList(indices: number[], targetListIndex: number): void {
+    const list = this.lists[this.currentListIndex];
+    const targetList = this.lists[targetListIndex];
+    if (!list || !targetList) return;
+    const sorted = [...indices].sort((a, b) => b - a);
+    const wordsToMove = sorted.map(i => list.words[i]).filter(Boolean);
+    sorted.forEach(i => list.words.splice(i, 1));
+    targetList.words.push(...wordsToMove);
+  }
+
+  private copyWordsToOtherList(indices: number[], targetListIndex: number): void {
+    const list = this.lists[this.currentListIndex];
+    const targetList = this.lists[targetListIndex];
+    if (!list || !targetList) return;
+    indices.forEach(index => {
+      const word = list.words[index];
+      if (word) targetList.words.push({ ...word });
     });
   }
 
@@ -576,67 +662,6 @@ export class PopupController {
     if (this.wordMenuCloseListener) {
       this.wordMenuCloseListener();
     }
-  }
-
-  private moveWordToOtherList(wordIndex: number, targetListIndex: number): void {
-    const list = this.lists[this.currentListIndex];
-    const targetList = this.lists[targetListIndex];
-    const word = list.words[wordIndex];
-    if (!word || !targetList) return;
-    targetList.words.push({ ...word });
-    list.words.splice(wordIndex, 1);
-  }
-
-  private copyWordToOtherList(wordIndex: number, targetListIndex: number): void {
-    const list = this.lists[this.currentListIndex];
-    const targetList = this.lists[targetListIndex];
-    const word = list.words[wordIndex];
-    if (!word || !targetList) return;
-    targetList.words.push({ ...word });
-  }
-
-  private setupWordSelection(): void {
-    document.getElementById('selectAllBtn')?.addEventListener('click', () => {
-      const list = this.lists[this.currentListIndex];
-      list.words.forEach((_, index) => {
-        this.selectedCheckboxes.add(index);
-      });
-      this.renderWords();
-    });
-
-    document.getElementById('deselectAllBtn')?.addEventListener('click', () => {
-      this.selectedCheckboxes.clear();
-      this.renderWords();
-    });
-
-    document.getElementById('deleteSelectedBtn')?.addEventListener('click', () => {
-      if (confirm(chrome.i18n.getMessage('confirm_delete_words') || 'Delete selected words?')) {
-        const list = this.lists[this.currentListIndex];
-        const toDelete = Array.from(this.selectedCheckboxes);
-        this.lists[this.currentListIndex].words = list.words.filter((_, i) => !toDelete.includes(i));
-        this.selectedCheckboxes.clear();
-        this.save();
-        this.renderWords();
-      }
-    });
-
-    document.getElementById('enableSelectedBtn')?.addEventListener('click', () => {
-      const list = this.lists[this.currentListIndex];
-      this.selectedCheckboxes.forEach(index => {
-        list.words[index].active = true;
-      });
-      this.save();
-      this.renderWords();
-    });
-
-    document.getElementById('disableSelectedBtn')?.addEventListener('click', () => {
-      const list = this.lists[this.currentListIndex];
-      this.selectedCheckboxes.forEach(index => {
-        list.words[index].active = false;
-      });
-      this.save();
-      this.renderWords();
-    });
   }
 
   private setupSettings(): void {
@@ -824,27 +849,26 @@ export class PopupController {
   }
 
   private setupImportExport(): void {
-    const importInput = document.getElementById('importInput') as HTMLInputElement;
+    const importListInput = document.getElementById('importListInput') as HTMLInputElement;
 
-    document.getElementById('exportBtn')?.addEventListener('click', () => {
-      const exportData: ExportData = {
-        lists: this.lists,
-        exceptionsList: this.exceptionsList
-      };
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    document.getElementById('exportListBtn')?.addEventListener('click', () => {
+      const list = this.lists[this.currentListIndex];
+      if (!list) return;
+      const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'highlight-lists.json';
+      const safeName = (list.name || 'list').replace(/[^a-zA-Z0-9-_]/g, '-');
+      a.download = `${safeName}.json`;
       a.click();
       URL.revokeObjectURL(url);
     });
 
-    document.getElementById('importBtn')?.addEventListener('click', () => {
-      importInput.click();
+    document.getElementById('importListBtn')?.addEventListener('click', () => {
+      importListInput?.click();
     });
 
-    importInput.addEventListener('change', (e) => {
+    importListInput?.addEventListener('change', (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
 
@@ -852,28 +876,50 @@ export class PopupController {
       reader.onload = (e) => {
         try {
           const data = JSON.parse(e.target?.result as string);
+          const toAdd: HighlightList[] = [];
 
           if (Array.isArray(data)) {
-            this.lists = data;
+            data.forEach((item: unknown) => {
+              if (this.isValidList(item)) toAdd.push(item as HighlightList);
+            });
           } else if (data && typeof data === 'object') {
             if (Array.isArray(data.lists)) {
-              this.lists = data.lists;
-            }
-            if (Array.isArray(data.exceptionsList)) {
-              this.exceptionsList = data.exceptionsList;
+              data.lists.forEach((item: unknown) => {
+                if (this.isValidList(item)) toAdd.push(item as HighlightList);
+              });
+            } else if (this.isValidList(data)) {
+              toAdd.push(data as HighlightList);
             }
           }
 
-          this.currentListIndex = 0;
-          this.updateExceptionButton();
-          this.renderExceptions();
+          if (toAdd.length === 0) {
+            alert(chrome.i18n.getMessage('invalid_import_format') || 'Invalid list format. Please select a valid list file.');
+            return;
+          }
+          const baseId = Date.now();
+          toAdd.forEach((l, i) => {
+            this.lists.push({ ...l, id: baseId + i });
+          });
           this.save();
+          this.renderLists();
         } catch (err) {
           alert(chrome.i18n.getMessage('invalid_json_error') + ': ' + (err as Error).message);
         }
       };
       reader.readAsText(file);
+      importListInput.value = '';
     });
+  }
+
+  private isValidList(obj: unknown): obj is HighlightList {
+    if (!obj || typeof obj !== 'object') return false;
+    const o = obj as Record<string, unknown>;
+    return (
+      typeof o.name === 'string' &&
+      Array.isArray(o.words) &&
+      (typeof o.background === 'string' || typeof o.background === 'undefined') &&
+      (typeof o.foreground === 'string' || typeof o.foreground === 'undefined')
+    );
   }
 
   private setupTheme(): void {
@@ -939,10 +985,6 @@ export class PopupController {
 
     this.renderLists();
     MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
-  }
-
-  private async openListManager(): Promise<void> {
-      await chrome.tabs.create({ url: chrome.runtime.getURL('list-manager/list-manager.html') });
   }
 
   private setupStorageSync(): void {

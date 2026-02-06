@@ -42,16 +42,16 @@
     "message": "Delete"
   },
   "disable_selected": {
-    "message": "Disable"
+    "message": "Disable selected"
   },
   "enable_selected": {
-    "message": "Enable"
+    "message": "Enable selected"
   },
   "import_list": {
-    "message": "Import JSON"
+    "message": "Import list"
   },
   "export_list": {
-    "message": "Export JSON"
+    "message": "Export list"
   },
   "import_list_list_manager": {
     "message": "Import list"
@@ -202,6 +202,12 @@
   },
   "copy_to_list": {
     "message": "Copy to list"
+  },
+  "move_selected": {
+    "message": "Move selected"
+  },
+  "copy_selected": {
+    "message": "Copy selected"
   },
   "no_other_lists": {
     "message": "No other lists"
