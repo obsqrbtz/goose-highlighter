@@ -215,7 +215,7 @@ export class PopupController {
 
     // Manage lists
     document.getElementById('manageListsBtn')?.addEventListener('click', () => {
-      this.openListManagerWindow();
+      void this.openListManager();
     });
 
     // Color picker text inputs sync
@@ -941,14 +941,8 @@ export class PopupController {
     MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
   }
 
-  private openListManagerWindow(): void {
-    chrome.windows.create({
-      url: chrome.runtime.getURL('list-manager/list-manager.html'),
-      type: 'popup',
-      width: 1280,
-      height: 700,
-      focused: true
-    });
+  private async openListManager(): Promise<void> {
+      await chrome.tabs.create({ url: chrome.runtime.getURL('list-manager/list-manager.html') });
   }
 
   private setupStorageSync(): void {

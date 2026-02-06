@@ -41,22 +41,13 @@ class BackgroundService {
     }
 
     private setupContextMenu(): void {
-        chrome.contextMenus.onClicked.addListener((info) => {
+        chrome.contextMenus.onClicked.addListener(async (info) => {
             if (info.menuItemId === 'manage-lists') {
-                this.openListManagerWindow();
+                    await chrome.tabs.create({ url: chrome.runtime.getURL('list-manager/list-manager.html') });
             }
         });
     }
 
-    private openListManagerWindow(): void {
-        chrome.windows.create({
-            url: chrome.runtime.getURL('list-manager/list-manager.html'),
-            type: 'popup',
-            width: 1280,
-            height: 700,
-            focused: true
-        });
-    }
 }
 
 new BackgroundService();
