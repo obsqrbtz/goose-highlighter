@@ -9,6 +9,9 @@ export class PopupController {
   private selectedCheckboxes = new Set<number>();
   private globalHighlightEnabled = true;
   private wordSearchQuery = '';
+  private currentPage = 1;
+  private pageSize = 100;
+  private totalWords = 0;
   private matchCaseEnabled = false;
   private matchWholeEnabled = false;
   private exceptionsList: string[] = [];
@@ -271,6 +274,7 @@ export class PopupController {
 
     wordSearch.addEventListener('input', (e) => {
       this.wordSearchQuery = (e.target as HTMLInputElement).value;
+      this.currentPage = 1;
       this.renderWords();
     });
   }
@@ -1023,6 +1027,7 @@ export class PopupController {
           if (!Number.isNaN(index)) {
             this.selectedCheckboxes.clear();
             this.currentListIndex = index;
+            this.currentPage = 1;
             this.renderWords();
             this.updateListForm();
             this.renderLists();
@@ -1063,14 +1068,25 @@ export class PopupController {
       filteredWords = list.words.filter(w => w.wordStr.toLowerCase().includes(q));
     }
 
+    this.totalWords = filteredWords.length;
+
     if (filteredWords.length === 0) {
       wordList.innerHTML = '<div class="word-list-empty">No words found</div>';
       const wordCount = document.getElementById('wordCount');
       if (wordCount) wordCount.textContent = '0';
+      this.renderPaginationControls();
       return;
     }
 
-    wordList.innerHTML = filteredWords.map(w => {
+    const totalPages = Math.ceil(this.totalWords / this.pageSize);
+    if (this.currentPage > totalPages) {
+      this.currentPage = Math.max(1, totalPages);
+    }
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = Math.min(startIndex + this.pageSize, this.totalWords);
+    const paginatedWords = filteredWords.slice(startIndex, endIndex);
+
+    wordList.innerHTML = paginatedWords.map(w => {
       const realIndex = list.words.indexOf(w);
       const isSelected = this.selectedCheckboxes.has(realIndex);
       return this.createWordItemHTML(w, realIndex, isSelected);
@@ -1078,8 +1094,94 @@ export class PopupController {
 
     const wordCount = document.getElementById('wordCount');
     if (wordCount) {
-      wordCount.textContent = filteredWords.length.toString();
+      wordCount.textContent = this.totalWords.toString();
     }
+
+    this.renderPaginationControls();
+  }
+
+  private renderPaginationControls(): void {
+    const paginationContainer = document.getElementById('paginationControls');
+    if (!paginationContainer) return;
+
+    const totalPages = Math.ceil(this.totalWords / this.pageSize);
+
+    if (totalPages <= 1) {
+      paginationContainer.style.display = 'none';
+      return;
+    }
+
+    const startItem = (this.currentPage - 1) * this.pageSize + 1;
+    const endItem = Math.min(this.currentPage * this.pageSize, this.totalWords);
+
+    const showingText = chrome.i18n.getMessage('showing_items')
+      ?.replace('{start}', String(startItem))
+      .replace('{end}', String(endItem))
+      .replace('{total}', String(this.totalWords))
+      || `Showing ${startItem}-${endItem} of ${this.totalWords} words`;
+
+    const pageInfoText = chrome.i18n.getMessage('page_info')
+      ?.replace('{current}', String(this.currentPage))
+      .replace('{total}', String(totalPages))
+      || `Page ${this.currentPage} of ${totalPages}`;
+
+    const firstPageTitle = chrome.i18n.getMessage('first_page') || 'First page';
+    const prevPageTitle = chrome.i18n.getMessage('previous_page') || 'Previous page';
+    const nextPageTitle = chrome.i18n.getMessage('next_page') || 'Next page';
+    const lastPageTitle = chrome.i18n.getMessage('last_page') || 'Last page';
+
+    paginationContainer.style.display = 'flex';
+    paginationContainer.innerHTML = `
+      <div class="pagination-info">
+        ${showingText}
+      </div>
+      <div class="pagination-controls">
+        <button class="pagination-btn" id="firstPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="${firstPageTitle}">
+          <i class="fa-solid fa-angles-left"></i>
+        </button>
+        <button class="pagination-btn" id="prevPageBtn" ${this.currentPage === 1 ? 'disabled' : ''} title="${prevPageTitle}">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
+        <div class="pagination-pages">
+          <span class="page-info">${pageInfoText}</span>
+        </div>
+        <button class="pagination-btn" id="nextPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="${nextPageTitle}">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+        <button class="pagination-btn" id="lastPageBtn" ${this.currentPage === totalPages ? 'disabled' : ''} title="${lastPageTitle}">
+          <i class="fa-solid fa-angles-right"></i>
+        </button>
+      </div>
+    `;
+
+    this.setupPaginationEventListeners();
+  }
+
+  private setupPaginationEventListeners(): void {
+    document.getElementById('firstPageBtn')?.addEventListener('click', () => {
+      this.goToPage(1);
+    });
+
+    document.getElementById('prevPageBtn')?.addEventListener('click', () => {
+      this.goToPage(this.currentPage - 1);
+    });
+
+    document.getElementById('nextPageBtn')?.addEventListener('click', () => {
+      this.goToPage(this.currentPage + 1);
+    });
+
+    document.getElementById('lastPageBtn')?.addEventListener('click', () => {
+      const totalPages = Math.ceil(this.totalWords / this.pageSize);
+      this.goToPage(totalPages);
+    });
+  }
+
+  private goToPage(page: number): void {
+    const totalPages = Math.ceil(this.totalWords / this.pageSize);
+    if (page < 1 || page > totalPages) return;
+
+    this.currentPage = page;
+    this.renderWords();
   }
 
   private createWordItemHTML(word: HighlightWord, realIndex: number, isSelected: boolean): string {

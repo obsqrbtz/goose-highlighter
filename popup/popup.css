@@ -645,6 +645,72 @@ body {
   text-align: center;
 }
 
+/* Pagination (Words tab) */
+.pagination-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--section-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+
+.pagination-info {
+  font-size: 11px;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pagination-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+  border-radius: 6px;
+  padding: 3px 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  font-size: 11px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--section-bg);
+  border-color: var(--accent);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-pages {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.pagination-pages .page-info {
+  font-size: 11px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
 /* Word item 3-dot menu dropdown */
 .word-item-menu-dropdown {
   display: none;
