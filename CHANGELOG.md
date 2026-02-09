@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.12.0...v1.12.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* permissions ([3e00090](https://github.com/obsqrbtz/goose-highlighter/commit/3e00090ac91ec58f08a46ac9dc826935a0e7085e))
+
 # [1.12.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.11.0...v1.12.0) (2026-02-09)
 
 
