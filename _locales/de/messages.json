@@ -39,19 +39,19 @@
         "message": "Auswählen"
     },
     "delete_selected": {
-        "message": "Löschen"
+        "message": "Ausgewählte löschen"
     },
     "disable_selected": {
-        "message": "Deaktivieren"
+        "message": "Ausgewählte deaktivieren"
     },
     "enable_selected": {
-        "message": "Aktivieren"
+        "message": "Ausgewählte aktivieren"
     },
     "import_list": {
-        "message": "JSON importieren"
+        "message": "Liste importieren"
     },
     "export_list": {
-        "message": "JSON exportieren"
+        "message": "Liste exportieren"
     },
     "import_list_list_manager": {
         "message": "Liste importieren"
@@ -196,6 +196,12 @@
   },
   "copy_to_list": {
     "message": "In Liste kopieren"
+  },
+  "move_selected": {
+    "message": "Ausgewählte verschieben"
+  },
+  "copy_selected": {
+    "message": "Ausgewählte kopieren"
   },
   "no_other_lists": {
     "message": "Keine anderen Listen"

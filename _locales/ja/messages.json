@@ -39,19 +39,19 @@
         "message": "すべて選択"
     },
     "delete_selected": {
-        "message": "削除"
+        "message": "選択項目を削除"
     },
     "disable_selected": {
-        "message": "無効にする"
+        "message": "選択項目を無効にする"
     },
     "enable_selected": {
-        "message": "有効にする"
+        "message": "選択項目を有効にする"
     },
     "import_list": {
-        "message": "JSONをインポート"
+        "message": "リストをインポート"
     },
     "export_list": {
-        "message": "JSONをエクスポート"
+        "message": "リストをエクスポート"
     },
     "import_list_list_manager": {
         "message": "リストをインポート"
@@ -202,6 +202,12 @@
     },
     "copy_to_list": {
         "message": "リストにコピー"
+    },
+    "move_selected": {
+        "message": "選択項目を移動"
+    },
+    "copy_selected": {
+        "message": "選択項目をコピー"
     },
     "no_other_lists": {
         "message": "他のリストはありません"

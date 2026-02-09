@@ -39,19 +39,19 @@
         "message": "Seleziona"
     },
     "delete_selected": {
-        "message": "Elimina"
+        "message": "Elimina selezionati"
     },
     "disable_selected": {
-        "message": "Disattiva"
+        "message": "Disattiva selezionati"
     },
     "enable_selected": {
-        "message": "Attiva"
+        "message": "Attiva selezionati"
     },
     "import_list": {
-        "message": "Importa JSON"
+        "message": "Importa lista"
     },
     "export_list": {
-        "message": "Esporta JSON"
+        "message": "Esporta lista"
     },
     "import_list_list_manager": {
         "message": "Importa lista"
@@ -202,6 +202,12 @@
     },
     "copy_to_list": {
         "message": "Copia in elenco"
+    },
+    "move_selected": {
+        "message": "Sposta selezionati"
+    },
+    "copy_selected": {
+        "message": "Copia selezionati"
     },
     "no_other_lists": {
         "message": "Nessun altro elenco"

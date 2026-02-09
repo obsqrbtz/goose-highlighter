@@ -39,19 +39,19 @@
     "message": "Selecteren"
   },
   "delete_selected": {
-    "message": "Verwijderen"
+    "message": "Geselecteerde verwijderen"
   },
   "disable_selected": {
-    "message": "Uitschakelen"
+    "message": "Geselecteerde uitschakelen"
   },
   "enable_selected": {
-    "message": "Inschakelen"
+    "message": "Geselecteerde inschakelen"
   },
   "import_list": {
-    "message": "JSON importeren"
+    "message": "Lijst importeren"
   },
   "export_list": {
-    "message": "JSON exporteren"
+    "message": "Lijst exporteren"
   },
   "import_list_list_manager": {
     "message": "Lijst importeren"
@@ -202,6 +202,12 @@
   },
   "copy_to_list": {
     "message": "Kopieer naar lijst"
+  },
+  "move_selected": {
+    "message": "Geselecteerde verplaatsen"
+  },
+  "copy_selected": {
+    "message": "Geselecteerde kopiëren"
   },
   "no_other_lists": {
     "message": "Geen andere lijsten"

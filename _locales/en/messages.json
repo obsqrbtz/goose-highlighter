@@ -39,7 +39,7 @@
     "message": "Select"
   },
   "delete_selected": {
-    "message": "Delete"
+    "message": "Delete selected"
   },
   "disable_selected": {
     "message": "Disable selected"

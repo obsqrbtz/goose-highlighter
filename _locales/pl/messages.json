@@ -39,19 +39,19 @@
     "message": "Zaznacz"
   },
   "delete_selected": {
-    "message": "Usuń"
+    "message": "Usuń zaznaczone"
   },
   "disable_selected": {
-    "message": "Wyłącz"
+    "message": "Wyłącz zaznaczone"
   },
   "enable_selected": {
-    "message": "Włącz"
+    "message": "Włącz zaznaczone"
   },
   "import_list": {
-    "message": "Importuj JSON"
+    "message": "Importuj listę"
   },
   "export_list": {
-    "message": "Eksportuj JSON"
+    "message": "Eksportuj listę"
   },
   "import_list_list_manager": {
     "message": "Importuj listę"
@@ -202,6 +202,12 @@
   },
   "copy_to_list": {
     "message": "Kopiuj do listy"
+  },
+  "move_selected": {
+    "message": "Przenieś zaznaczone"
+  },
+  "copy_selected": {
+    "message": "Kopiuj zaznaczone"
   },
   "no_other_lists": {
     "message": "Brak innych list"

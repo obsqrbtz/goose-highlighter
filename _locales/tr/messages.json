@@ -39,19 +39,19 @@
     "message": "Seç"
   },
   "delete_selected": {
-    "message": "Sil"
+    "message": "Seçilenleri sil"
   },
   "disable_selected": {
-    "message": "Devre Dışı Bırak"
+    "message": "Seçilenleri devre dışı bırak"
   },
   "enable_selected": {
-    "message": "Etkinleştir"
+    "message": "Seçilenleri etkinleştir"
   },
   "import_list": {
-    "message": "JSON İçe Aktar"
+    "message": "Listeyi içe aktar"
   },
   "export_list": {
-    "message": "JSON Dışa Aktar"
+    "message": "Listeyi dışa aktar"
   },
   "import_list_list_manager": {
     "message": "Listeyi içe aktar"
@@ -202,6 +202,12 @@
   },
   "copy_to_list": {
     "message": "Listeye kopyala"
+  },
+  "move_selected": {
+    "message": "Seçilenleri taşı"
+  },
+  "copy_selected": {
+    "message": "Seçilenleri kopyala"
   },
   "no_other_lists": {
     "message": "Başka liste yok"

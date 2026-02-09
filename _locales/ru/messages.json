@@ -39,19 +39,19 @@
     "message": "Выбрать все"
   },
   "delete_selected": {
-    "message": "Удалить"
+    "message": "Удалить выбранные"
   },
   "disable_selected": {
-    "message": "Отключить"
+    "message": "Отключить выбранные"
   },
   "enable_selected": {
-    "message": "Включить"
+    "message": "Включить выбранные"
   },
   "import_list": {
-    "message": "Импорт JSON"
+    "message": "Импорт списка"
   },
   "export_list": {
-    "message": "Экспорт JSON"
+    "message": "Экспорт списка"
   },
   "import_list_list_manager": {
     "message": "Импорт списка"
@@ -202,6 +202,12 @@
   },
   "copy_to_list": {
     "message": "Копировать в список"
+  },
+  "move_selected": {
+    "message": "Переместить выбранные"
+  },
+  "copy_selected": {
+    "message": "Копировать выбранные"
   },
   "no_other_lists": {
     "message": "Нет других списков"

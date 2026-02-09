@@ -39,19 +39,19 @@
         "message": "선택"
     },
     "delete_selected": {
-        "message": "삭제"
+        "message": "선택 항목 삭제"
     },
     "disable_selected": {
-        "message": "비활성화"
+        "message": "선택 항목 비활성화"
     },
     "enable_selected": {
-        "message": "활성화"
+        "message": "선택 항목 활성화"
     },
     "import_list": {
-        "message": "JSON 가져오기"
+        "message": "목록 가져오기"
     },
     "export_list": {
-        "message": "JSON 내보내기"
+        "message": "목록 내보내기"
     },
     "import_list_list_manager": {
         "message": "목록 가져오기"
@@ -202,6 +202,12 @@
     },
     "copy_to_list": {
         "message": "목록에 복사"
+    },
+    "move_selected": {
+        "message": "선택 항목 이동"
+    },
+    "copy_selected": {
+        "message": "선택 항목 복사"
     },
     "no_other_lists": {
         "message": "다른 목록 없음"

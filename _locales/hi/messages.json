@@ -39,19 +39,19 @@
         "message": "सभी चुनें"
     },
     "delete_selected": {
-        "message": "हटाएं"
+        "message": "चयनित हटाएं"
     },
     "disable_selected": {
-        "message": "अक्षम करें"
+        "message": "चयनित अक्षम करें"
     },
     "enable_selected": {
-        "message": "सक्षम करें"
+        "message": "चयनित सक्षम करें"
     },
     "import_list": {
-        "message": "JSON आयात करें"
+        "message": "सूची आयात करें"
     },
     "export_list": {
-        "message": "JSON निर्यात करें"
+        "message": "सूची निर्यात करें"
     },
     "import_list_list_manager": {
         "message": "सूची आयात करें"
@@ -202,6 +202,12 @@
     },
     "copy_to_list": {
         "message": "सूची में कॉपी करें"
+    },
+    "move_selected": {
+        "message": "चयनित स्थानांतरित करें"
+    },
+    "copy_selected": {
+        "message": "चयनित कॉपी करें"
     },
     "no_other_lists": {
         "message": "कोई अन्य सूची नहीं"

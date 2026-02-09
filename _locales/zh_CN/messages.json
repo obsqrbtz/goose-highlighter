@@ -39,19 +39,19 @@
     "message": "选择"
   },
   "delete_selected": {
-    "message": "删除"
+    "message": "删除所选"
   },
   "disable_selected": {
-    "message": "禁用"
+    "message": "禁用所选"
   },
   "enable_selected": {
-    "message": "启用"
+    "message": "启用所选"
   },
   "import_list": {
-    "message": "导入 JSON"
+    "message": "导入列表"
   },
   "export_list": {
-    "message": "导出 JSON"
+    "message": "导出列表"
   },
   "import_list_list_manager": {
     "message": "导入列表"
@@ -202,6 +202,12 @@
   },
   "copy_to_list": {
     "message": "复制到列表"
+  },
+  "move_selected": {
+    "message": "移动所选"
+  },
+  "copy_selected": {
+    "message": "复制所选"
   },
   "no_other_lists": {
     "message": "没有其他列表"
