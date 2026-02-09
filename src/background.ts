@@ -1,5 +1,7 @@
 import { StorageService } from './services/StorageService.js';
 
+const POPUP_STATE_KEY = 'goose-popup-ui-state';
+
 class BackgroundService {
     constructor() {
         this.initialize();
@@ -8,6 +10,17 @@ class BackgroundService {
     private initialize(): void {
         this.setupTabUpdateListener();
         this.setupInstallListener();
+        this.setupPopupStateListener();
+    }
+
+    private setupPopupStateListener(): void {
+        chrome.runtime.onMessage.addListener((msg: { type?: string; payload?: unknown }, _sender, sendResponse) => {
+            if (msg.type === 'SAVE_POPUP_STATE' && msg.payload !== undefined) {
+                chrome.storage.local.set({ [POPUP_STATE_KEY]: JSON.stringify(msg.payload) }).then(() => sendResponse(undefined)).catch(() => sendResponse(undefined));
+                return true;
+            }
+            return false;
+        });
     }
 
     private setupTabUpdateListener(): void {

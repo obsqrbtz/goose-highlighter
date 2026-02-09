@@ -46,4 +46,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   displayVersion();
   const controller = new PopupController();
   await controller.initialize();
+
+  const onClose = (): void => controller.captureScrollAndSave();
+  window.addEventListener('blur', onClose);
+  window.addEventListener('pagehide', onClose);
 });

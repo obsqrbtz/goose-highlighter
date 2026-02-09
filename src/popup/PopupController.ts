@@ -22,15 +22,21 @@ export class PopupController {
   private wordMenuOpenForIndex: number | null = null;
   private wordMenuCopyOnly = false;
   private wordMenuCloseListener: (() => void) | null = null;
+  private periodicSaveInterval: ReturnType<typeof setInterval> | null = null;
 
   async initialize(): Promise<void> {
     await this.loadData();
+    await this.loadPopupState();
     await this.getCurrentTab();
-    this.loadActiveTab();
     this.translateTitles();
     this.setupEventListeners();
     this.render();
+    this.restoreWordSearchInput();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.restoreScrollPositions());
+    });
     this.hideLoadingOverlay();
+    this.startPeriodicSave();
   }
 
   private hideLoadingOverlay(): void {
@@ -73,10 +79,114 @@ export class PopupController {
     }
   }
 
-  private loadActiveTab(): void {
-    const saved = localStorage.getItem('goose-highlighter-active-tab');
-    if (saved && saved !== 'options') {
-      this.activeTab = saved;
+  private static readonly POPUP_STATE_KEY = 'goose-popup-ui-state';
+  private scrollPositions: Record<string, number> = {};
+
+  private async loadPopupState(): Promise<void> {
+    try {
+      const result = await chrome.storage.local.get(PopupController.POPUP_STATE_KEY);
+      const raw = result[PopupController.POPUP_STATE_KEY];
+      if (raw === undefined || typeof raw !== 'string') return;
+      const state = JSON.parse(raw) as {
+        activeTab?: string;
+        currentListIndex?: number;
+        wordSearchQuery?: string;
+        currentPage?: number;
+        scrollPositions?: Record<string, number>;
+      };
+      if (typeof state.activeTab === 'string' && state.activeTab !== 'options') {
+        this.activeTab = state.activeTab;
+      }
+      if (typeof state.currentListIndex === 'number' && state.currentListIndex >= 0) {
+        this.currentListIndex = Math.min(state.currentListIndex, Math.max(0, this.lists.length - 1));
+      }
+      if (typeof state.wordSearchQuery === 'string') {
+        this.wordSearchQuery = state.wordSearchQuery;
+      }
+      if (typeof state.currentPage === 'number' && state.currentPage >= 1) {
+        this.currentPage = state.currentPage;
+      }
+      if (state.scrollPositions && typeof state.scrollPositions === 'object') {
+        this.scrollPositions = { ...state.scrollPositions };
+      }
+    } catch {
+      // keep defaults
+    }
+  }
+
+  private getPopupStatePayload(): { activeTab: string; currentListIndex: number; wordSearchQuery: string; currentPage: number; scrollPositions: Record<string, number> } {
+    return {
+      activeTab: this.activeTab,
+      currentListIndex: this.currentListIndex,
+      wordSearchQuery: this.wordSearchQuery,
+      currentPage: this.currentPage,
+      scrollPositions: this.scrollPositions
+    };
+  }
+
+  private savePopupState(): void {
+    chrome.storage.local.set({ [PopupController.POPUP_STATE_KEY]: JSON.stringify(this.getPopupStatePayload()) }).catch(() => {});
+  }
+
+  private startPeriodicSave(): void {
+    this.periodicSaveInterval = setInterval(() => {
+      const scrollEl = this.getScrollContainer(this.activeTab);
+      if (scrollEl) this.scrollPositions[this.activeTab] = scrollEl.scrollTop;
+      this.savePopupState();
+    }, 800);
+  }
+
+  captureScrollAndSave(): void {
+    if (this.periodicSaveInterval) {
+      clearInterval(this.periodicSaveInterval);
+      this.periodicSaveInterval = null;
+    }
+    const scrollEl = this.getScrollContainer(this.activeTab);
+    if (scrollEl) this.scrollPositions[this.activeTab] = scrollEl.scrollTop;
+    chrome.runtime.sendMessage({ type: 'SAVE_POPUP_STATE', payload: this.getPopupStatePayload() }).catch(() => {});
+  }
+
+  private restoreWordSearchInput(): void {
+    const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
+    if (wordSearch) {
+      wordSearch.value = this.wordSearchQuery;
+    }
+  }
+
+  private static readonly SCROLL_SELECTORS: Record<string, string> = {
+    lists: '.tab-inner',
+    words: '.word-list-container',
+    'page-highlights': '.page-highlights-list',
+    exceptions: '.exceptions-list'
+  };
+
+  private getScrollContainer(tabName: string): HTMLElement | null {
+    const sel = PopupController.SCROLL_SELECTORS[tabName];
+    if (!sel) return null;
+    const content = document.querySelector(`.tab-content[data-tab-content="${tabName}"]`);
+    return content?.querySelector(sel) ?? null;
+  }
+
+  private setupScrollListeners(): void {
+    const tabNames = ['lists', 'words', 'page-highlights', 'exceptions'];
+    tabNames.forEach(tabName => {
+      const el = this.getScrollContainer(tabName);
+      if (el) {
+        el.addEventListener('scroll', () => {
+          this.scrollPositions[tabName] = el.scrollTop;
+          this.savePopupState();
+        }, { passive: true });
+      }
+    });
+  }
+
+  private restoreScrollPositions(): void {
+    const el = this.getScrollContainer(this.activeTab);
+    if (el) {
+      const saved = this.scrollPositions[this.activeTab];
+      if (typeof saved === 'number' && saved >= 0) {
+        el.scrollTop = saved;
+      }
     }
   }
 
@@ -92,13 +202,16 @@ export class PopupController {
     });
   }
 
-  private saveActiveTab(): void {
-    localStorage.setItem('goose-highlighter-active-tab', this.activeTab);
-  }
-
   private switchTab(tabName: string): void {
-    this.activeTab = tabName;
-    this.saveActiveTab();
+    const isUserSwitch = tabName !== this.activeTab;
+    if (isUserSwitch) {
+      const scrollEl = this.getScrollContainer(this.activeTab);
+      if (scrollEl) {
+        this.scrollPositions[this.activeTab] = scrollEl.scrollTop;
+      }
+      this.activeTab = tabName;
+      this.savePopupState();
+    }
 
     document.querySelectorAll('.tab-button').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
@@ -111,10 +224,12 @@ export class PopupController {
     if (tabName === 'page-highlights') {
       this.loadPageHighlights();
     }
+    requestAnimationFrame(() => this.restoreScrollPositions());
   }
 
   private setupEventListeners(): void {
     this.setupTabs();
+    this.setupScrollListeners();
     this.setupSettingsOverlay();
     this.setupListManagement();
     this.setupWordManagement();
@@ -197,6 +312,7 @@ export class PopupController {
         words: []
       });
       this.currentListIndex = this.lists.length - 1;
+      this.savePopupState();
       this.save();
     });
 
@@ -209,6 +325,7 @@ export class PopupController {
       if (confirm(chrome.i18n.getMessage('confirm_delete_list') || 'Delete this list?')) {
         this.lists.splice(this.currentListIndex, 1);
         this.currentListIndex = Math.max(0, this.currentListIndex - 1);
+        this.savePopupState();
         this.save();
       }
     });
@@ -269,6 +386,7 @@ export class PopupController {
     wordSearch.addEventListener('input', (e) => {
       this.wordSearchQuery = (e.target as HTMLInputElement).value;
       this.currentPage = 1;
+      this.savePopupState();
       this.renderWords();
     });
   }
@@ -805,6 +923,9 @@ export class PopupController {
         </div>
       `;
     }).join('');
+    if (this.activeTab === 'page-highlights') {
+      requestAnimationFrame(() => this.restoreScrollPositions());
+    }
   }
 
   private setupExceptions(): void {
@@ -1064,6 +1185,7 @@ export class PopupController {
             this.selectedCheckboxes.clear();
             this.currentListIndex = index;
             this.currentPage = 1;
+            this.savePopupState();
             this.renderWords();
             this.updateListForm();
             this.renderLists();
@@ -1117,6 +1239,7 @@ export class PopupController {
     const totalPages = Math.ceil(this.totalWords / this.pageSize);
     if (this.currentPage > totalPages) {
       this.currentPage = Math.max(1, totalPages);
+      this.savePopupState();
     }
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = Math.min(startIndex + this.pageSize, this.totalWords);
@@ -1217,6 +1340,7 @@ export class PopupController {
     if (page < 1 || page > totalPages) return;
 
     this.currentPage = page;
+    this.savePopupState();
     this.renderWords();
   }
 
