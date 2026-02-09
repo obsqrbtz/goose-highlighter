@@ -1,10 +1,9 @@
-/* DM Sans – https://fontsource.org/fonts/dm-sans */
 @font-face {
   font-family: 'DM Sans';
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url(https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@latest/latin-400-normal.woff2) format('woff2');
+  src: url('fonts/dm-sans-latin-400-normal.woff2') format('woff2');
 }
 
 @font-face {
@@ -12,7 +11,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 500;
-  src: url(https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@latest/latin-500-normal.woff2) format('woff2');
+  src: url('fonts/dm-sans-latin-500-normal.woff2') format('woff2');
 }
 
 @font-face {
@@ -20,5 +19,5 @@
   font-style: normal;
   font-display: swap;
   font-weight: 600;
-  src: url(https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@latest/latin-600-normal.woff2) format('woff2');
+  src: url('fonts/dm-sans-latin-600-normal.woff2') format('woff2');
 }
