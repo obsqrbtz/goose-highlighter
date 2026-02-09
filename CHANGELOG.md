@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.11.0...v1.12.0) (2026-02-09)
+
+
+### Features
+
+* list management ([5e3e2bb](https://github.com/obsqrbtz/goose-highlighter/commit/5e3e2bbfe40bf3fcceeb4a5de88024ecc6987973))
+
 # [1.11.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.10.2...v1.11.0) (2025-12-11)
 
 
