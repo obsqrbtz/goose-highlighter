@@ -957,9 +957,9 @@ export class PopupController {
     });
 
     document.getElementById('exceptionsList')?.addEventListener('click', async (e) => {
-      const target = e.target as HTMLElement;
-      if (target.classList.contains('exception-remove')) {
-        const domain = target.dataset.domain!;
+      const button = (e.target as HTMLElement).closest('.exception-remove');
+      if (button) {
+        const domain = (button as HTMLElement).dataset.domain!;
         this.exceptionsList = this.exceptionsList.filter(d => d !== domain);
         this.updateExceptionButton();
         this.renderExceptions();
