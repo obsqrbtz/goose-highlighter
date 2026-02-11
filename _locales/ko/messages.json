@@ -125,11 +125,16 @@
     "exceptions_mode": { "message": "모드:" },
     "exceptions_mode_blacklist": { "message": "차단 목록 — 이 사이트에서 강조 안 함" },
     "exceptions_mode_whitelist": { "message": "허용 목록 — 이 사이트에서만 강조" },
+    "exceptions_mode_option_blacklist": { "message": "차단 목록" },
+    "exceptions_mode_option_whitelist": { "message": "허용 목록" },
+    "exceptions_mode_hint_blacklist": { "message": "이 사이트에서 강조하지 않습니다." },
+    "exceptions_mode_hint_whitelist": { "message": "이 사이트에서만 강조합니다." },
     "exceptions_list": {
         "message": "예외 사이트:"
     },
     "exceptions_list_blacklist": { "message": "제외할 사이트 (차단 목록):" },
     "exceptions_list_whitelist": { "message": "포함할 사이트 (허용 목록):" },
+    "add_current_site": { "message": "현재 사이트 추가" },
     "clear_all": {
         "message": "모두 지우기"
     },

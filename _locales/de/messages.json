@@ -119,11 +119,16 @@
   "exceptions_mode": { "message": "Modus:" },
   "exceptions_mode_blacklist": { "message": "Blacklist — auf diesen Sites nicht hervorheben" },
   "exceptions_mode_whitelist": { "message": "Whitelist — nur auf diesen Sites hervorheben" },
+  "exceptions_mode_option_blacklist": { "message": "Blacklist" },
+  "exceptions_mode_option_whitelist": { "message": "Whitelist" },
+  "exceptions_mode_hint_blacklist": { "message": "Auf diesen Sites nicht hervorheben." },
+  "exceptions_mode_hint_whitelist": { "message": "Nur auf diesen Sites hervorheben." },
   "exceptions_list": {
     "message": "Ausnahme-Websites:"
   },
   "exceptions_list_blacklist": { "message": "Sites ausschließen (Blacklist):" },
   "exceptions_list_whitelist": { "message": "Sites einschließen (Whitelist):" },
+  "add_current_site": { "message": "Aktuelle Website hinzufügen" },
   "clear_all": {
     "message": "Alle löschen"
   },

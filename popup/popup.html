@@ -224,16 +224,13 @@
     <div class="tab-content" data-tab-content="exceptions">
       <div class="tab-inner">
         <div class="exceptions-section">
-          <label class="section-label">
-            <i class="fa-solid fa-ban"></i>
-            <span data-i18n="site_exceptions">Site Exceptions</span>
-          </label>
           <div class="exceptions-mode-card">
             <span class="exceptions-mode-label" data-i18n="exceptions_mode">Mode</span>
             <select id="exceptionsModeSelect" class="exceptions-mode-select" aria-label="Exceptions mode">
-              <option value="blacklist" data-i18n="exceptions_mode_blacklist">Blacklist — don't highlight on these sites</option>
-              <option value="whitelist" data-i18n="exceptions_mode_whitelist">Whitelist — only highlight on these sites</option>
+              <option value="blacklist" data-i18n="exceptions_mode_option_blacklist">Blacklist</option>
+              <option value="whitelist" data-i18n="exceptions_mode_option_whitelist">Whitelist</option>
             </select>
+            <p class="exceptions-mode-hint" id="exceptionsModeHint" aria-live="polite"></p>
           </div>
           <div class="exceptions-add-row">
             <input type="text" id="exceptionDomainInput" class="exception-domain-input" data-i18n="exception_domain_placeholder" placeholder="example.com" />
@@ -241,6 +238,7 @@
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
+          <button type="button" class="exceptions-add-current-link" id="addCurrentSiteBtn" data-i18n="add_current_site">Add current site</button>
           <div class="exceptions-list-wrapper">
             <div class="exceptions-list-header">
               <span class="exceptions-mode-label" id="exceptionsListLabel" data-i18n="exceptions_list">Exception Sites</span>

@@ -1212,9 +1212,11 @@ export class PopupController {
       await StorageService.update('exceptionsMode', this.exceptionsMode);
       MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       this.updateExceptionsModeLabel();
+      this.updateExceptionsModeHint();
     });
 
     document.getElementById('addExceptionBtn')?.addEventListener('click', () => this.addExceptionFromInput());
+    document.getElementById('addCurrentSiteBtn')?.addEventListener('click', () => this.addCurrentSiteToExceptions());
     (document.getElementById('exceptionDomainInput') as HTMLInputElement)?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') this.addExceptionFromInput();
     });
@@ -1223,6 +1225,7 @@ export class PopupController {
       if (confirm(chrome.i18n.getMessage('confirm_clear_exceptions') || 'Clear all exceptions?')) {
         this.exceptionsList = [];
         this.renderExceptions();
+        this.updateAddCurrentSiteButton();
         await StorageService.update('exceptionsList', this.exceptionsList);
         MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       }
@@ -1234,6 +1237,7 @@ export class PopupController {
         const domain = (button as HTMLElement).dataset.domain!;
         this.exceptionsList = this.exceptionsList.filter(d => d !== domain);
         this.renderExceptions();
+        this.updateAddCurrentSiteButton();
         await StorageService.update('exceptionsList', this.exceptionsList);
         MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       }
@@ -1423,6 +1427,8 @@ export class PopupController {
     this.renderExceptions();
     this.updateExceptionsModeSelect();
     this.updateExceptionsModeLabel();
+    this.updateExceptionsModeHint();
+    this.updateAddCurrentSiteButton();
     this.updateFormValues();
   }
 
@@ -1683,6 +1689,23 @@ export class PopupController {
     });
   }
 
+  private async addCurrentSiteToExceptions(): Promise<void> {
+    let host = this.currentTabHost;
+    if (!host) {
+      await this.getCurrentTab();
+      host = this.currentTabHost;
+    }
+    if (!host) return;
+    const domain = host.toLowerCase();
+    if (this.exceptionsList.includes(domain)) return;
+    this.exceptionsList.push(domain);
+    this.renderExceptions();
+    await StorageService.update('exceptionsList', this.exceptionsList);
+    MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
+    this.updateAddCurrentSiteButton();
+  }
+
+
   private updateExceptionsModeSelect(): void {
     const select = document.getElementById('exceptionsModeSelect') as HTMLSelectElement | null;
     if (select) select.value = this.exceptionsMode;
@@ -1693,6 +1716,21 @@ export class PopupController {
     if (!label) return;
     const key = this.exceptionsMode === 'whitelist' ? 'exceptions_list_whitelist' : 'exceptions_list_blacklist';
     label.textContent = chrome.i18n.getMessage(key) || (this.exceptionsMode === 'whitelist' ? 'Sites to highlight (whitelist):' : 'Sites to exclude (blacklist):');
+  }
+
+  private updateExceptionsModeHint(): void {
+    const hint = document.getElementById('exceptionsModeHint');
+    if (!hint) return;
+    const key = this.exceptionsMode === 'whitelist' ? 'exceptions_mode_hint_whitelist' : 'exceptions_mode_hint_blacklist';
+    hint.textContent = chrome.i18n.getMessage(key) || (this.exceptionsMode === 'whitelist' ? 'Only highlight on these sites.' : 'Don\'t highlight on these sites.');
+  }
+
+  private updateAddCurrentSiteButton(): void {
+    const btn = document.getElementById('addCurrentSiteBtn') as HTMLButtonElement | null;
+    if (!btn) return;
+    const host = this.currentTabHost.toLowerCase();
+    const alreadyInList = host !== '' && this.exceptionsList.includes(host);
+    btn.disabled = !host || alreadyInList;
   }
 
   private renderExceptions(): void {
@@ -1709,7 +1747,7 @@ export class PopupController {
         <span class="exception-domain-icon"><i class="fa-solid fa-at"></i></span>
         <span class="exception-domain">${DOMUtils.escapeHtml(domain)}</span>
         <button type="button" class="exception-remove" data-domain="${DOMUtils.escapeHtml(domain)}" title="${DOMUtils.escapeHtml(chrome.i18n.getMessage('remove') || 'Remove')}" aria-label="${DOMUtils.escapeHtml(chrome.i18n.getMessage('remove') || 'Remove')}">
-          <i class="fa-solid fa-trash"></i>
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>`
     ).join('');

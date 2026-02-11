@@ -125,11 +125,16 @@
     "exceptions_mode": { "message": "モード:" },
     "exceptions_mode_blacklist": { "message": "ブラックリスト — これらのサイトではハイライトしない" },
     "exceptions_mode_whitelist": { "message": "ホワイトリスト — これらのサイトでのみハイライト" },
+    "exceptions_mode_option_blacklist": { "message": "ブラックリスト" },
+    "exceptions_mode_option_whitelist": { "message": "ホワイトリスト" },
+    "exceptions_mode_hint_blacklist": { "message": "これらのサイトではハイライトしません。" },
+    "exceptions_mode_hint_whitelist": { "message": "これらのサイトでのみハイライトします。" },
     "exceptions_list": {
         "message": "例外サイト:"
     },
     "exceptions_list_blacklist": { "message": "除外するサイト（ブラックリスト）:" },
     "exceptions_list_whitelist": { "message": "含めるサイト（ホワイトリスト）:" },
+    "add_current_site": { "message": "現在のサイトを追加" },
     "clear_all": {
         "message": "すべてクリア"
     },

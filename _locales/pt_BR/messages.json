@@ -125,11 +125,16 @@
   "exceptions_mode": { "message": "Modo:" },
   "exceptions_mode_blacklist": { "message": "Lista negra — não destacar nestes sites" },
   "exceptions_mode_whitelist": { "message": "Lista branca — destacar apenas nestes sites" },
+  "exceptions_mode_option_blacklist": { "message": "Lista negra" },
+  "exceptions_mode_option_whitelist": { "message": "Lista branca" },
+  "exceptions_mode_hint_blacklist": { "message": "Não destacar nestes sites." },
+  "exceptions_mode_hint_whitelist": { "message": "Destacar apenas nestes sites." },
   "exceptions_list": {
     "message": "Sites de exceção:"
   },
   "exceptions_list_blacklist": { "message": "Sites a excluir (lista negra):" },
   "exceptions_list_whitelist": { "message": "Sites a incluir (lista branca):" },
+  "add_current_site": { "message": "Adicionar site atual" },
   "clear_all": {
     "message": "Limpar tudo"
   },

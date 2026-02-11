@@ -125,11 +125,16 @@
   "exceptions_mode": { "message": "Mod:" },
   "exceptions_mode_blacklist": { "message": "Kara liste — bu sitelerde vurgulama" },
   "exceptions_mode_whitelist": { "message": "Beyaz liste — yalnızca bu sitelerde vurgula" },
+  "exceptions_mode_option_blacklist": { "message": "Kara liste" },
+  "exceptions_mode_option_whitelist": { "message": "Beyaz liste" },
+  "exceptions_mode_hint_blacklist": { "message": "Bu sitelerde vurgulama." },
+  "exceptions_mode_hint_whitelist": { "message": "Yalnızca bu sitelerde vurgula." },
   "exceptions_list": {
     "message": "İstisna Siteleri:"
   },
   "exceptions_list_blacklist": { "message": "Hariç tutulacak siteler (kara liste):" },
   "exceptions_list_whitelist": { "message": "Dahil edilecek siteler (beyaz liste):" },
+  "add_current_site": { "message": "Mevcut siteyi ekle" },
   "clear_all": {
     "message": "Hepsini Temizle"
   },

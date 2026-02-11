@@ -125,11 +125,16 @@
   "exceptions_mode": { "message": "模式：" },
   "exceptions_mode_blacklist": { "message": "黑名单 — 不在这些网站上高亮" },
   "exceptions_mode_whitelist": { "message": "白名单 — 仅在这些网站上高亮" },
+  "exceptions_mode_option_blacklist": { "message": "黑名单" },
+  "exceptions_mode_option_whitelist": { "message": "白名单" },
+  "exceptions_mode_hint_blacklist": { "message": "不在这些网站上高亮。" },
+  "exceptions_mode_hint_whitelist": { "message": "仅在这些网站上高亮。" },
   "exceptions_list": {
     "message": "例外网站："
   },
   "exceptions_list_blacklist": { "message": "要排除的网站（黑名单）：" },
   "exceptions_list_whitelist": { "message": "要包含的网站（白名单）：" },
+  "add_current_site": { "message": "添加当前网站" },
   "clear_all": {
     "message": "清除全部"
   },

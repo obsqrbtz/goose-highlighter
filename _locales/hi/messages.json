@@ -125,11 +125,16 @@
     "exceptions_mode": { "message": "मोड:" },
     "exceptions_mode_blacklist": { "message": "ब्लैकलिस्ट — इन साइटों पर हाइलाइट न करें" },
     "exceptions_mode_whitelist": { "message": "व्हाइटलिस्ट — केवल इन साइटों पर हाइलाइट करें" },
+    "exceptions_mode_option_blacklist": { "message": "ब्लैकलिस्ट" },
+    "exceptions_mode_option_whitelist": { "message": "व्हाइटलिस्ट" },
+    "exceptions_mode_hint_blacklist": { "message": "इन साइटों पर हाइलाइट न करें।" },
+    "exceptions_mode_hint_whitelist": { "message": "केवल इन साइटों पर हाइलाइट करें।" },
     "exceptions_list": {
         "message": "अपवाद साइटें:"
     },
     "exceptions_list_blacklist": { "message": "बहिष्कृत साइटें (ब्लैकलिस्ट):" },
     "exceptions_list_whitelist": { "message": "शामिल साइटें (व्हाइटलिस्ट):" },
+    "add_current_site": { "message": "वर्तमान साइट जोड़ें" },
     "clear_all": {
         "message": "सभी साफ करें"
     },

@@ -125,11 +125,16 @@
   "exceptions_mode": { "message": "Режим:" },
   "exceptions_mode_blacklist": { "message": "Чёрный список — не подсвечивать на этих сайтах" },
   "exceptions_mode_whitelist": { "message": "Белый список — подсвечивать только на этих сайтах" },
+  "exceptions_mode_option_blacklist": { "message": "Чёрный список" },
+  "exceptions_mode_option_whitelist": { "message": "Белый список" },
+  "exceptions_mode_hint_blacklist": { "message": "Не подсвечивать на этих сайтах." },
+  "exceptions_mode_hint_whitelist": { "message": "Подсвечивать только на этих сайтах." },
   "exceptions_list": {
     "message": "Сайты-исключения:"
   },
   "exceptions_list_blacklist": { "message": "Исключить сайты (чёрный список):" },
   "exceptions_list_whitelist": { "message": "Включить сайты (белый список):" },
+  "add_current_site": { "message": "Добавить текущий сайт" },
   "clear_all": {
     "message": "Очистить все"
   },

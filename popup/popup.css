@@ -1138,13 +1138,21 @@ body {
 .exceptions-mode-select {
   width: 100%;
   min-height: 32px;
-  padding: 0 10px;
+  padding: 0 28px 0 10px;
   font-size: var(--text-base);
   color: var(--text-color);
   background: var(--input-bg);
   border: 1px solid var(--input-border);
   border-radius: 6px;
   cursor: pointer;
+}
+
+.exceptions-mode-hint {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-color);
+  opacity: 0.6;
+  line-height: 1.3;
 }
 
 .exceptions-add-row {
@@ -1186,6 +1194,30 @@ body {
 
 .exception-add-btn i {
   font-size: 14px;
+}
+
+.exceptions-add-current-link {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: var(--text-xs);
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.2s, color 0.2s;
+  flex-shrink: 0;
+  text-align: left;
+}
+
+.exceptions-add-current-link:hover {
+  opacity: 0.9;
+  text-decoration: underline;
+}
+
+.exceptions-add-current-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  text-decoration: none;
 }
 
 .exceptions-list-wrapper {
@@ -1285,15 +1317,15 @@ body {
 .exception-remove {
   background: none;
   border: none;
-  padding: 4px;
+  padding: 2px;
   cursor: pointer;
   flex-shrink: 0;
   transition: color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9ca3af;
-  opacity: 0;
+  color: var(--text-color);
+  opacity: 0.5;
 }
 
 .exception-item:hover .exception-remove {
@@ -1302,10 +1334,11 @@ body {
 
 .exception-remove:hover {
   color: var(--danger);
+  background: none;
 }
 
 .exception-remove i {
-  font-size: 12px;
+  font-size: 10px;
 }
 
 

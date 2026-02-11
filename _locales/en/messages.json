@@ -131,6 +131,18 @@
   "exceptions_mode_whitelist": {
     "message": "Whitelist — only highlight on these sites"
   },
+  "exceptions_mode_option_blacklist": {
+    "message": "Blacklist"
+  },
+  "exceptions_mode_option_whitelist": {
+    "message": "Whitelist"
+  },
+  "exceptions_mode_hint_blacklist": {
+    "message": "Don't highlight on these sites."
+  },
+  "exceptions_mode_hint_whitelist": {
+    "message": "Only highlight on these sites."
+  },
   "exceptions_list": {
     "message": "Exception Sites:"
   },
@@ -139,6 +151,9 @@
   },
   "exceptions_list_whitelist": {
     "message": "Sites to include (whitelist):"
+  },
+  "add_current_site": {
+    "message": "Add current site"
   },
   "clear_all": {
     "message": "Clear all"

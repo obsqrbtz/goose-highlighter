@@ -125,11 +125,16 @@
   "exceptions_mode": { "message": "Tryb:" },
   "exceptions_mode_blacklist": { "message": "Czarna lista — nie podświetlaj na tych stronach" },
   "exceptions_mode_whitelist": { "message": "Biała lista — podświetlaj tylko na tych stronach" },
+  "exceptions_mode_option_blacklist": { "message": "Czarna lista" },
+  "exceptions_mode_option_whitelist": { "message": "Biała lista" },
+  "exceptions_mode_hint_blacklist": { "message": "Nie podświetlaj na tych stronach." },
+  "exceptions_mode_hint_whitelist": { "message": "Podświetlaj tylko na tych stronach." },
   "exceptions_list": {
     "message": "Strony wyjątków:"
   },
   "exceptions_list_blacklist": { "message": "Strony do wykluczenia (czarna lista):" },
   "exceptions_list_whitelist": { "message": "Strony do uwzględnienia (biała lista):" },
+  "add_current_site": { "message": "Dodaj bieżącą witrynę" },
   "clear_all": {
     "message": "Wyczyść wszystko"
   },
