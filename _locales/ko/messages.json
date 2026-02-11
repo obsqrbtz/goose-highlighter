@@ -328,5 +328,17 @@
     },
     "rename_list": {
         "message": "리스트 이름 변경"
+    },
+    "export_settings": {
+        "message": "내보내기"
+    },
+    "import_settings": {
+        "message": "가져오기"
+    },
+    "export_import_settings_label": {
+        "message": "내보내기 / 가져오기"
+    },
+    "export_import_settings_hint": {
+        "message": "목록 및 사이트 예외를 백업하거나 복원합니다."
     }
 }

@@ -328,5 +328,17 @@
     },
     "rename_list": {
         "message": "सूची का नाम बदलें"
+    },
+    "export_settings": {
+        "message": "निर्यात"
+    },
+    "import_settings": {
+        "message": "आयात"
+    },
+    "export_import_settings_label": {
+        "message": "निर्यात / आयात"
+    },
+    "export_import_settings_hint": {
+        "message": "सूचियों और साइट अपवादों का बैकअप लें या पुनर्स्थापित करें।"
     }
 }

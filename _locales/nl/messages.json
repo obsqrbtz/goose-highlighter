@@ -328,5 +328,17 @@
   },
   "rename_list": {
     "message": "Lijst hernoemen"
+  },
+  "export_settings": {
+    "message": "Exporteren"
+  },
+  "import_settings": {
+    "message": "Importeren"
+  },
+  "export_import_settings_label": {
+    "message": "Exporteren / Importeren"
+  },
+  "export_import_settings_hint": {
+    "message": "Back-up maken of lijsten en site-uitzonderingen herstellen."
   }
 }

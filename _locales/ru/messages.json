@@ -329,5 +329,17 @@
   },
   "rename_list": {
     "message": "Переименовать список"
+  },
+  "export_settings": {
+    "message": "Экспорт"
+  },
+  "import_settings": {
+    "message": "Импорт"
+  },
+  "export_import_settings_label": {
+    "message": "Экспорт / Импорт"
+  },
+  "export_import_settings_hint": {
+    "message": "Резервное копирование или восстановление списков и исключений сайтов."
   }
 }

@@ -328,5 +328,17 @@
   },
   "rename_list": {
     "message": "Renombrar lista"
+  },
+  "export_settings": {
+    "message": "Exportar"
+  },
+  "import_settings": {
+    "message": "Importar"
+  },
+  "export_import_settings_label": {
+    "message": "Exportar / Importar"
+  },
+  "export_import_settings_hint": {
+    "message": "Hacer copia de seguridad o restaurar listas y excepciones de sitios."
   }
 }

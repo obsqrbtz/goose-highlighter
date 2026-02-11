@@ -322,5 +322,17 @@
   },
   "rename_list": {
     "message": "Liste umbenennen"
+  },
+  "export_settings": {
+    "message": "Exportieren"
+  },
+  "import_settings": {
+    "message": "Importieren"
+  },
+  "export_import_settings_label": {
+    "message": "Export / Import"
+  },
+  "export_import_settings_hint": {
+    "message": "Listen und Website-Ausnahmen sichern oder wiederherstellen."
   }
 }

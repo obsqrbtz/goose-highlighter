@@ -276,6 +276,22 @@
             </div>
           </div>
 
+          <div class="settings-export-import-section">
+            <p class="settings-export-import-label" data-i18n="export_import_settings_label">Export / Import</p>
+            <p class="settings-export-import-hint" data-i18n="export_import_settings_hint">Back up or restore lists and site exceptions.</p>
+            <div class="list-export-import-row">
+              <button type="button" class="list-export-import-btn" id="exportSettingsBtn">
+                <i class="fa-solid fa-download"></i>
+                <span data-i18n="export_settings">Export</span>
+              </button>
+              <button type="button" class="list-export-import-btn" id="importSettingsBtn">
+                <i class="fa-solid fa-upload"></i>
+                <span data-i18n="import_settings">Import</span>
+              </button>
+              <input type="file" id="importSettingsInput" accept="application/json" hidden />
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

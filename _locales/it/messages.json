@@ -328,5 +328,17 @@
     },
     "rename_list": {
         "message": "Rinomina elenco"
+    },
+    "export_settings": {
+        "message": "Esporta"
+    },
+    "import_settings": {
+        "message": "Importa"
+    },
+    "export_import_settings_label": {
+        "message": "Esporta / Importa"
+    },
+    "export_import_settings_hint": {
+        "message": "Backup o ripristino di elenchi e eccezioni di siti."
     }
 }

@@ -328,5 +328,17 @@
   },
   "rename_list": {
     "message": "重命名列表"
+  },
+  "export_settings": {
+    "message": "导出"
+  },
+  "import_settings": {
+    "message": "导入"
+  },
+  "export_import_settings_label": {
+    "message": "导出 / 导入"
+  },
+  "export_import_settings_hint": {
+    "message": "备份或恢复列表和站点例外。"
   }
 }

@@ -328,5 +328,17 @@
   },
   "rename_list": {
     "message": "Zmień nazwę listy"
+  },
+  "export_settings": {
+    "message": "Eksportuj"
+  },
+  "import_settings": {
+    "message": "Importuj"
+  },
+  "export_import_settings_label": {
+    "message": "Eksport / Import"
+  },
+  "export_import_settings_hint": {
+    "message": "Utwórz kopię zapasową lub przywróć listy i wyjątki witryn."
   }
 }

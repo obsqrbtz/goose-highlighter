@@ -1,4 +1,4 @@
-import { HighlightList, HighlightWord, HighlightInfo } from '../types.js';
+import { HighlightList, HighlightWord, HighlightInfo, ExportData } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
@@ -231,6 +231,7 @@ export class PopupController {
     this.setupTabs();
     this.setupScrollListeners();
     this.setupSettingsOverlay();
+    this.setupSettingsExportImport();
     this.setupListManagement();
     this.setupWordManagement();
     this.setupSettings();
@@ -258,6 +259,95 @@ export class PopupController {
       if (e.target === overlay) {
         overlay.classList.remove('open');
       }
+    });
+  }
+
+  private setupSettingsExportImport(): void {
+    const importSettingsInput = document.getElementById('importSettingsInput') as HTMLInputElement;
+
+    document.getElementById('exportSettingsBtn')?.addEventListener('click', () => {
+      const data: ExportData = {
+        lists: this.lists,
+        exceptionsList: [...this.exceptionsList]
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'goose-highlighter-settings.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('importSettingsBtn')?.addEventListener('click', () => {
+      importSettingsInput?.click();
+    });
+
+    importSettingsInput?.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const raw = event.target?.result as string;
+          const data = JSON.parse(raw) as unknown;
+
+          if (!data || typeof data !== 'object') {
+            alert(chrome.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid export file.');
+            importSettingsInput.value = '';
+            return;
+          }
+
+          const obj = data as Record<string, unknown>;
+          let listsApplied = false;
+          let exceptionsApplied = false;
+
+          if (Array.isArray(obj.lists) && obj.lists.length > 0) {
+            const baseId = Date.now();
+            const validLists = obj.lists
+              .filter((item: unknown) => this.isValidList(item))
+              .map((item: HighlightList, i: number) => ({ ...item, id: baseId + i }));
+            if (validLists.length > 0) {
+              this.lists = validLists;
+              this.currentListIndex = Math.min(this.currentListIndex, this.lists.length - 1);
+              listsApplied = true;
+            }
+          }
+
+          if (Array.isArray(obj.exceptionsList)) {
+            this.exceptionsList = obj.exceptionsList.filter((d): d is string => typeof d === 'string');
+            exceptionsApplied = true;
+          }
+
+          if (!listsApplied && !exceptionsApplied) {
+            alert(chrome.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid export file.');
+            importSettingsInput.value = '';
+            return;
+          }
+
+          if (listsApplied && this.lists.length === 0) {
+            this.lists.push({
+              id: Date.now(),
+              name: chrome.i18n.getMessage('default_list_name') || 'Default List',
+              background: '#ffff00',
+              foreground: '#000000',
+              active: true,
+              words: []
+            });
+          }
+
+          await this.save();
+          MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
+          MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
+          this.render();
+          importSettingsInput.value = '';
+        } catch (err) {
+          alert((chrome.i18n.getMessage('invalid_json_error') || 'Invalid JSON file') + ': ' + (err as Error).message);
+          importSettingsInput.value = '';
+        }
+      };
+      reader.readAsText(file);
     });
   }
 

@@ -328,5 +328,17 @@
   },
   "rename_list": {
     "message": "Listeyi Yeniden Adlandır"
+  },
+  "export_settings": {
+    "message": "Dışa Aktar"
+  },
+  "import_settings": {
+    "message": "İçe Aktar"
+  },
+  "export_import_settings_label": {
+    "message": "Dışa Aktar / İçe Aktar"
+  },
+  "export_import_settings_hint": {
+    "message": "Listeleri ve site istisnalarını yedekleyin veya geri yükleyin."
   }
 }

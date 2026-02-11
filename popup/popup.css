@@ -1214,6 +1214,30 @@ body {
   opacity: 0.6;
 }
 
+.settings-export-import-section {
+  padding: 8px 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-export-import-label {
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.settings-export-import-hint {
+  font-size: var(--text-sm);
+  color: var(--text-color);
+  opacity: 0.6;
+  margin: 0;
+}
+
 .options-buttons {
   display: flex;
   gap: 8px;

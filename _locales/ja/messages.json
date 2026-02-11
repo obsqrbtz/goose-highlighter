@@ -328,5 +328,17 @@
     },
     "rename_list": {
         "message": "リスト名を変更"
+    },
+    "export_settings": {
+        "message": "エクスポート"
+    },
+    "import_settings": {
+        "message": "インポート"
+    },
+    "export_import_settings_label": {
+        "message": "エクスポート / インポート"
+    },
+    "export_import_settings_hint": {
+        "message": "リストとサイトの例外をバックアップまたは復元します。"
     }
 }

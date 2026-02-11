@@ -358,5 +358,17 @@
   },
   "close": {
     "message": "Close"
+  },
+  "export_settings": {
+    "message": "Export"
+  },
+  "import_settings": {
+    "message": "Import"
+  },
+  "export_import_settings_label": {
+    "message": "Export / Import"
+  },
+  "export_import_settings_hint": {
+    "message": "Back up or restore lists and site exceptions."
   }
 }
