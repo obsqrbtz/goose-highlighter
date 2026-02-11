@@ -1,3 +1,17 @@
+# [1.13.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.12.1...v1.13.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* exceptions page ui fixes ([226f2ef](https://github.com/obsqrbtz/goose-highlighter/commit/226f2efe4f20a041bc6323694d985c5dfe6857aa))
+* incorrect behaviour of filter chips after pressing select all ([b4e1425](https://github.com/obsqrbtz/goose-highlighter/commit/b4e1425c790fdbb9fc8f1558a759dd9bba5617ed))
+* only show filter buttons for list with 1+ matches ([7195a3b](https://github.com/obsqrbtz/goose-highlighter/commit/7195a3b41bb9dd804c0b7f716c20eb9bdc5ac3f9))
+
+
+### Features
+
+* group and filter items by list in "on page" section ([0680134](https://github.com/obsqrbtz/goose-highlighter/commit/068013486a43ed2329602e88ae6d365eebac0bf9))
+
 ## [1.12.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.12.0...v1.12.1) (2026-02-09)
 
 
