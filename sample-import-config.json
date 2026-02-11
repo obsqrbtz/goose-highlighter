@@ -1,0 +1,213 @@
+{
+  "lists": [
+    {
+      "active": true,
+      "background": "#fef08a",
+      "foreground": "#000000",
+      "id": 1,
+      "name": "Common 1",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "the" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "and" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "to" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "of" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "a" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "in" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "is" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "it" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#86efac",
+      "foreground": "#000000",
+      "id": 2,
+      "name": "Common 2",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "you" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "that" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "he" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "was" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "for" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "on" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "are" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "with" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#93c5fd",
+      "foreground": "#000000",
+      "id": 3,
+      "name": "Common 3",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "as" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "I" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "his" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "they" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "be" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "at" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "one" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "have" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#f9a8d4",
+      "foreground": "#000000",
+      "id": 4,
+      "name": "Common 4",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "this" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "from" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "or" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "had" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "by" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "but" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "what" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "some" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#c4b5fd",
+      "foreground": "#000000",
+      "id": 5,
+      "name": "Common 5",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "we" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "can" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "out" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "other" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "were" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "all" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "there" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "when" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#fdba74",
+      "foreground": "#000000",
+      "id": 6,
+      "name": "Common 6",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "up" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "use" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "your" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "how" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "said" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "each" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "she" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "which" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#67e8f9",
+      "foreground": "#000000",
+      "id": 7,
+      "name": "Common 7",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "their" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "time" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "if" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "will" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "way" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "about" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "many" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "then" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#fda4af",
+      "foreground": "#000000",
+      "id": 8,
+      "name": "Common 8",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "them" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "would" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "write" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "like" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "so" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "these" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "her" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "long" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#a7f3d0",
+      "foreground": "#000000",
+      "id": 9,
+      "name": "Common 9",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "make" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "thing" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "see" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "him" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "two" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "has" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "look" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "more" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#e0e7ff",
+      "foreground": "#000000",
+      "id": 10,
+      "name": "Common 10",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "day" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "could" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "go" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "come" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "did" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "number" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "sound" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "no" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#fde68a",
+      "foreground": "#000000",
+      "id": 11,
+      "name": "Common 11",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "most" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "people" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "my" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "over" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "know" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "water" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "than" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "call" }
+      ]
+    },
+    {
+      "active": true,
+      "background": "#d1fae5",
+      "foreground": "#000000",
+      "id": 12,
+      "name": "Common 12",
+      "words": [
+        { "active": true, "background": "", "foreground": "", "wordStr": "first" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "who" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "may" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "down" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "side" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "been" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "now" },
+        { "active": true, "background": "", "foreground": "", "wordStr": "find" }
+      ]
+    }
+  ],
+  "exceptionsList": [
+    "github.com",
+    "www.wikipedia.org"
+  ],
+  "exceptionsMode": "blacklist"
+}
