@@ -995,8 +995,9 @@ export class PopupController {
           listNames: h.listNames || (h.listName ? [h.listName] : [])
         }));
         this.pageHighlightsActiveLists = response.lists || [];
-        if (this.pageHighlightsListFilter.size === 0 && this.pageHighlightsActiveLists.length > 0) {
-          this.pageHighlightsListFilter = new Set(this.pageHighlightsActiveLists.map((l: { id: number }) => l.id));
+        const listIdsOnPage = this.getListIdsWithMatchesOnPage();
+        if (this.pageHighlightsListFilter.size === 0 && listIdsOnPage.size > 0) {
+          this.pageHighlightsListFilter = new Set(listIdsOnPage);
         }
         this.highlightIndices.clear();
         this.pageHighlights.forEach(h => this.highlightIndices.set(h.word, 0));
@@ -1136,11 +1137,31 @@ export class PopupController {
 
   private static readonly PAGE_HIGHLIGHTS_MANY_LISTS_THRESHOLD = 8;
 
+  /** List IDs that have at least one highlight on the current page (from pageHighlights). */
+  private getListIdsWithMatchesOnPage(): Set<number> {
+    const ids = new Set<number>();
+    for (const h of this.pageHighlights) {
+      if (h.listId !== undefined) ids.add(h.listId);
+      for (const name of h.listNames) {
+        const list = this.pageHighlightsActiveLists.find(l => l.name === name);
+        if (list) ids.add(list.id);
+      }
+    }
+    return ids;
+  }
+
+  /** Lists that have at least one word found on the current page (for filter chips only). */
+  private getListsWithMatchesOnPage(): Array<{ id: number; name: string; background: string }> {
+    const ids = this.getListIdsWithMatchesOnPage();
+    return this.pageHighlightsActiveLists.filter(l => ids.has(l.id));
+  }
+
   private renderPageHighlightsFilters(): void {
     const container = document.getElementById('pageHighlightsListFilters');
     const actionsEl = document.getElementById('pageHighlightsFiltersActions');
     if (!container) return;
-    if (this.pageHighlightsActiveLists.length <= 1) {
+    const listsOnPage = this.getListsWithMatchesOnPage();
+    if (listsOnPage.length <= 1) {
       container.innerHTML = '';
       if (actionsEl) {
         actionsEl.innerHTML = '';
@@ -1150,8 +1171,8 @@ export class PopupController {
     }
 
     const isNone = this.pageHighlightsListFilter.size === 1 && this.pageHighlightsListFilter.has(-1);
-    const allSelected = !isNone && (this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.size === this.pageHighlightsActiveLists.length);
-    const showQuickActions = this.pageHighlightsActiveLists.length > PopupController.PAGE_HIGHLIGHTS_MANY_LISTS_THRESHOLD;
+    const allSelected = !isNone && (this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.size === listsOnPage.length);
+    const showQuickActions = listsOnPage.length > PopupController.PAGE_HIGHLIGHTS_MANY_LISTS_THRESHOLD;
 
     if (actionsEl) {
       if (showQuickActions) {
@@ -1185,7 +1206,7 @@ export class PopupController {
     const active = (listId: number) =>
       !isNone && (this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.has(listId));
 
-    container.innerHTML = this.pageHighlightsActiveLists.map(list => {
+    container.innerHTML = listsOnPage.map(list => {
       const chipActive = active(list.id);
       const bg = DOMUtils.escapeHtml(list.background);
       return `
