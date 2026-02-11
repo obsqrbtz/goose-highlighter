@@ -36,7 +36,7 @@
     "message": "Woorden toevoegen"
   },
   "select_all": {
-    "message": "Selecteren"
+    "message": "Alles selecteren"
   },
   "delete_selected": {
     "message": "Geselecteerde verwijderen"
@@ -78,7 +78,7 @@
     "message": "Weet je zeker dat je de geselecteerde woorden wilt verwijderen?"
   },
   "deselect_all": {
-    "message": "Deselecteren"
+    "message": "Alles deselecteren"
   },
   "highlight_lists": {
     "message": "Markeer lijsten"

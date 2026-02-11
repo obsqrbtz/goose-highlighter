@@ -36,7 +36,7 @@
         "message": "Wörter hinzufügen"
     },
     "select_all": {
-        "message": "Auswählen"
+        "message": "Alle auswählen"
     },
     "delete_selected": {
         "message": "Ausgewählte löschen"
@@ -78,7 +78,7 @@
         "message": "Möchten Sie die ausgewählten Wörter wirklich löschen?"
     },
     "deselect_all": {
-        "message": "Abwählen"
+        "message": "Alle abwählen"
     },
     "highlight_lists": {
         "message": "Hervorhebungslisten"

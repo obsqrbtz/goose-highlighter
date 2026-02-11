@@ -36,7 +36,7 @@
         "message": "Ajouter des mots"
     },
     "select_all": {
-        "message": "Sélectionner"
+        "message": "Tout sélectionner"
     },
     "delete_selected": {
         "message": "Supprimer la sélection"
@@ -78,7 +78,7 @@
         "message": "Êtes-vous sûr de vouloir supprimer les mots sélectionnés ?"
     },
     "deselect_all": {
-        "message": "Désélectionner"
+        "message": "Tout désélectionner"
     },
     "highlight_lists": {
         "message": "Listes de surbrillance"

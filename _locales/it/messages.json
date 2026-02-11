@@ -36,7 +36,7 @@
         "message": "Aggiungi parole"
     },
     "select_all": {
-        "message": "Seleziona"
+        "message": "Seleziona tutto"
     },
     "delete_selected": {
         "message": "Elimina selezionati"
@@ -78,7 +78,7 @@
         "message": "Sei sicuro di voler eliminare le parole selezionate?"
     },
     "deselect_all": {
-        "message": "Deseleziona"
+        "message": "Deseleziona tutto"
     },
     "highlight_lists": {
         "message": "Elenchi di evidenziazione"

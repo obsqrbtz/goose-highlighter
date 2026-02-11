@@ -35,8 +35,8 @@
   "apply_paste": {
     "message": "Agregar palabras"
   },
-  "select_all": {
-    "message": "Seleccionar"
+"select_all": {
+  "message": "Seleccionar todo"
   },
   "delete_selected": {
     "message": "Eliminar seleccionados"
@@ -77,8 +77,8 @@
   "confirm_delete_words": {
     "message": "¿Estás seguro de que deseas eliminar las palabras seleccionadas?"
   },
-  "deselect_all": {
-    "message": "Deseleccionar"
+"deselect_all": {
+  "message": "Deseleccionar todo"
   },
   "highlight_lists": {
     "message": "Listas de resaltado"

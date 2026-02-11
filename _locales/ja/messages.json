@@ -78,7 +78,7 @@
         "message": "選択した単語を削除してもよろしいですか？"
     },
     "deselect_all": {
-        "message": "すべて解除"
+        "message": "すべての選択を解除"
     },
     "highlight_lists": {
         "message": "ハイライトリスト"

@@ -36,7 +36,7 @@
         "message": "단어 추가"
     },
     "select_all": {
-        "message": "선택"
+        "message": "모두 선택"
     },
     "delete_selected": {
         "message": "선택 항목 삭제"
@@ -78,7 +78,7 @@
         "message": "선택한 단어를 삭제하시겠습니까?"
     },
     "deselect_all": {
-        "message": "선택 해제"
+        "message": "모두 선택 해제"
     },
     "highlight_lists": {
         "message": "하이라이트 리스트"

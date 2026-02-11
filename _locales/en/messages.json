@@ -36,7 +36,7 @@
     "message": "Add Words"
   },
   "select_all": {
-    "message": "Select"
+    "message": "Select all"
   },
   "delete_selected": {
     "message": "Delete selected"
@@ -78,7 +78,7 @@
     "message": "Are you sure you want to delete the selected words?"
   },
   "deselect_all": {
-    "message": "Deselect"
+    "message": "Deselect all"
   },
   "highlight_lists": {
     "message": "Highlight Lists"

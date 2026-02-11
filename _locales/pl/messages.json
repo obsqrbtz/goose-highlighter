@@ -36,7 +36,7 @@
     "message": "Dodaj słowa"
   },
   "select_all": {
-    "message": "Zaznacz"
+    "message": "Zaznacz wszystko"
   },
   "delete_selected": {
     "message": "Usuń zaznaczone"
@@ -78,7 +78,7 @@
     "message": "Czy na pewno chcesz usunąć wybrane słowa?"
   },
   "deselect_all": {
-    "message": "Odznacz"
+    "message": "Odznacz wszystko"
   },
   "highlight_lists": {
     "message": "Listy podświetleń"

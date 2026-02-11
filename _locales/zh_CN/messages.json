@@ -36,7 +36,7 @@
     "message": "添加单词"
   },
   "select_all": {
-    "message": "选择"
+    "message": "全选"
   },
   "delete_selected": {
     "message": "删除所选"
@@ -78,7 +78,7 @@
     "message": "您确定要删除选中的单词吗？"
   },
   "deselect_all": {
-    "message": "取消选择"
+    "message": "取消全选"
   },
   "highlight_lists": {
     "message": "高亮列表"

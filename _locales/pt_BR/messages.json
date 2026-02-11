@@ -36,7 +36,7 @@
     "message": "Adicionar palavras"
   },
   "select_all": {
-    "message": "Selecionar"
+    "message": "Selecionar tudo"
   },
   "delete_selected": {
     "message": "Excluir selecionados"
@@ -78,7 +78,7 @@
     "message": "Tem certeza de que deseja excluir as palavras selecionadas?"
   },
   "deselect_all": {
-    "message": "Desmarcar"
+    "message": "Desmarcar tudo"
   },
   "highlight_lists": {
     "message": "Listas de destaque"

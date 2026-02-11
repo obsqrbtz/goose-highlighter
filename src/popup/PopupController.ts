@@ -1026,6 +1026,7 @@ export class PopupController {
 
   private passesListFilter(h: { listId?: number; listNames: string[] }): boolean {
     if (this.pageHighlightsListFilter.size === 0) return true;
+    if (this.pageHighlightsListFilter.has(-1)) return false;
     const wordListIds = new Set<number>();
     if (h.listId !== undefined) wordListIds.add(h.listId);
     for (const name of h.listNames) {
@@ -1122,19 +1123,62 @@ export class PopupController {
     }
   }
 
+  private static readonly PAGE_HIGHLIGHTS_MANY_LISTS_THRESHOLD = 8;
+
   private renderPageHighlightsFilters(): void {
     const container = document.getElementById('pageHighlightsListFilters');
+    const actionsEl = document.getElementById('pageHighlightsFiltersActions');
     if (!container) return;
     if (this.pageHighlightsActiveLists.length <= 1) {
       container.innerHTML = '';
+      if (actionsEl) {
+        actionsEl.innerHTML = '';
+        actionsEl.hidden = true;
+      }
       return;
     }
-    const allSelected = this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.size === this.pageHighlightsActiveLists.length;
+
+    const isNone = this.pageHighlightsListFilter.size === 1 && this.pageHighlightsListFilter.has(-1);
+    const allSelected = !isNone && (this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.size === this.pageHighlightsActiveLists.length);
+    const showQuickActions = this.pageHighlightsActiveLists.length > PopupController.PAGE_HIGHLIGHTS_MANY_LISTS_THRESHOLD;
+
+    if (actionsEl) {
+      if (showQuickActions) {
+        const allLabel = chrome.i18n.getMessage('select_all') || 'Select all';
+        const noneLabel = chrome.i18n.getMessage('deselect_all') || 'Deselect all';
+        actionsEl.innerHTML = `
+          <button type="button" class="page-highlights-filter-link" data-filter-action="all">${DOMUtils.escapeHtml(allLabel)}</button>
+          <span aria-hidden="true"> · </span>
+          <button type="button" class="page-highlights-filter-link" data-filter-action="none">${DOMUtils.escapeHtml(noneLabel)}</button>
+        `;
+        actionsEl.hidden = false;
+        actionsEl.querySelectorAll('.page-highlights-filter-link').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const action = (btn as HTMLElement).dataset.filterAction;
+            if (action === 'all') {
+              this.pageHighlightsListFilter = new Set();
+            } else if (action === 'none') {
+              this.pageHighlightsListFilter = new Set([-1]);
+            }
+            this.savePopupState();
+            this.renderPageHighlights();
+            this.renderPageHighlightsFilters();
+          });
+        });
+      } else {
+        actionsEl.innerHTML = '';
+        actionsEl.hidden = true;
+      }
+    }
+
+    const active = (listId: number) =>
+      !isNone && (this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.has(listId));
+
     container.innerHTML = this.pageHighlightsActiveLists.map(list => {
-      const active = this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.has(list.id);
+      const chipActive = active(list.id);
       const bg = DOMUtils.escapeHtml(list.background);
       return `
-        <button type="button" class="page-highlights-filter-chip ${active ? 'active' : ''}" data-list-id="${list.id}" title="${DOMUtils.escapeHtml(list.name)}" style="--list-color: ${bg};">
+        <button type="button" class="page-highlights-filter-chip ${chipActive ? 'active' : ''}" data-list-id="${list.id}" title="${DOMUtils.escapeHtml(list.name)}" style="--list-color: ${bg};">
           <span class="filter-dot" style="background-color: ${bg};"></span>
           <span>${DOMUtils.escapeHtml(list.name)}</span>
         </button>
@@ -1148,6 +1192,11 @@ export class PopupController {
           this.pageHighlightsListFilter.delete(id);
         } else {
           this.pageHighlightsListFilter.add(id);
+        }
+        if (this.pageHighlightsListFilter.size === 0) {
+          this.pageHighlightsListFilter = new Set();
+        } else if (this.pageHighlightsListFilter.has(-1)) {
+          this.pageHighlightsListFilter.delete(-1);
         }
         this.savePopupState();
         this.renderPageHighlights();

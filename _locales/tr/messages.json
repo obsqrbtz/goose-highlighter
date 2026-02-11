@@ -36,7 +36,7 @@
     "message": "Kelimeleri Ekle"
   },
   "select_all": {
-    "message": "Seç"
+    "message": "Tümünü seç"
   },
   "delete_selected": {
     "message": "Seçilenleri sil"
@@ -78,7 +78,7 @@
     "message": "Seçili kelimeleri silmek istediğinizden emin misiniz?"
   },
   "deselect_all": {
-    "message": "Seçimi Kaldır"
+    "message": "Tümünün seçimini kaldır"
   },
   "highlight_lists": {
     "message": "Vurgulama Listeleri"
