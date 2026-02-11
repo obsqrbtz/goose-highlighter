@@ -996,7 +996,7 @@ export class PopupController {
         }));
         this.pageHighlightsActiveLists = response.lists || [];
         const listIdsOnPage = this.getListIdsWithMatchesOnPage();
-        if (this.pageHighlightsListFilter.size === 0 && listIdsOnPage.size > 0) {
+        if (listIdsOnPage.size > 0) {
           this.pageHighlightsListFilter = new Set(listIdsOnPage);
         }
         this.highlightIndices.clear();
@@ -1220,14 +1220,22 @@ export class PopupController {
     container.querySelectorAll('.page-highlights-filter-chip').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = Number((btn as HTMLElement).dataset.listId);
+        const listIdsOnPage = this.getListIdsWithMatchesOnPage();
+        const allSelected = this.pageHighlightsListFilter.size === 0;
         if (this.pageHighlightsListFilter.has(id)) {
           this.pageHighlightsListFilter.delete(id);
+          if (this.pageHighlightsListFilter.size === 0) {
+            this.pageHighlightsListFilter = new Set();
+          }
         } else {
-          this.pageHighlightsListFilter.add(id);
+          if (allSelected) {
+            this.pageHighlightsListFilter = new Set(listIdsOnPage);
+            this.pageHighlightsListFilter.delete(id);
+          } else {
+            this.pageHighlightsListFilter.add(id);
+          }
         }
-        if (this.pageHighlightsListFilter.size === 0) {
-          this.pageHighlightsListFilter = new Set();
-        } else if (this.pageHighlightsListFilter.has(-1)) {
+        if (this.pageHighlightsListFilter.has(-1)) {
           this.pageHighlightsListFilter.delete(-1);
         }
         this.savePopupState();
