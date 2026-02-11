@@ -22,6 +22,7 @@ export interface StorageData {
   matchCaseEnabled: boolean;
   matchWholeEnabled: boolean;
   exceptionsList: string[];
+  exceptionsWhiteList: string[];
   exceptionsMode: ExceptionsMode;
 }
 
@@ -56,6 +57,7 @@ export interface MessageData {
 export interface ExportData {
   lists: HighlightList[];
   exceptionsList: string[];
+  exceptionsWhiteList?: string[];
   exceptionsMode?: ExceptionsMode;
 }
 
@@ -65,6 +67,7 @@ export const DEFAULT_STORAGE: StorageData = {
   matchCaseEnabled: false,
   matchWholeEnabled: false,
   exceptionsList: [],
+  exceptionsWhiteList: [],
   exceptionsMode: 'blacklist'
 };
 

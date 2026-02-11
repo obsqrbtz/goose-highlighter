@@ -7,6 +7,7 @@ export class ContentScript {
   private lists: HighlightList[] = [];
   private isGlobalHighlightEnabled = true;
   private exceptionsList: string[] = [];
+  private exceptionsWhiteList: string[] = [];
   private exceptionsMode: ExceptionsMode = 'blacklist';
   private shouldSkipDueToExceptions = false;
   private matchCase = false;
@@ -32,6 +33,7 @@ export class ContentScript {
       'matchCaseEnabled',
       'matchWholeEnabled',
       'exceptionsList',
+      'exceptionsWhiteList',
       'exceptionsMode'
     ]);
 
@@ -40,13 +42,19 @@ export class ContentScript {
     this.matchCase = data.matchCaseEnabled ?? false;
     this.matchWhole = data.matchWholeEnabled ?? false;
     this.exceptionsList = data.exceptionsList || [];
+    this.exceptionsWhiteList = data.exceptionsWhiteList || [];
     this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
     this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
   }
 
+  private getCurrentExceptionsList(): string[] {
+    return this.exceptionsMode === 'whitelist' ? this.exceptionsWhiteList : this.exceptionsList;
+  }
+
   private computeShouldSkipDueToExceptions(): boolean {
     const currentHostname = window.location.hostname;
-    const isInList = this.exceptionsList.includes(currentHostname);
+    const list = this.getCurrentExceptionsList();
+    const isInList = list.includes(currentHostname);
     if (this.exceptionsMode === 'blacklist') {
       return isInList;
     }
@@ -98,8 +106,9 @@ export class ContentScript {
   }
 
   private async handleExceptionsUpdate(): Promise<void> {
-    const data = await StorageService.get(['exceptionsList', 'exceptionsMode']);
+    const data = await StorageService.get(['exceptionsList', 'exceptionsWhiteList', 'exceptionsMode']);
     this.exceptionsList = data.exceptionsList || [];
+    this.exceptionsWhiteList = data.exceptionsWhiteList || [];
     this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
     this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
     this.processHighlights();

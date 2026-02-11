@@ -38,16 +38,16 @@ class BackgroundService {
 
     private setupInstallListener(): void {
         chrome.runtime.onInstalled.addListener(async (): Promise<void> => {
-            const data = await StorageService.get(['exceptionsList', 'exceptionsMode']);
-            const updates: { exceptionsList?: string[]; exceptionsMode?: 'blacklist' | 'whitelist' } = {};
-            if (!data.exceptionsList) {
-                updates.exceptionsList = [];
+            const data = await StorageService.get(['exceptionsList', 'exceptionsWhiteList', 'exceptionsMode']);
+            const updates: Record<string, unknown> = {};
+            if (data.exceptionsWhiteList === undefined) {
+                updates.exceptionsWhiteList = [];
             }
             if (data.exceptionsMode !== 'blacklist' && data.exceptionsMode !== 'whitelist') {
                 updates.exceptionsMode = 'blacklist';
             }
             if (Object.keys(updates).length > 0) {
-                await StorageService.set(updates);
+                await chrome.storage.local.set(updates);
             }
         });
     }

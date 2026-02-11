@@ -209,5 +209,6 @@
     "github.com",
     "www.wikipedia.org"
   ],
+  "exceptionsWhiteList": [],
   "exceptionsMode": "blacklist"
 }

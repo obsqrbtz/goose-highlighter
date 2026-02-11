@@ -15,7 +15,13 @@ export class PopupController {
   private matchCaseEnabled = false;
   private matchWholeEnabled = false;
   private exceptionsList: string[] = [];
+  private exceptionsWhiteList: string[] = [];
   private exceptionsMode: ExceptionsMode = 'blacklist';
+
+  private getCurrentExceptionsList(): string[] {
+    return this.exceptionsMode === 'whitelist' ? this.exceptionsWhiteList : this.exceptionsList;
+  }
+
   private currentTabHost = '';
   private activeTab = 'lists';
   private pageHighlights: Array<{ word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }> = [];
@@ -59,6 +65,7 @@ export class PopupController {
     this.matchCaseEnabled = data.matchCaseEnabled ?? false;
     this.matchWholeEnabled = data.matchWholeEnabled ?? false;
     this.exceptionsList = data.exceptionsList || [];
+    this.exceptionsWhiteList = data.exceptionsWhiteList || [];
     this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
 
     if (this.lists.length === 0) {
@@ -285,6 +292,7 @@ export class PopupController {
       const data: ExportData = {
         lists: this.lists,
         exceptionsList: [...this.exceptionsList],
+        exceptionsWhiteList: [...this.exceptionsWhiteList],
         exceptionsMode: this.exceptionsMode
       };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -336,7 +344,10 @@ export class PopupController {
             this.exceptionsList = obj.exceptionsList.filter((d): d is string => typeof d === 'string');
             exceptionsApplied = true;
           }
-
+          if (Array.isArray(obj.exceptionsWhiteList)) {
+            this.exceptionsWhiteList = obj.exceptionsWhiteList.filter((d): d is string => typeof d === 'string');
+            exceptionsApplied = true;
+          }
           if (obj.exceptionsMode === 'whitelist' || obj.exceptionsMode === 'blacklist') {
             this.exceptionsMode = obj.exceptionsMode;
             exceptionsApplied = true;
@@ -1213,6 +1224,8 @@ export class PopupController {
       MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       this.updateExceptionsModeLabel();
       this.updateExceptionsModeHint();
+      this.renderExceptions();
+      this.updateAddCurrentSiteButton();
     });
 
     document.getElementById('addExceptionBtn')?.addEventListener('click', () => this.addExceptionFromInput());
@@ -1223,10 +1236,17 @@ export class PopupController {
 
     document.getElementById('clearExceptionsBtn')?.addEventListener('click', async () => {
       if (confirm(chrome.i18n.getMessage('confirm_clear_exceptions') || 'Clear all exceptions?')) {
-        this.exceptionsList = [];
+        if (this.exceptionsMode === 'whitelist') {
+          this.exceptionsWhiteList = [];
+        } else {
+          this.exceptionsList = [];
+        }
         this.renderExceptions();
         this.updateAddCurrentSiteButton();
-        await StorageService.update('exceptionsList', this.exceptionsList);
+        await StorageService.set({
+          exceptionsList: this.exceptionsList,
+          exceptionsWhiteList: this.exceptionsWhiteList
+        });
         MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       }
     });
@@ -1235,10 +1255,17 @@ export class PopupController {
       const button = (e.target as HTMLElement).closest('.exception-remove');
       if (button) {
         const domain = (button as HTMLElement).dataset.domain!;
-        this.exceptionsList = this.exceptionsList.filter(d => d !== domain);
+        if (this.exceptionsMode === 'whitelist') {
+          this.exceptionsWhiteList = this.exceptionsWhiteList.filter(d => d !== domain);
+        } else {
+          this.exceptionsList = this.exceptionsList.filter(d => d !== domain);
+        }
         this.renderExceptions();
         this.updateAddCurrentSiteButton();
-        await StorageService.update('exceptionsList', this.exceptionsList);
+        await StorageService.set({
+          exceptionsList: this.exceptionsList,
+          exceptionsWhiteList: this.exceptionsWhiteList
+        });
         MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       }
     });
@@ -1377,6 +1404,7 @@ export class PopupController {
       matchCaseEnabled: this.matchCaseEnabled,
       matchWholeEnabled: this.matchWholeEnabled,
       exceptionsList: this.exceptionsList,
+      exceptionsWhiteList: this.exceptionsWhiteList,
       exceptionsMode: this.exceptionsMode
     });
 
@@ -1387,7 +1415,7 @@ export class PopupController {
   private setupStorageSync(): void {
     chrome.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== 'local') return;
-      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsMode) {
+      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsWhiteList || changes.exceptionsMode) {
         this.reloadFromStorage();
       }
     });
@@ -1400,6 +1428,7 @@ export class PopupController {
     this.matchCaseEnabled = data.matchCaseEnabled ?? false;
     this.matchWholeEnabled = data.matchWholeEnabled ?? false;
     this.exceptionsList = data.exceptionsList || [];
+    this.exceptionsWhiteList = data.exceptionsWhiteList || [];
     this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
 
     if (this.lists.length === 0) {
@@ -1676,15 +1705,23 @@ export class PopupController {
     const domain = this.normalizeDomain(input.value);
     if (!domain) return;
 
-    if (this.exceptionsList.includes(domain)) {
+    const list = this.getCurrentExceptionsList();
+    if (list.includes(domain)) {
       input.value = '';
       return;
     }
 
-    this.exceptionsList.push(domain);
+    if (this.exceptionsMode === 'whitelist') {
+      this.exceptionsWhiteList.push(domain);
+    } else {
+      this.exceptionsList.push(domain);
+    }
     input.value = '';
     this.renderExceptions();
-    StorageService.update('exceptionsList', this.exceptionsList).then(() => {
+    StorageService.set({
+      exceptionsList: this.exceptionsList,
+      exceptionsWhiteList: this.exceptionsWhiteList
+    }).then(() => {
       MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
     });
   }
@@ -1697,10 +1734,18 @@ export class PopupController {
     }
     if (!host) return;
     const domain = host.toLowerCase();
-    if (this.exceptionsList.includes(domain)) return;
-    this.exceptionsList.push(domain);
+    const list = this.getCurrentExceptionsList();
+    if (list.includes(domain)) return;
+    if (this.exceptionsMode === 'whitelist') {
+      this.exceptionsWhiteList.push(domain);
+    } else {
+      this.exceptionsList.push(domain);
+    }
     this.renderExceptions();
-    await StorageService.update('exceptionsList', this.exceptionsList);
+    await StorageService.set({
+      exceptionsList: this.exceptionsList,
+      exceptionsWhiteList: this.exceptionsWhiteList
+    });
     MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
     this.updateAddCurrentSiteButton();
   }
@@ -1729,7 +1774,8 @@ export class PopupController {
     const btn = document.getElementById('addCurrentSiteBtn') as HTMLButtonElement | null;
     if (!btn) return;
     const host = this.currentTabHost.toLowerCase();
-    const alreadyInList = host !== '' && this.exceptionsList.includes(host);
+    const list = this.getCurrentExceptionsList();
+    const alreadyInList = host !== '' && list.includes(host);
     btn.disabled = !host || alreadyInList;
   }
 
@@ -1737,12 +1783,13 @@ export class PopupController {
     const container = document.getElementById('exceptionsList');
     if (!container) return;
 
-    if (this.exceptionsList.length === 0) {
+    const list = this.getCurrentExceptionsList();
+    if (list.length === 0) {
       container.innerHTML = `<div class="exception-item exception-empty">${chrome.i18n.getMessage('no_exceptions') || 'No exceptions'}</div>`;
       return;
     }
 
-    container.innerHTML = this.exceptionsList.map(domain =>
+    container.innerHTML = list.map(domain =>
       `<div class="exception-item">
         <span class="exception-domain-icon"><i class="fa-solid fa-at"></i></span>
         <span class="exception-domain">${DOMUtils.escapeHtml(domain)}</span>
