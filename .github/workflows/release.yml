@@ -41,7 +41,7 @@ jobs:
           zip -r goose-highlighter-${{ steps.version.outputs.VERSION }}.zip . \
             -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'versioning.md' '.releaserc.json' \
                'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' \
-               'eslint.config.mjs' '.github/*' 'CHANGELOG.md' 'PRIVACY.MD'
+               'eslint.config.mjs' '.github/*' 'CHANGELOG.md' 'PRIVACY.MD' 'sample-import-config.json'
 
       - name: Install Chrome extension packaging tool
         run: npm install -g crx3
