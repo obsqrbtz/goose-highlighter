@@ -34,6 +34,8 @@
   --section-bg: #ffffff;
   --panel-bg: #ffffff;
   --switch-bg: #e0e0e0;
+  --switch-thumb: #ffffff;
+  --switch-track-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   --checkbox-accent: #ff8c00;
   --checkbox-border: #d0d0d0;
   --focus-ring: 0 0 0 3px rgba(255, 140, 0, 0.25);
@@ -64,6 +66,8 @@ body.dark {
   --section-bg: #121212;
   --panel-bg: #121212;
   --switch-bg: #2a2a2a;
+  --switch-thumb: #e5e5e5;
+  --switch-track-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   --checkbox-accent: #ff8c00;
   --checkbox-border: #333333;
   --focus-ring: 0 0 0 3px rgba(255, 140, 0, 0.3);

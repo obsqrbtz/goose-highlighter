@@ -122,9 +122,14 @@
     "manage_exceptions": {
         "message": "管理"
     },
+    "exceptions_mode": { "message": "モード:" },
+    "exceptions_mode_blacklist": { "message": "ブラックリスト — これらのサイトではハイライトしない" },
+    "exceptions_mode_whitelist": { "message": "ホワイトリスト — これらのサイトでのみハイライト" },
     "exceptions_list": {
         "message": "例外サイト:"
     },
+    "exceptions_list_blacklist": { "message": "除外するサイト（ブラックリスト）:" },
+    "exceptions_list_whitelist": { "message": "含めるサイト（ホワイトリスト）:" },
     "clear_all": {
         "message": "すべてクリア"
     },
@@ -172,6 +177,15 @@
     },
     "total_highlights": {
         "message": "合計"
+    },
+    "total_matches": {
+        "message": "一致数の合計"
+    },
+    "group_by_list": {
+        "message": "リストでグループ化"
+    },
+    "other": {
+        "message": "その他"
     },
     "refresh": {
         "message": "更新"

@@ -198,16 +198,20 @@
     <div class="tab-content" data-tab-content="page-highlights">
       <div class="tab-inner">
         <div class="page-highlights-section">
-          <div class="page-highlights-info-card">
-            <span data-i18n="total_highlights">Total:</span>
-            <strong id="totalHighlightsCount">0</strong>
+          <div class="page-highlights-header-row">
+            <span class="page-highlights-total-label" data-i18n="total_matches">Total matches</span>
+            <span class="page-highlights-total-count" id="totalHighlightsCount">0</span>
           </div>
-          
-          <button class="refresh-button" id="refreshHighlightsBtn">
-            <i class="fa-solid fa-rotate"></i>
-            <span data-i18n="refresh">Refresh</span>
-          </button>
-          
+          <div class="page-highlights-controls">
+            <label class="page-highlights-group-toggle">
+              <span class="switch-wrapper">
+                <input type="checkbox" id="pageHighlightsGroupByList" class="switch-input" />
+                <span class="switch-slider"></span>
+              </span>
+              <span class="page-highlights-group-label" data-i18n="group_by_list">Group by list</span>
+            </label>
+            <div id="pageHighlightsListFilters" class="page-highlights-filters"></div>
+          </div>
           <div id="pageHighlightsList" class="page-highlights-list"></div>
         </div>
       </div>
@@ -221,23 +225,26 @@
             <i class="fa-solid fa-ban"></i>
             <span data-i18n="site_exceptions">Site Exceptions</span>
           </label>
-          
-          <button class="exception-toggle-btn" id="toggleExceptionBtn">
-            <i class="fa-solid fa-plus"></i>
-            <span id="exceptionBtnText" data-i18n="add_exception">Add to Exceptions</span>
-          </button>
-          
+          <div class="exceptions-mode-card">
+            <span class="exceptions-mode-label" data-i18n="exceptions_mode">Mode</span>
+            <select id="exceptionsModeSelect" class="exceptions-mode-select" aria-label="Exceptions mode">
+              <option value="blacklist" data-i18n="exceptions_mode_blacklist">Blacklist — don't highlight on these sites</option>
+              <option value="whitelist" data-i18n="exceptions_mode_whitelist">Whitelist — only highlight on these sites</option>
+            </select>
+          </div>
+          <div class="exceptions-add-row">
+            <input type="text" id="exceptionDomainInput" class="exception-domain-input" data-i18n="exception_domain_placeholder" placeholder="example.com" />
+            <button type="button" class="exception-add-btn btn-primary-subdued" id="addExceptionBtn" aria-label="Add">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
           <div class="exceptions-list-wrapper">
-            <label class="section-label">
-              <span data-i18n="exceptions_list">Exception Sites:</span>
-            </label>
+            <div class="exceptions-list-header">
+              <span class="exceptions-mode-label" id="exceptionsListLabel" data-i18n="exceptions_list">Exception Sites</span>
+              <button type="button" class="clear-exceptions-link" id="clearExceptionsBtn" data-i18n="clear_all">Clear all</button>
+            </div>
             <div id="exceptionsList" class="exceptions-list"></div>
           </div>
-          
-          <button class="clear-exceptions-btn" id="clearExceptionsBtn">
-            <i class="fa-solid fa-trash"></i>
-            <span data-i18n="clear_all">Clear All</span>
-          </button>
         </div>
       </div>
     </div>

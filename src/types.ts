@@ -14,18 +14,23 @@ export interface HighlightList {
   words: HighlightWord[];
 }
 
+export type ExceptionsMode = 'blacklist' | 'whitelist';
+
 export interface StorageData {
   lists: HighlightList[];
   globalHighlightEnabled: boolean;
   matchCaseEnabled: boolean;
   matchWholeEnabled: boolean;
   exceptionsList: string[];
+  exceptionsMode: ExceptionsMode;
 }
 
 export interface ActiveWord {
   text: string;
   background: string;
   foreground: string;
+  listId?: number;
+  listName?: string;
 }
 
 export interface HighlightInfo {
@@ -33,6 +38,9 @@ export interface HighlightInfo {
   count: number;
   background: string;
   foreground: string;
+  listId?: number;
+  listName?: string;
+  listNames?: string[];
 }
 
 export interface MessageData {
@@ -48,6 +56,7 @@ export interface MessageData {
 export interface ExportData {
   lists: HighlightList[];
   exceptionsList: string[];
+  exceptionsMode?: ExceptionsMode;
 }
 
 export const DEFAULT_STORAGE: StorageData = {
@@ -55,7 +64,8 @@ export const DEFAULT_STORAGE: StorageData = {
   globalHighlightEnabled: true,
   matchCaseEnabled: false,
   matchWholeEnabled: false,
-  exceptionsList: []
+  exceptionsList: [],
+  exceptionsMode: 'blacklist'
 };
 
 export const CONSTANTS = {

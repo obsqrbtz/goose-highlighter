@@ -122,9 +122,14 @@
   "manage_exceptions": {
     "message": "Zarządzaj"
   },
+  "exceptions_mode": { "message": "Tryb:" },
+  "exceptions_mode_blacklist": { "message": "Czarna lista — nie podświetlaj na tych stronach" },
+  "exceptions_mode_whitelist": { "message": "Biała lista — podświetlaj tylko na tych stronach" },
   "exceptions_list": {
     "message": "Strony wyjątków:"
   },
+  "exceptions_list_blacklist": { "message": "Strony do wykluczenia (czarna lista):" },
+  "exceptions_list_whitelist": { "message": "Strony do uwzględnienia (biała lista):" },
   "clear_all": {
     "message": "Wyczyść wszystko"
   },
@@ -172,6 +177,15 @@
   },
   "total_highlights": {
     "message": "Łącznie"
+  },
+  "total_matches": {
+    "message": "Łączna liczba dopasowań"
+  },
+  "group_by_list": {
+    "message": "Grupuj według listy"
+  },
+  "other": {
+    "message": "Inne"
   },
   "refresh": {
     "message": "Odśwież"

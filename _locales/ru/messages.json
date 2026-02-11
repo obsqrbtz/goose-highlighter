@@ -122,9 +122,14 @@
   "manage_exceptions": {
     "message": "Управление"
   },
+  "exceptions_mode": { "message": "Режим:" },
+  "exceptions_mode_blacklist": { "message": "Чёрный список — не подсвечивать на этих сайтах" },
+  "exceptions_mode_whitelist": { "message": "Белый список — подсвечивать только на этих сайтах" },
   "exceptions_list": {
     "message": "Сайты-исключения:"
   },
+  "exceptions_list_blacklist": { "message": "Исключить сайты (чёрный список):" },
+  "exceptions_list_whitelist": { "message": "Включить сайты (белый список):" },
   "clear_all": {
     "message": "Очистить все"
   },
@@ -172,6 +177,15 @@
   },
   "total_highlights": {
     "message": "Всего"
+  },
+  "total_matches": {
+    "message": "Всего совпадений"
+  },
+  "group_by_list": {
+    "message": "Группировать по списку"
+  },
+  "other": {
+    "message": "Прочее"
   },
   "refresh": {
     "message": "Обновить"

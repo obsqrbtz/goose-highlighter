@@ -116,9 +116,14 @@
   "manage_exceptions": {
     "message": "Verwalten"
   },
+  "exceptions_mode": { "message": "Modus:" },
+  "exceptions_mode_blacklist": { "message": "Blacklist — auf diesen Sites nicht hervorheben" },
+  "exceptions_mode_whitelist": { "message": "Whitelist — nur auf diesen Sites hervorheben" },
   "exceptions_list": {
     "message": "Ausnahme-Websites:"
   },
+  "exceptions_list_blacklist": { "message": "Sites ausschließen (Blacklist):" },
+  "exceptions_list_whitelist": { "message": "Sites einschließen (Whitelist):" },
   "clear_all": {
     "message": "Alle löschen"
   },
@@ -166,6 +171,15 @@
   },
   "total_highlights": {
     "message": "Gesamt"
+  },
+  "total_matches": {
+    "message": "Treffer gesamt"
+  },
+  "group_by_list": {
+    "message": "Nach Liste gruppieren"
+  },
+  "other": {
+    "message": "Sonstige"
   },
   "refresh": {
     "message": "Aktualisieren"

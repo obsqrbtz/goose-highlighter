@@ -1,4 +1,4 @@
-import { HighlightList, HighlightWord, HighlightInfo, ExportData } from '../types.js';
+import { HighlightList, HighlightWord, HighlightInfo, ExportData, ExceptionsMode } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
@@ -15,9 +15,14 @@ export class PopupController {
   private matchCaseEnabled = false;
   private matchWholeEnabled = false;
   private exceptionsList: string[] = [];
+  private exceptionsMode: ExceptionsMode = 'blacklist';
   private currentTabHost = '';
   private activeTab = 'lists';
-  private pageHighlights: Array<{ word: string; count: number; background: string; foreground: string }> = [];
+  private pageHighlights: Array<{ word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }> = [];
+  private pageHighlightsActiveLists: Array<{ id: number; name: string; background: string }> = [];
+  private pageHighlightsGroupByList = false;
+  private pageHighlightsListFilter = new Set<number>();
+  private pageHighlightsCollapsedGroups = new Set<string>();
   private highlightIndices = new Map<string, number>();
   private wordMenuOpenForIndex: number | null = null;
   private wordMenuCopyOnly = false;
@@ -54,6 +59,7 @@ export class PopupController {
     this.matchCaseEnabled = data.matchCaseEnabled ?? false;
     this.matchWholeEnabled = data.matchWholeEnabled ?? false;
     this.exceptionsList = data.exceptionsList || [];
+    this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
 
     if (this.lists.length === 0) {
       this.lists.push({
@@ -93,6 +99,8 @@ export class PopupController {
         wordSearchQuery?: string;
         currentPage?: number;
         scrollPositions?: Record<string, number>;
+        pageHighlightsGroupByList?: boolean;
+        pageHighlightsListFilter?: number[];
       };
       if (typeof state.activeTab === 'string' && state.activeTab !== 'options') {
         this.activeTab = state.activeTab;
@@ -109,18 +117,26 @@ export class PopupController {
       if (state.scrollPositions && typeof state.scrollPositions === 'object') {
         this.scrollPositions = { ...state.scrollPositions };
       }
+      if (typeof state.pageHighlightsGroupByList === 'boolean') {
+        this.pageHighlightsGroupByList = state.pageHighlightsGroupByList;
+      }
+      if (Array.isArray(state.pageHighlightsListFilter)) {
+        this.pageHighlightsListFilter = new Set(state.pageHighlightsListFilter);
+      }
     } catch {
       // keep defaults
     }
   }
 
-  private getPopupStatePayload(): { activeTab: string; currentListIndex: number; wordSearchQuery: string; currentPage: number; scrollPositions: Record<string, number> } {
+  private getPopupStatePayload(): { activeTab: string; currentListIndex: number; wordSearchQuery: string; currentPage: number; scrollPositions: Record<string, number>; pageHighlightsGroupByList: boolean; pageHighlightsListFilter: number[] } {
     return {
       activeTab: this.activeTab,
       currentListIndex: this.currentListIndex,
       wordSearchQuery: this.wordSearchQuery,
       currentPage: this.currentPage,
-      scrollPositions: this.scrollPositions
+      scrollPositions: this.scrollPositions,
+      pageHighlightsGroupByList: this.pageHighlightsGroupByList,
+      pageHighlightsListFilter: Array.from(this.pageHighlightsListFilter)
     };
   }
 
@@ -268,7 +284,8 @@ export class PopupController {
     document.getElementById('exportSettingsBtn')?.addEventListener('click', () => {
       const data: ExportData = {
         lists: this.lists,
-        exceptionsList: [...this.exceptionsList]
+        exceptionsList: [...this.exceptionsList],
+        exceptionsMode: this.exceptionsMode
       };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -317,6 +334,11 @@ export class PopupController {
 
           if (Array.isArray(obj.exceptionsList)) {
             this.exceptionsList = obj.exceptionsList.filter((d): d is string => typeof d === 'string');
+            exceptionsApplied = true;
+          }
+
+          if (obj.exceptionsMode === 'whitelist' || obj.exceptionsMode === 'blacklist') {
+            this.exceptionsMode = obj.exceptionsMode;
             exceptionsApplied = true;
           }
 
@@ -908,14 +930,24 @@ export class PopupController {
   }
 
   private setupPageHighlights(): void {
-    document.getElementById('refreshHighlightsBtn')?.addEventListener('click', async () => {
-      await this.loadPageHighlights();
-    });
-
     document.getElementById('pageHighlightsList')?.addEventListener('click', async (e) => {
       const target = e.target as HTMLElement;
-      const item = target.closest('.page-highlight-item') as HTMLElement;
+      const groupHeader = target.closest('.page-highlights-group-header');
+      if (groupHeader) {
+        const section = groupHeader.closest('.page-highlights-group-section');
+        const groupKey = section?.getAttribute('data-group');
+        if (groupKey) {
+          if (this.pageHighlightsCollapsedGroups.has(groupKey)) {
+            this.pageHighlightsCollapsedGroups.delete(groupKey);
+          } else {
+            this.pageHighlightsCollapsedGroups.add(groupKey);
+          }
+          this.renderPageHighlights();
+          return;
+        }
+      }
 
+      const item = target.closest('.page-highlight-item') as HTMLElement;
       if (!item) return;
 
       const word = item.dataset.word;
@@ -934,6 +966,12 @@ export class PopupController {
         await this.jumpToHighlight(word, currentIndex);
       }
     });
+
+    document.getElementById('pageHighlightsGroupByList')?.addEventListener('change', (e) => {
+      this.pageHighlightsGroupByList = (e.target as HTMLInputElement).checked;
+      this.savePopupState();
+      this.renderPageHighlights();
+    });
   }
 
   private async loadPageHighlights(): Promise<void> {
@@ -941,15 +979,25 @@ export class PopupController {
       const response = await MessageService.sendToActiveTab({ type: 'GET_PAGE_HIGHLIGHTS' });
 
       if (response && response.highlights) {
-        this.pageHighlights = response.highlights;
+        this.pageHighlights = response.highlights.map((h: { word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames?: string[] }) => ({
+          ...h,
+          listNames: h.listNames || (h.listName ? [h.listName] : [])
+        }));
+        this.pageHighlightsActiveLists = response.lists || [];
+        if (this.pageHighlightsListFilter.size === 0 && this.pageHighlightsActiveLists.length > 0) {
+          this.pageHighlightsListFilter = new Set(this.pageHighlightsActiveLists.map((l: { id: number }) => l.id));
+        }
         this.highlightIndices.clear();
         this.pageHighlights.forEach(h => this.highlightIndices.set(h.word, 0));
         this.renderPageHighlights();
+        this.renderPageHighlightsFilters();
       }
     } catch (e) {
       console.error('Error loading page highlights:', e);
       this.pageHighlights = [];
+      this.pageHighlightsActiveLists = [];
       this.renderPageHighlights();
+      this.renderPageHighlightsFilters();
     }
   }
 
@@ -976,70 +1024,155 @@ export class PopupController {
     await this.jumpToHighlight(word, newIndex);
   }
 
+  private passesListFilter(h: { listId?: number; listNames: string[] }): boolean {
+    if (this.pageHighlightsListFilter.size === 0) return true;
+    const wordListIds = new Set<number>();
+    if (h.listId !== undefined) wordListIds.add(h.listId);
+    for (const name of h.listNames) {
+      const list = this.pageHighlightsActiveLists.find(l => l.name === name);
+      if (list) wordListIds.add(list.id);
+    }
+    return [...wordListIds].some(id => this.pageHighlightsListFilter.has(id));
+  }
+
+  private renderPageHighlightsItem(highlight: { word: string; count: number; background: string; foreground: string; listNames: string[] }): string {
+    const currentIndex = this.highlightIndices.get(highlight.word) || 0;
+    return `
+      <div class="page-highlight-item" data-word="${DOMUtils.escapeHtml(highlight.word)}" style="border-left-color: ${highlight.background}; --item-tint: ${highlight.background};">
+        <div class="page-highlight-word">
+          <span class="page-highlight-preview">
+            <span class="preview-dot" style="background-color: ${highlight.background};"></span>
+            ${DOMUtils.escapeHtml(highlight.word)}
+          </span>
+          ${highlight.count > 1 ? `<span class="page-highlight-position">${currentIndex + 1}/${highlight.count}</span>` : ''}
+        </div>
+        ${highlight.count > 1 ? `
+          <div class="page-highlight-nav">
+            <button class="highlight-prev" title="${chrome.i18n.getMessage('previous') || 'Previous'}">
+              <i class="fa-solid fa-chevron-up"></i>
+            </button>
+            <button class="highlight-next" title="${chrome.i18n.getMessage('next') || 'Next'}">
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
   private renderPageHighlights(): void {
     const container = document.getElementById('pageHighlightsList');
     const countElement = document.getElementById('totalHighlightsCount');
 
     if (!container || !countElement) return;
 
-    const totalCount = this.pageHighlights.reduce((sum, h) => sum + h.count, 0);
+    const filtered = this.pageHighlights.filter(h => this.passesListFilter(h));
+    const totalCount = filtered.reduce((sum, h) => sum + h.count, 0);
     countElement.textContent = totalCount.toString();
 
-    if (this.pageHighlights.length === 0) {
+    if (filtered.length === 0) {
       container.innerHTML = `<div class="page-highlights-empty">${chrome.i18n.getMessage('no_highlights_on_page') || 'No highlights on this page'}</div>`;
       return;
     }
 
-    container.innerHTML = this.pageHighlights.map(highlight => {
-      const currentIndex = this.highlightIndices.get(highlight.word) || 0;
-      return `
-        <div class="page-highlight-item" data-word="${DOMUtils.escapeHtml(highlight.word)}">
-          <div class="page-highlight-word">
-            <span class="page-highlight-preview" style="background-color: ${highlight.background}; color: ${highlight.foreground};">
-              ${DOMUtils.escapeHtml(highlight.word)}
-            </span>
-            ${highlight.count > 1 ? `<span class="page-highlight-position">${currentIndex + 1}/${highlight.count}</span>` : ''}
-          </div>
-          ${highlight.count > 1 ? `
-            <div class="page-highlight-nav">
-              <button class="highlight-prev" title="${chrome.i18n.getMessage('previous') || 'Previous'}">
-                <i class="fa-solid fa-chevron-up"></i>
-              </button>
-              <button class="highlight-next" title="${chrome.i18n.getMessage('next') || 'Next'}">
-                <i class="fa-solid fa-chevron-down"></i>
-              </button>
+    if (this.pageHighlightsGroupByList && this.pageHighlightsActiveLists.length > 0) {
+      const listIds = new Set(this.pageHighlightsActiveLists.map(l => l.id).filter(id => this.pageHighlightsListFilter.has(id) || this.pageHighlightsListFilter.size === 0));
+      const groupOrder = this.pageHighlightsActiveLists.filter(l => listIds.has(l.id));
+      let html = '';
+      for (const list of groupOrder) {
+        const items = filtered.filter(h => h.listId === list.id || (h.listNames && h.listNames.includes(list.name)));
+        if (items.length === 0) continue;
+        const groupKey = `list-${list.id}`;
+        const collapsed = this.pageHighlightsCollapsedGroups.has(groupKey);
+        const chevron = collapsed ? 'fa-chevron-right' : 'fa-chevron-down';
+        html += `
+          <div class="page-highlights-group-section ${collapsed ? 'collapsed' : ''}" data-group="${groupKey}">
+            <div class="page-highlights-group-header">
+              <i class="fa-solid ${chevron}"></i>
+              <span class="group-dot" style="background-color: ${list.background};"></span>
+              <span>${DOMUtils.escapeHtml(list.name)}</span>
+              <span style="opacity: 0.6; margin-left: 4px;">(${items.reduce((s, i) => s + i.count, 0)})</span>
             </div>
-          ` : ''}
-        </div>
-      `;
-    }).join('');
+            ${collapsed ? '' : items.map(h => this.renderPageHighlightsItem(h)).join('')}
+          </div>
+        `;
+      }
+      const ungrouped = filtered.filter(h => !groupOrder.some(l => h.listId === l.id || (h.listNames && h.listNames.includes(l.name))));
+      if (ungrouped.length > 0) {
+        const groupKey = 'list-other';
+        const collapsed = this.pageHighlightsCollapsedGroups.has(groupKey);
+        const chevron = collapsed ? 'fa-chevron-right' : 'fa-chevron-down';
+        html += `
+          <div class="page-highlights-group-section ${collapsed ? 'collapsed' : ''}" data-group="${groupKey}">
+            <div class="page-highlights-group-header">
+              <i class="fa-solid ${chevron}"></i>
+              <span style="opacity: 0.6;">${chrome.i18n.getMessage('other') || 'Other'}</span>
+            </div>
+            ${collapsed ? '' : ungrouped.map(h => this.renderPageHighlightsItem(h)).join('')}
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    } else {
+      container.innerHTML = filtered.map(h => this.renderPageHighlightsItem(h)).join('');
+    }
+
     if (this.activeTab === 'page-highlights') {
       requestAnimationFrame(() => this.restoreScrollPositions());
     }
   }
 
+  private renderPageHighlightsFilters(): void {
+    const container = document.getElementById('pageHighlightsListFilters');
+    if (!container) return;
+    if (this.pageHighlightsActiveLists.length <= 1) {
+      container.innerHTML = '';
+      return;
+    }
+    const allSelected = this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.size === this.pageHighlightsActiveLists.length;
+    container.innerHTML = this.pageHighlightsActiveLists.map(list => {
+      const active = this.pageHighlightsListFilter.size === 0 || this.pageHighlightsListFilter.has(list.id);
+      const bg = DOMUtils.escapeHtml(list.background);
+      return `
+        <button type="button" class="page-highlights-filter-chip ${active ? 'active' : ''}" data-list-id="${list.id}" title="${DOMUtils.escapeHtml(list.name)}" style="--list-color: ${bg};">
+          <span class="filter-dot" style="background-color: ${bg};"></span>
+          <span>${DOMUtils.escapeHtml(list.name)}</span>
+        </button>
+      `;
+    }).join('');
+
+    container.querySelectorAll('.page-highlights-filter-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = Number((btn as HTMLElement).dataset.listId);
+        if (this.pageHighlightsListFilter.has(id)) {
+          this.pageHighlightsListFilter.delete(id);
+        } else {
+          this.pageHighlightsListFilter.add(id);
+        }
+        this.savePopupState();
+        this.renderPageHighlights();
+        this.renderPageHighlightsFilters();
+      });
+    });
+  }
+
   private setupExceptions(): void {
-    document.getElementById('toggleExceptionBtn')?.addEventListener('click', async () => {
-      if (!this.currentTabHost) return;
-
-      const isException = this.exceptionsList.includes(this.currentTabHost);
-
-      if (isException) {
-        this.exceptionsList = this.exceptionsList.filter(domain => domain !== this.currentTabHost);
-      } else {
-        this.exceptionsList.push(this.currentTabHost);
-      }
-
-      this.updateExceptionButton();
-      this.renderExceptions();
-      await StorageService.update('exceptionsList', this.exceptionsList);
+    document.getElementById('exceptionsModeSelect')?.addEventListener('change', async (e) => {
+      const value = (e.target as HTMLSelectElement).value;
+      this.exceptionsMode = value === 'whitelist' ? 'whitelist' : 'blacklist';
+      await StorageService.update('exceptionsMode', this.exceptionsMode);
       MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
+      this.updateExceptionsModeLabel();
+    });
+
+    document.getElementById('addExceptionBtn')?.addEventListener('click', () => this.addExceptionFromInput());
+    (document.getElementById('exceptionDomainInput') as HTMLInputElement)?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') this.addExceptionFromInput();
     });
 
     document.getElementById('clearExceptionsBtn')?.addEventListener('click', async () => {
       if (confirm(chrome.i18n.getMessage('confirm_clear_exceptions') || 'Clear all exceptions?')) {
         this.exceptionsList = [];
-        this.updateExceptionButton();
         this.renderExceptions();
         await StorageService.update('exceptionsList', this.exceptionsList);
         MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
@@ -1051,7 +1184,6 @@ export class PopupController {
       if (button) {
         const domain = (button as HTMLElement).dataset.domain!;
         this.exceptionsList = this.exceptionsList.filter(d => d !== domain);
-        this.updateExceptionButton();
         this.renderExceptions();
         await StorageService.update('exceptionsList', this.exceptionsList);
         MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
@@ -1191,7 +1323,8 @@ export class PopupController {
       globalHighlightEnabled: this.globalHighlightEnabled,
       matchCaseEnabled: this.matchCaseEnabled,
       matchWholeEnabled: this.matchWholeEnabled,
-      exceptionsList: this.exceptionsList
+      exceptionsList: this.exceptionsList,
+      exceptionsMode: this.exceptionsMode
     });
 
     this.renderLists();
@@ -1201,7 +1334,7 @@ export class PopupController {
   private setupStorageSync(): void {
     chrome.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== 'local') return;
-      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || changes.matchWholeEnabled || changes.exceptionsList) {
+      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsMode) {
         this.reloadFromStorage();
       }
     });
@@ -1214,6 +1347,7 @@ export class PopupController {
     this.matchCaseEnabled = data.matchCaseEnabled ?? false;
     this.matchWholeEnabled = data.matchWholeEnabled ?? false;
     this.exceptionsList = data.exceptionsList || [];
+    this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
 
     if (this.lists.length === 0) {
       this.lists.push({
@@ -1238,7 +1372,8 @@ export class PopupController {
     this.renderLists();
     this.renderWords();
     this.renderExceptions();
-    this.updateExceptionButton();
+    this.updateExceptionsModeSelect();
+    this.updateExceptionsModeLabel();
     this.updateFormValues();
   }
 
@@ -1465,25 +1600,50 @@ export class PopupController {
     `;
   }
 
-  private updateExceptionButton(): void {
-    const toggleBtn = document.getElementById('toggleExceptionBtn');
-    const btnText = document.getElementById('exceptionBtnText');
-
-    if (!toggleBtn || !btnText || !this.currentTabHost) return;
-
-    const isException = this.exceptionsList.includes(this.currentTabHost);
-
-    if (isException) {
-      btnText.textContent = chrome.i18n.getMessage('remove_exception') || 'Remove from Exceptions';
-      toggleBtn.classList.add('danger');
-      const icon = toggleBtn.querySelector('i');
-      if (icon) icon.className = 'fa-solid fa-trash';
-    } else {
-      btnText.textContent = chrome.i18n.getMessage('add_exception') || 'Add to Exceptions';
-      toggleBtn.classList.remove('danger');
-      const icon = toggleBtn.querySelector('i');
-      if (icon) icon.className = 'fa-solid fa-plus';
+  private normalizeDomain(input: string): string | null {
+    const raw = input.trim().toLowerCase();
+    if (!raw) return null;
+    try {
+      if (raw.includes('.')) {
+        const url = raw.startsWith('http') ? new URL(raw) : new URL(`https://${raw}`);
+        return url.hostname;
+      }
+      return raw;
+    } catch {
+      return raw;
     }
+  }
+
+  private addExceptionFromInput(): void {
+    const input = document.getElementById('exceptionDomainInput') as HTMLInputElement;
+    if (!input) return;
+
+    const domain = this.normalizeDomain(input.value);
+    if (!domain) return;
+
+    if (this.exceptionsList.includes(domain)) {
+      input.value = '';
+      return;
+    }
+
+    this.exceptionsList.push(domain);
+    input.value = '';
+    this.renderExceptions();
+    StorageService.update('exceptionsList', this.exceptionsList).then(() => {
+      MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
+    });
+  }
+
+  private updateExceptionsModeSelect(): void {
+    const select = document.getElementById('exceptionsModeSelect') as HTMLSelectElement | null;
+    if (select) select.value = this.exceptionsMode;
+  }
+
+  private updateExceptionsModeLabel(): void {
+    const label = document.getElementById('exceptionsListLabel');
+    if (!label) return;
+    const key = this.exceptionsMode === 'whitelist' ? 'exceptions_list_whitelist' : 'exceptions_list_blacklist';
+    label.textContent = chrome.i18n.getMessage(key) || (this.exceptionsMode === 'whitelist' ? 'Sites to highlight (whitelist):' : 'Sites to exclude (blacklist):');
   }
 
   private renderExceptions(): void {
@@ -1491,12 +1651,13 @@ export class PopupController {
     if (!container) return;
 
     if (this.exceptionsList.length === 0) {
-      container.innerHTML = `<div class="exception-item">${chrome.i18n.getMessage('no_exceptions') || 'No exceptions'}</div>`;
+      container.innerHTML = `<div class="exception-item exception-empty">${chrome.i18n.getMessage('no_exceptions') || 'No exceptions'}</div>`;
       return;
     }
 
     container.innerHTML = this.exceptionsList.map(domain =>
       `<div class="exception-item">
+        <span class="exception-domain-icon"><i class="fa-solid fa-at"></i></span>
         <span class="exception-domain">${DOMUtils.escapeHtml(domain)}</span>
         <button type="button" class="exception-remove" data-domain="${DOMUtils.escapeHtml(domain)}" title="${DOMUtils.escapeHtml(chrome.i18n.getMessage('remove') || 'Remove')}" aria-label="${DOMUtils.escapeHtml(chrome.i18n.getMessage('remove') || 'Remove')}">
           <i class="fa-solid fa-trash"></i>
@@ -1509,5 +1670,7 @@ export class PopupController {
     (document.getElementById('globalHighlightToggle') as HTMLInputElement).checked = this.globalHighlightEnabled;
     (document.getElementById('matchCase') as HTMLInputElement).checked = this.matchCaseEnabled;
     (document.getElementById('matchWhole') as HTMLInputElement).checked = this.matchWholeEnabled;
+    const groupCheckbox = document.getElementById('pageHighlightsGroupByList') as HTMLInputElement;
+    if (groupCheckbox) groupCheckbox.checked = this.pageHighlightsGroupByList;
   }
 }

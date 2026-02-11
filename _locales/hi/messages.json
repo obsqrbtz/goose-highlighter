@@ -122,9 +122,14 @@
     "manage_exceptions": {
         "message": "प्रबंधित करें"
     },
+    "exceptions_mode": { "message": "मोड:" },
+    "exceptions_mode_blacklist": { "message": "ब्लैकलिस्ट — इन साइटों पर हाइलाइट न करें" },
+    "exceptions_mode_whitelist": { "message": "व्हाइटलिस्ट — केवल इन साइटों पर हाइलाइट करें" },
     "exceptions_list": {
         "message": "अपवाद साइटें:"
     },
+    "exceptions_list_blacklist": { "message": "बहिष्कृत साइटें (ब्लैकलिस्ट):" },
+    "exceptions_list_whitelist": { "message": "शामिल साइटें (व्हाइटलिस्ट):" },
     "clear_all": {
         "message": "सभी साफ करें"
     },
@@ -172,6 +177,15 @@
     },
     "total_highlights": {
         "message": "कुल"
+    },
+    "total_matches": {
+        "message": "कुल मिलान"
+    },
+    "group_by_list": {
+        "message": "सूची के अनुसार समूहित करें"
+    },
+    "other": {
+        "message": "अन्य"
     },
     "refresh": {
         "message": "रीफ्रेश करें"

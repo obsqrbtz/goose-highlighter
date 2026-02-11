@@ -1,4 +1,4 @@
-import { HighlightList, MessageData } from '../types.js';
+import { HighlightList, MessageData, ExceptionsMode } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { HighlightEngine } from './HighlightEngine.js';
@@ -7,7 +7,8 @@ export class ContentScript {
   private lists: HighlightList[] = [];
   private isGlobalHighlightEnabled = true;
   private exceptionsList: string[] = [];
-  private isCurrentSiteException = false;
+  private exceptionsMode: ExceptionsMode = 'blacklist';
+  private shouldSkipDueToExceptions = false;
   private matchCase = false;
   private matchWhole = false;
   private highlightEngine: HighlightEngine;
@@ -26,11 +27,12 @@ export class ContentScript {
 
   private async loadSettings(): Promise<void> {
     const data = await StorageService.get([
-      'lists', 
-      'globalHighlightEnabled', 
-      'matchCaseEnabled', 
-      'matchWholeEnabled', 
-      'exceptionsList'
+      'lists',
+      'globalHighlightEnabled',
+      'matchCaseEnabled',
+      'matchWholeEnabled',
+      'exceptionsList',
+      'exceptionsMode'
     ]);
 
     this.lists = data.lists || [];
@@ -38,12 +40,17 @@ export class ContentScript {
     this.matchCase = data.matchCaseEnabled ?? false;
     this.matchWhole = data.matchWholeEnabled ?? false;
     this.exceptionsList = data.exceptionsList || [];
-    this.isCurrentSiteException = this.checkCurrentSiteException();
+    this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
+    this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
   }
 
-  private checkCurrentSiteException(): boolean {
+  private computeShouldSkipDueToExceptions(): boolean {
     const currentHostname = window.location.hostname;
-    return this.exceptionsList.includes(currentHostname);
+    const isInList = this.exceptionsList.includes(currentHostname);
+    if (this.exceptionsMode === 'blacklist') {
+      return isInList;
+    }
+    return !isInList;
   }
 
   private setupMessageListener(): void {
@@ -91,9 +98,10 @@ export class ContentScript {
   }
 
   private async handleExceptionsUpdate(): Promise<void> {
-    const data = await StorageService.get(['exceptionsList']);
+    const data = await StorageService.get(['exceptionsList', 'exceptionsMode']);
     this.exceptionsList = data.exceptionsList || [];
-    this.isCurrentSiteException = this.checkCurrentSiteException();
+    this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
+    this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
     this.processHighlights();
   }
 
@@ -102,7 +110,7 @@ export class ContentScript {
     this.isProcessing = true;
 
     try {
-      if (!this.isGlobalHighlightEnabled || this.isCurrentSiteException) {
+      if (!this.isGlobalHighlightEnabled || this.shouldSkipDueToExceptions) {
         this.highlightEngine.clearHighlights();
         this.highlightEngine.stopObserving();
         return;
@@ -124,13 +132,15 @@ export class ContentScript {
         activeWords.push({
           text: word.wordStr,
           background: word.background || list.background,
-          foreground: word.foreground || list.foreground
+          foreground: word.foreground || list.foreground,
+          listId: list.id,
+          listName: list.name || 'Default'
         });
       }
     }
 
     const highlights = this.highlightEngine.getPageHighlights(activeWords);
-    sendResponse({ highlights });
+    sendResponse({ highlights, lists: this.lists.filter(l => l.active) });
   }
 
   private handleScrollToHighlight(word: string, index: number): void {

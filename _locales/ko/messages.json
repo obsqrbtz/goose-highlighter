@@ -122,9 +122,14 @@
     "manage_exceptions": {
         "message": "관리"
     },
+    "exceptions_mode": { "message": "모드:" },
+    "exceptions_mode_blacklist": { "message": "차단 목록 — 이 사이트에서 강조 안 함" },
+    "exceptions_mode_whitelist": { "message": "허용 목록 — 이 사이트에서만 강조" },
     "exceptions_list": {
         "message": "예외 사이트:"
     },
+    "exceptions_list_blacklist": { "message": "제외할 사이트 (차단 목록):" },
+    "exceptions_list_whitelist": { "message": "포함할 사이트 (허용 목록):" },
     "clear_all": {
         "message": "모두 지우기"
     },
@@ -172,6 +177,15 @@
     },
     "total_highlights": {
         "message": "전체"
+    },
+    "total_matches": {
+        "message": "총 일치 수"
+    },
+    "group_by_list": {
+        "message": "목록별로 그룹화"
+    },
+    "other": {
+        "message": "기타"
     },
     "refresh": {
         "message": "새로고침"

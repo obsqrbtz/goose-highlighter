@@ -122,11 +122,26 @@
   "manage_exceptions": {
     "message": "Manage"
   },
+  "exceptions_mode": {
+    "message": "Mode:"
+  },
+  "exceptions_mode_blacklist": {
+    "message": "Blacklist — don't highlight on these sites"
+  },
+  "exceptions_mode_whitelist": {
+    "message": "Whitelist — only highlight on these sites"
+  },
   "exceptions_list": {
     "message": "Exception Sites:"
   },
+  "exceptions_list_blacklist": {
+    "message": "Sites to exclude (blacklist):"
+  },
+  "exceptions_list_whitelist": {
+    "message": "Sites to include (whitelist):"
+  },
   "clear_all": {
-    "message": "Clear All"
+    "message": "Clear all"
   },
   "confirm_clear_exceptions": {
     "message": "Are you sure you want to clear all exceptions?"
@@ -172,6 +187,18 @@
   },
   "total_highlights": {
     "message": "Total"
+  },
+  "total_matches": {
+    "message": "Total matches"
+  },
+  "group_by_list": {
+    "message": "Group by list"
+  },
+  "other": {
+    "message": "Other"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
   },
   "refresh": {
     "message": "Refresh"

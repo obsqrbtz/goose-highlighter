@@ -122,9 +122,14 @@
   "manage_exceptions": {
     "message": "管理"
   },
+  "exceptions_mode": { "message": "模式：" },
+  "exceptions_mode_blacklist": { "message": "黑名单 — 不在这些网站上高亮" },
+  "exceptions_mode_whitelist": { "message": "白名单 — 仅在这些网站上高亮" },
   "exceptions_list": {
     "message": "例外网站："
   },
+  "exceptions_list_blacklist": { "message": "要排除的网站（黑名单）：" },
+  "exceptions_list_whitelist": { "message": "要包含的网站（白名单）：" },
   "clear_all": {
     "message": "清除全部"
   },
@@ -172,6 +177,15 @@
   },
   "total_highlights": {
     "message": "总计"
+  },
+  "total_matches": {
+    "message": "总匹配数"
+  },
+  "group_by_list": {
+    "message": "按列表分组"
+  },
+  "other": {
+    "message": "其他"
   },
   "refresh": {
     "message": "刷新"

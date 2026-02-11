@@ -122,9 +122,14 @@
   "manage_exceptions": {
     "message": "Beheren"
   },
+  "exceptions_mode": { "message": "Modus:" },
+  "exceptions_mode_blacklist": { "message": "Zwarte lijst — niet markeren op deze sites" },
+  "exceptions_mode_whitelist": { "message": "Witte lijst — alleen markeren op deze sites" },
   "exceptions_list": {
     "message": "Uitzondering sites:"
   },
+  "exceptions_list_blacklist": { "message": "Uit te sluiten sites (zwarte lijst):" },
+  "exceptions_list_whitelist": { "message": "Toe te voegen sites (witte lijst):" },
   "clear_all": {
     "message": "Alles wissen"
   },
@@ -172,6 +177,15 @@
   },
   "total_highlights": {
     "message": "Totaal"
+  },
+  "total_matches": {
+    "message": "Totaal aantal matches"
+  },
+  "group_by_list": {
+    "message": "Groeperen op lijst"
+  },
+  "other": {
+    "message": "Overige"
   },
   "refresh": {
     "message": "Vernieuwen"

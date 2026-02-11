@@ -419,8 +419,8 @@ export class HighlightEngine {
     }
   }
 
-  getPageHighlights(activeWords: ActiveWord[]): Array<{ word: string; count: number; background: string; foreground: string }> {
-    const seen = new Map<string, { word: string; count: number; background: string; foreground: string }>();
+  getPageHighlights(activeWords: ActiveWord[]): Array<{ word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }> {
+    const seen = new Map<string, { word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }>();
 
     for (const activeWord of activeWords) {
       const lookup = this.currentMatchCase ? activeWord.text : activeWord.text.toLowerCase();
@@ -429,13 +429,26 @@ export class HighlightEngine {
 
       const totalCount = (ranges?.length || 0) + (textareaMatches?.length || 0);
 
-      if (totalCount > 0 && !seen.has(lookup)) {
-        seen.set(lookup, {
-          word: activeWord.text,
-          count: totalCount,
-          background: activeWord.background,
-          foreground: activeWord.foreground
-        });
+      if (totalCount > 0) {
+        const listName = activeWord.listName || 'Default';
+        const listId = activeWord.listId;
+
+        if (seen.has(lookup)) {
+          const existing = seen.get(lookup)!;
+          if (listName && !existing.listNames.includes(listName)) {
+            existing.listNames.push(listName);
+          }
+        } else {
+          seen.set(lookup, {
+            word: activeWord.text,
+            count: totalCount,
+            background: activeWord.background,
+            foreground: activeWord.foreground,
+            listId,
+            listName,
+            listNames: [listName]
+          });
+        }
       }
     }
 

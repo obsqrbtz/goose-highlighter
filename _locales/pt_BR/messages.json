@@ -122,9 +122,14 @@
   "manage_exceptions": {
     "message": "Gerenciar"
   },
+  "exceptions_mode": { "message": "Modo:" },
+  "exceptions_mode_blacklist": { "message": "Lista negra — não destacar nestes sites" },
+  "exceptions_mode_whitelist": { "message": "Lista branca — destacar apenas nestes sites" },
   "exceptions_list": {
     "message": "Sites de exceção:"
   },
+  "exceptions_list_blacklist": { "message": "Sites a excluir (lista negra):" },
+  "exceptions_list_whitelist": { "message": "Sites a incluir (lista branca):" },
   "clear_all": {
     "message": "Limpar tudo"
   },
@@ -172,6 +177,15 @@
   },
   "total_highlights": {
     "message": "Total"
+  },
+  "total_matches": {
+    "message": "Total de correspondências"
+  },
+  "group_by_list": {
+    "message": "Agrupar por lista"
+  },
+  "other": {
+    "message": "Outros"
   },
   "refresh": {
     "message": "Atualizar"
