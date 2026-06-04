@@ -20,6 +20,6 @@ export class StorageService {
   }
 
   static async update<K extends keyof StorageData>(key: K, value: StorageData[K]): Promise<void> {
-    return this.set({ [key]: value } as Partial<StorageData>);
+    return this.set({ [key]: value });
   }
 }

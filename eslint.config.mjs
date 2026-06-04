@@ -1,40 +1,64 @@
 import globals from 'globals';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default [...compat.extends('eslint:recommended'), {
-    languageOptions: {
-        globals: {
-            ...globals.browser,
-            ...globals.webextensions,
-            chrome: 'readonly',
+export default [
+    {
+        ignores: ['dist/**', 'node_modules/**', 'eslint.config.mjs', 'src/types/css-highlights.d.ts'],
+    },
+    js.configs.recommended,
+    {
+        files: ['**/*.{js,mjs,cjs}'],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.webextensions,
+                ...globals.node,
+                chrome: 'readonly',
+            },
+            ecmaVersion: 2022,
+            sourceType: 'module',
         },
-
-        ecmaVersion: 12,
-        sourceType: 'module',
-    },
-
-    rules: {
-        semi: ['error', 'always'],
-        quotes: ['error', 'single'],
-    },
-}, {
-    files: ['scripts/**/*.js'],
-    languageOptions: {
-        globals: {
-            ...globals.node,
+        rules: {
+            semi: ['error', 'always'],
+            quotes: ['error', 'single'],
         },
-        ecmaVersion: 12,
-        sourceType: 'module',
     },
-}];
+    ...tseslint.configs.recommendedTypeChecked.map(config => ({
+        ...config,
+        files: ['**/*.{ts,tsx}'],
+    })),
+    {
+        files: ['**/*.{ts,tsx}'],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.webextensions,
+                chrome: 'readonly',
+            },
+            ecmaVersion: 2022,
+            sourceType: 'module',
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+        rules: {
+            semi: ['error', 'always'],
+            quotes: ['error', 'single'],
+            '@typescript-eslint/no-explicit-any': 'warn',
+            '@typescript-eslint/no-unused-vars': ['error', {
+                argsIgnorePattern: '^_',
+                varsIgnorePattern: '^_',
+            }],
+            '@typescript-eslint/no-floating-promises': 'warn',
+            '@typescript-eslint/no-misused-promises': 'warn',
+            '@typescript-eslint/await-thenable': 'error',
+            '@typescript-eslint/no-unsafe-assignment': 'off',
+            '@typescript-eslint/no-unsafe-member-access': 'off',
+            '@typescript-eslint/no-unsafe-call': 'off',
+            '@typescript-eslint/no-unsafe-argument': 'off',
+            '@typescript-eslint/unbound-method': 'off',
+        },
+    },
+];

@@ -1,4 +1,4 @@
-import { HighlightList, MessageData, ExceptionsMode } from '../types.js';
+import { HighlightList, MessageData, ExceptionsMode, ActiveWord } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { HighlightEngine } from './HighlightEngine.js';
@@ -62,7 +62,7 @@ export class ContentScript {
   }
 
   private setupMessageListener(): void {
-    MessageService.onMessage((message: MessageData, sender: any, sendResponse: (response?: any) => void) => {
+    MessageService.onMessage((message: MessageData, _sender: any, sendResponse: (response?: any) => void) => {
       switch (message.type) {
         case 'WORD_LIST_UPDATED':
           this.handleWordListUpdate();

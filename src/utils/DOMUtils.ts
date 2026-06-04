@@ -5,7 +5,7 @@ export class DOMUtils {
       '<': '&lt;',
       '>': '&gt;',
       '"': '&quot;',
-      "'": '&#39;'
+      '\'': '&#39;'
     };
     return str.replace(/[&<>"']/g, (match) => escapeMap[match]);
   }

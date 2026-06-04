@@ -9,13 +9,16 @@
     "eslint": "^9.30.0",
     "globals": "^16.2.0",
     "semantic-release": "^24.2.9",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.60.0"
   },
   "scripts": {
     "build": "node scripts/build-content-standalone.js && tsc",
     "watch": "tsc --watch",
     "clean": "rimraf dist",
     "rebuild": "npm run clean && npm run build",
-    "prepare": "npm run build && node scripts/update-manifest-version.js"
+    "prepare": "npm run build && node scripts/update-manifest-version.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   }
 }

@@ -3,23 +3,18 @@ import { DOMUtils } from '../utils/DOMUtils.js';
 
 
 export class HighlightEngine {
-      private static escapeHtml(text: string): string {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-      }
-
       private static renderHighlighted(text: string, pattern: RegExp): string {
         let html = '';
         let lastIndex = 0;
         pattern.lastIndex = 0;
-        let match;
-        while ((match = pattern.exec(text)) !== null) {
-          html += HighlightEngine.escapeHtml(text.substring(lastIndex, match.index));
-          html += `<mark>${HighlightEngine.escapeHtml(match[0])}</mark>`;
+        while ((pattern.exec(text)) !== null) {
+          const match = pattern.exec(text);
+          if (!match) break;
+          html += DOMUtils.escapeHtml(text.substring(lastIndex, match.index));
+          html += `<mark>${DOMUtils.escapeHtml(match[0])}</mark>`;
           lastIndex = match.index + match[0].length;
         }
-        html += HighlightEngine.escapeHtml(text.substring(lastIndex));
+        html += DOMUtils.escapeHtml(text.substring(lastIndex));
         return html;
       }
 
@@ -27,8 +22,7 @@ export class HighlightEngine {
         const text = input.value;
         let matchCount = 0;
         pattern.lastIndex = 0;
-        let match;
-        while ((match = pattern.exec(text)) !== null) {
+        while ((pattern.exec(text)) !== null) {
           matchCount++;
         }
         const oldBadge = input.parentElement?.querySelector('.goose-highlighter-textarea-badge');
@@ -38,10 +32,6 @@ export class HighlightEngine {
           badge.className = 'goose-highlighter-textarea-badge';
           badge.textContent = matchCount.toString();
           badge.setAttribute('data-round', matchCount > 9 ? 'false' : 'true');
-          badge.style.position = 'absolute';
-          badge.style.left = '4px';
-          badge.style.top = '4px';
-          badge.style.zIndex = '10000';
           const parent = input.parentElement;
           if (parent && window.getComputedStyle(parent).position === 'static') {
             parent.style.position = 'relative';
@@ -70,7 +60,6 @@ export class HighlightEngine {
         input.removeEventListener('input', updateBadge);
         input.addEventListener('input', updateBadge);
       }
-    private _textareaMatchInfo: Array<{ input: HTMLTextAreaElement | HTMLInputElement; count: number; text: string }> = [];
   private styleSheet: CSSStyleSheet | null = null;
   private highlights = new Map<string, Highlight>();
   private highlightsByWord = new Map<string, Range[]>();
@@ -264,7 +253,7 @@ export class HighlightEngine {
     this.isHighlighting = false;
   }
 
-  private highlightTextareas(pattern: RegExp, styleMap: Map<string, number>, activeWords: ActiveWord[]): void {
+  private highlightTextareas(pattern: RegExp, _styleMap: Map<string, number>, _activeWords: ActiveWord[]): void {
     if (!document.getElementById('gh-textarea-badge-style')) {
       const style = document.createElement('style');
       style.id = 'gh-textarea-badge-style';
@@ -396,7 +385,6 @@ export class HighlightEngine {
       document.head.appendChild(style);
     }
     const textareas = document.querySelectorAll('textarea, input[type="text"], input[type="search"], input[type="email"], input[type="url"]');
-    this._textareaMatchInfo = [];
     document.querySelectorAll('.goose-highlighter-textarea-badge').forEach(badge => badge.remove());
     for (const element of Array.from(textareas)) {
       const input = element as HTMLTextAreaElement | HTMLInputElement;
@@ -534,23 +522,6 @@ export class HighlightEngine {
     input.focus();
     input.setSelectionRange(position, position + wordLength);
 
-  }
-
-  private getTextPosition(overlay: HTMLElement, targetMark: HTMLElement): number {
-    let position = 0;
-    const walker = document.createTreeWalker(overlay, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
-
-    let node: Node | null;
-    while ((node = walker.nextNode())) {
-      if (node === targetMark) {
-        return position;
-      }
-      if (node.nodeType === Node.TEXT_NODE) {
-        position += node.textContent?.length || 0;
-      }
-    }
-
-    return position;
   }
 
   private scrollIntoViewInContainers(element: Element): void {
