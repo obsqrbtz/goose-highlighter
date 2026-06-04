@@ -17,34 +17,51 @@ export class ContentScript {
 
   constructor() {
     this.highlightEngine = new HighlightEngine(() => this.processHighlights());
-    this.initialize();
+    void this.initialize();
   }
 
   private async initialize(): Promise<void> {
-    await this.loadSettings();
-    this.setupMessageListener();
-    this.processHighlights();
+    try {
+      await this.loadSettings();
+      this.setupMessageListener();
+      this.processHighlights();
+    } catch (error) {
+      console.error('ContentScript initialization error:', error);
+    }
   }
 
   private async loadSettings(): Promise<void> {
-    const data = await StorageService.get([
-      'lists',
-      'globalHighlightEnabled',
-      'matchCaseEnabled',
-      'matchWholeEnabled',
-      'exceptionsList',
-      'exceptionsWhiteList',
-      'exceptionsMode'
-    ]);
+    try {
+      const data = await StorageService.get([
+        'lists',
+        'globalHighlightEnabled',
+        'matchCaseEnabled',
+        'matchWholeEnabled',
+        'exceptionsList',
+        'exceptionsWhiteList',
+        'exceptionsMode'
+      ]);
 
-    this.lists = data.lists || [];
-    this.isGlobalHighlightEnabled = data.globalHighlightEnabled ?? true;
-    this.matchCase = data.matchCaseEnabled ?? false;
-    this.matchWhole = data.matchWholeEnabled ?? false;
-    this.exceptionsList = data.exceptionsList || [];
-    this.exceptionsWhiteList = data.exceptionsWhiteList || [];
-    this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
-    this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
+      this.lists = data.lists || [];
+      this.isGlobalHighlightEnabled = data.globalHighlightEnabled ?? true;
+      this.matchCase = data.matchCaseEnabled ?? false;
+      this.matchWhole = data.matchWholeEnabled ?? false;
+      this.exceptionsList = data.exceptionsList || [];
+      this.exceptionsWhiteList = data.exceptionsWhiteList || [];
+      this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
+      this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
+    } catch (error) {
+      console.error('ContentScript.loadSettings error:', error);
+      // Use defaults on error
+      this.lists = [];
+      this.isGlobalHighlightEnabled = true;
+      this.matchCase = false;
+      this.matchWhole = false;
+      this.exceptionsList = [];
+      this.exceptionsWhiteList = [];
+      this.exceptionsMode = 'blacklist';
+      this.shouldSkipDueToExceptions = false;
+    }
   }
 
   private getCurrentExceptionsList(): string[] {
@@ -62,10 +79,10 @@ export class ContentScript {
   }
 
   private setupMessageListener(): void {
-    MessageService.onMessage((message: MessageData, _sender: any, sendResponse: (response?: any) => void) => {
+    MessageService.onMessage((message: MessageData, _sender: chrome.runtime.MessageSender, sendResponse: (response?: unknown) => void) => {
       switch (message.type) {
         case 'WORD_LIST_UPDATED':
-          this.handleWordListUpdate();
+          void this.handleWordListUpdate();
           return false;
         case 'GLOBAL_TOGGLE_UPDATED':
           this.handleGlobalToggleUpdate(message.enabled!);
@@ -74,7 +91,7 @@ export class ContentScript {
           this.handleMatchOptionsUpdate(message.matchCase!, message.matchWhole!);
           return false;
         case 'EXCEPTIONS_LIST_UPDATED':
-          this.handleExceptionsUpdate();
+          void this.handleExceptionsUpdate();
           return false;
         case 'GET_PAGE_HIGHLIGHTS':
           this.handleGetPageHighlights(sendResponse);
@@ -89,9 +106,13 @@ export class ContentScript {
 
 
   private async handleWordListUpdate(): Promise<void> {
-    const data = await StorageService.get(['lists']);
-    this.lists = data.lists || [];
-    this.processHighlights();
+    try {
+      const data = await StorageService.get(['lists']);
+      this.lists = data.lists || [];
+      this.processHighlights();
+    } catch (error) {
+      console.error('ContentScript.handleWordListUpdate error:', error);
+    }
   }
 
   private handleGlobalToggleUpdate(enabled: boolean): void {
@@ -106,12 +127,16 @@ export class ContentScript {
   }
 
   private async handleExceptionsUpdate(): Promise<void> {
-    const data = await StorageService.get(['exceptionsList', 'exceptionsWhiteList', 'exceptionsMode']);
-    this.exceptionsList = data.exceptionsList || [];
-    this.exceptionsWhiteList = data.exceptionsWhiteList || [];
-    this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
-    this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
-    this.processHighlights();
+    try {
+      const data = await StorageService.get(['exceptionsList', 'exceptionsWhiteList', 'exceptionsMode']);
+      this.exceptionsList = data.exceptionsList || [];
+      this.exceptionsWhiteList = data.exceptionsWhiteList || [];
+      this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
+      this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
+      this.processHighlights();
+    } catch (error) {
+      console.error('ContentScript.handleExceptionsUpdate error:', error);
+    }
   }
 
   private processHighlights(): void {
@@ -131,7 +156,7 @@ export class ContentScript {
     }
   }
 
-  private handleGetPageHighlights(sendResponse: (response: any) => void): void {
+  private handleGetPageHighlights(sendResponse: (response: unknown) => void): void {
     const activeWords: ActiveWord[] = [];
     
     for (const list of this.lists) {

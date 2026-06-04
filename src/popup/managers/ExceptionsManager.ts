@@ -14,15 +14,19 @@ export class ExceptionsManager {
 
   setupEventListeners(): void {
     document.getElementById('exceptionsModeSelect')?.addEventListener('change', async (e) => {
-      const value = (e.target as HTMLSelectElement).value;
-      this.exceptionsMode = value === 'whitelist' ? 'whitelist' : 'blacklist';
-      await StorageService.update('exceptionsMode', this.exceptionsMode);
-      MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
-      this.onExceptionsChanged();
+      try {
+        const value = (e.target as HTMLSelectElement).value;
+        this.exceptionsMode = value === 'whitelist' ? 'whitelist' : 'blacklist';
+        await StorageService.update('exceptionsMode', this.exceptionsMode);
+        MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
+        this.onExceptionsChanged();
+      } catch (error) {
+        console.error('Error updating exceptions mode:', error);
+      }
     });
 
     document.getElementById('addExceptionBtn')?.addEventListener('click', () => this.addExceptionFromInput());
-    document.getElementById('addCurrentSiteBtn')?.addEventListener('click', () => this.addCurrentSiteToExceptions());
+    document.getElementById('addCurrentSiteBtn')?.addEventListener('click', () => void this.addCurrentSiteToExceptions());
     (document.getElementById('exceptionDomainInput') as HTMLInputElement)?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') this.addExceptionFromInput();
     });
@@ -89,7 +93,7 @@ export class ExceptionsManager {
       this.exceptionsList.push(domain);
     }
     input.value = '';
-    this.saveAndNotify();
+    void this.saveAndNotify();
   }
 
   private async addCurrentSiteToExceptions(): Promise<void> {
@@ -156,12 +160,16 @@ export class ExceptionsManager {
   }
 
   private async saveAndNotify(): Promise<void> {
-    await StorageService.set({
-      exceptionsList: this.exceptionsList,
-      exceptionsWhiteList: this.exceptionsWhiteList
-    });
-    MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
-    this.onExceptionsChanged();
+    try {
+      await StorageService.set({
+        exceptionsList: this.exceptionsList,
+        exceptionsWhiteList: this.exceptionsWhiteList
+      });
+      MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
+      this.onExceptionsChanged();
+    } catch (error) {
+      console.error('ExceptionsManager.saveAndNotify error:', error);
+    }
   }
 
   getExceptionsList(): string[] {

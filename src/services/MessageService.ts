@@ -19,11 +19,11 @@ export class MessageService {
     });
   }
 
-  static onMessage(callback: (message: MessageData, sender: any, sendResponse: (response?: any) => void) => void | boolean): void {
+  static onMessage(callback: (message: MessageData, sender: chrome.runtime.MessageSender, sendResponse: (response?: unknown) => void) => void | boolean): void {
     chrome.runtime.onMessage.addListener(callback);
   }
 
-  static async sendToActiveTab(message: MessageData): Promise<any> {
+  static async sendToActiveTab(message: MessageData): Promise<unknown> {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab.id) {
       return chrome.tabs.sendMessage(tab.id, message);

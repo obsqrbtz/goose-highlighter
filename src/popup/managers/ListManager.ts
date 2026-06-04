@@ -82,7 +82,7 @@ export class ListManager {
     );
     if (newName && newName.trim()) {
       this.lists[currentIndex].name = newName.trim();
-      this.saveAndNotify();
+      void this.saveAndNotify();
     }
   }
 
@@ -96,7 +96,7 @@ export class ListManager {
       words: []
     });
     this.setCurrentListIndex(this.lists.length - 1);
-    this.saveAndNotify();
+    void this.saveAndNotify();
   }
 
   private deleteList(): void {
@@ -108,7 +108,7 @@ export class ListManager {
       const currentIndex = this.getCurrentListIndex();
       this.lists.splice(currentIndex, 1);
       this.setCurrentListIndex(Math.max(0, currentIndex - 1));
-      this.saveAndNotify();
+      void this.saveAndNotify();
     }
   }
 
@@ -122,7 +122,7 @@ export class ListManager {
     this.lists[currentIndex].foreground = listFg.value;
     this.lists[currentIndex].active = listActive.checked;
 
-    this.saveAndNotify();
+    void this.saveAndNotify();
   }
 
   updatePreview(): void {
@@ -193,8 +193,12 @@ export class ListManager {
   }
 
   private async saveAndNotify(): Promise<void> {
-    await StorageService.update('lists', this.lists);
-    MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
-    this.onListsChanged();
+    try {
+      await StorageService.update('lists', this.lists);
+      MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
+      this.onListsChanged();
+    } catch (error) {
+      console.error('ListManager.saveAndNotify error:', error);
+    }
   }
 }

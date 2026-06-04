@@ -67,10 +67,12 @@ export class HighlightEngine {
   private observer: MutationObserver;
   private isHighlighting = false;
   private currentMatchCase = false;
+  private eventListeners = new Map<HTMLElement, Map<string, EventListener>>();
+  private isDestroyed = false;
 
   constructor(private onUpdate: () => void) {
     this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
-      if (this.isHighlighting) return;
+      if (this.isHighlighting || this.isDestroyed) return;
       const hasContentChanges = mutations.some((mutation: MutationRecord) => {
         if (mutation.type !== 'childList') return false;
         const allNodes = [...Array.from(mutation.addedNodes), ...Array.from(mutation.removedNodes)];
@@ -119,6 +121,7 @@ export class HighlightEngine {
   clearHighlights(): void {
     this.observer.disconnect();
     this.clearHighlightsInternal();
+    this.cleanupEventListeners();
   }
 
 
@@ -163,7 +166,7 @@ export class HighlightEngine {
   }
 
   highlight(lists: HighlightList[], matchCase: boolean, matchWhole: boolean): void {
-    if (this.isHighlighting) return;
+    if (this.isHighlighting || this.isDestroyed) return;
     this.isHighlighting = true;
 
     this.currentMatchCase = matchCase;
@@ -245,12 +248,14 @@ export class HighlightEngine {
       }
 
       this.highlightTextareas(pattern, styleMap, activeWords);
-    } catch (e) {
-      console.error('Regex error:', e);
+    } catch (error) {
+      console.error('HighlightEngine.highlight - Regex error:', error);
+      // Clear any partial highlights on error
+      this.clearHighlightsInternal();
+    } finally {
+      this.startObserving();
+      this.isHighlighting = false;
     }
-
-    this.startObserving();
-    this.isHighlighting = false;
   }
 
   private highlightTextareas(pattern: RegExp, _styleMap: Map<string, number>, _activeWords: ActiveWord[]): void {
@@ -565,6 +570,7 @@ export class HighlightEngine {
   }
 
   private startObserving(): void {
+    if (this.isDestroyed) return;
     this.observer.observe(document.body, {
       childList: true,
       subtree: true,
@@ -572,7 +578,30 @@ export class HighlightEngine {
     });
   }
 
+  private cleanupEventListeners(): void {
+    for (const [element, listeners] of this.eventListeners) {
+      for (const [event, listener] of listeners) {
+        try {
+          element.removeEventListener(event, listener);
+        } catch (error) {
+          console.warn('HighlightEngine.cleanupEventListeners - Error removing event listener:', error);
+        }
+      }
+    }
+    this.eventListeners.clear();
+    
+    // Also cleanup textarea badges
+    document.querySelectorAll('.goose-highlighter-textarea-badge').forEach(badge => {
+      try {
+        badge.remove();
+      } catch (error) {
+        console.warn('HighlightEngine.cleanupEventListeners - Error removing badge:', error);
+      }
+    });
+  }
+
   destroy(): void {
+    this.isDestroyed = true;
     this.observer.disconnect();
     this.clearHighlights();
   }

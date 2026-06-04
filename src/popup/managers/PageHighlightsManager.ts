@@ -65,7 +65,7 @@ export class PageHighlightsManager {
 
   async load(): Promise<void> {
     try {
-      const response = await MessageService.sendToActiveTab({ type: 'GET_PAGE_HIGHLIGHTS' });
+      const response = await MessageService.sendToActiveTab({ type: 'GET_PAGE_HIGHLIGHTS' }) as { highlights?: PageHighlight[]; lists?: HighlightList[] } | null;
 
       if (response && response.highlights) {
         this.pageHighlights = response.highlights.map((h: PageHighlight) => ({

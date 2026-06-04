@@ -56,7 +56,7 @@ export class WordManager {
         existingWords.add(w);
       }
     }
-    this.saveAndNotify();
+    void this.saveAndNotify();
   }
 
   private setupWordListEvents(wordList: HTMLDivElement): void {
@@ -140,7 +140,7 @@ export class WordManager {
           const word = list.words[index];
           if (word) {
             word.active = target.checked;
-            this.saveAndNotify();
+            void this.saveAndNotify();
           }
         }
       }
@@ -154,7 +154,7 @@ export class WordManager {
     if (target.dataset.bgEdit != null) word.background = target.value;
     if (target.dataset.fgEdit != null) word.foreground = target.value;
 
-    this.saveAndNotify();
+    void this.saveAndNotify();
   }
 
   private handleWordListKeydown(e: KeyboardEvent): void {
@@ -187,7 +187,7 @@ export class WordManager {
     const newValue = target.value.trim();
     if (newValue && newValue !== word.wordStr) {
       word.wordStr = newValue;
-      this.saveAndNotify();
+      void this.saveAndNotify();
     } else {
       this.render();
     }
@@ -337,17 +337,17 @@ export class WordManager {
     } else if (action === 'enable') {
       this.setSelectedWordsActive(indices, true);
       this.closeWordItemMenu();
-      this.saveAndNotify();
+      void this.saveAndNotify();
     } else if (action === 'disable') {
       this.setSelectedWordsActive(indices, false);
       this.closeWordItemMenu();
-      this.saveAndNotify();
+      void this.saveAndNotify();
     } else if (action === 'delete') {
       if (confirm(chrome.i18n.getMessage('confirm_delete_words') || 'Delete selected words?')) {
         this.deleteWordsByIndices(indices);
         this.selectedCheckboxes.clear();
         this.closeWordItemMenu();
-        this.saveAndNotify();
+        void this.saveAndNotify();
       }
     }
   }
@@ -390,7 +390,7 @@ export class WordManager {
           this.moveWordsToOtherList(indices, targetIndex);
         }
         this.closeWordItemMenu();
-        this.saveAndNotify();
+        void this.saveAndNotify();
       });
     });
   }
@@ -546,8 +546,13 @@ export class WordManager {
   }
 
   private async saveAndNotify(): Promise<void> {
-    await StorageService.update('lists', this.lists);
-    MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
-    this.onWordsChanged();
+    try {
+      await StorageService.update('lists', this.lists);
+      MessageService.sendToAllTabs({ type: 'WORD_LIST_UPDATED' });
+      this.onWordsChanged();
+    } catch (error) {
+      console.error('WordManager.saveAndNotify error:', error);
+      // Optionally show user-facing error message
+    }
   }
 }

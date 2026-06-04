@@ -36,24 +36,36 @@ export class PopupController {
   private importExportManager!: ImportExportManager;
 
   async initialize(): Promise<void> {
-    await this.loadData();
-    await this.getCurrentTab();
-    
-    this.initializeManagers();
-    
-    await this.stateManager.load();
-    
-    PopupRenderer.translateTitles();
-    this.setupEventListeners();
-    this.render();
-    this.restoreWordSearchInput();
-    
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => this.stateManager.restoreScrollPositions());
-    });
-    
-    PopupRenderer.hideLoadingOverlay();
-    this.stateManager.startPeriodicSave();
+    try {
+      await this.loadData();
+      await this.getCurrentTab();
+      
+      this.initializeManagers();
+      
+      await this.stateManager.load();
+      
+      PopupRenderer.translateTitles();
+      this.setupEventListeners();
+      this.render();
+      this.restoreWordSearchInput();
+      
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => this.stateManager.restoreScrollPositions());
+      });
+      
+      PopupRenderer.hideLoadingOverlay();
+      this.stateManager.startPeriodicSave();
+    } catch (error) {
+      console.error('PopupController.initialize error:', error);
+      PopupRenderer.hideLoadingOverlay();
+      // Show error state to user
+      document.body.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: #f44336;">
+          <h3>Error loading extension</h3>
+          <p>Please try refreshing the popup.</p>
+        </div>
+      `;
+    }
   }
 
   private initializeManagers(): void {
@@ -120,21 +132,37 @@ export class PopupController {
   }
 
   private async loadData(): Promise<void> {
-    const data = await StorageService.get();
-    this.lists = data.lists || [];
-    this.globalHighlightEnabled = data.globalHighlightEnabled ?? true;
-    this.matchCaseEnabled = data.matchCaseEnabled ?? false;
-    this.matchWholeEnabled = data.matchWholeEnabled ?? false;
+    try {
+      const data = await StorageService.get();
+      this.lists = data.lists || [];
+      this.globalHighlightEnabled = data.globalHighlightEnabled ?? true;
+      this.matchCaseEnabled = data.matchCaseEnabled ?? false;
+      this.matchWholeEnabled = data.matchWholeEnabled ?? false;
 
-    if (this.lists.length === 0) {
-      this.lists.push({
+      if (this.lists.length === 0) {
+        this.lists.push({
+          id: Date.now(),
+          name: chrome.i18n.getMessage('default_list_name') || 'Default List',
+          background: '#ffff00',
+          foreground: '#000000',
+          active: true,
+          words: []
+        });
+      }
+    } catch (error) {
+      console.error('PopupController.loadData error:', error);
+      // Use defaults on error
+      this.lists = [{
         id: Date.now(),
         name: chrome.i18n.getMessage('default_list_name') || 'Default List',
         background: '#ffff00',
         foreground: '#000000',
         active: true,
         words: []
-      });
+      }];
+      this.globalHighlightEnabled = true;
+      this.matchCaseEnabled = false;
+      this.matchWholeEnabled = false;
     }
   }
 
@@ -146,7 +174,7 @@ export class PopupController {
         this.currentTabHost = url.hostname;
       }
     } catch (e) {
-      console.warn('Could not get current tab:', e);
+      console.warn('PopupController.getCurrentTab - Could not get current tab:', e);
     }
   }
 
@@ -226,32 +254,44 @@ export class PopupController {
     const matchWhole = document.getElementById('matchWhole') as HTMLInputElement;
 
     globalToggle?.addEventListener('change', async () => {
-      this.globalHighlightEnabled = globalToggle.checked;
-      await StorageService.update('globalHighlightEnabled', this.globalHighlightEnabled);
-      MessageService.sendToAllTabs({
-        type: 'GLOBAL_TOGGLE_UPDATED',
-        enabled: this.globalHighlightEnabled
-      });
+      try {
+        this.globalHighlightEnabled = globalToggle.checked;
+        await StorageService.update('globalHighlightEnabled', this.globalHighlightEnabled);
+        MessageService.sendToAllTabs({
+          type: 'GLOBAL_TOGGLE_UPDATED',
+          enabled: this.globalHighlightEnabled
+        });
+      } catch (error) {
+        console.error('Error updating global highlight toggle:', error);
+      }
     });
 
     matchCase?.addEventListener('change', async () => {
-      this.matchCaseEnabled = matchCase.checked;
-      await StorageService.update('matchCaseEnabled', this.matchCaseEnabled);
-      MessageService.sendToAllTabs({
-        type: 'MATCH_OPTIONS_UPDATED',
-        matchCase: this.matchCaseEnabled,
-        matchWhole: this.matchWholeEnabled
-      });
+      try {
+        this.matchCaseEnabled = matchCase.checked;
+        await StorageService.update('matchCaseEnabled', this.matchCaseEnabled);
+        MessageService.sendToAllTabs({
+          type: 'MATCH_OPTIONS_UPDATED',
+          matchCase: this.matchCaseEnabled,
+          matchWhole: this.matchWholeEnabled
+        });
+      } catch (error) {
+        console.error('Error updating match case:', error);
+      }
     });
 
     matchWhole?.addEventListener('change', async () => {
-      this.matchWholeEnabled = matchWhole.checked;
-      await StorageService.update('matchWholeEnabled', this.matchWholeEnabled);
-      MessageService.sendToAllTabs({
-        type: 'MATCH_OPTIONS_UPDATED',
-        matchCase: this.matchCaseEnabled,
-        matchWhole: this.matchWholeEnabled
-      });
+      try {
+        this.matchWholeEnabled = matchWhole.checked;
+        await StorageService.update('matchWholeEnabled', this.matchWholeEnabled);
+        MessageService.sendToAllTabs({
+          type: 'MATCH_OPTIONS_UPDATED',
+          matchCase: this.matchCaseEnabled,
+          matchWhole: this.matchWholeEnabled
+        });
+      } catch (error) {
+        console.error('Error updating match whole:', error);
+      }
     });
   }
 
@@ -288,15 +328,19 @@ export class PopupController {
       if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || 
           changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsWhiteList || 
           changes.exceptionsMode) {
-        this.reloadFromStorage();
+        void this.reloadFromStorage();
       }
     });
   }
 
   private async reloadFromStorage(): Promise<void> {
-    await this.loadData();
-    this.state.currentListIndex = Math.min(this.state.currentListIndex, this.lists.length - 1);
-    this.render();
+    try {
+      await this.loadData();
+      this.state.currentListIndex = Math.min(this.state.currentListIndex, this.lists.length - 1);
+      this.render();
+    } catch (error) {
+      console.error('PopupController.reloadFromStorage error:', error);
+    }
   }
 
   private restoreWordSearchInput(): void {
