@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.1...v1.13.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* updated publish workflow to use env vars instead of cli flags ([59568b2](https://github.com/obsqrbtz/goose-highlighter/commit/59568b20de79cafa924a707832c0541baaa37745))
+
 ## [1.13.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.0...v1.13.1) (2026-06-08)
 
 
