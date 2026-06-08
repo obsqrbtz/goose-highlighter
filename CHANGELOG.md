@@ -1,3 +1,10 @@
+## [1.13.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.2...v1.13.3) (2026-06-08)
+
+
+### Bug Fixes
+
+* update env vars for publish workflow ([fbc6d74](https://github.com/obsqrbtz/goose-highlighter/commit/fbc6d74115d512f4715b17fd81d3de0627bb9388))
+
 ## [1.13.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.1...v1.13.2) (2026-06-08)
 
 
