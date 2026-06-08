@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.0...v1.13.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* position match-count pill on the field's top border so it doesn't cover text ([5f03835](https://github.com/obsqrbtz/goose-highlighter/commit/5f03835281540da30f492d42beef9f6a1f78711d))
+
 # [1.13.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.12.1...v1.13.0) (2026-02-11)
 
 
