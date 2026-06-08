@@ -31,12 +31,12 @@ export class HighlightEngine {
           const badge = document.createElement('div');
           badge.className = 'goose-highlighter-textarea-badge';
           badge.textContent = matchCount.toString();
-          badge.setAttribute('data-round', matchCount > 9 ? 'false' : 'true');
           const parent = input.parentElement;
           if (parent && window.getComputedStyle(parent).position === 'static') {
             parent.style.position = 'relative';
           }
           parent?.appendChild(badge);
+          HighlightEngine.positionBadge(badge, input);
           badge.addEventListener('click', () => {
             document.querySelectorAll('.goose-highlighter-textarea-popup').forEach(p => p.remove());
             const popup = document.createElement('div');
@@ -52,6 +52,17 @@ export class HighlightEngine {
             closeBtn?.addEventListener('click', () => popup.remove());
           });
         }
+      }
+
+      private static positionBadge(badge: HTMLElement, input: HTMLTextAreaElement | HTMLInputElement): void {
+        const inset = 8;
+        const badgeWidth = badge.offsetWidth || 16;
+        const badgeHeight = badge.offsetHeight || 16;
+        const left = input.offsetLeft + input.offsetWidth - badgeWidth - inset;
+        const top = input.offsetTop - badgeHeight / 2;
+        badge.style.setProperty('left', `${left}px`, 'important');
+        badge.style.setProperty('top', `${top}px`, 'important');
+        badge.style.removeProperty('transform');
       }
 
       private static attachBadgeListener(input: HTMLTextAreaElement | HTMLInputElement, pattern: RegExp): void {
@@ -274,30 +285,25 @@ export class HighlightEngine {
         }
         .goose-highlighter-textarea-badge {
           position: absolute !important;
-          left: 4px !important;
-          top: 4px !important;
           background: var(--gh-badge-accent);
           color: var(--gh-badge-text);
           font-family: inherit;
           font-weight: bold;
-          font-size: 14px;
+          font-size: 11px;
+          line-height: 1;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+          box-shadow: 0 1px 3px rgba(0,0,0,0.2);
           cursor: pointer;
           z-index: 10000;
-          padding: 0 10px;
-          height: 22px;
-          min-width: 22px;
-          border-radius: 12px;
-          border: 2px solid var(--gh-badge-border);
+          padding: 0 6px;
+          height: 16px;
+          min-width: 16px;
+          box-sizing: border-box;
+          border-radius: 4px;
+          border: 1px solid var(--gh-badge-border);
           transition: box-shadow 0.2s, background 0.2s;
-        }
-        .goose-highlighter-textarea-badge[data-round="true"] {
-          border-radius: 50%;
-          padding: 0;
-          min-width: 22px;
         }
         .goose-highlighter-textarea-badge:hover {
           box-shadow: 0 4px 12px rgba(236,156,35,0.25);
