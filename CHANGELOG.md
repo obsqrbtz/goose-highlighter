@@ -1,3 +1,11 @@
+## [1.13.4](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.3...v1.13.4) (2026-06-09)
+
+
+### Bug Fixes
+
+* create standalone window for import on linux (linux kills popups early preventing successfull import) ([f7e66ac](https://github.com/obsqrbtz/goose-highlighter/commit/f7e66ace0e367983cdad750ac3a411f4d0d13ddd))
+* fixed warnings ([14f7ee2](https://github.com/obsqrbtz/goose-highlighter/commit/14f7ee24584e1950f2a2b990a3234603e7729367))
+
 ## [1.13.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.2...v1.13.3) (2026-06-08)
 
 

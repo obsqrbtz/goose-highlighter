@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extension_name__",
   "description": "__MSG_extension_description__",
-  "version": "1.13.3",
+  "version": "1.13.4",
   "default_locale": "en",
   "permissions": [
     "scripting",
@@ -17,7 +17,9 @@
     "default_icon": "icons/icon128.png"
   },
   "background": {
-    "scripts": ["dist/background.js"],
+    "scripts": [
+      "dist/background.js"
+    ],
     "service_worker": "dist/background.js",
     "type": "module"
   },
