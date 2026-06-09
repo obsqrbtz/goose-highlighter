@@ -258,6 +258,38 @@
   "import_success": {
     "message": "{words} kelime içeren {count} liste başarıyla içe aktarıldı."
   },
+  "import_page_title": {
+    "message": "İçe Aktar — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "İçe Aktar"
+  },
+  "import_choose_file": {
+    "message": "Dosya seç"
+  },
+  "import_select_list_prompt": {
+    "message": "İçe aktarmak için bir liste dosyası seçin."
+  },
+  "import_select_settings_prompt": {
+    "message": "İçe aktarmak için bir ayar dosyası seçin."
+  },
+  "import_in_progress": {
+    "message": "İçe aktarılıyor…"
+  },
+  "import_complete": {
+    "message": "İçe aktarma tamamlandı."
+  },
+  "import_complete_lists": {
+    "message": "İçe aktarma tamamlandı. $COUNT$ liste eklendi.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Bu sekmeyi kapatabilirsiniz."
+  },
   "preview_label": {
     "message": "Önizleme"
   },

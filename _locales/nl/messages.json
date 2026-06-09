@@ -258,6 +258,38 @@
   "import_success": {
     "message": "{count} lijst(en) met {words} woord(en) succesvol geïmporteerd."
   },
+  "import_page_title": {
+    "message": "Importeren — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Importeren"
+  },
+  "import_choose_file": {
+    "message": "Bestand kiezen"
+  },
+  "import_select_list_prompt": {
+    "message": "Selecteer een lijstbestand om te importeren."
+  },
+  "import_select_settings_prompt": {
+    "message": "Selecteer een instellingenbestand om te importeren."
+  },
+  "import_in_progress": {
+    "message": "Bezig met importeren…"
+  },
+  "import_complete": {
+    "message": "Importeren voltooid."
+  },
+  "import_complete_lists": {
+    "message": "Importeren voltooid. $COUNT$ lijst(en) toegevoegd.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Je kunt dit tabblad sluiten."
+  },
   "preview_label": {
     "message": "Voorbeeld"
   },

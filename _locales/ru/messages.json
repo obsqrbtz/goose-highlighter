@@ -262,6 +262,38 @@
   "preview_label": {
     "message": "Предпросмотр"
   },
+  "import_page_title": {
+    "message": "Импорт — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Импорт"
+  },
+  "import_choose_file": {
+    "message": "Выбрать файл"
+  },
+  "import_select_list_prompt": {
+    "message": "Выберите файл списка для импорта."
+  },
+  "import_select_settings_prompt": {
+    "message": "Выберите файл настроек для импорта."
+  },
+  "import_in_progress": {
+    "message": "Импорт…"
+  },
+  "import_complete": {
+    "message": "Импорт завершён."
+  },
+  "import_complete_lists": {
+    "message": "Импорт завершён. Добавлено списков: $COUNT$.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Можно закрыть эту вкладку."
+  },
   "preview_text": {
     "message": "Так будет выглядеть выделенный текст."
   },

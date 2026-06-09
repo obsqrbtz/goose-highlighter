@@ -258,6 +258,38 @@
     "import_success": {
         "message": "{words}개의 단어가 포함된 {count}개의 리스트를 성공적으로 가져왔습니다."
     },
+    "import_page_title": {
+        "message": "가져오기 — Goose Highlighter"
+    },
+    "import_page_heading": {
+        "message": "가져오기"
+    },
+    "import_choose_file": {
+        "message": "파일 선택"
+    },
+    "import_select_list_prompt": {
+        "message": "가져올 목록 파일을 선택하세요."
+    },
+    "import_select_settings_prompt": {
+        "message": "가져올 설정 파일을 선택하세요."
+    },
+    "import_in_progress": {
+        "message": "가져오는 중…"
+    },
+    "import_complete": {
+        "message": "가져오기가 완료되었습니다."
+    },
+    "import_complete_lists": {
+        "message": "가져오기가 완료되었습니다. $COUNT$개의 목록을 추가했습니다.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "import_close_tab_hint": {
+        "message": "이 탭을 닫아도 됩니다."
+    },
     "preview_label": {
         "message": "미리보기"
     },

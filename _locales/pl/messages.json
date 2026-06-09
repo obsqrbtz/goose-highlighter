@@ -258,6 +258,38 @@
   "import_success": {
     "message": "Pomyślnie zaimportowano {count} list(y) z {words} słowami."
   },
+  "import_page_title": {
+    "message": "Importuj — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Importuj"
+  },
+  "import_choose_file": {
+    "message": "Wybierz plik"
+  },
+  "import_select_list_prompt": {
+    "message": "Wybierz plik listy do zaimportowania."
+  },
+  "import_select_settings_prompt": {
+    "message": "Wybierz plik ustawień do zaimportowania."
+  },
+  "import_in_progress": {
+    "message": "Importowanie…"
+  },
+  "import_complete": {
+    "message": "Import zakończony."
+  },
+  "import_complete_lists": {
+    "message": "Import zakończony. Dodano listy: $COUNT$.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Możesz zamknąć tę kartę."
+  },
   "preview_label": {
     "message": "Podgląd"
   },

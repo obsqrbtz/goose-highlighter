@@ -252,6 +252,38 @@
   "import_success": {
     "message": "{count} Liste(n) mit {words} Wort/Wörtern erfolgreich importiert."
   },
+  "import_page_title": {
+    "message": "Importieren — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Importieren"
+  },
+  "import_choose_file": {
+    "message": "Datei auswählen"
+  },
+  "import_select_list_prompt": {
+    "message": "Wählen Sie eine Listendatei zum Importieren aus."
+  },
+  "import_select_settings_prompt": {
+    "message": "Wählen Sie eine Einstellungsdatei zum Importieren aus."
+  },
+  "import_in_progress": {
+    "message": "Wird importiert…"
+  },
+  "import_complete": {
+    "message": "Import abgeschlossen."
+  },
+  "import_complete_lists": {
+    "message": "Import abgeschlossen. $COUNT$ Liste(n) hinzugefügt.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Sie können diesen Tab schließen."
+  },
   "preview_label": {
     "message": "Vorschau"
   },

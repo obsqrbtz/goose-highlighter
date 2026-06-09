@@ -1,0 +1,96 @@
+:root {
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --muted: #6b6b70;
+  --accent: #f4b400;
+  --accent-text: #1d1d1f;
+  --success: #1a7f37;
+  --error: #d93025;
+  --border: #e0e0e2;
+}
+
+:root.dark {
+  --bg: #1e1e1e;
+  --card: #2a2a2a;
+  --text: #f0f0f0;
+  --muted: #a0a0a5;
+  --accent: #f4b400;
+  --accent-text: #1d1d1f;
+  --success: #4caf50;
+  --error: #ff6b6b;
+  --border: #3a3a3a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 24px;
+}
+
+.import-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.import-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.status {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.status.success {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.status.error {
+  color: var(--error);
+  font-weight: 600;
+}
+
+.import-btn {
+  appearance: none;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 22px;
+  cursor: pointer;
+}
+
+.import-btn:hover {
+  filter: brightness(0.95);
+}
+
+.hint {
+  margin: 20px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}

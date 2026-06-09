@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="import_page_title">Import — Goose Highlighter</title>
+  <link rel="stylesheet" href="import.css" />
+</head>
+
+<body>
+  <main class="import-card">
+    <h1 class="import-title" data-i18n="import_page_heading">Import</h1>
+    <p id="status" class="status">…</p>
+    <button type="button" id="chooseFileBtn" class="import-btn" data-i18n="import_choose_file">Choose file</button>
+    <input type="file" id="importFileInput" accept="application/json" hidden />
+    <p id="closeHint" class="hint" hidden data-i18n="import_close_tab_hint">You may close this tab.</p>
+  </main>
+  <script type="module" src="../dist/import/import.js"></script>
+</body>
+
+</html>

@@ -17,9 +17,26 @@ export class ImportExportManager {
     private onDataChanged: () => void
   ) {}
 
+  private isLinux = false;
+
   setupEventListeners(): void {
+    void this.detectPlatform();
     this.setupListImportExport();
     this.setupSettingsImportExport();
+  }
+
+  private async detectPlatform(): Promise<void> {
+    try {
+      const info = await browserAPI.runtime.getPlatformInfo();
+      this.isLinux = info.os === 'linux';
+    } catch {
+      this.isLinux = false;
+    }
+  }
+
+  private openImportTab(type: 'list' | 'settings'): void {
+    const url = browserAPI.runtime.getURL(`import/import.html?type=${type}`);
+    void browserAPI.tabs.create({ url });
   }
 
   private setupListImportExport(): void {
@@ -30,7 +47,11 @@ export class ImportExportManager {
     });
 
     document.getElementById('importListBtn')?.addEventListener('click', () => {
-      importListInput?.click();
+      if (this.isLinux) {
+        this.openImportTab('list');
+      } else {
+        importListInput?.click();
+      }
     });
 
     importListInput?.addEventListener('change', (e) => {
@@ -54,7 +75,11 @@ export class ImportExportManager {
     });
 
     document.getElementById('importSettingsBtn')?.addEventListener('click', () => {
-      importSettingsInput?.click();
+      if (this.isLinux) {
+        this.openImportTab('settings');
+      } else {
+        importSettingsInput?.click();
+      }
     });
 
     importSettingsInput?.addEventListener('change', (e) => {
