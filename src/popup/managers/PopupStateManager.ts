@@ -1,3 +1,4 @@
+import { browserAPI } from '../../utils/browser.js';
 export class PopupStateManager {
   private static readonly POPUP_STATE_KEY = 'goose-popup-ui-state';
   private static readonly SCROLL_SELECTORS: Record<string, string> = {
@@ -17,7 +18,7 @@ export class PopupStateManager {
 
   async load(): Promise<void> {
     try {
-      const result = await chrome.storage.local.get(PopupStateManager.POPUP_STATE_KEY);
+      const result = await browserAPI.storage.local.get(PopupStateManager.POPUP_STATE_KEY);
       const raw = result[PopupStateManager.POPUP_STATE_KEY];
       if (raw === undefined || typeof raw !== 'string') return;
       
@@ -60,7 +61,7 @@ export class PopupStateManager {
       pageHighlightsGroupByList: state.pageHighlightsGroupByList,
       pageHighlightsListFilter: Array.from(state.pageHighlightsListFilter)
     };
-    chrome.storage.local.set({ [PopupStateManager.POPUP_STATE_KEY]: JSON.stringify(payload) }).catch(() => {});
+    browserAPI.storage.local.set({ [PopupStateManager.POPUP_STATE_KEY]: JSON.stringify(payload) }).catch(() => {});
   }
 
   startPeriodicSave(): void {
@@ -90,7 +91,7 @@ export class PopupStateManager {
       pageHighlightsGroupByList: state.pageHighlightsGroupByList,
       pageHighlightsListFilter: Array.from(state.pageHighlightsListFilter)
     };
-    chrome.runtime.sendMessage({ type: 'SAVE_POPUP_STATE', payload }).catch(() => {});
+    browserAPI.runtime.sendMessage({ type: 'SAVE_POPUP_STATE', payload }).catch(() => {});
   }
 
   setupScrollListeners(): void {

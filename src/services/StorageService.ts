@@ -1,3 +1,4 @@
+import { browserAPI } from '../utils/browser.js';
 import { StorageData, DEFAULT_STORAGE } from '../types.js';
 
 export class StorageService {
@@ -11,9 +12,9 @@ export class StorageService {
         keys.forEach(key => {
           keyDefaults[key] = defaults[key];
         });
-        return await chrome.storage.local.get(keyDefaults) as Pick<StorageData, typeof keys[number]>;
+        return await browserAPI.storage.local.get(keyDefaults) as Pick<StorageData, typeof keys[number]>;
       }
-      return await chrome.storage.local.get(defaults) as StorageData;
+      return await browserAPI.storage.local.get(defaults) as StorageData;
     } catch (error) {
       console.error('StorageService.get error:', error);
       // Return defaults on error
@@ -30,7 +31,7 @@ export class StorageService {
 
   static async set(data: Partial<StorageData>): Promise<void> {
     try {
-      await chrome.storage.local.set(data);
+      await browserAPI.storage.local.set(data);
     } catch (error) {
       console.error('StorageService.set error:', error);
       throw error;

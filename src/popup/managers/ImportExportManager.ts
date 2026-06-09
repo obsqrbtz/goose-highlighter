@@ -1,3 +1,4 @@
+import { browserAPI } from '../../utils/browser.js';
 import { HighlightList, ExportData, ExceptionsMode } from '../../types.js';
 import { StorageService } from '../../services/StorageService.js';
 import { MessageService } from '../../services/MessageService.js';
@@ -104,7 +105,7 @@ export class ImportExportManager {
       }
 
       if (toAdd.length === 0) {
-        alert(chrome.i18n.getMessage('invalid_import_format') || 'Invalid list format. Please select a valid list file.');
+        alert(browserAPI.i18n.getMessage('invalid_import_format') || 'Invalid list format. Please select a valid list file.');
         return;
       }
       
@@ -115,7 +116,7 @@ export class ImportExportManager {
       
       this.saveAndNotify();
     } catch (err) {
-      alert(chrome.i18n.getMessage('invalid_json_error') + ': ' + (err as Error).message);
+      alert(browserAPI.i18n.getMessage('invalid_json_error') + ': ' + (err as Error).message);
     }
   }
 
@@ -140,7 +141,7 @@ export class ImportExportManager {
       const data = JSON.parse(jsonString) as unknown;
 
       if (!data || typeof data !== 'object') {
-        alert(chrome.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid export file.');
+        alert(browserAPI.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid export file.');
         return;
       }
 
@@ -176,14 +177,14 @@ export class ImportExportManager {
       }
 
       if (!listsApplied && !exceptionsApplied) {
-        alert(chrome.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid export file.');
+        alert(browserAPI.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid export file.');
         return;
       }
 
       if (listsApplied && this.lists.length === 0) {
         this.lists.push({
           id: Date.now(),
-          name: chrome.i18n.getMessage('default_list_name') || 'Default List',
+          name: browserAPI.i18n.getMessage('default_list_name') || 'Default List',
           background: '#ffff00',
           foreground: '#000000',
           active: true,
@@ -201,7 +202,7 @@ export class ImportExportManager {
       MessageService.sendToAllTabs({ type: 'EXCEPTIONS_LIST_UPDATED' });
       this.onDataChanged();
     } catch (err) {
-      alert((chrome.i18n.getMessage('invalid_json_error') || 'Invalid JSON file') + ': ' + (err as Error).message);
+      alert((browserAPI.i18n.getMessage('invalid_json_error') || 'Invalid JSON file') + ': ' + (err as Error).message);
     }
   }
 

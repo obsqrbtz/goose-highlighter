@@ -1,3 +1,4 @@
+import { browserAPI } from '../utils/browser.js';
 import { HighlightList, ActiveWord, CONSTANTS } from '../types.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
 
@@ -43,7 +44,7 @@ export class HighlightEngine {
             popup.className = 'goose-highlighter-textarea-popup';
             popup.innerHTML = `
               <div class="gh-popup-titlebar">
-                <button class="gh-popup-close" title="${chrome.i18n.getMessage('close') || 'Close'}">&times;</button>
+                <button class="gh-popup-close" title="${browserAPI.i18n.getMessage('close') || 'Close'}">&times;</button>
               </div>
               <pre class="gh-popup-pre">${HighlightEngine.renderHighlighted(text, pattern)}</pre>
             `;

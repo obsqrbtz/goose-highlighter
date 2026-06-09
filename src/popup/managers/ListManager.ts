@@ -1,3 +1,4 @@
+import { browserAPI } from '../../utils/browser.js';
 import { HighlightList } from '../../types.js';
 import { StorageService } from '../../services/StorageService.js';
 import { MessageService } from '../../services/MessageService.js';
@@ -77,7 +78,7 @@ export class ListManager {
   private renameList(): void {
     const currentIndex = this.getCurrentListIndex();
     const newName = prompt(
-      chrome.i18n.getMessage('enter_list_name') || 'Enter list name:',
+      browserAPI.i18n.getMessage('enter_list_name') || 'Enter list name:',
       this.lists[currentIndex].name
     );
     if (newName && newName.trim()) {
@@ -89,7 +90,7 @@ export class ListManager {
   private createNewList(): void {
     this.lists.push({
       id: Date.now(),
-      name: chrome.i18n.getMessage('new_list_name') || 'New List',
+      name: browserAPI.i18n.getMessage('new_list_name') || 'New List',
       background: '#22c55e',
       foreground: '#000000',
       active: true,
@@ -101,10 +102,10 @@ export class ListManager {
 
   private deleteList(): void {
     if (this.lists.length <= 1) {
-      alert(chrome.i18n.getMessage('cannot_delete_last_list') || 'Cannot delete the last list');
+      alert(browserAPI.i18n.getMessage('cannot_delete_last_list') || 'Cannot delete the last list');
       return;
     }
-    if (confirm(chrome.i18n.getMessage('confirm_delete_list') || 'Delete this list?')) {
+    if (confirm(browserAPI.i18n.getMessage('confirm_delete_list') || 'Delete this list?')) {
       const currentIndex = this.getCurrentListIndex();
       this.lists.splice(currentIndex, 1);
       this.setCurrentListIndex(Math.max(0, currentIndex - 1));

@@ -1,11 +1,12 @@
+import { browserAPI } from '../utils/browser.js';
 import { MessageData } from '../types.js';
 
 export class MessageService {
   static sendToAllTabs(message: MessageData): void {
-    chrome.tabs.query({}, (tabs) => {
+    browserAPI.tabs.query({}, (tabs) => {
       tabs.forEach(tab => {
         if (tab.id) {
-          chrome.tabs.sendMessage(tab.id, message).catch(() => {
+          browserAPI.tabs.sendMessage(tab.id, message).catch(() => {
             // Ignore errors for tabs that can't receive messages
           });
         }
@@ -14,19 +15,19 @@ export class MessageService {
   }
 
   static sendToTab(tabId: number, message: MessageData): void {
-    chrome.tabs.sendMessage(tabId, message).catch(() => {
+    browserAPI.tabs.sendMessage(tabId, message).catch(() => {
       // Ignore errors for tabs that can't receive messages
     });
   }
 
   static onMessage(callback: (message: MessageData, sender: chrome.runtime.MessageSender, sendResponse: (response?: unknown) => void) => void | boolean): void {
-    chrome.runtime.onMessage.addListener(callback);
+    browserAPI.runtime.onMessage.addListener(callback);
   }
 
   static async sendToActiveTab(message: MessageData): Promise<unknown> {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await browserAPI.tabs.query({ active: true, currentWindow: true });
     if (tab.id) {
-      return chrome.tabs.sendMessage(tab.id, message);
+      return browserAPI.tabs.sendMessage(tab.id, message);
     }
     return null;
   }

@@ -1,3 +1,4 @@
+import { browserAPI } from '../../utils/browser.js';
 import { ExceptionsMode } from '../../types.js';
 import { StorageService } from '../../services/StorageService.js';
 import { MessageService } from '../../services/MessageService.js';
@@ -32,7 +33,7 @@ export class ExceptionsManager {
     });
 
     document.getElementById('clearExceptionsBtn')?.addEventListener('click', async () => {
-      if (confirm(chrome.i18n.getMessage('confirm_clear_exceptions') || 'Clear all exceptions?')) {
+      if (confirm(browserAPI.i18n.getMessage('confirm_clear_exceptions') || 'Clear all exceptions?')) {
         if (this.exceptionsMode === 'whitelist') {
           this.exceptionsWhiteList = [];
         } else {
@@ -127,14 +128,14 @@ export class ExceptionsManager {
     const label = document.getElementById('exceptionsListLabel');
     if (!label) return;
     const key = this.exceptionsMode === 'whitelist' ? 'exceptions_list_whitelist' : 'exceptions_list_blacklist';
-    label.textContent = chrome.i18n.getMessage(key) || (this.exceptionsMode === 'whitelist' ? 'Sites to highlight (whitelist):' : 'Sites to exclude (blacklist):');
+    label.textContent = browserAPI.i18n.getMessage(key) || (this.exceptionsMode === 'whitelist' ? 'Sites to highlight (whitelist):' : 'Sites to exclude (blacklist):');
   }
 
   private updateExceptionsModeHint(): void {
     const hint = document.getElementById('exceptionsModeHint');
     if (!hint) return;
     const key = this.exceptionsMode === 'whitelist' ? 'exceptions_mode_hint_whitelist' : 'exceptions_mode_hint_blacklist';
-    hint.textContent = chrome.i18n.getMessage(key) || (this.exceptionsMode === 'whitelist' ? 'Only highlight on these sites.' : 'Don\'t highlight on these sites.');
+    hint.textContent = browserAPI.i18n.getMessage(key) || (this.exceptionsMode === 'whitelist' ? 'Only highlight on these sites.' : 'Don\'t highlight on these sites.');
   }
 
   private updateAddCurrentSiteButton(): void {
@@ -152,7 +153,7 @@ export class ExceptionsManager {
 
     const list = this.getCurrentExceptionsList();
     if (list.length === 0) {
-      container.innerHTML = `<div class="exception-item exception-empty">${chrome.i18n.getMessage('no_exceptions') || 'No exceptions'}</div>`;
+      container.innerHTML = `<div class="exception-item exception-empty">${browserAPI.i18n.getMessage('no_exceptions') || 'No exceptions'}</div>`;
       return;
     }
 

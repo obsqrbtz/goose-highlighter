@@ -1,6 +1,8 @@
+import { browserAPI } from '../../utils/browser.js';
 import { MessageService } from '../../services/MessageService.js';
 import { DOMUtils } from '../../utils/DOMUtils.js';
 import { PopupRenderer, PageHighlight } from './PopupRenderer.js';
+import { HighlightList } from '../../types.js';
 
 export class PageHighlightsManager {
   private static readonly MANY_LISTS_THRESHOLD = 8;
@@ -138,7 +140,7 @@ export class PageHighlightsManager {
     countElement.textContent = totalCount.toString();
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div class="page-highlights-empty">${chrome.i18n.getMessage('no_highlights_on_page') || 'No highlights on this page'}</div>`;
+      container.innerHTML = `<div class="page-highlights-empty">${browserAPI.i18n.getMessage('no_highlights_on_page') || 'No highlights on this page'}</div>`;
       return;
     }
 
@@ -190,7 +192,7 @@ export class PageHighlightsManager {
         <div class="page-highlights-group-section ${collapsed ? 'collapsed' : ''}" data-group="${groupKey}">
           <div class="page-highlights-group-header">
             <i class="fa-solid ${chevron}"></i>
-            <span style="opacity: 0.6;">${chrome.i18n.getMessage('other') || 'Other'}</span>
+            <span style="opacity: 0.6;">${browserAPI.i18n.getMessage('other') || 'Other'}</span>
           </div>
           ${collapsed ? '' : ungrouped.map(h => {
             const currentIndex = this.highlightIndices.get(h.word) || 0;
@@ -240,8 +242,8 @@ export class PageHighlightsManager {
 
     if (actionsEl) {
       if (showQuickActions) {
-        const allLabel = chrome.i18n.getMessage('select_all') || 'Select all';
-        const noneLabel = chrome.i18n.getMessage('deselect_all') || 'Deselect all';
+        const allLabel = browserAPI.i18n.getMessage('select_all') || 'Select all';
+        const noneLabel = browserAPI.i18n.getMessage('deselect_all') || 'Deselect all';
         actionsEl.innerHTML = `
           <button type="button" class="page-highlights-filter-link" data-filter-action="all">${DOMUtils.escapeHtml(allLabel)}</button>
           <span aria-hidden="true"> · </span>

@@ -1,3 +1,4 @@
+import { browserAPI } from '../utils/browser.js';
 import { HighlightList } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
@@ -142,7 +143,7 @@ export class PopupController {
       if (this.lists.length === 0) {
         this.lists.push({
           id: Date.now(),
-          name: chrome.i18n.getMessage('default_list_name') || 'Default List',
+          name: browserAPI.i18n.getMessage('default_list_name') || 'Default List',
           background: '#ffff00',
           foreground: '#000000',
           active: true,
@@ -154,7 +155,7 @@ export class PopupController {
       // Use defaults on error
       this.lists = [{
         id: Date.now(),
-        name: chrome.i18n.getMessage('default_list_name') || 'Default List',
+        name: browserAPI.i18n.getMessage('default_list_name') || 'Default List',
         background: '#ffff00',
         foreground: '#000000',
         active: true,
@@ -168,7 +169,7 @@ export class PopupController {
 
   private async getCurrentTab(): Promise<void> {
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      const [tab] = await browserAPI.tabs.query({ active: true, currentWindow: true });
       if (tab?.url) {
         const url = new URL(tab.url);
         this.currentTabHost = url.hostname;
@@ -323,7 +324,7 @@ export class PopupController {
   }
 
   private setupStorageSync(): void {
-    chrome.storage.onChanged.addListener((changes, areaName) => {
+    browserAPI.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== 'local') return;
       if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || 
           changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsWhiteList || 

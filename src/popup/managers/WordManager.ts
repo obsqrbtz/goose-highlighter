@@ -1,3 +1,4 @@
+import { browserAPI } from '../../utils/browser.js';
 import { HighlightList } from '../../types.js';
 import { StorageService } from '../../services/StorageService.js';
 import { MessageService } from '../../services/MessageService.js';
@@ -244,16 +245,16 @@ export class WordManager {
     dropdown.style.right = '';
 
     const moveLabel = isMultiple
-      ? (chrome.i18n.getMessage('move_selected') || 'Move selected')
-      : (chrome.i18n.getMessage('move_to_list') || 'Move to list');
+      ? (browserAPI.i18n.getMessage('move_selected') || 'Move selected')
+      : (browserAPI.i18n.getMessage('move_to_list') || 'Move to list');
     const copyLabel = isMultiple
-      ? (chrome.i18n.getMessage('copy_selected') || 'Copy selected')
-      : (chrome.i18n.getMessage('copy_to_list') || 'Copy to list');
-    const enableSelectedLabel = chrome.i18n.getMessage('enable_selected') || 'Enable selected';
-    const disableSelectedLabel = chrome.i18n.getMessage('disable_selected') || 'Disable selected';
+      ? (browserAPI.i18n.getMessage('copy_selected') || 'Copy selected')
+      : (browserAPI.i18n.getMessage('copy_to_list') || 'Copy to list');
+    const enableSelectedLabel = browserAPI.i18n.getMessage('enable_selected') || 'Enable selected';
+    const disableSelectedLabel = browserAPI.i18n.getMessage('disable_selected') || 'Disable selected';
     const deleteLabel = isMultiple
-      ? (chrome.i18n.getMessage('delete_selected') || 'Delete selected')
-      : (chrome.i18n.getMessage('delete_selected') || 'Delete');
+      ? (browserAPI.i18n.getMessage('delete_selected') || 'Delete selected')
+      : (browserAPI.i18n.getMessage('delete_selected') || 'Delete');
 
     const enableDisableItems = isMultiple
       ? `
@@ -343,7 +344,7 @@ export class WordManager {
       this.closeWordItemMenu();
       void this.saveAndNotify();
     } else if (action === 'delete') {
-      if (confirm(chrome.i18n.getMessage('confirm_delete_words') || 'Delete selected words?')) {
+      if (confirm(browserAPI.i18n.getMessage('confirm_delete_words') || 'Delete selected words?')) {
         this.deleteWordsByIndices(indices);
         this.selectedCheckboxes.clear();
         this.closeWordItemMenu();
@@ -363,7 +364,7 @@ export class WordManager {
       .filter(({ index }) => index !== currentIndex);
 
     if (otherLists.length === 0) {
-      const noOtherLabel = chrome.i18n.getMessage('no_other_lists') || 'No other lists';
+      const noOtherLabel = browserAPI.i18n.getMessage('no_other_lists') || 'No other lists';
       dropdown.innerHTML = `
         <div class="word-item-menu-item disabled">
           <span>${DOMUtils.escapeHtml(noOtherLabel)}</span>

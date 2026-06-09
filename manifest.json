@@ -4,7 +4,6 @@
   "description": "__MSG_extension_description__",
   "version": "1.13.3",
   "default_locale": "en",
-  "id": "kdoehicejfnccbmecpkfjlbljpfogoep",
   "permissions": [
     "scripting",
     "storage",
@@ -18,8 +17,15 @@
     "default_icon": "icons/icon128.png"
   },
   "background": {
+    "scripts": ["dist/background.js"],
     "service_worker": "dist/background.js",
     "type": "module"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{8f9d2c41-6b1e-4a7c-9f3a-0e2d5b7c1a64}",
+      "strict_min_version": "121.0"
+    }
   },
   "icons": {
     "48": "icons/icon48.png",

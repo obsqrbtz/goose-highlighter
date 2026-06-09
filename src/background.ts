@@ -1,3 +1,4 @@
+import { browserAPI } from './utils/browser.js';
 import { StorageService } from './services/StorageService.js';
 
 const POPUP_STATE_KEY = 'goose-popup-ui-state';
@@ -14,9 +15,9 @@ class BackgroundService {
     }
 
     private setupPopupStateListener(): void {
-        chrome.runtime.onMessage.addListener((msg: { type?: string; payload?: unknown }, _sender, sendResponse) => {
+        browserAPI.runtime.onMessage.addListener((msg: { type?: string; payload?: unknown }, _sender, sendResponse) => {
             if (msg.type === 'SAVE_POPUP_STATE' && msg.payload !== undefined) {
-                chrome.storage.local.set({ [POPUP_STATE_KEY]: JSON.stringify(msg.payload) }).then(() => sendResponse(undefined)).catch(() => sendResponse(undefined));
+                browserAPI.storage.local.set({ [POPUP_STATE_KEY]: JSON.stringify(msg.payload) }).then(() => sendResponse(undefined)).catch(() => sendResponse(undefined));
                 return true;
             }
             return false;
@@ -24,9 +25,9 @@ class BackgroundService {
     }
 
     private setupTabUpdateListener(): void {
-        chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void => {
+        browserAPI.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void => {
             if (changeInfo.status === 'complete' && tab.url && /^https?:/.test(tab.url)) {
-                chrome.scripting.executeScript({
+                browserAPI.scripting.executeScript({
                     target: { tabId },
                     files: ['dist/content-standalone.js']
                 }).catch((err: unknown) => {
@@ -37,7 +38,7 @@ class BackgroundService {
     }
 
     private setupInstallListener(): void {
-        chrome.runtime.onInstalled.addListener(async (): Promise<void> => {
+        browserAPI.runtime.onInstalled.addListener(async (): Promise<void> => {
             const data = await StorageService.get(['exceptionsList', 'exceptionsWhiteList', 'exceptionsMode']);
             const updates: Record<string, unknown> = {};
             if (data.exceptionsWhiteList === undefined) {
@@ -47,7 +48,7 @@ class BackgroundService {
                 updates.exceptionsMode = 'blacklist';
             }
             if (Object.keys(updates).length > 0) {
-                await chrome.storage.local.set(updates);
+                await browserAPI.storage.local.set(updates);
             }
         });
     }
