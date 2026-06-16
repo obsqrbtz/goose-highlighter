@@ -1,3 +1,10 @@
+## [1.13.5](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.4...v1.13.5) (2026-06-16)
+
+
+### Bug Fixes
+
+* add textarea badge position option ([04dfa05](https://github.com/obsqrbtz/goose-highlighter/commit/04dfa05bd064c67081226db1d78520e6721bd9f8))
+
 ## [1.13.4](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.3...v1.13.4) (2026-06-09)
 
 
