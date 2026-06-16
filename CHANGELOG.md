@@ -1,3 +1,10 @@
+## [1.13.6](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.5...v1.13.6) (2026-06-16)
+
+
+### Bug Fixes
+
+* bump version (store already had 1.13.5 pushed manually as a rollback) ([6ba596a](https://github.com/obsqrbtz/goose-highlighter/commit/6ba596aa2ccdc9009f714fa5126cab2d5225fba8))
+
 ## [1.13.5](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.4...v1.13.5) (2026-06-16)
 
 
