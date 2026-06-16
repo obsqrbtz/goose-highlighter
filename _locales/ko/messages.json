@@ -110,6 +110,45 @@
     "match_whole": {
         "message": "전체 단어 일치"
     },
+    "badge_position_label": {
+        "message": "필드 카운터 위치"
+    },
+    "badge_position_hint": {
+        "message": "텍스트 필드(텍스트 영역 / 입력란)에서 일치 개수 배지가 표시되는 위치."
+    },
+    "badge_position_horizontal": {
+        "message": "가로"
+    },
+    "badge_position_vertical": {
+        "message": "세로"
+    },
+    "badge_position_placement": {
+        "message": "배치"
+    },
+    "badge_position_left": {
+        "message": "왼쪽"
+    },
+    "badge_position_right": {
+        "message": "오른쪽"
+    },
+    "badge_position_top": {
+        "message": "위"
+    },
+    "badge_position_center": {
+        "message": "가운데"
+    },
+    "badge_position_bottom": {
+        "message": "아래"
+    },
+    "badge_position_inside": {
+        "message": "안쪽"
+    },
+    "badge_position_outside": {
+        "message": "바깥쪽"
+    },
+    "badge_position_border": {
+        "message": "경계선"
+    },
     "site_exceptions": {
         "message": "사이트 예외"
     },

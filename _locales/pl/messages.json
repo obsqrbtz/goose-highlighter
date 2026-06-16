@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "Tylko całe słowo"
   },
+  "badge_position_label": {
+    "message": "Pozycja licznika w polach"
+  },
+  "badge_position_hint": {
+    "message": "Gdzie pojawia się licznik dopasowań w polach tekstowych (obszary tekstu / pola input)."
+  },
+  "badge_position_horizontal": {
+    "message": "Poziomo"
+  },
+  "badge_position_vertical": {
+    "message": "Pionowo"
+  },
+  "badge_position_placement": {
+    "message": "Umiejscowienie"
+  },
+  "badge_position_left": {
+    "message": "Lewo"
+  },
+  "badge_position_right": {
+    "message": "Prawo"
+  },
+  "badge_position_top": {
+    "message": "Góra"
+  },
+  "badge_position_center": {
+    "message": "Środek"
+  },
+  "badge_position_bottom": {
+    "message": "Dół"
+  },
+  "badge_position_inside": {
+    "message": "Wewnątrz"
+  },
+  "badge_position_outside": {
+    "message": "Na zewnątrz"
+  },
+  "badge_position_border": {
+    "message": "Na krawędzi"
+  },
   "site_exceptions": {
     "message": "Wyjątki stron"
   },

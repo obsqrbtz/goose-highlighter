@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "Alleen volledig woord"
   },
+  "badge_position_label": {
+    "message": "Positie van veldteller"
+  },
+  "badge_position_hint": {
+    "message": "Waar de teller met aantal overeenkomsten staat in tekstvelden (tekstgebieden / invoervelden)."
+  },
+  "badge_position_horizontal": {
+    "message": "Horizontaal"
+  },
+  "badge_position_vertical": {
+    "message": "Verticaal"
+  },
+  "badge_position_placement": {
+    "message": "Plaatsing"
+  },
+  "badge_position_left": {
+    "message": "Links"
+  },
+  "badge_position_right": {
+    "message": "Rechts"
+  },
+  "badge_position_top": {
+    "message": "Boven"
+  },
+  "badge_position_center": {
+    "message": "Midden"
+  },
+  "badge_position_bottom": {
+    "message": "Onder"
+  },
+  "badge_position_inside": {
+    "message": "Binnen"
+  },
+  "badge_position_outside": {
+    "message": "Buiten"
+  },
+  "badge_position_border": {
+    "message": "Op de rand"
+  },
   "site_exceptions": {
     "message": "Site-uitzonderingen"
   },

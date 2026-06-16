@@ -110,6 +110,45 @@
     "match_whole": {
         "message": "पूरा शब्द मिलाएं"
     },
+    "badge_position_label": {
+        "message": "फ़ील्ड काउंटर की स्थिति"
+    },
+    "badge_position_hint": {
+        "message": "टेक्स्ट फ़ील्ड (टेक्स्ट एरिया / इनपुट) पर मिलान काउंटर कहाँ दिखे।"
+    },
+    "badge_position_horizontal": {
+        "message": "क्षैतिज"
+    },
+    "badge_position_vertical": {
+        "message": "ऊर्ध्वाधर"
+    },
+    "badge_position_placement": {
+        "message": "स्थान"
+    },
+    "badge_position_left": {
+        "message": "बायाँ"
+    },
+    "badge_position_right": {
+        "message": "दायाँ"
+    },
+    "badge_position_top": {
+        "message": "ऊपर"
+    },
+    "badge_position_center": {
+        "message": "केंद्र"
+    },
+    "badge_position_bottom": {
+        "message": "नीचे"
+    },
+    "badge_position_inside": {
+        "message": "अंदर"
+    },
+    "badge_position_outside": {
+        "message": "बाहर"
+    },
+    "badge_position_border": {
+        "message": "किनारे पर"
+    },
     "site_exceptions": {
         "message": "साइट अपवाद"
     },

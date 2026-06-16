@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "Слово целиком"
   },
+  "badge_position_label": {
+    "message": "Положение счётчика в полях"
+  },
+  "badge_position_hint": {
+    "message": "Где располагается счётчик совпадений в текстовых полях (textarea / input)."
+  },
+  "badge_position_horizontal": {
+    "message": "По горизонтали"
+  },
+  "badge_position_vertical": {
+    "message": "По вертикали"
+  },
+  "badge_position_placement": {
+    "message": "Размещение"
+  },
+  "badge_position_left": {
+    "message": "Слева"
+  },
+  "badge_position_right": {
+    "message": "Справа"
+  },
+  "badge_position_top": {
+    "message": "Сверху"
+  },
+  "badge_position_center": {
+    "message": "По центру"
+  },
+  "badge_position_bottom": {
+    "message": "Снизу"
+  },
+  "badge_position_inside": {
+    "message": "Внутри"
+  },
+  "badge_position_outside": {
+    "message": "Снаружи"
+  },
+  "badge_position_border": {
+    "message": "На границе"
+  },
   "site_exceptions": {
     "message": "Сайты-исключения"
   },

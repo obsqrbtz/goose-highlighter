@@ -110,6 +110,45 @@
     "match_whole": {
         "message": "完全一致"
     },
+    "badge_position_label": {
+        "message": "フィールドカウンターの位置"
+    },
+    "badge_position_hint": {
+        "message": "テキストフィールド（テキストエリア／入力欄）での一致件数バッジの位置。"
+    },
+    "badge_position_horizontal": {
+        "message": "水平"
+    },
+    "badge_position_vertical": {
+        "message": "垂直"
+    },
+    "badge_position_placement": {
+        "message": "配置"
+    },
+    "badge_position_left": {
+        "message": "左"
+    },
+    "badge_position_right": {
+        "message": "右"
+    },
+    "badge_position_top": {
+        "message": "上"
+    },
+    "badge_position_center": {
+        "message": "中央"
+    },
+    "badge_position_bottom": {
+        "message": "下"
+    },
+    "badge_position_inside": {
+        "message": "内側"
+    },
+    "badge_position_outside": {
+        "message": "外側"
+    },
+    "badge_position_border": {
+        "message": "境界線上"
+    },
     "site_exceptions": {
         "message": "サイト例外"
     },

@@ -110,6 +110,45 @@
     "match_whole": {
         "message": "Solo parola intera"
     },
+    "badge_position_label": {
+        "message": "Posizione del contatore nei campi"
+    },
+    "badge_position_hint": {
+        "message": "Dove si trova il contatore delle corrispondenze nei campi di testo (aree di testo / input)."
+    },
+    "badge_position_horizontal": {
+        "message": "Orizzontale"
+    },
+    "badge_position_vertical": {
+        "message": "Verticale"
+    },
+    "badge_position_placement": {
+        "message": "Posizionamento"
+    },
+    "badge_position_left": {
+        "message": "Sinistra"
+    },
+    "badge_position_right": {
+        "message": "Destra"
+    },
+    "badge_position_top": {
+        "message": "Alto"
+    },
+    "badge_position_center": {
+        "message": "Centro"
+    },
+    "badge_position_bottom": {
+        "message": "Basso"
+    },
+    "badge_position_inside": {
+        "message": "All'interno"
+    },
+    "badge_position_outside": {
+        "message": "All'esterno"
+    },
+    "badge_position_border": {
+        "message": "Sul bordo"
+    },
     "site_exceptions": {
         "message": "Eccezioni siti"
     },

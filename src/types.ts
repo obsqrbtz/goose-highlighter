@@ -16,6 +16,16 @@ export interface HighlightList {
 
 export type ExceptionsMode = 'blacklist' | 'whitelist';
 
+export type BadgeHorizontal = 'left' | 'right';
+export type BadgeVertical = 'top' | 'center' | 'bottom';
+export type BadgePlacement = 'inside' | 'outside' | 'border';
+
+export interface BadgePosition {
+  horizontal: BadgeHorizontal;
+  vertical: BadgeVertical;
+  placement: BadgePlacement;
+}
+
 export interface StorageData {
   lists: HighlightList[];
   globalHighlightEnabled: boolean;
@@ -24,6 +34,7 @@ export interface StorageData {
   exceptionsList: string[];
   exceptionsWhiteList: string[];
   exceptionsMode: ExceptionsMode;
+  badgePosition: BadgePosition;
 }
 
 export interface ActiveWord {
@@ -45,13 +56,14 @@ export interface HighlightInfo {
 }
 
 export interface MessageData {
-  type: 'WORD_LIST_UPDATED' | 'GLOBAL_TOGGLE_UPDATED' | 'MATCH_OPTIONS_UPDATED' | 'EXCEPTIONS_LIST_UPDATED' | 'GET_PAGE_HIGHLIGHTS' | 'PAGE_HIGHLIGHTS_RESPONSE' | 'SCROLL_TO_HIGHLIGHT';
+  type: 'WORD_LIST_UPDATED' | 'GLOBAL_TOGGLE_UPDATED' | 'MATCH_OPTIONS_UPDATED' | 'EXCEPTIONS_LIST_UPDATED' | 'GET_PAGE_HIGHLIGHTS' | 'PAGE_HIGHLIGHTS_RESPONSE' | 'SCROLL_TO_HIGHLIGHT' | 'BADGE_POSITION_UPDATED';
   enabled?: boolean;
   matchCase?: boolean;
   matchWhole?: boolean;
   highlights?: HighlightInfo[];
   word?: string;
   index?: number;
+  badgePosition?: BadgePosition;
 }
 
 export interface ExportData {
@@ -68,7 +80,8 @@ export const DEFAULT_STORAGE: StorageData = {
   matchWholeEnabled: false,
   exceptionsList: [],
   exceptionsWhiteList: [],
-  exceptionsMode: 'blacklist'
+  exceptionsMode: 'blacklist',
+  badgePosition: { horizontal: 'right', vertical: 'top', placement: 'border' }
 };
 
 export const CONSTANTS = {

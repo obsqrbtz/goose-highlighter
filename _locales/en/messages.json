@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "Match Whole Word"
   },
+  "badge_position_label": {
+    "message": "Field counter position"
+  },
+  "badge_position_hint": {
+    "message": "Where the match-count badge sits on text fields (textareas / inputs)."
+  },
+  "badge_position_horizontal": {
+    "message": "Horizontal"
+  },
+  "badge_position_vertical": {
+    "message": "Vertical"
+  },
+  "badge_position_placement": {
+    "message": "Placement"
+  },
+  "badge_position_left": {
+    "message": "Left"
+  },
+  "badge_position_right": {
+    "message": "Right"
+  },
+  "badge_position_top": {
+    "message": "Top"
+  },
+  "badge_position_center": {
+    "message": "Center"
+  },
+  "badge_position_bottom": {
+    "message": "Bottom"
+  },
+  "badge_position_inside": {
+    "message": "Inside"
+  },
+  "badge_position_outside": {
+    "message": "Outside"
+  },
+  "badge_position_border": {
+    "message": "On border"
+  },
   "site_exceptions": {
     "message": "Site Exceptions"
   },

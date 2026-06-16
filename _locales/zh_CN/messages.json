@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "全词匹配"
   },
+  "badge_position_label": {
+    "message": "字段计数器位置"
+  },
+  "badge_position_hint": {
+    "message": "匹配计数徽章在文本字段（文本区域／输入框）中的位置。"
+  },
+  "badge_position_horizontal": {
+    "message": "水平"
+  },
+  "badge_position_vertical": {
+    "message": "垂直"
+  },
+  "badge_position_placement": {
+    "message": "放置方式"
+  },
+  "badge_position_left": {
+    "message": "左"
+  },
+  "badge_position_right": {
+    "message": "右"
+  },
+  "badge_position_top": {
+    "message": "上"
+  },
+  "badge_position_center": {
+    "message": "居中"
+  },
+  "badge_position_bottom": {
+    "message": "下"
+  },
+  "badge_position_inside": {
+    "message": "内部"
+  },
+  "badge_position_outside": {
+    "message": "外部"
+  },
+  "badge_position_border": {
+    "message": "边框上"
+  },
   "site_exceptions": {
     "message": "网站例外"
   },

@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "Tüm kelimeyle eşleş"
   },
+  "badge_position_label": {
+    "message": "Alan sayacının konumu"
+  },
+  "badge_position_hint": {
+    "message": "Eşleşme sayacının metin alanlarındaki (metin alanları / girişler) konumu."
+  },
+  "badge_position_horizontal": {
+    "message": "Yatay"
+  },
+  "badge_position_vertical": {
+    "message": "Dikey"
+  },
+  "badge_position_placement": {
+    "message": "Yerleşim"
+  },
+  "badge_position_left": {
+    "message": "Sol"
+  },
+  "badge_position_right": {
+    "message": "Sağ"
+  },
+  "badge_position_top": {
+    "message": "Üst"
+  },
+  "badge_position_center": {
+    "message": "Orta"
+  },
+  "badge_position_bottom": {
+    "message": "Alt"
+  },
+  "badge_position_inside": {
+    "message": "İçeride"
+  },
+  "badge_position_outside": {
+    "message": "Dışarıda"
+  },
+  "badge_position_border": {
+    "message": "Kenarda"
+  },
   "site_exceptions": {
     "message": "Site İstisnaları"
   },

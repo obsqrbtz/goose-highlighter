@@ -1502,6 +1502,60 @@ body {
   margin: 0;
 }
 
+.badge-position-section {
+  padding: 8px 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.badge-position-label {
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.badge-position-hint {
+  font-size: var(--text-sm);
+  color: var(--text-color);
+  opacity: 0.6;
+  margin: 0;
+}
+
+.badge-position-row {
+  display: flex;
+  gap: 8px;
+}
+
+.badge-position-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--text-sm);
+  color: var(--text-color);
+}
+
+.badge-position-select {
+  height: 30px;
+  padding: 0 6px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.badge-position-select:focus {
+  outline: none;
+  border-color: var(--accent-color, #ec9c23);
+}
+
 .options-buttons {
   display: flex;
   gap: 8px;

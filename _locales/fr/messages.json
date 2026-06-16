@@ -110,6 +110,45 @@
     "match_whole": {
         "message": "Mot entier seulement"
     },
+    "badge_position_label": {
+        "message": "Position du compteur dans les champs"
+    },
+    "badge_position_hint": {
+        "message": "Emplacement du compteur de correspondances dans les champs de texte (zones de texte / champs)."
+    },
+    "badge_position_horizontal": {
+        "message": "Horizontal"
+    },
+    "badge_position_vertical": {
+        "message": "Vertical"
+    },
+    "badge_position_placement": {
+        "message": "Emplacement"
+    },
+    "badge_position_left": {
+        "message": "Gauche"
+    },
+    "badge_position_right": {
+        "message": "Droite"
+    },
+    "badge_position_top": {
+        "message": "Haut"
+    },
+    "badge_position_center": {
+        "message": "Centre"
+    },
+    "badge_position_bottom": {
+        "message": "Bas"
+    },
+    "badge_position_inside": {
+        "message": "À l'intérieur"
+    },
+    "badge_position_outside": {
+        "message": "À l'extérieur"
+    },
+    "badge_position_border": {
+        "message": "Sur la bordure"
+    },
     "site_exceptions": {
         "message": "Exceptions de sites"
     },

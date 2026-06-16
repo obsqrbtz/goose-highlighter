@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "Coincidir palabra completa"
   },
+  "badge_position_label": {
+    "message": "Posición del contador en campos"
+  },
+  "badge_position_hint": {
+    "message": "Dónde se sitúa el contador de coincidencias en los campos de texto (áreas de texto / entradas)."
+  },
+  "badge_position_horizontal": {
+    "message": "Horizontal"
+  },
+  "badge_position_vertical": {
+    "message": "Vertical"
+  },
+  "badge_position_placement": {
+    "message": "Ubicación"
+  },
+  "badge_position_left": {
+    "message": "Izquierda"
+  },
+  "badge_position_right": {
+    "message": "Derecha"
+  },
+  "badge_position_top": {
+    "message": "Arriba"
+  },
+  "badge_position_center": {
+    "message": "Centro"
+  },
+  "badge_position_bottom": {
+    "message": "Abajo"
+  },
+  "badge_position_inside": {
+    "message": "Dentro"
+  },
+  "badge_position_outside": {
+    "message": "Fuera"
+  },
+  "badge_position_border": {
+    "message": "En el borde"
+  },
   "site_exceptions": {
     "message": "Excepciones de sitios"
   },

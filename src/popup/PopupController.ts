@@ -1,5 +1,5 @@
 import { browserAPI } from '../utils/browser.js';
-import { HighlightList } from '../types.js';
+import { HighlightList, BadgePosition, BadgeHorizontal, BadgeVertical, BadgePlacement, DEFAULT_STORAGE } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { PopupStateManager, PopupState } from './managers/PopupStateManager.js';
@@ -16,6 +16,7 @@ export class PopupController {
   private globalHighlightEnabled = true;
   private matchCaseEnabled = false;
   private matchWholeEnabled = false;
+  private badgePosition: BadgePosition = { ...DEFAULT_STORAGE.badgePosition };
   private currentTabHost = '';
 
   // UI state
@@ -139,6 +140,7 @@ export class PopupController {
       this.globalHighlightEnabled = data.globalHighlightEnabled ?? true;
       this.matchCaseEnabled = data.matchCaseEnabled ?? false;
       this.matchWholeEnabled = data.matchWholeEnabled ?? false;
+      this.badgePosition = data.badgePosition ?? { ...DEFAULT_STORAGE.badgePosition };
 
       if (this.lists.length === 0) {
         this.lists.push({
@@ -164,6 +166,7 @@ export class PopupController {
       this.globalHighlightEnabled = true;
       this.matchCaseEnabled = false;
       this.matchWholeEnabled = false;
+      this.badgePosition = { ...DEFAULT_STORAGE.badgePosition };
     }
   }
 
@@ -294,6 +297,31 @@ export class PopupController {
         console.error('Error updating match whole:', error);
       }
     });
+
+    const badgeHorizontal = document.getElementById('badgePositionHorizontal') as HTMLSelectElement;
+    const badgeVertical = document.getElementById('badgePositionVertical') as HTMLSelectElement;
+    const badgePlacement = document.getElementById('badgePositionPlacement') as HTMLSelectElement;
+
+    const saveBadgePosition = async () => {
+      try {
+        this.badgePosition = {
+          horizontal: badgeHorizontal.value as BadgeHorizontal,
+          vertical: badgeVertical.value as BadgeVertical,
+          placement: badgePlacement.value as BadgePlacement
+        };
+        await StorageService.update('badgePosition', this.badgePosition);
+        MessageService.sendToAllTabs({
+          type: 'BADGE_POSITION_UPDATED',
+          badgePosition: this.badgePosition
+        });
+      } catch (error) {
+        console.error('Error updating badge position:', error);
+      }
+    };
+
+    badgeHorizontal?.addEventListener('change', saveBadgePosition);
+    badgeVertical?.addEventListener('change', saveBadgePosition);
+    badgePlacement?.addEventListener('change', saveBadgePosition);
   }
 
   private setupTheme(): void {
@@ -326,9 +354,9 @@ export class PopupController {
   private setupStorageSync(): void {
     browserAPI.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== 'local') return;
-      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled || 
-          changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsWhiteList || 
-          changes.exceptionsMode) {
+      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled ||
+          changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsWhiteList ||
+          changes.exceptionsMode || changes.badgePosition) {
         void this.reloadFromStorage();
       }
     });
@@ -362,6 +390,12 @@ export class PopupController {
     (document.getElementById('globalHighlightToggle') as HTMLInputElement).checked = this.globalHighlightEnabled;
     (document.getElementById('matchCase') as HTMLInputElement).checked = this.matchCaseEnabled;
     (document.getElementById('matchWhole') as HTMLInputElement).checked = this.matchWholeEnabled;
+    const badgeHorizontal = document.getElementById('badgePositionHorizontal') as HTMLSelectElement | null;
+    const badgeVertical = document.getElementById('badgePositionVertical') as HTMLSelectElement | null;
+    const badgePlacement = document.getElementById('badgePositionPlacement') as HTMLSelectElement | null;
+    if (badgeHorizontal) badgeHorizontal.value = this.badgePosition.horizontal;
+    if (badgeVertical) badgeVertical.value = this.badgePosition.vertical;
+    if (badgePlacement) badgePlacement.value = this.badgePosition.placement;
     const groupCheckbox = document.getElementById('pageHighlightsGroupByList') as HTMLInputElement;
     if (groupCheckbox) groupCheckbox.checked = this.state.pageHighlightsGroupByList;
   }

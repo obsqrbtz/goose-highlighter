@@ -1,5 +1,5 @@
 import { browserAPI } from '../utils/browser.js';
-import { HighlightList, ActiveWord, CONSTANTS } from '../types.js';
+import { HighlightList, ActiveWord, CONSTANTS, BadgePosition } from '../types.js';
 import { DOMUtils } from '../utils/DOMUtils.js';
 
 
@@ -56,11 +56,33 @@ export class HighlightEngine {
       }
 
       private static positionBadge(badge: HTMLElement, input: HTMLTextAreaElement | HTMLInputElement): void {
-        const inset = 8;
-        const badgeWidth = badge.offsetWidth || 16;
-        const badgeHeight = badge.offsetHeight || 16;
-        const left = input.offsetLeft + input.offsetWidth - badgeWidth - inset;
-        const top = input.offsetTop - badgeHeight / 2;
+        const gap = 8;
+        const w = badge.offsetWidth || 16;
+        const h = badge.offsetHeight || 16;
+        const { horizontal, vertical, placement } = HighlightEngine.badgePosition;
+
+        const il = input.offsetLeft;
+        const it = input.offsetTop;
+        const ir = il + input.offsetWidth;
+        const ib = it + input.offsetHeight;
+
+        let left: number;
+        if (horizontal === 'left') {
+          left = placement === 'inside' ? il + gap : placement === 'outside' ? il - w - gap : il - w / 2;
+        } else {
+          left = placement === 'inside' ? ir - w - gap : placement === 'outside' ? ir + gap : ir - w / 2;
+        }
+
+        let top: number;
+        if (vertical === 'top') {
+          top = placement === 'inside' ? it + gap : placement === 'outside' ? it - h - gap : it - h / 2;
+        } else if (vertical === 'bottom') {
+          top = placement === 'inside' ? ib - h - gap : placement === 'outside' ? ib + gap : ib - h / 2;
+        } else {
+          // 'center' — vertically centered on the field; placement only affects horizontal
+          top = it + (input.offsetHeight - h) / 2;
+        }
+
         badge.style.setProperty('left', `${left}px`, 'important');
         badge.style.setProperty('top', `${top}px`, 'important');
         badge.style.removeProperty('transform');
@@ -72,6 +94,12 @@ export class HighlightEngine {
         input.removeEventListener('input', updateBadge);
         input.addEventListener('input', updateBadge);
       }
+  private static badgePosition: BadgePosition = { horizontal: 'right', vertical: 'top', placement: 'border' };
+
+  setBadgePosition(position: BadgePosition): void {
+    HighlightEngine.badgePosition = position;
+  }
+
   private styleSheet: CSSStyleSheet | null = null;
   private highlights = new Map<string, Highlight>();
   private highlightsByWord = new Map<string, Range[]>();

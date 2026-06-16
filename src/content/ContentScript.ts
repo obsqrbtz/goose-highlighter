@@ -1,4 +1,4 @@
-import { HighlightList, MessageData, ExceptionsMode, ActiveWord } from '../types.js';
+import { HighlightList, MessageData, ExceptionsMode, ActiveWord, BadgePosition, DEFAULT_STORAGE } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { HighlightEngine } from './HighlightEngine.js';
@@ -12,6 +12,7 @@ export class ContentScript {
   private shouldSkipDueToExceptions = false;
   private matchCase = false;
   private matchWhole = false;
+  private badgePosition: BadgePosition = DEFAULT_STORAGE.badgePosition;
   private highlightEngine: HighlightEngine;
   private isProcessing = false;
 
@@ -39,17 +40,20 @@ export class ContentScript {
         'matchWholeEnabled',
         'exceptionsList',
         'exceptionsWhiteList',
-        'exceptionsMode'
+        'exceptionsMode',
+        'badgePosition'
       ]);
 
       this.lists = data.lists || [];
       this.isGlobalHighlightEnabled = data.globalHighlightEnabled ?? true;
       this.matchCase = data.matchCaseEnabled ?? false;
       this.matchWhole = data.matchWholeEnabled ?? false;
+      this.badgePosition = data.badgePosition ?? DEFAULT_STORAGE.badgePosition;
       this.exceptionsList = data.exceptionsList || [];
       this.exceptionsWhiteList = data.exceptionsWhiteList || [];
       this.exceptionsMode = data.exceptionsMode === 'whitelist' ? 'whitelist' : 'blacklist';
       this.shouldSkipDueToExceptions = this.computeShouldSkipDueToExceptions();
+      this.highlightEngine.setBadgePosition(this.badgePosition);
     } catch (error) {
       console.error('ContentScript.loadSettings error:', error);
       // Use defaults on error
@@ -57,6 +61,7 @@ export class ContentScript {
       this.isGlobalHighlightEnabled = true;
       this.matchCase = false;
       this.matchWhole = false;
+      this.badgePosition = DEFAULT_STORAGE.badgePosition;
       this.exceptionsList = [];
       this.exceptionsWhiteList = [];
       this.exceptionsMode = 'blacklist';
@@ -89,6 +94,9 @@ export class ContentScript {
           return false;
         case 'MATCH_OPTIONS_UPDATED':
           this.handleMatchOptionsUpdate(message.matchCase!, message.matchWhole!);
+          return false;
+        case 'BADGE_POSITION_UPDATED':
+          this.handleBadgePositionUpdate(message.badgePosition!);
           return false;
         case 'EXCEPTIONS_LIST_UPDATED':
           void this.handleExceptionsUpdate();
@@ -123,6 +131,12 @@ export class ContentScript {
   private handleMatchOptionsUpdate(matchCase: boolean, matchWhole: boolean): void {
     this.matchCase = matchCase;
     this.matchWhole = matchWhole;
+    this.processHighlights();
+  }
+
+  private handleBadgePositionUpdate(badgePosition: BadgePosition): void {
+    this.badgePosition = badgePosition;
+    this.highlightEngine.setBadgePosition(badgePosition);
     this.processHighlights();
   }
 

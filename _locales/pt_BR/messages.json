@@ -110,6 +110,45 @@
   "match_whole": {
     "message": "Palavra inteira"
   },
+  "badge_position_label": {
+    "message": "Posição do contador nos campos"
+  },
+  "badge_position_hint": {
+    "message": "Onde o contador de correspondências fica nos campos de texto (áreas de texto / entradas)."
+  },
+  "badge_position_horizontal": {
+    "message": "Horizontal"
+  },
+  "badge_position_vertical": {
+    "message": "Vertical"
+  },
+  "badge_position_placement": {
+    "message": "Posicionamento"
+  },
+  "badge_position_left": {
+    "message": "Esquerda"
+  },
+  "badge_position_right": {
+    "message": "Direita"
+  },
+  "badge_position_top": {
+    "message": "Topo"
+  },
+  "badge_position_center": {
+    "message": "Centro"
+  },
+  "badge_position_bottom": {
+    "message": "Base"
+  },
+  "badge_position_inside": {
+    "message": "Dentro"
+  },
+  "badge_position_outside": {
+    "message": "Fora"
+  },
+  "badge_position_border": {
+    "message": "Na borda"
+  },
   "site_exceptions": {
     "message": "Exceções de sites"
   },
