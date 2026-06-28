@@ -1,3 +1,10 @@
+## [1.13.7](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.6...v1.13.7) (2026-06-28)
+
+
+### Bug Fixes
+
+* process search queries ([6e9425e](https://github.com/obsqrbtz/goose-highlighter/commit/6e9425e89a148871d4f6d060ee2115133b0233b0))
+
 ## [1.13.6](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.5...v1.13.6) (2026-06-16)
 
 
