@@ -92,6 +92,10 @@ export class PopupController {
       this.lists,
       () => this.state.currentListIndex,
       () => this.state.wordSearchQuery,
+      (query) => {
+        this.state.wordSearchQuery = query;
+        this.stateManager.save();
+      },
       () => this.state.currentPage,
       (page) => {
         this.state.currentPage = page;

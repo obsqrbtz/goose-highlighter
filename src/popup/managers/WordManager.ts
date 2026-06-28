@@ -17,6 +17,7 @@ export class WordManager {
     private lists: HighlightList[],
     private getCurrentListIndex: () => number,
     private getWordSearchQuery: () => string,
+    private setWordSearchQuery: (query: string) => void,
     private getCurrentPage: () => number,
     private setCurrentPage: (page: number) => void,
     private onWordsChanged: () => void
@@ -35,6 +36,7 @@ export class WordManager {
     this.setupWordListEvents(wordList);
 
     wordSearch.addEventListener('input', () => {
+      this.setWordSearchQuery(wordSearch.value);
       this.setCurrentPage(1);
       this.onWordsChanged();
     });
