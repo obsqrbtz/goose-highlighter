@@ -39,7 +39,7 @@ jobs:
       - name: Create extension zip
         run: |
           zip -r goose-highlighter-${{ steps.version.outputs.VERSION }}.zip . \
-            -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'versioning.md' '.nvmrc' '.releaserc.json' \
+            -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'tests/*' 'versioning.md' '.nvmrc' '.releaserc.json' \
                'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' \
                'eslint.config.mjs' '.github/*' 'CHANGELOG.md' 'PRIVACY.MD' 'sample-import-config.json'
 
@@ -57,7 +57,7 @@ jobs:
           
           # Copy all files except excluded ones to temp directory
           rsync -av --exclude='.git*' --exclude='node_modules' --exclude='src' \
-                --exclude='scripts' --exclude='versioning.md' --exclude='.nvmrc' --exclude='.releaserc.json' \
+                --exclude='scripts' --exclude='tests' --exclude='versioning.md' --exclude='.nvmrc' --exclude='.releaserc.json' \
                 --exclude='package.json' --exclude='package-lock.json' \
                 --exclude='README.md' --exclude='tsconfig.json' \
                 --exclude='eslint.config.mjs' --exclude='.github' \
