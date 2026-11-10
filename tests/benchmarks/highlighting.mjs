@@ -49,7 +49,7 @@ function countRanges() {
     return count;
 }
 
-async function measure(expected, run, previousCount = 0) {
+async function measure(expected, run, scanFinished, previousCount = 0) {
     await nextTask();
     const start = performance.now();
     run();
@@ -67,10 +67,15 @@ async function measure(expected, run, previousCount = 0) {
         if (count > Math.max(expected, previousCount)) throw new Error(`Expected ${expected} ranges, found ${count}`);
         await frame();
     }
+    const { finished, ...timings } = await scanFinished;
+    if (countRanges() !== expected) throw new Error(`Expected ${expected} ranges after scan, found ${countRanges()}`);
     await frame();
     await frame();
     const end = performance.now();
-    return { start, end, returned: returned - start, first, complete, secondFrame: end - start };
+    return {
+        start, end, returned: returned - start, first, complete, scanFinished: finished - start,
+        ...timings, secondFrame: end - start,
+    };
 }
 
 async function benchmark(workload) {
@@ -106,19 +111,23 @@ async function benchmark(workload) {
     let engine;
     let activeWords;
     const highlight = () => engine.highlight(activeWords ??= activeHighlightWords(lists), false, true);
-    engine = new HighlightEngine(highlight);
+    let reportScan;
+    engine = new HighlightEngine(highlight, timings => reportScan({ ...timings, finished: performance.now() }));
+    const measureScan = (expectedCount, action, previousCount) => {
+        const scanFinished = new Promise(resolve => { reportScan = resolve; });
+        return measure(expectedCount, action, scanFinished, previousCount);
+    };
     const passes = [];
     const updates = [];
     await frame();
     await frame();
     try {
         for (let sample = 0; sample < workload.samples; sample++) {
-            if (sample > 0) engine.clearHighlights();
-            passes.push(await measure(expected, highlight));
+            passes.push(await measureScan(expected, highlight));
             if (workload.update) {
                 const row = createRow(sample, workload, 1);
-                updates.push(await measure(expected + 1, () => content.append(row), expected));
-                await measure(expected, () => row.remove(), expected + 1);
+                updates.push(await measureScan(expected + 1, () => content.append(row), expected));
+                await measureScan(expected, () => row.remove(), expected + 1);
             }
         }
     } finally {

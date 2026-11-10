@@ -5,7 +5,7 @@ interface TextPart {
   end: number;
 }
 
-interface TextRun {
+export interface TextRun {
   text: string;
   parts: TextPart[];
   collapse: boolean;
@@ -123,7 +123,7 @@ function findPart(parts: TextPart[], offset: number): TextPart {
   return parts[low];
 }
 
-export function rangeFor(run: TextRun, start: number, end: number): Range | undefined {
+export function rangeFor(run: TextRun, start: number, end: number, existing?: Range): Range | undefined {
   const first = findPart(run.parts, start);
   const last = findPart(run.parts, end - 1);
   const startOffset = first.offset + start - first.start;
@@ -131,6 +131,8 @@ export function rangeFor(run: TextRun, start: number, end: number): Range | unde
   // A run can span multiple scan batches, with page edits between them.
   if (!first.node.isConnected || !last.node.isConnected ||
       startOffset > first.node.length || endOffset > last.node.length) return;
+  if (existing?.startContainer === first.node && !existing.collapsed && existing.startOffset === startOffset &&
+      existing.endContainer === last.node && existing.endOffset === endOffset) return existing;
   const range = new Range();
   range.setStart(first.node, startOffset);
   range.setEnd(last.node, endOffset);

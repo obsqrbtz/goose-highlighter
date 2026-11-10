@@ -271,6 +271,43 @@ if (location.search === '?empty-entry') {
             expectRanges('alpha');
         });
 
+    await check('reused runs agree with a full scan after inline edits and distant style changes',
+        '<style>body:has(.hide) #remote { display: none }</style>' +
+        '<p id="edited">alpha <em>beta</em></p><p id="remote">alpha beta</p><p>alpha beta</p>',
+        async (highlight, engine) => {
+            const words = ['alpha', 'alpha beta', 'beta'];
+            highlight(words, { matchWhole: true });
+            const edited = document.querySelector('#edited');
+            const unchanged = ranges().find(range => range.startContainer === document.body.lastElementChild.firstChild);
+            edited.querySelector('em').firstChild.splitText(2);
+            edited.classList.add('hide');
+            await waitForUpdate();
+            expect(ranges().includes(unchanged), true);
+            expect(ranges().some(range => range.startContainer.parentElement.id === 'remote'), false);
+
+            const nodes = [...document.querySelectorAll('p')].flatMap(p => {
+                const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+                const text = [];
+                while (walker.nextNode()) text.push(walker.currentNode);
+                return text;
+            });
+            const offsets = range => [
+                nodes.indexOf(range.startContainer), range.startOffset,
+                nodes.indexOf(range.endContainer), range.endOffset,
+            ];
+            const snapshot = () => {
+                const layers = [...CSS.highlights].filter(([name]) => name !== 'gh-flash')
+                    .map(([name, layer]) => [name, layer.priority, [...layer].map(offsets)]);
+                engine.scrollToHighlight('alpha beta', 1);
+                return [layers, words.map(word => count(engine, word)), offsets([...CSS.highlights.get('gh-flash')][0])];
+            };
+            const reused = snapshot();
+            engine.clearHighlights();
+            highlight();
+            await engine.waitForScan();
+            expect(snapshot(), reused);
+        });
+
     await check('keeps relevant mutations across observer deliveries', '<p>beta</p>', async highlight => {
         highlight(['alpha']);
         const paragraph = document.createElement('p');

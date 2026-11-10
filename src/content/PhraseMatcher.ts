@@ -64,7 +64,7 @@ export function projectText(source: string, matchCase: boolean, collapse: boolea
 
   const spaces: TextEdit[] = [];
   let removed = 0;
-  let text = canonical.replace(collapse ? /[ \t\r\n\f\u00a0\u202f]+/g : /[\u00a0\u202f]/g, (space: string, index: number) => {
+  let text = canonical.replace(collapse ? /[ \t\r\n\f\u00a0\u202f]{2,}|[\t\r\n\f\u00a0\u202f]/g : /[\u00a0\u202f]/g, (space: string, index: number) => {
     if (space.length > 1) {
       const start = index - removed;
       spaces.push({ start, end: start + 1, originalStart: index, originalEnd: index + space.length });

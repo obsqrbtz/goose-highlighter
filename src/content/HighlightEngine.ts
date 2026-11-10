@@ -1,7 +1,7 @@
 import { browserAPI } from '../utils/browser.js';
 import { HighlightList, ActiveWord, CONSTANTS, BadgePosition, HighlightInfo, isValidHighlightWord } from '../types.js';
 import { PhraseMatcher, phraseKey, projectText, PhraseEntry } from './PhraseMatcher.js';
-import { isHighlighterUi, rangeFor, textRuns } from './TextRuns.js';
+import { isHighlighterUi, rangeFor, TextRun, textRuns } from './TextRuns.js';
 
 type TextField = HTMLTextAreaElement | HTMLInputElement;
 
@@ -15,6 +15,28 @@ interface FieldState {
   onInput: () => void;
   matches: FieldMatch[];
   badge?: HTMLElement;
+}
+
+interface RunMatch {
+  key: string;
+  layer: string;
+  length: number;
+  start: number;
+  end: number;
+  range?: Range;
+}
+
+interface CachedRun {
+  text: string;
+  offset: number;
+  collapse: boolean;
+  matches: RunMatch[];
+}
+
+export interface ScanTimings {
+  preparation: number;
+  active: number;
+  registration: number;
 }
 
 const hexColor = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/i;
@@ -70,8 +92,9 @@ export class HighlightEngine {
   private matcher?: PhraseMatcher;
   private preservedMatcher?: PhraseMatcher;
   private inheritsHighlightColors?: boolean;
+  private cachedRuns = new WeakMap<Text, CachedRun>();
 
-  constructor(private onUpdate: () => void) {
+  constructor(private onUpdate: () => void, private onScanMeasured?: (timings: ScanTimings) => void) {
     this.observer = new MutationObserver(mutations => {
       const changed = mutations.some(mutation => {
         if (isHighlighterUi(mutation.target)) return false;
@@ -175,6 +198,7 @@ export class HighlightEngine {
     this.matchWhole = matchWhole;
     this.matcher = matcher;
     this.preservedMatcher = preservedMatcher;
+    this.cachedRuns = new WeakMap();
   }
 
   private getMatcher(collapse: boolean): PhraseMatcher {
@@ -183,23 +207,33 @@ export class HighlightEngine {
 
   highlight(words: ActiveWord[], matchCase: boolean, matchWhole: boolean): void {
     if (this.isDestroyed) return;
-    this.clearHighlights();
-    if (words.length === 0) return;
+    if (words.length === 0) {
+      this.clearHighlights();
+      return;
+    }
+    this.resetHighlights();
     const version = this.scanVersion;
-    const work = this.scan(words, matchCase, matchWhole);
+    const timings = this.onScanMeasured ? { preparation: 0, active: 0, registration: 0 } : undefined;
+    const work = this.scan(words, matchCase, matchWhole, timings);
     const scheduler = (window as Window & { scheduler?: { yield(): Promise<void> } }).scheduler;
     this.scanDone = new Promise(resolve => { this.finishScan = resolve; });
 
     this.startObserving();
     const runBatch = () => {
       if (version !== this.scanVersion) return;
-      const deadline = performance.now() + 8;
+      const start = performance.now();
+      const deadline = start + 8;
       try {
         while (!work.next().done) {
           if (performance.now() < deadline) continue;
+          if (timings) timings.active += performance.now() - start;
           if (scheduler?.yield) void scheduler.yield().then(runBatch);
           else window.setTimeout(runBatch, 0);
           return;
+        }
+        if (timings) {
+          timings.active += performance.now() - start;
+          this.onScanMeasured?.(timings);
         }
         this.completeScan();
       } catch (error) {
@@ -211,41 +245,73 @@ export class HighlightEngine {
     runBatch();
   }
 
-  private *scan(words: ActiveWord[], matchCase: boolean, matchWhole: boolean): Generator<void> {
+  private *scan(words: ActiveWord[], matchCase: boolean, matchWhole: boolean, timings?: ScanTimings): Generator<void> {
+    const start = timings ? performance.now() : 0;
     yield* this.updateMatcher(words, matchCase, matchWhole);
+    if (timings) timings.preparation = performance.now() - start;
     this.highlightFields();
 
     if (typeof Highlight === 'undefined' || !CSS.highlights) return;
+    const nextRuns = new WeakMap<Text, CachedRun>();
     let rendered = 0;
     for (const run of textRuns(document.body)) {
       if (run) {
-        const projected = projectText(run.text, matchCase, run.collapse);
-        for (const match of this.getMatcher(run.collapse).scan(projected.text)) {
+        // Re-read the DOM and styles, since a local edit can affect distant CSS
+        // selectors. Reuse matching work only when the resulting run agrees.
+        const { node, offset } = run.parts[0];
+        const previous = this.cachedRuns.get(node);
+        const unchanged = previous?.text === run.text && previous.offset === offset && previous.collapse === run.collapse;
+        const cached = unchanged ? previous : { text: run.text, offset, collapse: run.collapse, matches: [] };
+        const matches = unchanged ? cached.matches : this.matchRun(run, matchCase, cached.matches);
+        for (const match of matches) {
           if (!match) {
             yield;
             continue;
           }
-          const range = rangeFor(run, projected.offset(match.start), projected.offset(match.end, true));
-          if (!range) continue;
-          const length = match.end - match.start;
-          const layer = `gh-${match.style}-${length}`;
-          let highlight = this.highlights.get(layer);
-          if (!highlight) {
-            highlight = new Highlight();
-            // Shorter matches paint over longer ones. The flash keeps priority zero.
-            highlight.priority = -length;
-            this.highlights.set(layer, highlight);
-            CSS.highlights.set(layer, highlight);
-          }
-          highlight.add(range);
-          const ranges = this.highlightsByWord.get(match.key) ?? [];
-          if (ranges.length === 0) this.highlightsByWord.set(match.key, ranges);
-          ranges.push(range);
+          const registrationStart = timings ? performance.now() : 0;
+          const range = rangeFor(run, match.start, match.end, match.range);
+          match.range = range;
+          if (range) this.registerRange(match, range);
+          if (timings) timings.registration += performance.now() - registrationStart;
           if (++rendered % 128 === 0) yield;
         }
+        nextRuns.set(node, cached);
       }
       yield;
     }
+    this.cachedRuns = nextRuns;
+  }
+
+  private *matchRun(run: TextRun, matchCase: boolean, matches: RunMatch[]): Generator<RunMatch | undefined> {
+    const projected = projectText(run.text, matchCase, run.collapse);
+    for (const match of this.getMatcher(run.collapse).scan(projected.text)) {
+      if (!match) {
+        yield;
+        continue;
+      }
+      const length = match.end - match.start;
+      const result = {
+        key: match.key, layer: `gh-${match.style}-${length}`, length,
+        start: projected.offset(match.start), end: projected.offset(match.end, true),
+      };
+      matches.push(result);
+      yield result;
+    }
+  }
+
+  private registerRange(match: RunMatch, range: Range): void {
+    let highlight = this.highlights.get(match.layer);
+    if (!highlight) {
+      highlight = new Highlight();
+      // Shorter matches paint over longer ones. The flash keeps priority zero.
+      highlight.priority = -match.length;
+      this.highlights.set(match.layer, highlight);
+      CSS.highlights.set(match.layer, highlight);
+    }
+    highlight.add(range);
+    const ranges = this.highlightsByWord.get(match.key) ?? [];
+    if (ranges.length === 0) this.highlightsByWord.set(match.key, ranges);
+    ranges.push(range);
   }
 
   private updateField(input: TextField, field: FieldState): void {
@@ -485,6 +551,11 @@ export class HighlightEngine {
   }
 
   clearHighlights(): void {
+    this.cachedRuns = new WeakMap();
+    this.resetHighlights();
+  }
+
+  private resetHighlights(): void {
     this.stopObserving();
     this.scanVersion++;
     this.completeScan();
