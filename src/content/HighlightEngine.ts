@@ -38,7 +38,7 @@ export function activeHighlightWords(lists: HighlightList[]): ActiveWord[] {
 export class HighlightEngine {
   private badgePosition: BadgePosition = { horizontal: 'right', vertical: 'top', placement: 'border' };
   private styleElement?: HTMLStyleElement;
-  private highlights = new Map<number, Highlight>();
+  private highlights = new Map<string, Highlight>();
   private highlightsByWord = new Map<string, Range[]>();
   private fields = new Map<TextField, FieldState>();
   private popup?: HTMLElement;
@@ -88,7 +88,8 @@ export class HighlightEngine {
         word.foreground === this.words[i].foreground)) return;
 
     const rules = ['::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); }'];
-    const styles = new Map<string, number>();
+    const styles = new Map<string, { id: number; colors: string }>();
+    const layers = new Set<string>();
     const entries = new Map<string, PhraseEntry>();
     const preserved = new Map<string, PhraseEntry>();
     let hasDistinctWhitespace = false;
@@ -100,14 +101,19 @@ export class HighlightEngine {
       if (!collapsed) continue;
       const styleKey = `${word.background}|${word.foreground}`;
       let style = styles.get(styleKey);
-      if (style === undefined) {
-        style = styles.size;
-        styles.set(styleKey, style);
+      if (!style) {
         const background = CSS.supports('color', word.background) ? word.background : '#ff0';
         const foreground = CSS.supports('color', word.foreground) ? word.foreground : '#000';
-        rules.push(`::highlight(gh-${style}) { background-color: ${background}; color: ${foreground}; }`);
+        style = { id: styles.size, colors: `background-color: ${background}; color: ${foreground};` };
+        styles.set(styleKey, style);
       }
-      const entry = { key, style };
+      for (const length of [collapsed.length, key.length]) {
+        const layer = `gh-${style.id}-${length}`;
+        if (layers.has(layer)) continue;
+        layers.add(layer);
+        rules.push(`::highlight(${layer}) { ${style.colors} }`);
+      }
+      const entry = { key, style: style.id };
       entries.set(collapsed, entry);
       preserved.set(key, entry);
       hasDistinctWhitespace ||= collapsed !== key;
@@ -184,11 +190,15 @@ export class HighlightEngine {
           }
           const range = rangeFor(run, projected.offset(match.start), projected.offset(match.end, true));
           if (!range) continue;
-          let highlight = this.highlights.get(match.style);
+          const length = match.end - match.start;
+          const layer = `gh-${match.style}-${length}`;
+          let highlight = this.highlights.get(layer);
           if (!highlight) {
             highlight = new Highlight();
-            this.highlights.set(match.style, highlight);
-            CSS.highlights.set(`gh-${match.style}`, highlight);
+            // Shorter matches paint over longer ones. The flash keeps priority zero.
+            highlight.priority = -length;
+            this.highlights.set(layer, highlight);
+            CSS.highlights.set(layer, highlight);
           }
           highlight.add(range);
           const ranges = this.highlightsByWord.get(match.key) ?? [];
@@ -208,7 +218,7 @@ export class HighlightEngine {
       key: match.key,
       start: projected.offset(match.start),
       end: projected.offset(match.end, true),
-    }));
+    })).sort((a, b) => a.start - b.start);
     field.badge?.remove();
     field.badge = undefined;
     if (!field.matches.length || !input.parentElement) return;
@@ -239,12 +249,16 @@ export class HighlightEngine {
     const pre = document.createElement('pre');
     pre.className = 'gh-popup-pre';
     let previousEnd = 0;
+    let mark: HTMLElement | undefined;
     for (const match of matches) {
-      pre.append(text.slice(previousEnd, match.start));
-      const mark = document.createElement('mark');
-      mark.textContent = text.slice(match.start, match.end);
-      pre.appendChild(mark);
-      previousEnd = match.end;
+      // The preview uses one color, so merge overlapping coverage without repeating text.
+      if (!mark || match.start >= previousEnd) {
+        pre.append(text.slice(previousEnd, match.start));
+        mark = document.createElement('mark');
+        pre.appendChild(mark);
+      }
+      mark.append(text.slice(Math.max(previousEnd, match.start), match.end));
+      previousEnd = Math.max(previousEnd, match.end);
     }
     pre.append(text.slice(previousEnd));
     popup.append(titlebar, pre);
@@ -439,7 +453,7 @@ export class HighlightEngine {
     this.completeScan();
     clearTimeout(this.flashTimer);
     if (CSS.highlights) {
-      for (const style of this.highlights.keys()) CSS.highlights.delete(`gh-${style}`);
+      for (const layer of this.highlights.keys()) CSS.highlights.delete(layer);
       CSS.highlights.delete('gh-flash');
     }
     this.highlights.clear();

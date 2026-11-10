@@ -1,6 +1,7 @@
 // CSS Highlights API type declarations
 interface Highlight {
   new(...ranges: Range[]): Highlight;
+  priority: number;
   add(range: Range): void;
   clear(): void;
   delete(range: Range): boolean;

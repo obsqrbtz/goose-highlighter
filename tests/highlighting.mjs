@@ -162,13 +162,22 @@ if (location.search === '?empty-entry') {
             expectRanges('alpha');
         });
 
-    await check('longest phrase wins at the same start regardless of list order',
-        '<p>beta gamma</p>', (highlight, engine) => {
-            highlight(['beta', 'beta gamma'], { matchWhole: true });
-            expectRanges('beta gamma');
-            expect(count(engine, 'beta gamma'), 1);
-            highlight(['beta gamma', 'beta'], { matchWhole: true });
-            expectRanges('beta gamma');
+    await check('overlapping matches keep their ranges and shorter matches paint on top',
+        '<p>beta <em>gamma</em> delta</p>', (highlight, engine) => {
+            const words = ['beta', 'gamma', 'beta gamma', 'gamma delta'];
+            for (const order of [words, [...words].reverse()]) {
+                const lists = [list(order.map((word, i) => ({
+                    ...entry(word), background: ['red', 'green', 'blue', 'yellow'][i],
+                })))];
+                highlight([], { matchWhole: true, lists });
+                expect(ranges().map(range => range.toString()).sort(), [...words].sort());
+                for (const word of words) expect(count(engine, word), 1);
+                const priorities = new Map([...CSS.highlights.values()].flatMap(layer =>
+                    [...layer].map(range => [range.toString(), layer.priority])));
+                expect(priorities.get('beta') > priorities.get('beta gamma'), true);
+                expect(priorities.get('gamma') > priorities.get('beta gamma'), true);
+                expect(priorities.get('gamma') > priorities.get('gamma delta'), true);
+            }
         });
 
     await check('whole-word matching checks letters across inline nodes',
@@ -281,6 +290,21 @@ if (location.search === '?empty-entry') {
         const field = document.querySelector('textarea');
         expect([field.selectionStart, field.selectionEnd], [6, 11]);
     });
+
+    await check('overlapping field matches are counted without duplicating preview text',
+        '<div><textarea>before beta gamma delta after</textarea></div>', (highlight, engine) => {
+            const words = ['beta gamma', 'gamma', 'gamma delta'];
+            highlight(words);
+            for (const word of words) expect(count(engine, word), 1);
+            const indicator = document.querySelector(badge);
+            expect(indicator?.textContent, '3');
+            indicator.click();
+            expect(document.querySelector('.gh-popup-pre').textContent, 'before beta gamma delta after');
+            expect(document.querySelector('.gh-popup-pre mark').textContent, 'beta gamma delta');
+            engine.scrollToHighlight('gamma', 0);
+            const field = document.querySelector('textarea');
+            expect(field.value.slice(field.selectionStart, field.selectionEnd), 'gamma');
+        });
 
     await check('default text inputs and explicit text inputs both get badges',
         '<div><input value="alpha"></div><div><input type="text" value="alpha"></div>', highlight => {

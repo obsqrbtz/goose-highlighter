@@ -171,7 +171,6 @@ export class PhraseMatcher {
   }
 
   *scan(text: string): Generator<PhraseMatch | undefined> {
-    const matches = new Map<number, PhraseMatch>();
     let state = this.root;
     for (let i = 0; i < text.length; i++) {
       if (i > 0 && i % 2048 === 0) yield;
@@ -189,17 +188,8 @@ export class PhraseMatcher {
           (hit.leftBoundary && isWordAt(text, start - 1)) ||
           (hit.rightBoundary && isWordAt(text, end))
         )) continue;
-        matches.set(start, { ...hit.entry!, start, end });
+        yield { ...hit.entry!, start, end };
       }
-    }
-
-    // Preserve non-overlapping matches, preferring the longest at each start.
-    let end = 0;
-    for (const start of [...matches.keys()].sort((a, b) => a - b)) {
-      if (start < end) continue;
-      const match = matches.get(start)!;
-      end = match.end;
-      yield match;
     }
   }
 }
