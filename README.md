@@ -37,7 +37,7 @@ Goose Highlighter is a browser extension that allows you to highlight words on a
    - Select the extracted folder containing the extension files
 
 #### Option 3: Build from Source
-1. **Prerequisites:** Node.js 20+ and npm
+1. **Prerequisites:** Node.js 26 LTS and npm. With nvm, run `nvm install` from the cloned repository to use the version in `.nvmrc`.
 2. **Clone the repository:**
    ```bash
    git clone https://github.com/obsqrbtz/goose-highlighter.git

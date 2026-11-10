@@ -46,7 +46,7 @@ export class ImportService {
     const obj = data as Record<string, unknown>;
     const result: ParsedSettings = {};
     if (Array.isArray(obj.lists)) {
-      result.lists = obj.lists.filter((item: unknown) => this.isValidList(item)) as HighlightList[];
+      result.lists = obj.lists.filter((item: unknown) => this.isValidList(item));
     }
     if (Array.isArray(obj.exceptionsList)) {
       result.exceptionsList = obj.exceptionsList.filter((d): d is string => typeof d === 'string');

@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.nvmrc'
           cache: 'npm'
 
       - name: Install dependencies
@@ -39,12 +39,12 @@ jobs:
       - name: Create extension zip
         run: |
           zip -r goose-highlighter-${{ steps.version.outputs.VERSION }}.zip . \
-            -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'versioning.md' '.releaserc.json' \
+            -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'versioning.md' '.nvmrc' '.releaserc.json' \
                'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' \
                'eslint.config.mjs' '.github/*' 'CHANGELOG.md' 'PRIVACY.MD' 'sample-import-config.json'
 
       - name: Install Chrome extension packaging tool
-        run: npm install -g crx3
+        run: npm install -g crx3@2.0.0
 
       - name: Generate private key for CRX
         run: |
@@ -57,7 +57,7 @@ jobs:
           
           # Copy all files except excluded ones to temp directory
           rsync -av --exclude='.git*' --exclude='node_modules' --exclude='src' \
-                --exclude='scripts' --exclude='versioning.md' --exclude='.releaserc.json' \
+                --exclude='scripts' --exclude='versioning.md' --exclude='.nvmrc' --exclude='.releaserc.json' \
                 --exclude='package.json' --exclude='package-lock.json' \
                 --exclude='README.md' --exclude='tsconfig.json' \
                 --exclude='eslint.config.mjs' --exclude='.github' \

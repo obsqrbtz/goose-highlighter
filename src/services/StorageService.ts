@@ -4,7 +4,7 @@ import { StorageData, DEFAULT_STORAGE } from '../types.js';
 export class StorageService {
   static async get<K extends keyof StorageData>(keys: K[]): Promise<Pick<StorageData, K>>;
   static async get(): Promise<StorageData>;
-  static async get(keys?: (keyof StorageData)[]): Promise<StorageData | Pick<StorageData, keyof StorageData>> {
+  static async get(keys?: (keyof StorageData)[]): Promise<Partial<StorageData>> {
     try {
       const defaults = DEFAULT_STORAGE;
       if (keys) {
@@ -12,9 +12,9 @@ export class StorageService {
         keys.forEach(key => {
           keyDefaults[key] = defaults[key];
         });
-        return await browserAPI.storage.local.get(keyDefaults) as Pick<StorageData, typeof keys[number]>;
+        return await browserAPI.storage.local.get<Partial<StorageData>>(keyDefaults);
       }
-      return await browserAPI.storage.local.get(defaults) as StorageData;
+      return await browserAPI.storage.local.get<StorageData>(defaults);
     } catch (error) {
       console.error('StorageService.get error:', error);
       // Return defaults on error
@@ -23,7 +23,7 @@ export class StorageService {
         keys.forEach(key => {
           keyDefaults[key] = DEFAULT_STORAGE[key];
         });
-        return keyDefaults as Pick<StorageData, typeof keys[number]>;
+        return keyDefaults;
       }
       return DEFAULT_STORAGE;
     }

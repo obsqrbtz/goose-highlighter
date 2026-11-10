@@ -25,7 +25,7 @@ class BackgroundService {
     }
 
     private setupTabUpdateListener(): void {
-        browserAPI.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void => {
+        browserAPI.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             if (changeInfo.status === 'complete' && tab.url && /^https?:/.test(tab.url)) {
                 browserAPI.scripting.executeScript({
                     target: { tabId },
