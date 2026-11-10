@@ -26,29 +26,38 @@
   "enable_highlight": {
     "message": "Vurgulamayı Etkinleştir"
   },
+  "apply": {
+    "message": "Uygula"
+  },
   "paste_hint": {
-    "message": "Kelimeleri buraya yapıştırın"
+    "message": "Satır başına bir kelime veya ifade"
   },
   "apply_paste": {
     "message": "Kelimeleri Ekle"
   },
   "select_all": {
-    "message": "Seç"
+    "message": "Tümünü seç"
   },
   "delete_selected": {
-    "message": "Sil"
+    "message": "Seçilenleri sil"
   },
   "disable_selected": {
-    "message": "Devre Dışı Bırak"
+    "message": "Seçilenleri devre dışı bırak"
   },
   "enable_selected": {
-    "message": "Etkinleştir"
+    "message": "Seçilenleri etkinleştir"
   },
   "import_list": {
-    "message": "JSON İçe Aktar"
+    "message": "Listeyi içe aktar"
   },
   "export_list": {
-    "message": "JSON Dışa Aktar"
+    "message": "Listeyi dışa aktar"
+  },
+  "import_list_list_manager": {
+    "message": "Listeyi içe aktar"
+  },
+  "export_list_list_manager": {
+    "message": "Listeyi dışa aktar"
   },
   "default_list_name": {
     "message": "Varsayılan Liste"
@@ -69,7 +78,7 @@
     "message": "Seçili kelimeleri silmek istediğinizden emin misiniz?"
   },
   "deselect_all": {
-    "message": "Seçimi Kaldır"
+    "message": "Tümünün seçimini kaldır"
   },
   "highlight_lists": {
     "message": "Vurgulama Listeleri"
@@ -100,5 +109,326 @@
   },
   "match_whole": {
     "message": "Tüm kelimeyle eşleş"
+  },
+  "badge_position_label": {
+    "message": "Alan sayacının konumu"
+  },
+  "badge_position_hint": {
+    "message": "Eşleşme sayacının metin alanlarındaki (metin alanları / girişler) konumu."
+  },
+  "badge_position_horizontal": {
+    "message": "Yatay"
+  },
+  "badge_position_vertical": {
+    "message": "Dikey"
+  },
+  "badge_position_placement": {
+    "message": "Yerleşim"
+  },
+  "badge_position_left": {
+    "message": "Sol"
+  },
+  "badge_position_right": {
+    "message": "Sağ"
+  },
+  "badge_position_top": {
+    "message": "Üst"
+  },
+  "badge_position_center": {
+    "message": "Orta"
+  },
+  "badge_position_bottom": {
+    "message": "Alt"
+  },
+  "badge_position_inside": {
+    "message": "İçeride"
+  },
+  "badge_position_outside": {
+    "message": "Dışarıda"
+  },
+  "badge_position_border": {
+    "message": "Kenarda"
+  },
+  "site_exceptions": {
+    "message": "Site İstisnaları"
+  },
+  "add_exception": {
+    "message": "İstisnalara Ekle"
+  },
+  "remove_exception": {
+    "message": "Mevcut olanı kaldır"
+  },
+  "manage_exceptions": {
+    "message": "Yönet"
+  },
+  "exceptions_mode": { "message": "Mod:" },
+  "exceptions_mode_blacklist": { "message": "Kara liste — bu sitelerde vurgulama" },
+  "exceptions_mode_whitelist": { "message": "Beyaz liste — yalnızca bu sitelerde vurgula" },
+  "exceptions_mode_option_blacklist": { "message": "Kara liste" },
+  "exceptions_mode_option_whitelist": { "message": "Beyaz liste" },
+  "exceptions_mode_hint_blacklist": { "message": "Bu sitelerde vurgulama." },
+  "exceptions_mode_hint_whitelist": { "message": "Yalnızca bu sitelerde vurgula." },
+  "exceptions_list": {
+    "message": "İstisna Siteleri:"
+  },
+  "exceptions_list_blacklist": { "message": "Hariç tutulacak siteler (kara liste):" },
+  "exceptions_list_whitelist": { "message": "Dahil edilecek siteler (beyaz liste):" },
+  "add_current_site": { "message": "Mevcut siteyi ekle" },
+  "clear_all": {
+    "message": "Hepsini Temizle"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Tüm istisnaları temizlemek istediğinizden emin misiniz?"
+  },
+  "remove": {
+    "message": "Kaldır"
+  },
+  "tab_lists": {
+    "message": "Listeler"
+  },
+  "tab_words": {
+    "message": "Kelimeler"
+  },
+  "tab_exceptions": {
+    "message": "İstisnalar"
+  },
+  "no_exceptions": {
+    "message": "İstisna yok"
+  },
+  "toggle_highlighting_title": {
+    "message": "Vurgulamayı aç/kapat"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Karanlık modu aç/kapat"
+  },
+  "select_title": {
+    "message": "Seç"
+  },
+  "word_placeholder": {
+    "message": "Kelime veya ifade"
+  },
+  "background_color_title": {
+    "message": "Arka plan rengi"
+  },
+  "text_color_title": {
+    "message": "Metin rengi"
+  },
+  "tab_page_highlights": {
+    "message": "Sayfada"
+  },
+  "highlights_on_page": {
+    "message": "Bu sayfadaki vurgular"
+  },
+  "total_highlights": {
+    "message": "Toplam"
+  },
+  "total_matches": {
+    "message": "Toplam eşleşme"
+  },
+  "group_by_list": {
+    "message": "Listeye göre grupla"
+  },
+  "other": {
+    "message": "Diğer"
+  },
+  "refresh": {
+    "message": "Yenile"
+  },
+  "no_highlights_on_page": {
+    "message": "Bu sayfada vurgu bulunamadı"
+  },
+  "previous": {
+    "message": "Önceki"
+  },
+  "next": {
+    "message": "Sonraki"
+  },
+  "duplicate": {
+    "message": "Çoğalt"
+  },
+  "merge": {
+    "message": "Birleştir"
+  },
+  "move": {
+    "message": "Taşı"
+  },
+  "copy": {
+    "message": "Kopyala"
+  },
+  "move_to_list": {
+    "message": "Listeye taşı"
+  },
+  "copy_to_list": {
+    "message": "Listeye kopyala"
+  },
+  "move_selected": {
+    "message": "Seçilenleri taşı"
+  },
+  "copy_selected": {
+    "message": "Seçilenleri kopyala"
+  },
+  "no_other_lists": {
+    "message": "Başka liste yok"
+  },
+  "word_actions": {
+    "message": "Başka bir listeye taşı veya kopyala"
+  },
+  "merge_lists_min_two": {
+    "message": "Birleştirmek için en az iki liste seçin."
+  },
+  "merge_lists_confirm": {
+    "message": "{count} listeyi \"{target}\" ile birleştir? Kaynak listeler kaldırılacak."
+  },
+  "delete_current_list": {
+    "message": "Mevcut listeyi sil?"
+  },
+  "delete_lists_confirm": {
+    "message": "Seçili {count} listeyi sil?"
+  },
+  "invalid_import_format": {
+    "message": "Geçersiz dosya formatı. Lütfen geçerli bir Goose Highlighter dışa aktarma dosyası seçin."
+  },
+  "import_failed": {
+    "message": "Dosya içe aktarılamadı. Lütfen geçerli bir JSON dosyası olduğundan emin olun."
+  },
+  "import_confirm": {
+    "message": "Toplam {words} kelime içeren {count} liste içe aktarılsın mı?"
+  },
+  "import_success": {
+    "message": "{words} kelime içeren {count} liste başarıyla içe aktarıldı."
+  },
+  "import_page_title": {
+    "message": "İçe Aktar — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "İçe Aktar"
+  },
+  "import_choose_file": {
+    "message": "Dosya seç"
+  },
+  "import_select_list_prompt": {
+    "message": "İçe aktarmak için bir liste dosyası seçin."
+  },
+  "import_select_settings_prompt": {
+    "message": "İçe aktarmak için bir ayar dosyası seçin."
+  },
+  "import_in_progress": {
+    "message": "İçe aktarılıyor…"
+  },
+  "import_complete": {
+    "message": "İçe aktarma tamamlandı."
+  },
+  "import_complete_lists": {
+    "message": "İçe aktarma tamamlandı. $COUNT$ liste eklendi.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Bu sekmeyi kapatabilirsiniz."
+  },
+  "preview_label": {
+    "message": "Önizleme"
+  },
+  "preview_text": {
+    "message": "Vurgulanan metniniz böyle görünecek."
+  },
+  "preview_text_before": {
+    "message": "Vurgulanan metniniz"
+  },
+  "preview_text_highlight": {
+    "message": "böyle"
+  },
+  "preview_text_after": {
+    "message": "görünecek."
+  },
+  "enable_highlighting_title": {
+    "message": "Vurgulamayı Etkinleştir"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Sayfalarda vurguları göster"
+  },
+  "manage_lists": {
+    "message": "Listeleri Yönet"
+  },
+  "background_label": {
+    "message": "Arka Plan"
+  },
+  "foreground_label": {
+    "message": "Ön Plan"
+  },
+  "multi_select_hint": {
+    "message": "Tıklama - seç • Ctrl+tıklama - birden fazla"
+  },
+  "dark_mode_title": {
+    "message": "Karanlık Mod"
+  },
+  "dark_mode_subtitle": {
+    "message": "Açık/koyu tema arasında geçiş yap"
+  },
+  "list_manager_title": {
+    "message": "Liste Yöneticisi"
+  },
+  "words_label": {
+    "message": "kelime"
+  },
+  "active_label": {
+    "message": "aktif"
+  },
+  "inactive_label": {
+    "message": "pasif"
+  },
+  "drag_words_hint": {
+    "message": "Tıklama - seç • Ctrl+tıklama - birden fazla • Listeye sürükle - taşı"
+  },
+  "drag_lists_hint": {
+    "message": "Sürükle - sırala • Ctrl+tıklama - birden fazla"
+  },
+  "showing_items": {
+    "message": "{total} kelimeden {start}-{end} gösteriliyor"
+  },
+  "items_per_page": {
+    "message": "Sayfa başına öğe:"
+  },
+  "page_info": {
+    "message": "Sayfa {current} / {total}"
+  },
+  "toggle_active": {
+    "message": "aktif/pasif değiştir"
+  },
+  "rename_list_title": {
+    "message": "Listeyi yeniden adlandır"
+  },
+  "new_list_title": {
+    "message": "Yeni liste"
+  },
+  "delete_list_title": {
+    "message": "Listeyi sil"
+  },
+  "list_active_badge": {
+    "message": "Aktif"
+  },
+  "list_paused_badge": {
+    "message": "Duraklatıldı"
+  },
+  "words_stats": {
+    "message": "{total} kelime • {active} aktif • {inactive} pasif"
+  },
+  "rename_list": {
+    "message": "Listeyi Yeniden Adlandır"
+  },
+  "export_settings": {
+    "message": "Dışa Aktar"
+  },
+  "import_settings": {
+    "message": "İçe Aktar"
+  },
+  "export_import_settings_label": {
+    "message": "Dışa Aktar / İçe Aktar"
+  },
+  "export_import_settings_hint": {
+    "message": "Listeleri ve site istisnalarını yedekleyin veya geri yükleyin."
   }
 }

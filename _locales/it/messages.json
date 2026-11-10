@@ -26,29 +26,38 @@
     "enable_highlight": {
         "message": "Abilita evidenziazione"
     },
+    "apply": {
+        "message": "Applica"
+    },
     "paste_hint": {
-        "message": "Incolla le parole qui"
+        "message": "Una parola o frase per riga"
     },
     "apply_paste": {
         "message": "Aggiungi parole"
     },
     "select_all": {
-        "message": "Seleziona"
+        "message": "Seleziona tutto"
     },
     "delete_selected": {
-        "message": "Elimina"
+        "message": "Elimina selezionati"
     },
     "disable_selected": {
-        "message": "Disattiva"
+        "message": "Disattiva selezionati"
     },
     "enable_selected": {
-        "message": "Attiva"
+        "message": "Attiva selezionati"
     },
     "import_list": {
-        "message": "Importa JSON"
+        "message": "Importa lista"
     },
     "export_list": {
-        "message": "Esporta JSON"
+        "message": "Esporta lista"
+    },
+    "import_list_list_manager": {
+        "message": "Importa lista"
+    },
+    "export_list_list_manager": {
+        "message": "Esporta lista"
     },
     "default_list_name": {
         "message": "Elenco predefinito"
@@ -69,7 +78,7 @@
         "message": "Sei sicuro di voler eliminare le parole selezionate?"
     },
     "deselect_all": {
-        "message": "Deseleziona"
+        "message": "Deseleziona tutto"
     },
     "highlight_lists": {
         "message": "Elenchi di evidenziazione"
@@ -100,5 +109,326 @@
     },
     "match_whole": {
         "message": "Solo parola intera"
+    },
+    "badge_position_label": {
+        "message": "Posizione del contatore nei campi"
+    },
+    "badge_position_hint": {
+        "message": "Dove si trova il contatore delle corrispondenze nei campi di testo (aree di testo / input)."
+    },
+    "badge_position_horizontal": {
+        "message": "Orizzontale"
+    },
+    "badge_position_vertical": {
+        "message": "Verticale"
+    },
+    "badge_position_placement": {
+        "message": "Posizionamento"
+    },
+    "badge_position_left": {
+        "message": "Sinistra"
+    },
+    "badge_position_right": {
+        "message": "Destra"
+    },
+    "badge_position_top": {
+        "message": "Alto"
+    },
+    "badge_position_center": {
+        "message": "Centro"
+    },
+    "badge_position_bottom": {
+        "message": "Basso"
+    },
+    "badge_position_inside": {
+        "message": "All'interno"
+    },
+    "badge_position_outside": {
+        "message": "All'esterno"
+    },
+    "badge_position_border": {
+        "message": "Sul bordo"
+    },
+    "site_exceptions": {
+        "message": "Eccezioni siti"
+    },
+    "add_exception": {
+        "message": "Aggiungi alle eccezioni"
+    },
+    "remove_exception": {
+        "message": "Rimuovi corrente"
+    },
+    "manage_exceptions": {
+        "message": "Gestisci"
+    },
+    "exceptions_mode": { "message": "Modalità:" },
+    "exceptions_mode_blacklist": { "message": "Lista nera — non evidenziare su questi siti" },
+    "exceptions_mode_whitelist": { "message": "Lista bianca — evidenziare solo su questi siti" },
+    "exceptions_mode_option_blacklist": { "message": "Lista nera" },
+    "exceptions_mode_option_whitelist": { "message": "Lista bianca" },
+    "exceptions_mode_hint_blacklist": { "message": "Non evidenziare su questi siti." },
+    "exceptions_mode_hint_whitelist": { "message": "Evidenziare solo su questi siti." },
+    "exceptions_list": {
+        "message": "Siti di eccezione:"
+    },
+    "exceptions_list_blacklist": { "message": "Siti da escludere (lista nera):" },
+    "exceptions_list_whitelist": { "message": "Siti da includere (lista bianca):" },
+    "add_current_site": { "message": "Aggiungi sito attuale" },
+    "clear_all": {
+        "message": "Cancella tutto"
+    },
+    "confirm_clear_exceptions": {
+        "message": "Sei sicuro di voler cancellare tutte le eccezioni?"
+    },
+    "remove": {
+        "message": "Rimuovi"
+    },
+    "tab_lists": {
+        "message": "Elenchi"
+    },
+    "tab_words": {
+        "message": "Parole"
+    },
+    "tab_exceptions": {
+        "message": "Eccezioni"
+    },
+    "no_exceptions": {
+        "message": "Nessuna eccezione"
+    },
+    "toggle_highlighting_title": {
+        "message": "Attiva/disattiva evidenziazione"
+    },
+    "toggle_dark_mode_title": {
+        "message": "Attiva/disattiva modalità scura"
+    },
+    "select_title": {
+        "message": "Seleziona"
+    },
+    "word_placeholder": {
+        "message": "Parola o frase"
+    },
+    "background_color_title": {
+        "message": "Colore di sfondo"
+    },
+    "text_color_title": {
+        "message": "Colore del testo"
+    },
+    "tab_page_highlights": {
+        "message": "Sulla pagina"
+    },
+    "highlights_on_page": {
+        "message": "Evidenziazioni su questa pagina"
+    },
+    "total_highlights": {
+        "message": "Totale"
+    },
+    "total_matches": {
+        "message": "Corrispondenze totali"
+    },
+    "group_by_list": {
+        "message": "Raggruppa per lista"
+    },
+    "other": {
+        "message": "Altri"
+    },
+    "refresh": {
+        "message": "Aggiorna"
+    },
+    "no_highlights_on_page": {
+        "message": "Nessuna evidenziazione trovata su questa pagina"
+    },
+    "previous": {
+        "message": "Precedente"
+    },
+    "next": {
+        "message": "Successivo"
+    },
+    "duplicate": {
+        "message": "Duplica"
+    },
+    "merge": {
+        "message": "Unisci"
+    },
+    "move": {
+        "message": "Sposta"
+    },
+    "copy": {
+        "message": "Copia"
+    },
+    "move_to_list": {
+        "message": "Sposta in elenco"
+    },
+    "copy_to_list": {
+        "message": "Copia in elenco"
+    },
+    "move_selected": {
+        "message": "Sposta selezionati"
+    },
+    "copy_selected": {
+        "message": "Copia selezionati"
+    },
+    "no_other_lists": {
+        "message": "Nessun altro elenco"
+    },
+    "word_actions": {
+        "message": "Sposta o copia in un altro elenco"
+    },
+    "merge_lists_min_two": {
+        "message": "Seleziona almeno due elenchi da unire."
+    },
+    "merge_lists_confirm": {
+        "message": "Unire {count} elenco/i in \"{target}\"? Gli elenchi di origine verranno rimossi."
+    },
+    "delete_current_list": {
+        "message": "Eliminare l'elenco corrente?"
+    },
+    "delete_lists_confirm": {
+        "message": "Eliminare {count} elenco/i selezionato/i?"
+    },
+    "invalid_import_format": {
+        "message": "Formato file non valido. Seleziona un file di esportazione Goose Highlighter valido."
+    },
+    "import_failed": {
+        "message": "Importazione del file non riuscita. Assicurati che sia un file JSON valido."
+    },
+    "import_confirm": {
+        "message": "Importare {count} elenco/i con {words} parola/e totali?"
+    },
+    "import_success": {
+        "message": "Importati con successo {count} elenco/i con {words} parola/e."
+    },
+    "import_page_title": {
+        "message": "Importa — Goose Highlighter"
+    },
+    "import_page_heading": {
+        "message": "Importa"
+    },
+    "import_choose_file": {
+        "message": "Scegli file"
+    },
+    "import_select_list_prompt": {
+        "message": "Seleziona un file di elenco da importare."
+    },
+    "import_select_settings_prompt": {
+        "message": "Seleziona un file di impostazioni da importare."
+    },
+    "import_in_progress": {
+        "message": "Importazione…"
+    },
+    "import_complete": {
+        "message": "Importazione completata."
+    },
+    "import_complete_lists": {
+        "message": "Importazione completata. Aggiunte $COUNT$ liste.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "import_close_tab_hint": {
+        "message": "Puoi chiudere questa scheda."
+    },
+    "preview_label": {
+        "message": "Anteprima"
+    },
+    "preview_text": {
+        "message": "Ecco come apparirà il tuo testo evidenziato."
+    },
+    "preview_text_before": {
+        "message": "Ecco come apparirà il tuo"
+    },
+    "preview_text_highlight": {
+        "message": "testo evidenziato"
+    },
+    "preview_text_after": {
+        "message": "."
+    },
+    "enable_highlighting_title": {
+        "message": "Abilita evidenziazione"
+    },
+    "enable_highlighting_subtitle": {
+        "message": "Mostra evidenziazioni sulle pagine"
+    },
+    "manage_lists": {
+        "message": "Gestisci elenchi"
+    },
+    "background_label": {
+        "message": "Sfondo"
+    },
+    "foreground_label": {
+        "message": "Testo"
+    },
+    "multi_select_hint": {
+        "message": "Clic - seleziona • Ctrl+clic - più"
+    },
+    "dark_mode_title": {
+        "message": "Modalità scura"
+    },
+    "dark_mode_subtitle": {
+        "message": "Passa tra tema chiaro/scuro"
+    },
+    "list_manager_title": {
+        "message": "Gestore elenchi"
+    },
+    "words_label": {
+        "message": "parole"
+    },
+    "active_label": {
+        "message": "attivo"
+    },
+    "inactive_label": {
+        "message": "inattivo"
+    },
+    "drag_words_hint": {
+        "message": "Clic - seleziona • Ctrl+clic - più • Trascina in lista - sposta"
+    },
+    "drag_lists_hint": {
+        "message": "Trascina - riordina • Ctrl+clic - più"
+    },
+    "showing_items": {
+        "message": "Visualizzazione di {start}-{end} su {total} parole"
+    },
+    "items_per_page": {
+        "message": "Elementi per pagina:"
+    },
+    "page_info": {
+        "message": "Pagina {current} di {total}"
+    },
+    "toggle_active": {
+        "message": "attiva/disattiva"
+    },
+    "rename_list_title": {
+        "message": "Rinomina elenco"
+    },
+    "new_list_title": {
+        "message": "Nuovo elenco"
+    },
+    "delete_list_title": {
+        "message": "Elimina elenco"
+    },
+    "list_active_badge": {
+        "message": "Attivo"
+    },
+    "list_paused_badge": {
+        "message": "In pausa"
+    },
+    "words_stats": {
+        "message": "{total} parole • {active} attive • {inactive} inattive"
+    },
+    "rename_list": {
+        "message": "Rinomina elenco"
+    },
+    "export_settings": {
+        "message": "Esporta"
+    },
+    "import_settings": {
+        "message": "Importa"
+    },
+    "export_import_settings_label": {
+        "message": "Esporta / Importa"
+    },
+    "export_import_settings_hint": {
+        "message": "Backup o ripristino di elenchi e eccezioni di siti."
     }
 }

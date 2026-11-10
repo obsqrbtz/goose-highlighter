@@ -1,0 +1,272 @@
+/* Shared word list UI – used by list-manager and popup (class names aliased for both) */
+
+/* Word list container */
+.word-list,
+.word-list-container {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.word-list .empty,
+.word-list-empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+/* Word item row */
+.word-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid var(--input-border);
+  min-width: 0;
+}
+
+.word-item:last-child {
+  border-bottom: none;
+}
+
+.word-item:hover {
+  background: var(--highlight-tag);
+}
+
+.word-item.selected {
+  background: var(--section-bg);
+  border-left: 3px solid var(--accent);
+  padding-left: 9px;
+}
+
+.word-item.disabled {
+  opacity: 0.5;
+}
+
+/* Text label (list-manager: .word-text, popup: .word-item-text) */
+.word-text,
+.word-item-text {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  user-select: none;
+}
+
+.word-text.editing,
+.word-item-text.editing {
+  display: none;
+}
+
+/* Inline edit input */
+.word-edit-input,
+.word-item-edit-input {
+  display: none;
+  flex: 1;
+  height: 28px;
+  padding: 0 8px;
+  background: var(--bg-color);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--text-color);
+  min-width: 0;
+}
+
+.word-edit-input:focus,
+.word-item-edit-input:focus {
+  outline: none;
+}
+
+.word-edit-input.active,
+.word-item-edit-input.active {
+  display: block;
+}
+
+/* Actions container */
+.word-actions,
+.word-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+
+.word-actions > *,
+.word-item-actions > * {
+  pointer-events: auto;
+}
+
+/* Icon button inside word item (list-manager: .word-item .icon-btn, popup: .word-item-icon-btn) */
+.word-item .icon-btn,
+.word-item-icon-btn {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+.word-item .icon-btn:hover,
+.word-item-icon-btn:hover {
+  opacity: 1;
+  background: var(--highlight-tag);
+  color: var(--accent);
+}
+
+.word-item .icon-btn i,
+.word-item-icon-btn i {
+  font-size: 14px;
+}
+
+/* Color picker inside word item */
+.word-item input[type="color"],
+.word-item-color-picker {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid var(--input-border);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.word-item input[type="color"]::-webkit-color-swatch-wrapper,
+.word-item-color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 3px;
+}
+
+.word-item input[type="color"]::-webkit-color-swatch,
+.word-item-color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 3px;
+}
+
+.word-item input[type="color"]:hover,
+.word-item-color-picker:hover {
+  border-color: var(--accent);
+}
+
+/* Word action row (Select All, Delete, etc.) – list-manager: .word-controls .row, popup: .word-actions-row */
+.word-controls .row,
+.word-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.word-controls .row button,
+.word-action-btn {
+  height: 26px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+}
+
+.word-controls .row button:hover,
+.word-action-btn:hover {
+  background: var(--section-bg);
+}
+
+.word-controls .row button.danger,
+.word-action-btn.danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+}
+
+.word-controls .row button.danger:hover,
+.word-action-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Add-words textarea (shared look) */
+.add-words textarea,
+.add-words-textarea {
+  flex: 1;
+  min-height: 56px;
+  padding: 6px 10px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.add-words textarea:focus,
+.add-words-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Add-words primary button (subdued) */
+.add-words button.primary,
+.add-words-button {
+  background: rgba(255, 140, 0, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 0, 0.35);
+}
+
+.add-words button.primary:hover,
+.add-words-button:hover {
+  background: rgba(255, 140, 0, 0.18);
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+html.dark .add-words button.primary,
+html.dark .add-words-button,
+body.dark .add-words button.primary,
+body.dark .add-words-button {
+  background: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.4);
+}
+
+html.dark .add-words button.primary:hover,
+html.dark .add-words-button:hover,
+body.dark .add-words button.primary:hover,
+body.dark .add-words-button:hover {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.55);
+}
+
+/* Word search input (shared) */
+.word-search-input,
+#wordSearch {
+  height: 32px;
+  padding: 0 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+}
+
+.word-search-input:focus,
+#wordSearch:focus {
+  outline: none;
+  border-color: var(--accent);
+}

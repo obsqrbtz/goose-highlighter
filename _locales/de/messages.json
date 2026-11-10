@@ -26,29 +26,38 @@
     "enable_highlight": {
         "message": "Hervorhebung aktivieren"
     },
+    "apply": {
+        "message": "Anwenden"
+    },
     "paste_hint": {
-        "message": "Wörter hier einfügen"
+        "message": "Ein Wort oder Ausdruck pro Zeile"
     },
     "apply_paste": {
         "message": "Wörter hinzufügen"
     },
     "select_all": {
-        "message": "Auswählen"
+        "message": "Alle auswählen"
     },
     "delete_selected": {
-        "message": "Löschen"
+        "message": "Ausgewählte löschen"
     },
     "disable_selected": {
-        "message": "Deaktivieren"
+        "message": "Ausgewählte deaktivieren"
     },
     "enable_selected": {
-        "message": "Aktivieren"
+        "message": "Ausgewählte aktivieren"
     },
     "import_list": {
-        "message": "JSON importieren"
+        "message": "Liste importieren"
     },
     "export_list": {
-        "message": "JSON exportieren"
+        "message": "Liste exportieren"
+    },
+    "import_list_list_manager": {
+        "message": "Liste importieren"
+    },
+    "export_list_list_manager": {
+        "message": "Liste exportieren"
     },
     "default_list_name": {
         "message": "Standardliste"
@@ -69,7 +78,7 @@
         "message": "Möchten Sie die ausgewählten Wörter wirklich löschen?"
     },
     "deselect_all": {
-        "message": "Abwählen"
+        "message": "Alle abwählen"
     },
     "highlight_lists": {
         "message": "Hervorhebungslisten"
@@ -94,5 +103,300 @@
 },
   "options": { "message": "Optionen" },
   "match_case": { "message": "Groß-/Kleinschreibung beachten" },
-  "match_whole": { "message": "Ganzes Wort übereinstimmen" }
+  "match_whole": { "message": "Ganzes Wort übereinstimmen" },
+  "badge_position_label": { "message": "Position des Feldzählers" },
+  "badge_position_hint": { "message": "Wo der Trefferzähler in Textfeldern (Textbereiche / Eingaben) sitzt." },
+  "badge_position_horizontal": { "message": "Horizontal" },
+  "badge_position_vertical": { "message": "Vertikal" },
+  "badge_position_placement": { "message": "Platzierung" },
+  "badge_position_left": { "message": "Links" },
+  "badge_position_right": { "message": "Rechts" },
+  "badge_position_top": { "message": "Oben" },
+  "badge_position_center": { "message": "Mitte" },
+  "badge_position_bottom": { "message": "Unten" },
+  "badge_position_inside": { "message": "Innen" },
+  "badge_position_outside": { "message": "Außen" },
+  "badge_position_border": { "message": "Am Rand" },
+  "site_exceptions": {
+    "message": "Website-Ausnahmen"
+  },
+  "add_exception": {
+    "message": "Zu Ausnahmen hinzufügen"
+  },
+  "remove_exception": {
+    "message": "Aktuelle entfernen"
+  },
+  "manage_exceptions": {
+    "message": "Verwalten"
+  },
+  "exceptions_mode": { "message": "Modus:" },
+  "exceptions_mode_blacklist": { "message": "Blacklist — auf diesen Sites nicht hervorheben" },
+  "exceptions_mode_whitelist": { "message": "Whitelist — nur auf diesen Sites hervorheben" },
+  "exceptions_mode_option_blacklist": { "message": "Blacklist" },
+  "exceptions_mode_option_whitelist": { "message": "Whitelist" },
+  "exceptions_mode_hint_blacklist": { "message": "Auf diesen Sites nicht hervorheben." },
+  "exceptions_mode_hint_whitelist": { "message": "Nur auf diesen Sites hervorheben." },
+  "exceptions_list": {
+    "message": "Ausnahme-Websites:"
+  },
+  "exceptions_list_blacklist": { "message": "Sites ausschließen (Blacklist):" },
+  "exceptions_list_whitelist": { "message": "Sites einschließen (Whitelist):" },
+  "add_current_site": { "message": "Aktuelle Website hinzufügen" },
+  "clear_all": {
+    "message": "Alle löschen"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Möchten Sie wirklich alle Ausnahmen löschen?"
+  },
+  "remove": {
+    "message": "Entfernen"
+  },
+  "tab_lists": {
+    "message": "Listen"
+  },
+  "tab_words": {
+    "message": "Wörter"
+  },
+  "tab_exceptions": {
+    "message": "Ausnahmen"
+  },
+  "no_exceptions": {
+    "message": "Keine Ausnahmen"
+  },
+  "toggle_highlighting_title": {
+    "message": "Hervorhebung umschalten"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Dunkelmodus umschalten"
+  },
+  "select_title": {
+    "message": "Auswählen"
+  },
+  "word_placeholder": {
+    "message": "Wort oder Phrase"
+  },
+  "background_color_title": {
+    "message": "Hintergrundfarbe"
+  },
+  "text_color_title": {
+    "message": "Textfarbe"
+  },
+  "tab_page_highlights": {
+    "message": "Auf Seite"
+  },
+  "highlights_on_page": {
+    "message": "Hervorhebungen auf dieser Seite"
+  },
+  "total_highlights": {
+    "message": "Gesamt"
+  },
+  "total_matches": {
+    "message": "Treffer gesamt"
+  },
+  "group_by_list": {
+    "message": "Nach Liste gruppieren"
+  },
+  "other": {
+    "message": "Sonstige"
+  },
+  "refresh": {
+    "message": "Aktualisieren"
+  },
+  "no_highlights_on_page": {
+    "message": "Keine Hervorhebungen auf dieser Seite gefunden"
+  },
+  "previous": {
+    "message": "Vorherige"
+  },
+  "next": {
+    "message": "Nächste"
+  },
+  "duplicate": {
+    "message": "Duplizieren"
+  },
+  "merge": {
+    "message": "Zusammenführen"
+  },
+  "move": {
+    "message": "Verschieben"
+  },
+  "copy": {
+    "message": "Kopieren"
+  },
+  "move_to_list": {
+    "message": "Zur Liste verschieben"
+  },
+  "copy_to_list": {
+    "message": "In Liste kopieren"
+  },
+  "move_selected": {
+    "message": "Ausgewählte verschieben"
+  },
+  "copy_selected": {
+    "message": "Ausgewählte kopieren"
+  },
+  "no_other_lists": {
+    "message": "Keine anderen Listen"
+  },
+  "word_actions": {
+    "message": "In eine andere Liste verschieben oder kopieren"
+  },
+  "merge_lists_min_two": {
+    "message": "Wählen Sie mindestens zwei Listen zum Zusammenführen aus."
+  },
+  "merge_lists_confirm": {
+    "message": "{count} Liste(n) in \"{target}\" zusammenführen? Quelllisten werden entfernt."
+  },
+  "delete_current_list": {
+    "message": "Aktuelle Liste löschen?"
+  },
+  "delete_lists_confirm": {
+    "message": "{count} ausgewählte Liste(n) löschen?"
+  },
+  "invalid_import_format": {
+    "message": "Ungültiges Dateiformat. Bitte wählen Sie eine gültige Goose Highlighter-Exportdatei."
+  },
+  "import_failed": {
+    "message": "Import der Datei fehlgeschlagen. Bitte stellen Sie sicher, dass es sich um eine gültige JSON-Datei handelt."
+  },
+  "import_confirm": {
+    "message": "{count} Liste(n) mit insgesamt {words} Wort/Wörtern importieren?"
+  },
+  "import_success": {
+    "message": "{count} Liste(n) mit {words} Wort/Wörtern erfolgreich importiert."
+  },
+  "import_page_title": {
+    "message": "Importieren — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Importieren"
+  },
+  "import_choose_file": {
+    "message": "Datei auswählen"
+  },
+  "import_select_list_prompt": {
+    "message": "Wählen Sie eine Listendatei zum Importieren aus."
+  },
+  "import_select_settings_prompt": {
+    "message": "Wählen Sie eine Einstellungsdatei zum Importieren aus."
+  },
+  "import_in_progress": {
+    "message": "Wird importiert…"
+  },
+  "import_complete": {
+    "message": "Import abgeschlossen."
+  },
+  "import_complete_lists": {
+    "message": "Import abgeschlossen. $COUNT$ Liste(n) hinzugefügt.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Sie können diesen Tab schließen."
+  },
+  "preview_label": {
+    "message": "Vorschau"
+  },
+  "preview_text": {
+    "message": "So wird Ihr hervorgehobener Text angezeigt."
+  },
+  "preview_text_before": {
+    "message": "So wird Ihr"
+  },
+  "preview_text_highlight": {
+    "message": "hervorgehobener Text"
+  },
+  "preview_text_after": {
+    "message": "angezeigt."
+  },
+  "enable_highlighting_title": {
+    "message": "Hervorhebung aktivieren"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Hervorhebungen auf Seiten anzeigen"
+  },
+  "manage_lists": {
+    "message": "Listen verwalten"
+  },
+  "background_label": {
+    "message": "Hintergrund"
+  },
+  "foreground_label": {
+    "message": "Vordergrund"
+  },
+  "multi_select_hint": {
+    "message": "Klick - auswählen • Strg+Klick - mehrere"
+  },
+  "dark_mode_title": {
+    "message": "Dunkelmodus"
+  },
+  "dark_mode_subtitle": {
+    "message": "Zwischen hellem und dunklem Design wechseln"
+  },
+  "list_manager_title": {
+    "message": "Listenverwaltung"
+  },
+  "words_label": {
+    "message": "Wörter"
+  },
+  "active_label": {
+    "message": "aktiv"
+  },
+  "inactive_label": {
+    "message": "inaktiv"
+  },
+  "drag_words_hint": {
+    "message": "Klick - auswählen • Strg+Klick - mehrere • Ziehen in Liste - verschieben"
+  },
+  "drag_lists_hint": {
+    "message": "Ziehen - neu ordnen • Strg+Klick - mehrere"
+  },
+  "showing_items": {
+    "message": "Zeige {start}-{end} von {total} Wörtern"
+  },
+  "items_per_page": {
+    "message": "Elemente pro Seite:"
+  },
+  "page_info": {
+    "message": "Seite {current} von {total}"
+  },
+  "toggle_active": {
+    "message": "Aktiv umschalten"
+  },
+  "rename_list_title": {
+    "message": "Liste umbenennen"
+  },
+  "new_list_title": {
+    "message": "Neue Liste"
+  },
+  "delete_list_title": {
+    "message": "Liste löschen"
+  },
+  "list_active_badge": {
+    "message": "Aktiv"
+  },
+  "list_paused_badge": {
+    "message": "Pausiert"
+  },
+  "words_stats": {
+    "message": "{total} Wörter • {active} aktiv • {inactive} inaktiv"
+  },
+  "rename_list": {
+    "message": "Liste umbenennen"
+  },
+  "export_settings": {
+    "message": "Exportieren"
+  },
+  "import_settings": {
+    "message": "Importieren"
+  },
+  "export_import_settings_label": {
+    "message": "Export / Import"
+  },
+  "export_import_settings_hint": {
+    "message": "Listen und Website-Ausnahmen sichern oder wiederherstellen."
+  }
 }

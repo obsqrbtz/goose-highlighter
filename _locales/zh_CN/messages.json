@@ -26,29 +26,38 @@
   "enable_highlight": {
     "message": "启用高亮"
   },
+  "apply": {
+    "message": "应用"
+  },
   "paste_hint": {
-    "message": "在此粘贴单词"
+    "message": "每行一个词或短语"
   },
   "apply_paste": {
     "message": "添加单词"
   },
   "select_all": {
-    "message": "选择"
+    "message": "全选"
   },
   "delete_selected": {
-    "message": "删除"
+    "message": "删除所选"
   },
   "disable_selected": {
-    "message": "禁用"
+    "message": "禁用所选"
   },
   "enable_selected": {
-    "message": "启用"
+    "message": "启用所选"
   },
   "import_list": {
-    "message": "导入 JSON"
+    "message": "导入列表"
   },
   "export_list": {
-    "message": "导出 JSON"
+    "message": "导出列表"
+  },
+  "import_list_list_manager": {
+    "message": "导入列表"
+  },
+  "export_list_list_manager": {
+    "message": "导出列表"
   },
   "default_list_name": {
     "message": "默认列表"
@@ -69,7 +78,7 @@
     "message": "您确定要删除选中的单词吗？"
   },
   "deselect_all": {
-    "message": "取消选择"
+    "message": "取消全选"
   },
   "highlight_lists": {
     "message": "高亮列表"
@@ -100,5 +109,326 @@
   },
   "match_whole": {
     "message": "全词匹配"
+  },
+  "badge_position_label": {
+    "message": "字段计数器位置"
+  },
+  "badge_position_hint": {
+    "message": "匹配计数徽章在文本字段（文本区域／输入框）中的位置。"
+  },
+  "badge_position_horizontal": {
+    "message": "水平"
+  },
+  "badge_position_vertical": {
+    "message": "垂直"
+  },
+  "badge_position_placement": {
+    "message": "放置方式"
+  },
+  "badge_position_left": {
+    "message": "左"
+  },
+  "badge_position_right": {
+    "message": "右"
+  },
+  "badge_position_top": {
+    "message": "上"
+  },
+  "badge_position_center": {
+    "message": "居中"
+  },
+  "badge_position_bottom": {
+    "message": "下"
+  },
+  "badge_position_inside": {
+    "message": "内部"
+  },
+  "badge_position_outside": {
+    "message": "外部"
+  },
+  "badge_position_border": {
+    "message": "边框上"
+  },
+  "site_exceptions": {
+    "message": "网站例外"
+  },
+  "add_exception": {
+    "message": "添加到例外"
+  },
+  "remove_exception": {
+    "message": "移除当前"
+  },
+  "manage_exceptions": {
+    "message": "管理"
+  },
+  "exceptions_mode": { "message": "模式：" },
+  "exceptions_mode_blacklist": { "message": "黑名单 — 不在这些网站上高亮" },
+  "exceptions_mode_whitelist": { "message": "白名单 — 仅在这些网站上高亮" },
+  "exceptions_mode_option_blacklist": { "message": "黑名单" },
+  "exceptions_mode_option_whitelist": { "message": "白名单" },
+  "exceptions_mode_hint_blacklist": { "message": "不在这些网站上高亮。" },
+  "exceptions_mode_hint_whitelist": { "message": "仅在这些网站上高亮。" },
+  "exceptions_list": {
+    "message": "例外网站："
+  },
+  "exceptions_list_blacklist": { "message": "要排除的网站（黑名单）：" },
+  "exceptions_list_whitelist": { "message": "要包含的网站（白名单）：" },
+  "add_current_site": { "message": "添加当前网站" },
+  "clear_all": {
+    "message": "清除全部"
+  },
+  "confirm_clear_exceptions": {
+    "message": "您确定要清除所有例外吗？"
+  },
+  "remove": {
+    "message": "移除"
+  },
+  "tab_lists": {
+    "message": "列表"
+  },
+  "tab_words": {
+    "message": "单词"
+  },
+  "tab_exceptions": {
+    "message": "例外"
+  },
+  "no_exceptions": {
+    "message": "无例外"
+  },
+  "toggle_highlighting_title": {
+    "message": "切换高亮"
+  },
+  "toggle_dark_mode_title": {
+    "message": "切换暗黑模式"
+  },
+  "select_title": {
+    "message": "选择"
+  },
+  "word_placeholder": {
+    "message": "单词或短语"
+  },
+  "background_color_title": {
+    "message": "背景颜色"
+  },
+  "text_color_title": {
+    "message": "文字颜色"
+  },
+  "tab_page_highlights": {
+    "message": "页面上"
+  },
+  "highlights_on_page": {
+    "message": "此页面上的高亮"
+  },
+  "total_highlights": {
+    "message": "总计"
+  },
+  "total_matches": {
+    "message": "总匹配数"
+  },
+  "group_by_list": {
+    "message": "按列表分组"
+  },
+  "other": {
+    "message": "其他"
+  },
+  "refresh": {
+    "message": "刷新"
+  },
+  "no_highlights_on_page": {
+    "message": "此页面上未找到高亮"
+  },
+  "previous": {
+    "message": "上一个"
+  },
+  "next": {
+    "message": "下一个"
+  },
+  "duplicate": {
+    "message": "复制"
+  },
+  "merge": {
+    "message": "合并"
+  },
+  "move": {
+    "message": "移动"
+  },
+  "copy": {
+    "message": "复制"
+  },
+  "move_to_list": {
+    "message": "移动到列表"
+  },
+  "copy_to_list": {
+    "message": "复制到列表"
+  },
+  "move_selected": {
+    "message": "移动所选"
+  },
+  "copy_selected": {
+    "message": "复制所选"
+  },
+  "no_other_lists": {
+    "message": "没有其他列表"
+  },
+  "word_actions": {
+    "message": "移动或复制到另一个列表"
+  },
+  "merge_lists_min_two": {
+    "message": "选择至少两个列表进行合并。"
+  },
+  "merge_lists_confirm": {
+    "message": "将 {count} 个列表合并到 \"{target}\"？源列表将被删除。"
+  },
+  "delete_current_list": {
+    "message": "删除当前列表？"
+  },
+  "delete_lists_confirm": {
+    "message": "删除 {count} 个选定的列表？"
+  },
+  "invalid_import_format": {
+    "message": "无效的文件格式。请选择有效的 Goose Highlighter 导出文件。"
+  },
+  "import_failed": {
+    "message": "导入文件失败。请确保它是有效的 JSON 文件。"
+  },
+  "import_confirm": {
+    "message": "导入 {count} 个列表，共 {words} 个单词？"
+  },
+  "import_success": {
+    "message": "成功导入 {count} 个列表，共 {words} 个单词。"
+  },
+  "import_page_title": {
+    "message": "导入 — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "导入"
+  },
+  "import_choose_file": {
+    "message": "选择文件"
+  },
+  "import_select_list_prompt": {
+    "message": "选择要导入的列表文件。"
+  },
+  "import_select_settings_prompt": {
+    "message": "选择要导入的设置文件。"
+  },
+  "import_in_progress": {
+    "message": "正在导入…"
+  },
+  "import_complete": {
+    "message": "导入完成。"
+  },
+  "import_complete_lists": {
+    "message": "导入完成。已添加 $COUNT$ 个列表。",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "您可以关闭此标签页。"
+  },
+  "preview_label": {
+    "message": "预览"
+  },
+  "preview_text": {
+    "message": "您的高亮文本将如此显示。"
+  },
+  "preview_text_before": {
+    "message": "您的"
+  },
+  "preview_text_highlight": {
+    "message": "高亮文本"
+  },
+  "preview_text_after": {
+    "message": "将如此显示。"
+  },
+  "enable_highlighting_title": {
+    "message": "启用高亮"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "在页面上显示高亮"
+  },
+  "manage_lists": {
+    "message": "管理列表"
+  },
+  "background_label": {
+    "message": "背景"
+  },
+  "foreground_label": {
+    "message": "前景"
+  },
+  "multi_select_hint": {
+    "message": "点击 - 选择 • Ctrl+点击 - 多选"
+  },
+  "dark_mode_title": {
+    "message": "暗黑模式"
+  },
+  "dark_mode_subtitle": {
+    "message": "切换亮色/暗色主题"
+  },
+  "list_manager_title": {
+    "message": "列表管理器"
+  },
+  "words_label": {
+    "message": "单词"
+  },
+  "active_label": {
+    "message": "激活"
+  },
+  "inactive_label": {
+    "message": "未激活"
+  },
+  "drag_words_hint": {
+    "message": "点击 - 选择 • Ctrl+点击 - 多选 • 拖到列表 - 移动"
+  },
+  "drag_lists_hint": {
+    "message": "拖动 - 排序 • Ctrl+点击 - 多选"
+  },
+  "showing_items": {
+    "message": "显示 {start}-{end} / 共 {total} 个单词"
+  },
+  "items_per_page": {
+    "message": "每页项目数："
+  },
+  "page_info": {
+    "message": "第 {current} 页，共 {total} 页"
+  },
+  "toggle_active": {
+    "message": "切换激活状态"
+  },
+  "rename_list_title": {
+    "message": "重命名列表"
+  },
+  "new_list_title": {
+    "message": "新建列表"
+  },
+  "delete_list_title": {
+    "message": "删除列表"
+  },
+  "list_active_badge": {
+    "message": "激活"
+  },
+  "list_paused_badge": {
+    "message": "已暂停"
+  },
+  "words_stats": {
+    "message": "{total} 个单词 • {active} 个激活 • {inactive} 个未激活"
+  },
+  "rename_list": {
+    "message": "重命名列表"
+  },
+  "export_settings": {
+    "message": "导出"
+  },
+  "import_settings": {
+    "message": "导入"
+  },
+  "export_import_settings_label": {
+    "message": "导出 / 导入"
+  },
+  "export_import_settings_hint": {
+    "message": "备份或恢复列表和站点例外。"
   }
 }

@@ -1,0 +1,643 @@
+import { browserAPI } from '../utils/browser.js';
+import { HighlightList, ActiveWord, CONSTANTS, BadgePosition } from '../types.js';
+import { DOMUtils } from '../utils/DOMUtils.js';
+
+
+export class HighlightEngine {
+      private static renderHighlighted(text: string, pattern: RegExp): string {
+        let html = '';
+        let lastIndex = 0;
+        pattern.lastIndex = 0;
+        while ((pattern.exec(text)) !== null) {
+          const match = pattern.exec(text);
+          if (!match) break;
+          html += DOMUtils.escapeHtml(text.substring(lastIndex, match.index));
+          html += `<mark>${DOMUtils.escapeHtml(match[0])}</mark>`;
+          lastIndex = match.index + match[0].length;
+        }
+        html += DOMUtils.escapeHtml(text.substring(lastIndex));
+        return html;
+      }
+
+      private static createOrUpdateBadge(input: HTMLTextAreaElement | HTMLInputElement, pattern: RegExp): void {
+        const text = input.value;
+        let matchCount = 0;
+        pattern.lastIndex = 0;
+        while ((pattern.exec(text)) !== null) {
+          matchCount++;
+        }
+        const oldBadge = input.parentElement?.querySelector('.goose-highlighter-textarea-badge');
+        if (oldBadge) oldBadge.remove();
+        if (matchCount > 0) {
+          const badge = document.createElement('div');
+          badge.className = 'goose-highlighter-textarea-badge';
+          badge.textContent = matchCount.toString();
+          const parent = input.parentElement;
+          if (parent && window.getComputedStyle(parent).position === 'static') {
+            parent.style.position = 'relative';
+          }
+          parent?.appendChild(badge);
+          HighlightEngine.positionBadge(badge, input);
+          badge.addEventListener('click', () => {
+            document.querySelectorAll('.goose-highlighter-textarea-popup').forEach(p => p.remove());
+            const popup = document.createElement('div');
+            popup.className = 'goose-highlighter-textarea-popup';
+            popup.innerHTML = `
+              <div class="gh-popup-titlebar">
+                <button class="gh-popup-close" title="${browserAPI.i18n.getMessage('close') || 'Close'}">&times;</button>
+              </div>
+              <pre class="gh-popup-pre">${HighlightEngine.renderHighlighted(text, pattern)}</pre>
+            `;
+            document.body.appendChild(popup);
+            const closeBtn = popup.querySelector('.gh-popup-close');
+            closeBtn?.addEventListener('click', () => popup.remove());
+          });
+        }
+      }
+
+      private static positionBadge(badge: HTMLElement, input: HTMLTextAreaElement | HTMLInputElement): void {
+        const gap = 8;
+        const w = badge.offsetWidth || 16;
+        const h = badge.offsetHeight || 16;
+        const { horizontal, vertical, placement } = HighlightEngine.badgePosition;
+
+        const il = input.offsetLeft;
+        const it = input.offsetTop;
+        const ir = il + input.offsetWidth;
+        const ib = it + input.offsetHeight;
+
+        let left: number;
+        if (horizontal === 'left') {
+          left = placement === 'inside' ? il + gap : placement === 'outside' ? il - w - gap : il - w / 2;
+        } else {
+          left = placement === 'inside' ? ir - w - gap : placement === 'outside' ? ir + gap : ir - w / 2;
+        }
+
+        let top: number;
+        if (vertical === 'top') {
+          top = placement === 'inside' ? it + gap : placement === 'outside' ? it - h - gap : it - h / 2;
+        } else if (vertical === 'bottom') {
+          top = placement === 'inside' ? ib - h - gap : placement === 'outside' ? ib + gap : ib - h / 2;
+        } else {
+          // 'center' — vertically centered on the field; placement only affects horizontal
+          top = it + (input.offsetHeight - h) / 2;
+        }
+
+        badge.style.setProperty('left', `${left}px`, 'important');
+        badge.style.setProperty('top', `${top}px`, 'important');
+        badge.style.removeProperty('transform');
+      }
+
+      private static attachBadgeListener(input: HTMLTextAreaElement | HTMLInputElement, pattern: RegExp): void {
+        const updateBadge = () => HighlightEngine.createOrUpdateBadge(input, pattern);
+        updateBadge();
+        input.removeEventListener('input', updateBadge);
+        input.addEventListener('input', updateBadge);
+      }
+  private static badgePosition: BadgePosition = { horizontal: 'right', vertical: 'top', placement: 'border' };
+
+  setBadgePosition(position: BadgePosition): void {
+    HighlightEngine.badgePosition = position;
+  }
+
+  private styleSheet: CSSStyleSheet | null = null;
+  private highlights = new Map<string, Highlight>();
+  private highlightsByWord = new Map<string, Range[]>();
+  private textareaMatchesByWord = new Map<string, Array<{ input: HTMLTextAreaElement | HTMLInputElement; position: number }>>();
+  private observer: MutationObserver;
+  private isHighlighting = false;
+  private currentMatchCase = false;
+  private eventListeners = new Map<HTMLElement, Map<string, EventListener>>();
+  private isDestroyed = false;
+
+  constructor(private onUpdate: () => void) {
+    this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
+      if (this.isHighlighting || this.isDestroyed) return;
+      const hasContentChanges = mutations.some((mutation: MutationRecord) => {
+        if (mutation.type !== 'childList') return false;
+        const allNodes = [...Array.from(mutation.addedNodes), ...Array.from(mutation.removedNodes)];
+        return allNodes.some(node => {
+          if (node.nodeType === Node.TEXT_NODE) return true;
+          if (node instanceof Element) return true;
+          return false;
+        });
+      });
+      if (hasContentChanges) {
+        this.onUpdate();
+      }
+    }, CONSTANTS.DEBOUNCE_DELAY));
+  }
+
+  private initializeStyleSheet(): void {
+    if (!this.styleSheet) {
+      const style = document.createElement('style');
+      style.id = 'goose-highlighter-styles';
+      document.head.appendChild(style);
+      this.styleSheet = style.sheet!;
+    }
+  }
+
+  private updateHighlightStyles(activeWords: ActiveWord[]): void {
+    this.initializeStyleSheet();
+
+    while (this.styleSheet!.cssRules.length > 0) {
+      this.styleSheet!.deleteRule(0);
+    }
+
+    const uniqueStyles = new Map<string, number>();
+    let styleIndex = 0;
+
+    for (const word of activeWords) {
+      const styleKey = `${word.background}-${word.foreground}`;
+      if (!uniqueStyles.has(styleKey)) {
+        uniqueStyles.set(styleKey, styleIndex);
+        const rule = `::highlight(gh-${styleIndex}) { background-color: ${word.background}; color: ${word.foreground}; }`;
+        this.styleSheet!.insertRule(rule, this.styleSheet!.cssRules.length);
+        styleIndex++;
+      }
+    }
+  }
+
+  clearHighlights(): void {
+    this.observer.disconnect();
+    this.clearHighlightsInternal();
+    this.cleanupEventListeners();
+  }
+
+
+  private getTextNodes(): Text[] {
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node: Text) => {
+          if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'TEXTAREA', 'INPUT'].includes(node.parentNode.nodeName)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          if (!node.nodeValue?.trim()) {
+            return NodeFilter.FILTER_SKIP;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode as Text);
+    }
+    return textNodes;
+  }
+
+  private extractActiveWords(lists: HighlightList[]): ActiveWord[] {
+    const activeWords: ActiveWord[] = [];
+    for (const list of lists) {
+      if (!list.active) continue;
+      for (const word of list.words) {
+        if (!word.active) continue;
+        activeWords.push({
+          text: word.wordStr,
+          background: word.background || list.background,
+          foreground: word.foreground || list.foreground
+        });
+      }
+    }
+    return activeWords;
+  }
+
+  highlight(lists: HighlightList[], matchCase: boolean, matchWhole: boolean): void {
+    if (this.isHighlighting || this.isDestroyed) return;
+    this.isHighlighting = true;
+
+    this.currentMatchCase = matchCase;
+
+    this.observer.disconnect();
+    this.clearHighlightsInternal();
+
+    const activeWords = this.extractActiveWords(lists);
+    if (activeWords.length === 0) {
+      this.startObserving();
+      this.isHighlighting = false;
+      return;
+    }
+
+    this.updateHighlightStyles(activeWords);
+
+    const styleMap = new Map<string, number>();
+    const uniqueStyles = new Map<string, number>();
+    let styleIndex = 0;
+
+    for (const word of activeWords) {
+      const styleKey = `${word.background}-${word.foreground}`;
+      if (!uniqueStyles.has(styleKey)) {
+        uniqueStyles.set(styleKey, styleIndex++);
+      }
+      const lookup = matchCase ? word.text : word.text.toLowerCase();
+      styleMap.set(lookup, uniqueStyles.get(styleKey)!);
+    }
+
+    const flags = matchCase ? 'gu' : 'giu';
+    let wordsPattern = Array.from(styleMap.keys()).map(DOMUtils.escapeRegex).join('|');
+
+    if (matchWhole) {
+      wordsPattern = `(?:(?<!\\p{L})|^)(${wordsPattern})(?:(?!\\p{L})|$)`;
+    }
+
+    try {
+      const pattern = new RegExp(`(${wordsPattern})`, flags);
+      const textNodes = this.getTextNodes();
+
+      const rangesByStyle = new Map<number, Range[]>();
+      this.highlightsByWord.clear();
+      this.textareaMatchesByWord.clear();
+
+      for (const node of textNodes) {
+        if (!node.nodeValue) continue;
+
+        const text = node.nodeValue;
+        pattern.lastIndex = 0;
+        let match;
+
+        while ((match = pattern.exec(text)) !== null) {
+          const lookup = matchCase ? match[0] : match[0].toLowerCase();
+          const styleIdx = styleMap.get(lookup);
+
+          if (styleIdx !== undefined) {
+            const range = new Range();
+            range.setStart(node, match.index);
+            range.setEnd(node, match.index + match[0].length);
+
+            if (!rangesByStyle.has(styleIdx)) {
+              rangesByStyle.set(styleIdx, []);
+            }
+            rangesByStyle.get(styleIdx)!.push(range);
+
+            if (!this.highlightsByWord.has(lookup)) {
+              this.highlightsByWord.set(lookup, []);
+            }
+            this.highlightsByWord.get(lookup)!.push(range);
+          }
+        }
+      }
+
+      for (const [styleIdx, ranges] of rangesByStyle) {
+        const highlight = new Highlight(...ranges);
+        const highlightName = `gh-${styleIdx}`;
+        this.highlights.set(highlightName, highlight);
+        CSS.highlights.set(highlightName, highlight);
+      }
+
+      this.highlightTextareas(pattern, styleMap, activeWords);
+    } catch (error) {
+      console.error('HighlightEngine.highlight - Regex error:', error);
+      // Clear any partial highlights on error
+      this.clearHighlightsInternal();
+    } finally {
+      this.startObserving();
+      this.isHighlighting = false;
+    }
+  }
+
+  private highlightTextareas(pattern: RegExp, _styleMap: Map<string, number>, _activeWords: ActiveWord[]): void {
+    if (!document.getElementById('gh-textarea-badge-style')) {
+      const style = document.createElement('style');
+      style.id = 'gh-textarea-badge-style';
+      style.textContent = `
+        :root {
+          --gh-badge-accent: #ec9c23;
+          --gh-badge-text: #000;
+          --gh-badge-border: #2d2d2d;
+          --gh-popup-bg: #161616;
+          --gh-popup-border: #ec9c23;
+          --gh-popup-radius: 10px;
+          --gh-popup-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .goose-highlighter-textarea-badge {
+          position: absolute !important;
+          background: var(--gh-badge-accent);
+          color: var(--gh-badge-text);
+          font-family: inherit;
+          font-weight: bold;
+          font-size: 11px;
+          line-height: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          cursor: pointer;
+          z-index: 10000;
+          padding: 0 6px;
+          height: 16px;
+          min-width: 16px;
+          box-sizing: border-box;
+          border-radius: 4px;
+          border: 1px solid var(--gh-badge-border);
+          transition: box-shadow 0.2s, background 0.2s;
+        }
+        .goose-highlighter-textarea-badge:hover {
+          box-shadow: 0 4px 12px rgba(236,156,35,0.25);
+          background: #ffb84d;
+        }
+        .goose-highlighter-textarea-popup {
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          background: var(--gh-popup-bg);
+          border: 2px solid var(--gh-popup-border);
+          border-radius: var(--gh-popup-radius);
+          box-shadow: var(--gh-popup-shadow);
+          padding: 0 0 20px 0;
+          z-index: 10001;
+          max-width: 420px;
+          max-height: 70vh;
+          overflow: auto;
+          color: #e8e8e8;
+          font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+        .gh-popup-titlebar {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          background: #191919;
+          border-top-left-radius: var(--gh-popup-radius);
+          border-top-right-radius: var(--gh-popup-radius);
+          height: 32px;
+          padding: 0 8px 0 0;
+          border-bottom: 1px solid #222;
+          position: relative;
+        }
+        .gh-popup-close {
+          background: none;
+          color: #e8e8e8;
+          border: none;
+          font-size: 22px;
+          font-weight: bold;
+          cursor: pointer;
+          padding: 0 6px;
+          border-radius: 4px;
+          transition: background 0.2s, color 0.2s;
+          z-index: 10002;
+          line-height: 1;
+        }
+        .gh-popup-close:hover {
+          background: #ec9c23;
+          color: #222;
+        }
+        .goose-highlighter-textarea-popup::-webkit-scrollbar {
+          width: 10px;
+          background: #222;
+          border-radius: 8px;
+        }
+        .goose-highlighter-textarea-popup::-webkit-scrollbar-thumb {
+          background: var(--gh-badge-accent);
+          border-radius: 8px;
+          border: 2px solid #222;
+        }
+        .goose-highlighter-textarea-popup::-webkit-scrollbar-thumb:hover {
+          background: #ffb84d;
+        }
+        .goose-highlighter-textarea-popup {
+          scrollbar-width: thin;
+          scrollbar-color: var(--gh-badge-accent) #222;
+        }
+        .gh-popup-pre {
+          background: #222;
+          border-radius: 7px;
+          padding: 10px 12px;
+          border: 1px solid #333;
+          color: #e8e8e8;
+          font-size: 15px;
+          font-family: inherit;
+          margin: 16px 16px 0 16px;
+          white-space: pre-wrap;
+          word-break: break-word;
+          overflow-wrap: break-word;
+        }
+        .gh-popup-pre mark {
+          background: none;
+          color: #ec9c23;
+          font-weight: bold;
+          border-radius: 0;
+          padding: 0;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    const textareas = document.querySelectorAll('textarea, input[type="text"], input[type="search"], input[type="email"], input[type="url"]');
+    document.querySelectorAll('.goose-highlighter-textarea-badge').forEach(badge => badge.remove());
+    for (const element of Array.from(textareas)) {
+      const input = element as HTMLTextAreaElement | HTMLInputElement;
+      HighlightEngine.attachBadgeListener(input, pattern);
+    }
+  }
+
+
+  private clearHighlightsInternal(): void {
+    for (const name of this.highlights.keys()) {
+      CSS.highlights.delete(name);
+    }
+    this.highlights.clear();
+    this.highlightsByWord.clear();
+    this.textareaMatchesByWord.clear();
+    if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
+      while (this.styleSheet.cssRules.length > 0) {
+        this.styleSheet.deleteRule(0);
+      }
+    }
+  }
+
+  getPageHighlights(activeWords: ActiveWord[]): Array<{ word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }> {
+    const seen = new Map<string, { word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }>();
+
+    for (const activeWord of activeWords) {
+      const lookup = this.currentMatchCase ? activeWord.text : activeWord.text.toLowerCase();
+      const ranges = this.highlightsByWord.get(lookup);
+      const textareaMatches = this.textareaMatchesByWord.get(lookup);
+
+      const totalCount = (ranges?.length || 0) + (textareaMatches?.length || 0);
+
+      if (totalCount > 0) {
+        const listName = activeWord.listName || 'Default';
+        const listId = activeWord.listId;
+
+        if (seen.has(lookup)) {
+          const existing = seen.get(lookup)!;
+          if (listName && !existing.listNames.includes(listName)) {
+            existing.listNames.push(listName);
+          }
+        } else {
+          seen.set(lookup, {
+            word: activeWord.text,
+            count: totalCount,
+            background: activeWord.background,
+            foreground: activeWord.foreground,
+            listId,
+            listName,
+            listNames: [listName]
+          });
+        }
+      }
+    }
+
+    return Array.from(seen.values());
+  }
+
+  scrollToHighlight(word: string, index: number): void {
+    const lookup = this.currentMatchCase ? word : word.toLowerCase();
+    const ranges = this.highlightsByWord.get(lookup) || [];
+    const textareaMatches = this.textareaMatchesByWord.get(lookup) || [];
+
+    const totalMatches = ranges.length + textareaMatches.length;
+    if (totalMatches === 0) return;
+
+    const targetIndex = Math.min(index, totalMatches - 1);
+
+    try {
+      if (targetIndex >= ranges.length) {
+        const textareaIndex = targetIndex - ranges.length;
+        const textareaMatch = textareaMatches[textareaIndex];
+        this.scrollToTextareaMatch(textareaMatch.input, textareaMatch.position, word.length);
+        return;
+      }
+
+      const range = ranges[targetIndex];
+      if (!range) return;
+
+      // First, scroll any scrollable containers
+      const element = range.commonAncestorContainer.nodeType === Node.TEXT_NODE
+        ? range.commonAncestorContainer.parentElement
+        : range.commonAncestorContainer as Element;
+
+      if (element) {
+        this.scrollIntoViewInContainers(element);
+      }
+
+      // Then scroll the main window
+      const rect = range.getBoundingClientRect();
+      const absoluteTop = window.pageYOffset + rect.top;
+      const middle = absoluteTop - (window.innerHeight / 2) + (rect.height / 2);
+
+      window.scrollTo({
+        top: middle,
+        behavior: 'smooth'
+      });
+
+      const flashHighlight = new Highlight(range);
+      CSS.highlights.set('gh-flash', flashHighlight);
+
+      if (this.styleSheet) {
+        const flashRule = '::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); box-shadow: 0 0 10px 3px rgba(255, 165, 0, 0.8); }';
+        const ruleIndex = this.styleSheet.insertRule(flashRule, this.styleSheet.cssRules.length);
+
+        setTimeout(() => {
+          CSS.highlights.delete('gh-flash');
+          if (this.styleSheet && ruleIndex < this.styleSheet.cssRules.length) {
+            this.styleSheet.deleteRule(ruleIndex);
+          }
+        }, 600);
+      }
+    } catch (e) {
+      console.error('Error scrolling to highlight:', e);
+    }
+  }
+
+  private scrollToTextareaMatch(input: HTMLTextAreaElement | HTMLInputElement, position: number, wordLength: number): void {
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    if (input.tagName === 'TEXTAREA') {
+      const textarea = input as HTMLTextAreaElement;
+      const text = textarea.value;
+      const beforeText = text.substring(0, position);
+      const lines = beforeText.split('\n');
+      const lineNumber = lines.length - 1;
+
+      const computedStyle = window.getComputedStyle(textarea);
+      const lineHeight = parseFloat(computedStyle.lineHeight) || parseFloat(computedStyle.fontSize) * 1.2;
+
+      const targetScrollTop = lineNumber * lineHeight - (textarea.clientHeight / 2);
+      textarea.scrollTop = Math.max(0, targetScrollTop);
+    }
+
+    input.focus();
+    input.setSelectionRange(position, position + wordLength);
+
+  }
+
+  private scrollIntoViewInContainers(element: Element): void {
+    let current: Element | null = element;
+
+    while (current && current !== document.body) {
+      const parent: HTMLElement | null = current.parentElement;
+      if (!parent) break;
+
+      const parentStyle = window.getComputedStyle(parent);
+      const isScrollable = (
+        (parentStyle.overflow === 'auto' || parentStyle.overflow === 'scroll' ||
+          parentStyle.overflowY === 'auto' || parentStyle.overflowY === 'scroll' ||
+          parentStyle.overflowX === 'auto' || parentStyle.overflowX === 'scroll') &&
+        (parent.scrollHeight > parent.clientHeight || parent.scrollWidth > parent.clientWidth)
+      );
+
+      if (isScrollable) {
+        const parentRect = parent.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        if (elementRect.top < parentRect.top) {
+          parent.scrollTop -= (parentRect.top - elementRect.top) + 20;
+        } else if (elementRect.bottom > parentRect.bottom) {
+          parent.scrollTop += (elementRect.bottom - parentRect.bottom) + 20;
+        }
+
+        if (elementRect.left < parentRect.left) {
+          parent.scrollLeft -= (parentRect.left - elementRect.left) + 20;
+        } else if (elementRect.right > parentRect.right) {
+          parent.scrollLeft += (elementRect.right - parentRect.right) + 20;
+        }
+      }
+
+      current = parent;
+    }
+  }
+
+  stopObserving(): void {
+    this.observer.disconnect();
+  }
+
+  private startObserving(): void {
+    if (this.isDestroyed) return;
+    this.observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: false
+    });
+  }
+
+  private cleanupEventListeners(): void {
+    for (const [element, listeners] of this.eventListeners) {
+      for (const [event, listener] of listeners) {
+        try {
+          element.removeEventListener(event, listener);
+        } catch (error) {
+          console.warn('HighlightEngine.cleanupEventListeners - Error removing event listener:', error);
+        }
+      }
+    }
+    this.eventListeners.clear();
+    
+    // Also cleanup textarea badges
+    document.querySelectorAll('.goose-highlighter-textarea-badge').forEach(badge => {
+      try {
+        badge.remove();
+      } catch (error) {
+        console.warn('HighlightEngine.cleanupEventListeners - Error removing badge:', error);
+      }
+    });
+  }
+
+  destroy(): void {
+    this.isDestroyed = true;
+    this.observer.disconnect();
+    this.clearHighlights();
+  }
+}

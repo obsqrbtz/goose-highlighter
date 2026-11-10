@@ -2,7 +2,8 @@ name: Publish Chrome Extension
 
 on:
   push:
-    branches: [ main ]
+    tags:
+      - 'v*'
 
 jobs:
   publish:
@@ -16,31 +17,50 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build extension
+        run: npm run build
+
       - name: Set version from tag
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
+      - name: Update manifest version
+        run: node scripts/update-manifest-version.js ${{ steps.version.outputs.VERSION }}
+
       - name: Create zip package
         run: |
-          zip -r goose-highlighter.zip . -x '*.git*' 'node_modules/*' 'versioning.md' '.releaserc.json' 'package.json' 'package-lock.json' 'README.md'
+          zip -r goose-highlighter.zip . -x '*.git*' 'node_modules/*' 'src/*' 'scripts/*' 'versioning.md' '.releaserc.json' 'package.json' 'package-lock.json' 'README.md' 'tsconfig.json' 'eslint.config.mjs' 'sample-import-config.json'
 
       - name: Install webstore upload CLI
         run: npm install -g chrome-webstore-upload-cli
 
       - name: Upload to Chrome Web Store
+        env:
+          CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          PUBLISHER_ID: ${{ secrets.GOOGLE_PUBLISHER_ID }}
         run: |
           chrome-webstore-upload upload \
             --source goose-highlighter.zip \
-            --extension-id $EXTENSION_ID \
-            --client-id ${{ secrets.GOOGLE_CLIENT_ID }} \
-            --client-secret ${{ secrets.GOOGLE_CLIENT_SECRET }} \
-            --refresh-token ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+            --extension-id $EXTENSION_ID
 
       - name: Publish extension
+        env:
+          CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          PUBLISHER_ID: ${{ secrets.GOOGLE_PUBLISHER_ID }}
         run: |
           chrome-webstore-upload publish \
-            --extension-id $EXTENSION_ID \
-            --client-id ${{ secrets.GOOGLE_CLIENT_ID }} \
-            --client-secret ${{ secrets.GOOGLE_CLIENT_SECRET }} \
-            --refresh-token ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+            --extension-id $EXTENSION_ID
 

@@ -1,3 +1,214 @@
+## [1.13.7](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.6...v1.13.7) (2026-06-28)
+
+
+### Bug Fixes
+
+* process search queries ([6e9425e](https://github.com/obsqrbtz/goose-highlighter/commit/6e9425e89a148871d4f6d060ee2115133b0233b0))
+
+## [1.13.6](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.5...v1.13.6) (2026-06-16)
+
+
+### Bug Fixes
+
+* bump version (store already had 1.13.5 pushed manually as a rollback) ([6ba596a](https://github.com/obsqrbtz/goose-highlighter/commit/6ba596aa2ccdc9009f714fa5126cab2d5225fba8))
+
+## [1.13.5](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.4...v1.13.5) (2026-06-16)
+
+
+### Bug Fixes
+
+* add textarea badge position option ([04dfa05](https://github.com/obsqrbtz/goose-highlighter/commit/04dfa05bd064c67081226db1d78520e6721bd9f8))
+
+## [1.13.4](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.3...v1.13.4) (2026-06-09)
+
+
+### Bug Fixes
+
+* create standalone window for import on linux (linux kills popups early preventing successfull import) ([f7e66ac](https://github.com/obsqrbtz/goose-highlighter/commit/f7e66ace0e367983cdad750ac3a411f4d0d13ddd))
+* fixed warnings ([14f7ee2](https://github.com/obsqrbtz/goose-highlighter/commit/14f7ee24584e1950f2a2b990a3234603e7729367))
+
+## [1.13.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.2...v1.13.3) (2026-06-08)
+
+
+### Bug Fixes
+
+* update env vars for publish workflow ([fbc6d74](https://github.com/obsqrbtz/goose-highlighter/commit/fbc6d74115d512f4715b17fd81d3de0627bb9388))
+
+## [1.13.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.1...v1.13.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* updated publish workflow to use env vars instead of cli flags ([59568b2](https://github.com/obsqrbtz/goose-highlighter/commit/59568b20de79cafa924a707832c0541baaa37745))
+
+## [1.13.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.0...v1.13.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* position match-count pill on the field's top border so it doesn't cover text ([5f03835](https://github.com/obsqrbtz/goose-highlighter/commit/5f03835281540da30f492d42beef9f6a1f78711d))
+
+# [1.13.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.12.1...v1.13.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* exceptions page ui fixes ([226f2ef](https://github.com/obsqrbtz/goose-highlighter/commit/226f2efe4f20a041bc6323694d985c5dfe6857aa))
+* incorrect behaviour of filter chips after pressing select all ([b4e1425](https://github.com/obsqrbtz/goose-highlighter/commit/b4e1425c790fdbb9fc8f1558a759dd9bba5617ed))
+* only show filter buttons for list with 1+ matches ([7195a3b](https://github.com/obsqrbtz/goose-highlighter/commit/7195a3b41bb9dd804c0b7f716c20eb9bdc5ac3f9))
+
+
+### Features
+
+* group and filter items by list in "on page" section ([0680134](https://github.com/obsqrbtz/goose-highlighter/commit/068013486a43ed2329602e88ae6d365eebac0bf9))
+
+## [1.12.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.12.0...v1.12.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* permissions ([3e00090](https://github.com/obsqrbtz/goose-highlighter/commit/3e00090ac91ec58f08a46ac9dc826935a0e7085e))
+
+# [1.12.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.11.0...v1.12.0) (2026-02-09)
+
+
+### Features
+
+* list management ([5e3e2bb](https://github.com/obsqrbtz/goose-highlighter/commit/5e3e2bbfe40bf3fcceeb4a5de88024ecc6987973))
+
+# [1.11.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.10.2...v1.11.0) (2025-12-11)
+
+
+### Features
+
+* NY ([647f4f8](https://github.com/obsqrbtz/goose-highlighter/commit/647f4f8ad489b4fa573b182c7f7e730b591dd595))
+
+## [1.10.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.10.1...v1.10.2) (2025-11-22)
+
+
+### Bug Fixes
+
+* do not highlight textareas. create badge with popup instead ([f800318](https://github.com/obsqrbtz/goose-highlighter/commit/f800318e66aba17eb95d60c3bfa44c5215989314))
+* update badge when textarea text changes ([5d7766d](https://github.com/obsqrbtz/goose-highlighter/commit/5d7766d5fd3df0204f64eb15f938cb2a459897ad))
+
+## [1.10.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.10.0...v1.10.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* add fake highlighting for textareas ([f3c999a](https://github.com/obsqrbtz/goose-highlighter/commit/f3c999ad192d20ad4024261d8b3c8628de21382a))
+* correct matches list buttons handling ([f895327](https://github.com/obsqrbtz/goose-highlighter/commit/f895327eb0efc325309fea02eb4030eb8301916a))
+* go to textarea match ([fc4ef86](https://github.com/obsqrbtz/goose-highlighter/commit/fc4ef8655d0a4bce8ef6b67e45f5929e21c9b746))
+
+# [1.10.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.3...v1.10.0) (2025-11-20)
+
+
+### Bug Fixes
+
+* lighten debounce() usage, do not do full re-render on every change ([348d64f](https://github.com/obsqrbtz/goose-highlighter/commit/348d64f35693c11e7b14edcbe59b910195974950))
+* made placeholder for textarea, added outline offset ([4f32be0](https://github.com/obsqrbtz/goose-highlighter/commit/4f32be0b93b5a39dcb034b4a15bbeca05add0a1f))
+
+
+### Features
+
+* new tabbed layout ([18e167c](https://github.com/obsqrbtz/goose-highlighter/commit/18e167cb7f2e758e09b201f7eff4cdbad080774e))
+* show all found words and allow jump to them (beta) ([1a4c91f](https://github.com/obsqrbtz/goose-highlighter/commit/1a4c91fd5e35cc2227a580465ba9078200200623))
+
+## [1.9.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.2...v1.9.3) (2025-11-18)
+
+
+### Bug Fixes
+
+* use CSS Custom Highlight API to avoid dom modifications (fixes [#1](https://github.com/obsqrbtz/goose-highlighter/issues/1)) ([3f2bb60](https://github.com/obsqrbtz/goose-highlighter/commit/3f2bb6080ba3a9ac0599ad6594f0d877c12bb62f))
+
+## [1.9.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.1...v1.9.2) (2025-11-14)
+
+
+### Bug Fixes
+
+* **highlight:** prevent creating extra <span>'s ([#1](https://github.com/obsqrbtz/goose-highlighter/issues/1)) ([affddd3](https://github.com/obsqrbtz/goose-highlighter/commit/affddd3dbc7de30100ca134ec65f4dc090275ca5))
+
+## [1.9.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.9.0...v1.9.1) (2025-11-05)
+
+
+### Bug Fixes
+
+* remove halowen styling ([172aa75](https://github.com/obsqrbtz/goose-highlighter/commit/172aa7583b325761af43c780db4ac61dc4bda99b))
+
+# [1.9.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.5...v1.9.0) (2025-10-31)
+
+
+### Features
+
+* haloween styling ([5ef380e](https://github.com/obsqrbtz/goose-highlighter/commit/5ef380e54447f45f7360dd4b7b84456aae55bfee))
+
+## [1.8.5](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.4...v1.8.5) (2025-10-29)
+
+
+### Bug Fixes
+
+* highlight colors when multiple list have different configurations ([67577c8](https://github.com/obsqrbtz/goose-highlighter/commit/67577c89cffca1ab6d40a8913e51b7c3c6f91c85))
+
+## [1.8.4](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.3...v1.8.4) (2025-10-28)
+
+
+### Bug Fixes
+
+* do not re-highlight when already processing highlights ([8be53f3](https://github.com/obsqrbtz/goose-highlighter/commit/8be53f32402c2f0f228ca003ef3805c5ff0b6e88))
+
+## [1.8.3](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.2...v1.8.3) (2025-10-08)
+
+
+### Bug Fixes
+
+* stop observing when highlightting is disabled ([d7c8dbb](https://github.com/obsqrbtz/goose-highlighter/commit/d7c8dbb5f0011afe83739841218aa737794074e3))
+
+## [1.8.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.8.1...v1.8.2) (2025-10-08)
+
+
+### Bug Fixes
+
+* do not call save() on all keypresses in textboxes ([687d7c9](https://github.com/obsqrbtz/goose-highlighter/commit/687d7c9e62f0f282ce73e86cdc62aaf275c9dafe))
+* do not save anything in list settings section until presses the apply button ([0734bf3](https://github.com/obsqrbtz/goose-highlighter/commit/0734bf330824c60f0d5c4784e99660b9e652efd6))
+
+# [1.8.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.2...v1.8.0) (2025-10-07)
+
+
+### Features
+
+* add collapsible sections ([a158a30](https://github.com/obsqrbtz/goose-highlighter/commit/a158a303b01416f81e69bb137b71d3369904b044))
+* add websites to exception list ([915add3](https://github.com/obsqrbtz/goose-highlighter/commit/915add3a4cdbff390a4d0f7d227a4ece5fa31072))
+
+## [1.7.2](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.1...v1.7.2) (2025-10-06)
+
+
+### Bug Fixes
+
+* do not create <mark> elements, just wrap found words in <span> and add .css styling ([6ba0d2e](https://github.com/obsqrbtz/goose-highlighter/commit/6ba0d2eb7c7346cdca3921a12d300a714439efa5))
+
+## [1.7.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.7.0...v1.7.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* unicode support in regex ([ae1cf48](https://github.com/obsqrbtz/goose-highlighter/commit/ae1cf48c53cd42e65279cf2acde1a2860d8a31ee))
+
+# [1.7.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.6.0...v1.7.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* colorbox styling ([1e704b5](https://github.com/obsqrbtz/goose-highlighter/commit/1e704b51a859845e539224aeb389a4e493d64520))
+* colorbox styling ([08ad7c4](https://github.com/obsqrbtz/goose-highlighter/commit/08ad7c432541ea4240dec05a340ad0b3279ce82f))
+* moved import/export to options section ([fe15965](https://github.com/obsqrbtz/goose-highlighter/commit/fe15965e89e8483f6b96eb779617053664c9d5b1))
+* wordlist scrollbar styling ([b30fac5](https://github.com/obsqrbtz/goose-highlighter/commit/b30fac5deda7941035d8ae23001c998c2584c03e))
+
+
+### Features
+
+* add word search ([80d4bff](https://github.com/obsqrbtz/goose-highlighter/commit/80d4bff0b4ef7c9e97506d1fe43a827bcc4b28fd))
+* added matching flags ([759307f](https://github.com/obsqrbtz/goose-highlighter/commit/759307f9834a2bbb23e963e2042b7d41d5cfda44))
+
 # [1.6.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.5.0...v1.6.0) (2025-06-25)
 
 

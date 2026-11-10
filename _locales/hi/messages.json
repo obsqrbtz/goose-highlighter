@@ -26,8 +26,11 @@
     "enable_highlight": {
         "message": "हाइलाइट सक्षम करें"
     },
+    "apply": {
+        "message": "लागू करें"
+    },
     "paste_hint": {
-        "message": "यहाँ शब्द चिपकाएँ"
+        "message": "प्रति पंक्ति एक शब्द या वाक्यांश"
     },
     "apply_paste": {
         "message": "शब्द जोड़ें"
@@ -36,19 +39,25 @@
         "message": "सभी चुनें"
     },
     "delete_selected": {
-        "message": "हटाएं"
+        "message": "चयनित हटाएं"
     },
     "disable_selected": {
-        "message": "अक्षम करें"
+        "message": "चयनित अक्षम करें"
     },
     "enable_selected": {
-        "message": "सक्षम करें"
+        "message": "चयनित सक्षम करें"
     },
     "import_list": {
-        "message": "JSON आयात करें"
+        "message": "सूची आयात करें"
     },
     "export_list": {
-        "message": "JSON निर्यात करें"
+        "message": "सूची निर्यात करें"
+    },
+    "import_list_list_manager": {
+        "message": "सूची आयात करें"
+    },
+    "export_list_list_manager": {
+        "message": "सूची निर्यात करें"
     },
     "default_list_name": {
         "message": "डिफ़ॉल्ट सूची"
@@ -69,7 +78,7 @@
         "message": "क्या आप वाकई चयनित शब्दों को हटाना चाहते हैं?"
     },
     "deselect_all": {
-        "message": "चयन हटाएँ"
+        "message": "सभी का चयन हटाएँ"
     },
     "highlight_lists": {
         "message": "हाइलाइट सूचियाँ"
@@ -100,5 +109,326 @@
     },
     "match_whole": {
         "message": "पूरा शब्द मिलाएं"
+    },
+    "badge_position_label": {
+        "message": "फ़ील्ड काउंटर की स्थिति"
+    },
+    "badge_position_hint": {
+        "message": "टेक्स्ट फ़ील्ड (टेक्स्ट एरिया / इनपुट) पर मिलान काउंटर कहाँ दिखे।"
+    },
+    "badge_position_horizontal": {
+        "message": "क्षैतिज"
+    },
+    "badge_position_vertical": {
+        "message": "ऊर्ध्वाधर"
+    },
+    "badge_position_placement": {
+        "message": "स्थान"
+    },
+    "badge_position_left": {
+        "message": "बायाँ"
+    },
+    "badge_position_right": {
+        "message": "दायाँ"
+    },
+    "badge_position_top": {
+        "message": "ऊपर"
+    },
+    "badge_position_center": {
+        "message": "केंद्र"
+    },
+    "badge_position_bottom": {
+        "message": "नीचे"
+    },
+    "badge_position_inside": {
+        "message": "अंदर"
+    },
+    "badge_position_outside": {
+        "message": "बाहर"
+    },
+    "badge_position_border": {
+        "message": "किनारे पर"
+    },
+    "site_exceptions": {
+        "message": "साइट अपवाद"
+    },
+    "add_exception": {
+        "message": "अपवादों में जोड़ें"
+    },
+    "remove_exception": {
+        "message": "वर्तमान हटाएं"
+    },
+    "manage_exceptions": {
+        "message": "प्रबंधित करें"
+    },
+    "exceptions_mode": { "message": "मोड:" },
+    "exceptions_mode_blacklist": { "message": "ब्लैकलिस्ट — इन साइटों पर हाइलाइट न करें" },
+    "exceptions_mode_whitelist": { "message": "व्हाइटलिस्ट — केवल इन साइटों पर हाइलाइट करें" },
+    "exceptions_mode_option_blacklist": { "message": "ब्लैकलिस्ट" },
+    "exceptions_mode_option_whitelist": { "message": "व्हाइटलिस्ट" },
+    "exceptions_mode_hint_blacklist": { "message": "इन साइटों पर हाइलाइट न करें।" },
+    "exceptions_mode_hint_whitelist": { "message": "केवल इन साइटों पर हाइलाइट करें।" },
+    "exceptions_list": {
+        "message": "अपवाद साइटें:"
+    },
+    "exceptions_list_blacklist": { "message": "बहिष्कृत साइटें (ब्लैकलिस्ट):" },
+    "exceptions_list_whitelist": { "message": "शामिल साइटें (व्हाइटलिस्ट):" },
+    "add_current_site": { "message": "वर्तमान साइट जोड़ें" },
+    "clear_all": {
+        "message": "सभी साफ करें"
+    },
+    "confirm_clear_exceptions": {
+        "message": "क्या आप वाकई सभी अपवादों को साफ करना चाहते हैं?"
+    },
+    "remove": {
+        "message": "हटाएं"
+    },
+    "tab_lists": {
+        "message": "सूचियाँ"
+    },
+    "tab_words": {
+        "message": "शब्द"
+    },
+    "tab_exceptions": {
+        "message": "अपवाद"
+    },
+    "no_exceptions": {
+        "message": "कोई अपवाद नहीं"
+    },
+    "toggle_highlighting_title": {
+        "message": "हाइलाइटिंग टॉगल करें"
+    },
+    "toggle_dark_mode_title": {
+        "message": "डार्क मोड टॉगल करें"
+    },
+    "select_title": {
+        "message": "चुनें"
+    },
+    "word_placeholder": {
+        "message": "शब्द या वाक्यांश"
+    },
+    "background_color_title": {
+        "message": "पृष्ठभूमि रंग"
+    },
+    "text_color_title": {
+        "message": "पाठ रंग"
+    },
+    "tab_page_highlights": {
+        "message": "पृष्ठ पर"
+    },
+    "highlights_on_page": {
+        "message": "इस पृष्ठ पर हाइलाइट"
+    },
+    "total_highlights": {
+        "message": "कुल"
+    },
+    "total_matches": {
+        "message": "कुल मिलान"
+    },
+    "group_by_list": {
+        "message": "सूची के अनुसार समूहित करें"
+    },
+    "other": {
+        "message": "अन्य"
+    },
+    "refresh": {
+        "message": "रीफ्रेश करें"
+    },
+    "no_highlights_on_page": {
+        "message": "इस पृष्ठ पर कोई हाइलाइट नहीं मिला"
+    },
+    "previous": {
+        "message": "पिछला"
+    },
+    "next": {
+        "message": "अगला"
+    },
+    "duplicate": {
+        "message": "डुप्लिकेट"
+    },
+    "merge": {
+        "message": "मर्ज करें"
+    },
+    "move": {
+        "message": "स्थानांतरित करें"
+    },
+    "copy": {
+        "message": "कॉपी करें"
+    },
+    "move_to_list": {
+        "message": "सूची में ले जाएं"
+    },
+    "copy_to_list": {
+        "message": "सूची में कॉपी करें"
+    },
+    "move_selected": {
+        "message": "चयनित स्थानांतरित करें"
+    },
+    "copy_selected": {
+        "message": "चयनित कॉपी करें"
+    },
+    "no_other_lists": {
+        "message": "कोई अन्य सूची नहीं"
+    },
+    "word_actions": {
+        "message": "किसी अन्य सूची में ले जाएं या कॉपी करें"
+    },
+    "merge_lists_min_two": {
+        "message": "मर्ज करने के लिए कम से कम दो सूचियाँ चुनें।"
+    },
+    "merge_lists_confirm": {
+        "message": "{count} सूची(याँ) को \"{target}\" में मर्ज करें? स्रोत सूचियाँ हटा दी जाएंगी।"
+    },
+    "delete_current_list": {
+        "message": "वर्तमान सूची हटाएं?"
+    },
+    "delete_lists_confirm": {
+        "message": "{count} चयनित सूची(याँ) हटाएं?"
+    },
+    "invalid_import_format": {
+        "message": "अमान्य फ़ाइल प्रारूप। कृपया एक मान्य Goose Highlighter निर्यात फ़ाइल चुनें।"
+    },
+    "import_failed": {
+        "message": "फ़ाइल आयात करने में विफल। कृपया सुनिश्चित करें कि यह एक मान्य JSON फ़ाइल है।"
+    },
+    "import_confirm": {
+        "message": "कुल {words} शब्द(ों) के साथ {count} सूची(याँ) आयात करें?"
+    },
+    "import_success": {
+        "message": "{words} शब्द(ों) के साथ {count} सूची(याँ) सफलतापूर्वक आयात की गईं।"
+    },
+    "import_page_title": {
+        "message": "इंपोर्ट — Goose Highlighter"
+    },
+    "import_page_heading": {
+        "message": "इंपोर्ट करें"
+    },
+    "import_choose_file": {
+        "message": "फ़ाइल चुनें"
+    },
+    "import_select_list_prompt": {
+        "message": "इंपोर्ट करने के लिए एक सूची फ़ाइल चुनें."
+    },
+    "import_select_settings_prompt": {
+        "message": "इंपोर्ट करने के लिए एक सेटिंग फ़ाइल चुनें."
+    },
+    "import_in_progress": {
+        "message": "इंपोर्ट हो रहा है…"
+    },
+    "import_complete": {
+        "message": "इंपोर्ट पूरा हुआ."
+    },
+    "import_complete_lists": {
+        "message": "इंपोर्ट पूरा हुआ. $COUNT$ सूचियाँ जोड़ी गईं.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "import_close_tab_hint": {
+        "message": "आप इस टैब को बंद कर सकते हैं."
+    },
+    "preview_label": {
+        "message": "पूर्वावलोकन"
+    },
+    "preview_text": {
+        "message": "आपका हाइलाइट किया गया टेक्स्ट इस तरह दिखाई देगा।"
+    },
+    "preview_text_before": {
+        "message": "आपका"
+    },
+    "preview_text_highlight": {
+        "message": "हाइलाइट किया गया टेक्स्ट"
+    },
+    "preview_text_after": {
+        "message": "इस तरह दिखाई देगा।"
+    },
+    "enable_highlighting_title": {
+        "message": "हाइलाइटिंग सक्षम करें"
+    },
+    "enable_highlighting_subtitle": {
+        "message": "पृष्ठों पर हाइलाइट दिखाएं"
+    },
+    "manage_lists": {
+        "message": "सूचियाँ प्रबंधित करें"
+    },
+    "background_label": {
+        "message": "पृष्ठभूमि"
+    },
+    "foreground_label": {
+        "message": "अग्रभूमि"
+    },
+    "multi_select_hint": {
+        "message": "क्लिक - चुनें • Ctrl+क्लिक - कई"
+    },
+    "dark_mode_title": {
+        "message": "डार्क मोड"
+    },
+    "dark_mode_subtitle": {
+        "message": "हल्की/गहरी थीम टॉगल करें"
+    },
+    "list_manager_title": {
+        "message": "सूची प्रबंधक"
+    },
+    "words_label": {
+        "message": "शब्द"
+    },
+    "active_label": {
+        "message": "सक्रिय"
+    },
+    "inactive_label": {
+        "message": "निष्क्रिय"
+    },
+    "drag_words_hint": {
+        "message": "क्लिक - चुनें • Ctrl+क्लिक - कई • सूची में खींचें - स्थानांतरित"
+    },
+    "drag_lists_hint": {
+        "message": "खींचें - क्रम बदलें • Ctrl+क्लिक - कई"
+    },
+    "showing_items": {
+        "message": "{total} शब्दों में से {start}-{end} दिखा रहे हैं"
+    },
+    "items_per_page": {
+        "message": "प्रति पृष्ठ आइटम:"
+    },
+    "page_info": {
+        "message": "पृष्ठ {current} का {total}"
+    },
+    "toggle_active": {
+        "message": "सक्रिय टॉगल करें"
+    },
+    "rename_list_title": {
+        "message": "सूची का नाम बदलें"
+    },
+    "new_list_title": {
+        "message": "नई सूची"
+    },
+    "delete_list_title": {
+        "message": "सूची हटाएं"
+    },
+    "list_active_badge": {
+        "message": "सक्रिय"
+    },
+    "list_paused_badge": {
+        "message": "रोका गया"
+    },
+    "words_stats": {
+        "message": "{total} शब्द • {active} सक्रिय • {inactive} निष्क्रिय"
+    },
+    "rename_list": {
+        "message": "सूची का नाम बदलें"
+    },
+    "export_settings": {
+        "message": "निर्यात"
+    },
+    "import_settings": {
+        "message": "आयात"
+    },
+    "export_import_settings_label": {
+        "message": "निर्यात / आयात"
+    },
+    "export_import_settings_hint": {
+        "message": "सूचियों और साइट अपवादों का बैकअप लें या पुनर्स्थापित करें।"
     }
 }

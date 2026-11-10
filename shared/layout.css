@@ -1,0 +1,117 @@
+/* Shared app chrome – header/topbar used by list-manager and popup */
+
+/* App header bar (use with .topbar, .header, or standalone .app-header) */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: var(--bg-color);
+  border-bottom: 1px solid var(--input-border);
+  flex-shrink: 0;
+}
+
+.app-header-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-logo {
+  height: 28px;
+  width: 28px;
+  border-radius: 8px;
+  background: var(--text-color);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+html.dark .app-logo,
+body.dark .app-logo {
+  background: var(--highlight-tag);
+}
+
+.app-logo img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.app-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-color);
+}
+
+.app-subtitle {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-header-actions button {
+  min-height: 28px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Subdued primary button – shared orange outline style */
+.btn-primary-subdued {
+  background: rgba(255, 140, 0, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 0, 0.35);
+}
+
+.btn-primary-subdued:hover {
+  background: rgba(255, 140, 0, 0.18);
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+html.dark .btn-primary-subdued,
+body.dark .btn-primary-subdued {
+  background: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.4);
+}
+
+html.dark .btn-primary-subdued:hover,
+body.dark .btn-primary-subdued:hover {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.55);
+}
+
+/* Ghost button in header/panels */
+.app-header-actions button.ghost,
+.panel-actions button.ghost {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+}
+
+.app-header-actions button.ghost:hover,
+.panel-actions button.ghost:hover {
+  background: var(--section-bg);
+}
+
+/* Danger button in header/panels */
+.panel-actions button.danger {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+}
+
+.panel-actions button.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.45);
+}

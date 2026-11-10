@@ -26,29 +26,38 @@
   "enable_highlight": {
     "message": "Markeren inschakelen"
   },
+  "apply": {
+    "message": "Toepassen"
+  },
   "paste_hint": {
-    "message": "Plak hier de woorden"
+    "message": "Eén woord of zin per regel"
   },
   "apply_paste": {
     "message": "Woorden toevoegen"
   },
   "select_all": {
-    "message": "Selecteren"
+    "message": "Alles selecteren"
   },
   "delete_selected": {
-    "message": "Verwijderen"
+    "message": "Geselecteerde verwijderen"
   },
   "disable_selected": {
-    "message": "Uitschakelen"
+    "message": "Geselecteerde uitschakelen"
   },
   "enable_selected": {
-    "message": "Inschakelen"
+    "message": "Geselecteerde inschakelen"
   },
   "import_list": {
-    "message": "JSON importeren"
+    "message": "Lijst importeren"
   },
   "export_list": {
-    "message": "JSON exporteren"
+    "message": "Lijst exporteren"
+  },
+  "import_list_list_manager": {
+    "message": "Lijst importeren"
+  },
+  "export_list_list_manager": {
+    "message": "Lijst exporteren"
   },
   "default_list_name": {
     "message": "Standaardlijst"
@@ -69,7 +78,7 @@
     "message": "Weet je zeker dat je de geselecteerde woorden wilt verwijderen?"
   },
   "deselect_all": {
-    "message": "Deselecteren"
+    "message": "Alles deselecteren"
   },
   "highlight_lists": {
     "message": "Markeer lijsten"
@@ -100,5 +109,326 @@
   },
   "match_whole": {
     "message": "Alleen volledig woord"
+  },
+  "badge_position_label": {
+    "message": "Positie van veldteller"
+  },
+  "badge_position_hint": {
+    "message": "Waar de teller met aantal overeenkomsten staat in tekstvelden (tekstgebieden / invoervelden)."
+  },
+  "badge_position_horizontal": {
+    "message": "Horizontaal"
+  },
+  "badge_position_vertical": {
+    "message": "Verticaal"
+  },
+  "badge_position_placement": {
+    "message": "Plaatsing"
+  },
+  "badge_position_left": {
+    "message": "Links"
+  },
+  "badge_position_right": {
+    "message": "Rechts"
+  },
+  "badge_position_top": {
+    "message": "Boven"
+  },
+  "badge_position_center": {
+    "message": "Midden"
+  },
+  "badge_position_bottom": {
+    "message": "Onder"
+  },
+  "badge_position_inside": {
+    "message": "Binnen"
+  },
+  "badge_position_outside": {
+    "message": "Buiten"
+  },
+  "badge_position_border": {
+    "message": "Op de rand"
+  },
+  "site_exceptions": {
+    "message": "Site-uitzonderingen"
+  },
+  "add_exception": {
+    "message": "Toevoegen aan uitzonderingen"
+  },
+  "remove_exception": {
+    "message": "Huidige verwijderen"
+  },
+  "manage_exceptions": {
+    "message": "Beheren"
+  },
+  "exceptions_mode": { "message": "Modus:" },
+  "exceptions_mode_blacklist": { "message": "Zwarte lijst — niet markeren op deze sites" },
+  "exceptions_mode_whitelist": { "message": "Witte lijst — alleen markeren op deze sites" },
+  "exceptions_mode_option_blacklist": { "message": "Zwarte lijst" },
+  "exceptions_mode_option_whitelist": { "message": "Witte lijst" },
+  "exceptions_mode_hint_blacklist": { "message": "Niet markeren op deze sites." },
+  "exceptions_mode_hint_whitelist": { "message": "Alleen markeren op deze sites." },
+  "exceptions_list": {
+    "message": "Uitzondering sites:"
+  },
+  "exceptions_list_blacklist": { "message": "Uit te sluiten sites (zwarte lijst):" },
+  "exceptions_list_whitelist": { "message": "Toe te voegen sites (witte lijst):" },
+  "add_current_site": { "message": "Huidige site toevoegen" },
+  "clear_all": {
+    "message": "Alles wissen"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Weet je zeker dat je alle uitzonderingen wilt wissen?"
+  },
+  "remove": {
+    "message": "Verwijderen"
+  },
+  "tab_lists": {
+    "message": "Lijsten"
+  },
+  "tab_words": {
+    "message": "Woorden"
+  },
+  "tab_exceptions": {
+    "message": "Uitzonderingen"
+  },
+  "no_exceptions": {
+    "message": "Geen uitzonderingen"
+  },
+  "toggle_highlighting_title": {
+    "message": "Markeren in-/uitschakelen"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Donkere modus in-/uitschakelen"
+  },
+  "select_title": {
+    "message": "Selecteren"
+  },
+  "word_placeholder": {
+    "message": "Woord of zin"
+  },
+  "background_color_title": {
+    "message": "Achtergrondkleur"
+  },
+  "text_color_title": {
+    "message": "Tekstkleur"
+  },
+  "tab_page_highlights": {
+    "message": "Op pagina"
+  },
+  "highlights_on_page": {
+    "message": "Markeringen op deze pagina"
+  },
+  "total_highlights": {
+    "message": "Totaal"
+  },
+  "total_matches": {
+    "message": "Totaal aantal matches"
+  },
+  "group_by_list": {
+    "message": "Groeperen op lijst"
+  },
+  "other": {
+    "message": "Overige"
+  },
+  "refresh": {
+    "message": "Vernieuwen"
+  },
+  "no_highlights_on_page": {
+    "message": "Geen markeringen gevonden op deze pagina"
+  },
+  "previous": {
+    "message": "Vorige"
+  },
+  "next": {
+    "message": "Volgende"
+  },
+  "duplicate": {
+    "message": "Dupliceren"
+  },
+  "merge": {
+    "message": "Samenvoegen"
+  },
+  "move": {
+    "message": "Verplaatsen"
+  },
+  "copy": {
+    "message": "Kopiëren"
+  },
+  "move_to_list": {
+    "message": "Verplaats naar lijst"
+  },
+  "copy_to_list": {
+    "message": "Kopieer naar lijst"
+  },
+  "move_selected": {
+    "message": "Geselecteerde verplaatsen"
+  },
+  "copy_selected": {
+    "message": "Geselecteerde kopiëren"
+  },
+  "no_other_lists": {
+    "message": "Geen andere lijsten"
+  },
+  "word_actions": {
+    "message": "Verplaats of kopieer naar een andere lijst"
+  },
+  "merge_lists_min_two": {
+    "message": "Selecteer minimaal twee lijsten om samen te voegen."
+  },
+  "merge_lists_confirm": {
+    "message": "{count} lijst(en) samenvoegen in \"{target}\"? Bronlijsten worden verwijderd."
+  },
+  "delete_current_list": {
+    "message": "Huidige lijst verwijderen?"
+  },
+  "delete_lists_confirm": {
+    "message": "{count} geselecteerde lijst(en) verwijderen?"
+  },
+  "invalid_import_format": {
+    "message": "Ongeldig bestandsformaat. Selecteer een geldig Goose Highlighter exportbestand."
+  },
+  "import_failed": {
+    "message": "Importeren van bestand mislukt. Zorg ervoor dat het een geldig JSON-bestand is."
+  },
+  "import_confirm": {
+    "message": "{count} lijst(en) met in totaal {words} woord(en) importeren?"
+  },
+  "import_success": {
+    "message": "{count} lijst(en) met {words} woord(en) succesvol geïmporteerd."
+  },
+  "import_page_title": {
+    "message": "Importeren — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Importeren"
+  },
+  "import_choose_file": {
+    "message": "Bestand kiezen"
+  },
+  "import_select_list_prompt": {
+    "message": "Selecteer een lijstbestand om te importeren."
+  },
+  "import_select_settings_prompt": {
+    "message": "Selecteer een instellingenbestand om te importeren."
+  },
+  "import_in_progress": {
+    "message": "Bezig met importeren…"
+  },
+  "import_complete": {
+    "message": "Importeren voltooid."
+  },
+  "import_complete_lists": {
+    "message": "Importeren voltooid. $COUNT$ lijst(en) toegevoegd.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Je kunt dit tabblad sluiten."
+  },
+  "preview_label": {
+    "message": "Voorbeeld"
+  },
+  "preview_text": {
+    "message": "Zo zal uw gemarkeerde tekst verschijnen."
+  },
+  "preview_text_before": {
+    "message": "Zo zal uw"
+  },
+  "preview_text_highlight": {
+    "message": "gemarkeerde tekst"
+  },
+  "preview_text_after": {
+    "message": "verschijnen."
+  },
+  "enable_highlighting_title": {
+    "message": "Markeren inschakelen"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Markeringen op pagina's weergeven"
+  },
+  "manage_lists": {
+    "message": "Lijsten beheren"
+  },
+  "background_label": {
+    "message": "Achtergrond"
+  },
+  "foreground_label": {
+    "message": "Voorgrond"
+  },
+  "multi_select_hint": {
+    "message": "Klik - selecteren • Ctrl+klik - meerdere"
+  },
+  "dark_mode_title": {
+    "message": "Donkere modus"
+  },
+  "dark_mode_subtitle": {
+    "message": "Schakel tussen licht/donker thema"
+  },
+  "list_manager_title": {
+    "message": "Lijstbeheerder"
+  },
+  "words_label": {
+    "message": "woorden"
+  },
+  "active_label": {
+    "message": "actief"
+  },
+  "inactive_label": {
+    "message": "inactief"
+  },
+  "drag_words_hint": {
+    "message": "Klik - selecteren • Ctrl+klik - meerdere • Sleep naar lijst - verplaatsen"
+  },
+  "drag_lists_hint": {
+    "message": "Sleep - herschikken • Ctrl+klik - meerdere"
+  },
+  "showing_items": {
+    "message": "{start}-{end} van {total} woorden weergegeven"
+  },
+  "items_per_page": {
+    "message": "Items per pagina:"
+  },
+  "page_info": {
+    "message": "Pagina {current} van {total}"
+  },
+  "toggle_active": {
+    "message": "actief schakelen"
+  },
+  "rename_list_title": {
+    "message": "Lijst hernoemen"
+  },
+  "new_list_title": {
+    "message": "Nieuwe lijst"
+  },
+  "delete_list_title": {
+    "message": "Lijst verwijderen"
+  },
+  "list_active_badge": {
+    "message": "Actief"
+  },
+  "list_paused_badge": {
+    "message": "Gepauzeerd"
+  },
+  "words_stats": {
+    "message": "{total} woorden • {active} actief • {inactive} inactief"
+  },
+  "rename_list": {
+    "message": "Lijst hernoemen"
+  },
+  "export_settings": {
+    "message": "Exporteren"
+  },
+  "import_settings": {
+    "message": "Importeren"
+  },
+  "export_import_settings_label": {
+    "message": "Exporteren / Importeren"
+  },
+  "export_import_settings_hint": {
+    "message": "Back-up maken of lijsten en site-uitzonderingen herstellen."
   }
 }

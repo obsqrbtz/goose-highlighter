@@ -26,29 +26,38 @@
   "enable_highlight": {
     "message": "Activar resaltado"
   },
+  "apply": {
+    "message": "Aplicar"
+  },
   "paste_hint": {
-    "message": "Pega las palabras aquí"
+    "message": "Una palabra o frase por línea"
   },
   "apply_paste": {
     "message": "Agregar palabras"
   },
-  "select_all": {
-    "message": "Seleccionar"
+"select_all": {
+  "message": "Seleccionar todo"
   },
   "delete_selected": {
-    "message": "Eliminar"
+    "message": "Eliminar seleccionados"
   },
   "disable_selected": {
-    "message": "Desactivar"
+    "message": "Desactivar seleccionados"
   },
   "enable_selected": {
-    "message": "Activar"
+    "message": "Activar seleccionados"
   },
   "import_list": {
-    "message": "Importar JSON"
+    "message": "Importar lista"
   },
   "export_list": {
-    "message": "Exportar JSON"
+    "message": "Exportar lista"
+  },
+  "import_list_list_manager": {
+    "message": "Importar lista"
+  },
+  "export_list_list_manager": {
+    "message": "Exportar lista"
   },
   "default_list_name": {
     "message": "Lista predeterminada"
@@ -68,8 +77,8 @@
   "confirm_delete_words": {
     "message": "¿Estás seguro de que deseas eliminar las palabras seleccionadas?"
   },
-  "deselect_all": {
-    "message": "Deseleccionar"
+"deselect_all": {
+  "message": "Deseleccionar todo"
   },
   "highlight_lists": {
     "message": "Listas de resaltado"
@@ -100,5 +109,326 @@
   },
   "match_whole": {
     "message": "Coincidir palabra completa"
+  },
+  "badge_position_label": {
+    "message": "Posición del contador en campos"
+  },
+  "badge_position_hint": {
+    "message": "Dónde se sitúa el contador de coincidencias en los campos de texto (áreas de texto / entradas)."
+  },
+  "badge_position_horizontal": {
+    "message": "Horizontal"
+  },
+  "badge_position_vertical": {
+    "message": "Vertical"
+  },
+  "badge_position_placement": {
+    "message": "Ubicación"
+  },
+  "badge_position_left": {
+    "message": "Izquierda"
+  },
+  "badge_position_right": {
+    "message": "Derecha"
+  },
+  "badge_position_top": {
+    "message": "Arriba"
+  },
+  "badge_position_center": {
+    "message": "Centro"
+  },
+  "badge_position_bottom": {
+    "message": "Abajo"
+  },
+  "badge_position_inside": {
+    "message": "Dentro"
+  },
+  "badge_position_outside": {
+    "message": "Fuera"
+  },
+  "badge_position_border": {
+    "message": "En el borde"
+  },
+  "site_exceptions": {
+    "message": "Excepciones de sitios"
+  },
+  "add_exception": {
+    "message": "Agregar a excepciones"
+  },
+  "remove_exception": {
+    "message": "Eliminar actual"
+  },
+  "manage_exceptions": {
+    "message": "Gestionar"
+  },
+  "exceptions_mode": { "message": "Modo:" },
+  "exceptions_mode_blacklist": { "message": "Lista negra — no resaltar en estos sitios" },
+  "exceptions_mode_whitelist": { "message": "Lista blanca — solo resaltar en estos sitios" },
+  "exceptions_mode_option_blacklist": { "message": "Lista negra" },
+  "exceptions_mode_option_whitelist": { "message": "Lista blanca" },
+  "exceptions_mode_hint_blacklist": { "message": "No resaltar en estos sitios." },
+  "exceptions_mode_hint_whitelist": { "message": "Solo resaltar en estos sitios." },
+  "exceptions_list": {
+    "message": "Sitios de excepción:"
+  },
+  "exceptions_list_blacklist": { "message": "Sitios a excluir (lista negra):" },
+  "exceptions_list_whitelist": { "message": "Sitios a incluir (lista blanca):" },
+  "add_current_site": { "message": "Añadir sitio actual" },
+  "clear_all": {
+    "message": "Limpiar todo"
+  },
+  "confirm_clear_exceptions": {
+    "message": "¿Estás seguro de que deseas limpiar todas las excepciones?"
+  },
+  "remove": {
+    "message": "Eliminar"
+  },
+  "tab_lists": {
+    "message": "Listas"
+  },
+  "tab_words": {
+    "message": "Palabras"
+  },
+  "tab_exceptions": {
+    "message": "Excepciones"
+  },
+  "no_exceptions": {
+    "message": "Sin excepciones"
+  },
+  "toggle_highlighting_title": {
+    "message": "Alternar resaltado"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Alternar modo oscuro"
+  },
+  "select_title": {
+    "message": "Seleccionar"
+  },
+  "word_placeholder": {
+    "message": "Palabra o frase"
+  },
+  "background_color_title": {
+    "message": "Color de fondo"
+  },
+  "text_color_title": {
+    "message": "Color de texto"
+  },
+  "tab_page_highlights": {
+    "message": "En página"
+  },
+  "highlights_on_page": {
+    "message": "Resaltados en esta página"
+  },
+  "total_highlights": {
+    "message": "Total"
+  },
+  "total_matches": {
+    "message": "Coincidencias totales"
+  },
+  "group_by_list": {
+    "message": "Agrupar por lista"
+  },
+  "other": {
+    "message": "Otros"
+  },
+  "refresh": {
+    "message": "Actualizar"
+  },
+  "no_highlights_on_page": {
+    "message": "No se encontraron resaltados en esta página"
+  },
+  "previous": {
+    "message": "Anterior"
+  },
+  "next": {
+    "message": "Siguiente"
+  },
+  "duplicate": {
+    "message": "Duplicar"
+  },
+  "merge": {
+    "message": "Combinar"
+  },
+  "move": {
+    "message": "Mover"
+  },
+  "copy": {
+    "message": "Copiar"
+  },
+  "move_to_list": {
+    "message": "Mover a lista"
+  },
+  "copy_to_list": {
+    "message": "Copiar a lista"
+  },
+  "move_selected": {
+    "message": "Mover seleccionados"
+  },
+  "copy_selected": {
+    "message": "Copiar seleccionados"
+  },
+  "no_other_lists": {
+    "message": "No hay otras listas"
+  },
+  "word_actions": {
+    "message": "Mover o copiar a otra lista"
+  },
+  "merge_lists_min_two": {
+    "message": "Seleccione al menos dos listas para combinar."
+  },
+  "merge_lists_confirm": {
+    "message": "¿Combinar {count} lista(s) en \"{target}\"? Las listas de origen se eliminarán."
+  },
+  "delete_current_list": {
+    "message": "¿Eliminar la lista actual?"
+  },
+  "delete_lists_confirm": {
+    "message": "¿Eliminar {count} lista(s) seleccionada(s)?"
+  },
+  "invalid_import_format": {
+    "message": "Formato de archivo no válido. Seleccione un archivo de exportación válido de Goose Highlighter."
+  },
+  "import_failed": {
+    "message": "Error al importar el archivo. Asegúrese de que sea un archivo JSON válido."
+  },
+  "import_confirm": {
+    "message": "¿Importar {count} lista(s) con {words} palabra(s) en total?"
+  },
+  "import_success": {
+    "message": "Se importaron correctamente {count} lista(s) con {words} palabra(s)."
+  },
+  "import_page_title": {
+    "message": "Importar — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Importar"
+  },
+  "import_choose_file": {
+    "message": "Elegir archivo"
+  },
+  "import_select_list_prompt": {
+    "message": "Selecciona un archivo de lista para importar."
+  },
+  "import_select_settings_prompt": {
+    "message": "Selecciona un archivo de ajustes para importar."
+  },
+  "import_in_progress": {
+    "message": "Importando…"
+  },
+  "import_complete": {
+    "message": "Importación completada."
+  },
+  "import_complete_lists": {
+    "message": "Importación completada. Se añadieron $COUNT$ lista(s).",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Puedes cerrar esta pestaña."
+  },
+  "preview_label": {
+    "message": "Vista previa"
+  },
+  "preview_text": {
+    "message": "Así es como aparecerá su texto resaltado."
+  },
+  "preview_text_before": {
+    "message": "Así es como aparecerá su"
+  },
+  "preview_text_highlight": {
+    "message": "texto resaltado"
+  },
+  "preview_text_after": {
+    "message": "."
+  },
+  "enable_highlighting_title": {
+    "message": "Activar resaltado"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Mostrar resaltados en páginas"
+  },
+  "manage_lists": {
+    "message": "Gestionar listas"
+  },
+  "background_label": {
+    "message": "Fondo"
+  },
+  "foreground_label": {
+    "message": "Texto"
+  },
+  "multi_select_hint": {
+    "message": "Clic - seleccionar • Ctrl+clic - varios"
+  },
+  "dark_mode_title": {
+    "message": "Modo oscuro"
+  },
+  "dark_mode_subtitle": {
+    "message": "Alternar tema claro/oscuro"
+  },
+  "list_manager_title": {
+    "message": "Gestor de listas"
+  },
+  "words_label": {
+    "message": "palabras"
+  },
+  "active_label": {
+    "message": "activo"
+  },
+  "inactive_label": {
+    "message": "inactivo"
+  },
+  "drag_words_hint": {
+    "message": "Clic - seleccionar • Ctrl+clic - varios • Arrastrar a lista - mover"
+  },
+  "drag_lists_hint": {
+    "message": "Arrastrar - reordenar • Ctrl+clic - varios"
+  },
+  "showing_items": {
+    "message": "Mostrando {start}-{end} de {total} palabras"
+  },
+  "items_per_page": {
+    "message": "Elementos por página:"
+  },
+  "page_info": {
+    "message": "Página {current} de {total}"
+  },
+  "toggle_active": {
+    "message": "alternar activo"
+  },
+  "rename_list_title": {
+    "message": "Renombrar lista"
+  },
+  "new_list_title": {
+    "message": "Nueva lista"
+  },
+  "delete_list_title": {
+    "message": "Eliminar lista"
+  },
+  "list_active_badge": {
+    "message": "Activo"
+  },
+  "list_paused_badge": {
+    "message": "Pausado"
+  },
+  "words_stats": {
+    "message": "{total} palabras • {active} activas • {inactive} inactivas"
+  },
+  "rename_list": {
+    "message": "Renombrar lista"
+  },
+  "export_settings": {
+    "message": "Exportar"
+  },
+  "import_settings": {
+    "message": "Importar"
+  },
+  "export_import_settings_label": {
+    "message": "Exportar / Importar"
+  },
+  "export_import_settings_hint": {
+    "message": "Hacer copia de seguridad o restaurar listas y excepciones de sitios."
   }
 }

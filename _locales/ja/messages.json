@@ -26,8 +26,11 @@
     "enable_highlight": {
         "message": "ハイライトを有効にする"
     },
+    "apply": {
+        "message": "適用"
+    },
     "paste_hint": {
-        "message": "ここに単語を貼り付けてください"
+        "message": "1行に1単語または1フレーズ"
     },
     "apply_paste": {
         "message": "単語を追加"
@@ -36,19 +39,25 @@
         "message": "すべて選択"
     },
     "delete_selected": {
-        "message": "削除"
+        "message": "選択項目を削除"
     },
     "disable_selected": {
-        "message": "無効にする"
+        "message": "選択項目を無効にする"
     },
     "enable_selected": {
-        "message": "有効にする"
+        "message": "選択項目を有効にする"
     },
     "import_list": {
-        "message": "JSONをインポート"
+        "message": "リストをインポート"
     },
     "export_list": {
-        "message": "JSONをエクスポート"
+        "message": "リストをエクスポート"
+    },
+    "import_list_list_manager": {
+        "message": "リストをインポート"
+    },
+    "export_list_list_manager": {
+        "message": "リストをエクスポート"
     },
     "default_list_name": {
         "message": "デフォルトリスト"
@@ -69,7 +78,7 @@
         "message": "選択した単語を削除してもよろしいですか？"
     },
     "deselect_all": {
-        "message": "すべて解除"
+        "message": "すべての選択を解除"
     },
     "highlight_lists": {
         "message": "ハイライトリスト"
@@ -100,5 +109,326 @@
     },
     "match_whole": {
         "message": "完全一致"
+    },
+    "badge_position_label": {
+        "message": "フィールドカウンターの位置"
+    },
+    "badge_position_hint": {
+        "message": "テキストフィールド（テキストエリア／入力欄）での一致件数バッジの位置。"
+    },
+    "badge_position_horizontal": {
+        "message": "水平"
+    },
+    "badge_position_vertical": {
+        "message": "垂直"
+    },
+    "badge_position_placement": {
+        "message": "配置"
+    },
+    "badge_position_left": {
+        "message": "左"
+    },
+    "badge_position_right": {
+        "message": "右"
+    },
+    "badge_position_top": {
+        "message": "上"
+    },
+    "badge_position_center": {
+        "message": "中央"
+    },
+    "badge_position_bottom": {
+        "message": "下"
+    },
+    "badge_position_inside": {
+        "message": "内側"
+    },
+    "badge_position_outside": {
+        "message": "外側"
+    },
+    "badge_position_border": {
+        "message": "境界線上"
+    },
+    "site_exceptions": {
+        "message": "サイト例外"
+    },
+    "add_exception": {
+        "message": "例外に追加"
+    },
+    "remove_exception": {
+        "message": "現在を削除"
+    },
+    "manage_exceptions": {
+        "message": "管理"
+    },
+    "exceptions_mode": { "message": "モード:" },
+    "exceptions_mode_blacklist": { "message": "ブラックリスト — これらのサイトではハイライトしない" },
+    "exceptions_mode_whitelist": { "message": "ホワイトリスト — これらのサイトでのみハイライト" },
+    "exceptions_mode_option_blacklist": { "message": "ブラックリスト" },
+    "exceptions_mode_option_whitelist": { "message": "ホワイトリスト" },
+    "exceptions_mode_hint_blacklist": { "message": "これらのサイトではハイライトしません。" },
+    "exceptions_mode_hint_whitelist": { "message": "これらのサイトでのみハイライトします。" },
+    "exceptions_list": {
+        "message": "例外サイト:"
+    },
+    "exceptions_list_blacklist": { "message": "除外するサイト（ブラックリスト）:" },
+    "exceptions_list_whitelist": { "message": "含めるサイト（ホワイトリスト）:" },
+    "add_current_site": { "message": "現在のサイトを追加" },
+    "clear_all": {
+        "message": "すべてクリア"
+    },
+    "confirm_clear_exceptions": {
+        "message": "すべての例外をクリアしてもよろしいですか？"
+    },
+    "remove": {
+        "message": "削除"
+    },
+    "tab_lists": {
+        "message": "リスト"
+    },
+    "tab_words": {
+        "message": "単語"
+    },
+    "tab_exceptions": {
+        "message": "例外"
+    },
+    "no_exceptions": {
+        "message": "例外なし"
+    },
+    "toggle_highlighting_title": {
+        "message": "ハイライトの切り替え"
+    },
+    "toggle_dark_mode_title": {
+        "message": "ダークモードの切り替え"
+    },
+    "select_title": {
+        "message": "選択"
+    },
+    "word_placeholder": {
+        "message": "単語またはフレーズ"
+    },
+    "background_color_title": {
+        "message": "背景色"
+    },
+    "text_color_title": {
+        "message": "文字色"
+    },
+    "tab_page_highlights": {
+        "message": "ページ上"
+    },
+    "highlights_on_page": {
+        "message": "このページのハイライト"
+    },
+    "total_highlights": {
+        "message": "合計"
+    },
+    "total_matches": {
+        "message": "一致数の合計"
+    },
+    "group_by_list": {
+        "message": "リストでグループ化"
+    },
+    "other": {
+        "message": "その他"
+    },
+    "refresh": {
+        "message": "更新"
+    },
+    "no_highlights_on_page": {
+        "message": "このページにハイライトが見つかりません"
+    },
+    "previous": {
+        "message": "前へ"
+    },
+    "next": {
+        "message": "次へ"
+    },
+    "duplicate": {
+        "message": "複製"
+    },
+    "merge": {
+        "message": "統合"
+    },
+    "move": {
+        "message": "移動"
+    },
+    "copy": {
+        "message": "コピー"
+    },
+    "move_to_list": {
+        "message": "リストに移動"
+    },
+    "copy_to_list": {
+        "message": "リストにコピー"
+    },
+    "move_selected": {
+        "message": "選択項目を移動"
+    },
+    "copy_selected": {
+        "message": "選択項目をコピー"
+    },
+    "no_other_lists": {
+        "message": "他のリストはありません"
+    },
+    "word_actions": {
+        "message": "別のリストに移動またはコピー"
+    },
+    "merge_lists_min_two": {
+        "message": "統合するには少なくとも2つのリストを選択してください。"
+    },
+    "merge_lists_confirm": {
+        "message": "{count}個のリストを\"{target}\"に統合しますか？ソースリストは削除されます。"
+    },
+    "delete_current_list": {
+        "message": "現在のリストを削除しますか？"
+    },
+    "delete_lists_confirm": {
+        "message": "選択した{count}個のリストを削除しますか？"
+    },
+    "invalid_import_format": {
+        "message": "無効なファイル形式です。有効なGoose Highlighterエクスポートファイルを選択してください。"
+    },
+    "import_failed": {
+        "message": "ファイルのインポートに失敗しました。有効なJSONファイルであることを確認してください。"
+    },
+    "import_confirm": {
+        "message": "合計{words}個の単語を含む{count}個のリストをインポートしますか？"
+    },
+    "import_success": {
+        "message": "{words}個の単語を含む{count}個のリストを正常にインポートしました。"
+    },
+    "import_page_title": {
+        "message": "インポート — Goose Highlighter"
+    },
+    "import_page_heading": {
+        "message": "インポート"
+    },
+    "import_choose_file": {
+        "message": "ファイルを選択"
+    },
+    "import_select_list_prompt": {
+        "message": "インポートするリストファイルを選択してください。"
+    },
+    "import_select_settings_prompt": {
+        "message": "インポートする設定ファイルを選択してください。"
+    },
+    "import_in_progress": {
+        "message": "インポート中…"
+    },
+    "import_complete": {
+        "message": "インポートが完了しました。"
+    },
+    "import_complete_lists": {
+        "message": "インポートが完了しました。$COUNT$ 個のリストを追加しました。",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "import_close_tab_hint": {
+        "message": "このタブを閉じても問題ありません。"
+    },
+    "preview_label": {
+        "message": "プレビュー"
+    },
+    "preview_text": {
+        "message": "ハイライトされたテキストはこのように表示されます。"
+    },
+    "preview_text_before": {
+        "message": ""
+    },
+    "preview_text_highlight": {
+        "message": "ハイライトされたテキスト"
+    },
+    "preview_text_after": {
+        "message": "はこのように表示されます。"
+    },
+    "enable_highlighting_title": {
+        "message": "ハイライトを有効にする"
+    },
+    "enable_highlighting_subtitle": {
+        "message": "ページにハイライトを表示"
+    },
+    "manage_lists": {
+        "message": "リストを管理"
+    },
+    "background_label": {
+        "message": "背景"
+    },
+    "foreground_label": {
+        "message": "前景"
+    },
+    "multi_select_hint": {
+        "message": "クリック - 選択 • Ctrl+クリック - 複数"
+    },
+    "dark_mode_title": {
+        "message": "ダークモード"
+    },
+    "dark_mode_subtitle": {
+        "message": "ライト/ダークテーマを切り替え"
+    },
+    "list_manager_title": {
+        "message": "リストマネージャー"
+    },
+    "words_label": {
+        "message": "単語"
+    },
+    "active_label": {
+        "message": "有効"
+    },
+    "inactive_label": {
+        "message": "無効"
+    },
+    "drag_words_hint": {
+        "message": "クリック - 選択 • Ctrl+クリック - 複数 • リストへドラッグ - 移動"
+    },
+    "drag_lists_hint": {
+        "message": "ドラッグ - 並べ替え • Ctrl+クリック - 複数"
+    },
+    "showing_items": {
+        "message": "{total}単語中{start}-{end}を表示"
+    },
+    "items_per_page": {
+        "message": "ページあたりのアイテム数:"
+    },
+    "page_info": {
+        "message": "ページ{current}/{total}"
+    },
+    "toggle_active": {
+        "message": "有効/無効を切り替え"
+    },
+    "rename_list_title": {
+        "message": "リスト名を変更"
+    },
+    "new_list_title": {
+        "message": "新しいリスト"
+    },
+    "delete_list_title": {
+        "message": "リストを削除"
+    },
+    "list_active_badge": {
+        "message": "有効"
+    },
+    "list_paused_badge": {
+        "message": "一時停止"
+    },
+    "words_stats": {
+        "message": "{total}単語 • {active}有効 • {inactive}無効"
+    },
+    "rename_list": {
+        "message": "リスト名を変更"
+    },
+    "export_settings": {
+        "message": "エクスポート"
+    },
+    "import_settings": {
+        "message": "インポート"
+    },
+    "export_import_settings_label": {
+        "message": "エクスポート / インポート"
+    },
+    "export_import_settings_hint": {
+        "message": "リストとサイトの例外をバックアップまたは復元します。"
     }
 }

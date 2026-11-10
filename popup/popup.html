@@ -6,97 +6,345 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title data-i18n="extension_name">Goose Highlighter</title>
   <link rel="stylesheet" href="popup.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/icons.css" />
 </head>
 
-<body class="dark">
-  <div class="container">
+<body>
+  <div class="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+  <div class="popup-container">
 
-    <div class="header-bar">
-      <span class="title">
-        <i class="fa-solid fa-highlighter"></i> Goose Highlighter
-      </span>
-      <div class="icon-toggles">
-        <label class="icon-toggle" title="Toggle highlighting">
-          <input type="checkbox" class="hidden-toggle" id="globalHighlightToggle" />
-          <i class="toggle-icon global-icon fa-solid"></i>
-        </label>
-        <label class="icon-toggle" title="Toggle dark mode">
-          <input type="checkbox" class="hidden-toggle" id="themeToggle" />
-          <i class="toggle-icon theme-icon fa-solid"></i>
-        </label>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-header">
-        <h2><i class="fa-solid fa-list"></i> <span data-i18n="highlight_lists">Highlight Lists</span></h2>
-      </div>
-      <label for="listSelect" data-i18n="select_list">Select List:</label>
-      <select id="listSelect"></select>
-      <div class="button-row">
-        <button id="newListBtn"><i class="fa-solid fa-plus"></i> <span data-i18n="new_list">New</span></button>
-        <button id="deleteListBtn" class="danger"><i class="fa-solid fa-trash"></i> <span
-            data-i18n="delete_list">Delete</span></button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2><i class="fa-solid fa-gear"></i> <span data-i18n="list_settings">List Settings</span></h2>
-      <label><span data-i18n="list_name">List Name:</span> <input type="text" id="listName" /></label>
-      <div class="color-row">
-        <div class="color-label">
-          <span data-i18n="background">Background:</span>
-          <input type="color" id="listBg" />
+    <!-- Header -->
+    <div class="header app-header">
+      <div class="header-content app-header-content">
+        <div class="header-logo app-logo">
+          <img src="../img/logo-outlined.png" alt="Goose" style="width: 18px; height: 18px;">
         </div>
-        <div class="color-label">
-          <span data-i18n="foreground">Foreground:</span>
-          <input type="color" id="listFg" />
+        <span class="header-title app-title" data-i18n="extension_name">Goose Highlighter</span>
+      </div>
+      <div class="header-actions app-header-actions">
+        <button class="icon-button header-settings-btn" id="settingsBtn" data-i18n-title="options" title="Options" aria-label="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+        <label class="header-power-toggle" title="Toggle highlighting" aria-label="Toggle highlighting">
+          <input type="checkbox" id="globalHighlightToggle" class="header-power-input" />
+          <span class="power-icon-wrapper">
+            <i class="fa-solid fa-power-off"></i>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-button active" data-tab="lists">
+        <i class="fa-solid fa-list"></i>
+        <span data-i18n="tab_lists">Lists</span>
+      </button>
+      <button class="tab-button" data-tab="words">
+        <i class="fa-solid fa-tags"></i>
+        <span data-i18n="tab_words">Words</span>
+      </button>
+      <button class="tab-button" data-tab="page-highlights">
+        <i class="fa-solid fa-location-dot"></i>
+        <span data-i18n="tab_page_highlights">On Page</span>
+      </button>
+      <button class="tab-button" data-tab="exceptions">
+        <i class="fa-solid fa-ban"></i>
+        <span data-i18n="tab_exceptions">Exceptions</span>
+      </button>
+    </div>
+
+    <!-- Lists Tab -->
+    <div class="tab-content active" data-tab-content="lists">
+      <div class="tab-inner">
+        <div class="list-selector-section">
+          <!-- List Selector with Actions -->
+          <div class="list-selector-row">
+            <div class="list-dropdown-wrapper">
+              <button class="list-dropdown-button" id="listDropdownBtn">
+                <div class="list-dropdown-content">
+                  <div class="list-color-indicator" id="currentListColor"></div>
+                  <span class="list-dropdown-text" id="currentListName">Default List</span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="list-dropdown-menu" id="listDropdownMenu">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+            <button class="icon-button" id="renameListBtn" data-i18n-title="rename_list_title" title="Rename list">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button class="icon-button" id="newListBtn" data-i18n-title="new_list_title" title="New list">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+            <button class="icon-button danger" id="deleteListBtn" data-i18n-title="delete_list_title" title="Delete list">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+
+          <!-- Export / Import (Lists tab) -->
+          <div class="list-export-import-row">
+            <button class="list-export-import-btn" id="exportListBtn">
+              <i class="fa-solid fa-download"></i>
+              <span data-i18n="export_list">Export</span>
+            </button>
+            <button class="list-export-import-btn" id="importListBtn">
+              <i class="fa-solid fa-upload"></i>
+              <span data-i18n="import_list">Import</span>
+            </button>
+            <input type="file" id="importListInput" accept="application/json" hidden />
+          </div>
+
+          <!-- Color Pickers -->
+          <div class="color-pickers-row">
+            <div class="color-picker-group">
+              <label class="color-picker-label" data-i18n="background_label">Background</label>
+              <div class="color-picker-input-group">
+                <input type="color" id="listBg" class="color-picker-swatch" />
+                <input type="text" id="listBgText" class="color-picker-text" maxlength="7" />
+              </div>
+            </div>
+            <div class="color-picker-group">
+              <label class="color-picker-label" data-i18n="foreground_label">Foreground</label>
+              <div class="color-picker-input-group">
+                <input type="color" id="listFg" class="color-picker-swatch" />
+                <input type="text" id="listFgText" class="color-picker-text" maxlength="7" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div class="preview-section">
+            <label class="preview-label" data-i18n="preview_label">Preview</label>
+            <div class="preview-box">
+              <p class="preview-text">
+                <span data-i18n="preview_text_before">This is how your</span>
+                <span class="preview-highlight" id="previewHighlight" data-i18n="preview_text_highlight">highlighted text</span>
+                <span data-i18n="preview_text_after">will appear.</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Enable Toggle -->
+          <div class="enable-toggle-section">
+            <div class="enable-toggle-content">
+              <div class="enable-toggle-text">
+                <p class="enable-toggle-title" data-i18n="enable_highlighting_title">Enable Highlighting</p>
+                <p class="enable-toggle-subtitle" data-i18n="enable_highlighting_subtitle">Show highlights on pages</p>
+              </div>
+              <label class="switch-wrapper">
+                <input type="checkbox" id="listActive" class="switch-input" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Apply Button -->
+        <button class="apply-button btn-primary-subdued" id="applyListSettingsBtn">
+          <i class="fa-solid fa-check"></i>
+          <span data-i18n="apply">Apply Changes</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Words Tab -->
+    <div class="tab-content" data-tab-content="words">
+      <div class="tab-inner">
+        <!-- Add Words Section -->
+        <div class="add-words-section">
+          <label class="section-label">
+            <i class="fa-solid fa-pen"></i>
+            <span data-i18n="add_words">Add Words</span>
+          </label>
+          <textarea id="bulkPaste" class="add-words-textarea" data-i18n="paste_hint" placeholder="Paste words or phrases here. Each new word/phrase should start from next line."></textarea>
+          <button class="add-words-button" id="addWordsBtn">
+            <span data-i18n="apply_paste">Add Words</span>
+          </button>
+        </div>
+
+        <!-- Word List Section -->
+        <div class="word-list-section">
+          <div class="word-list-header">
+            <label class="section-label">
+              <i class="fa-solid fa-tags"></i>
+              <span data-i18n="word_list">Word List</span>
+              <span class="word-count-badge" id="wordCount">0</span>
+            </label>
+          </div>
+
+          <!-- Search -->
+          <div class="word-search-wrapper">
+            <input type="text" id="wordSearch" class="word-search-input" data-i18n="search_placeholder" placeholder="Search..." />
+          </div>
+
+          <!-- Word List -->
+          <div id="wordList" class="word-list-container"></div>
+          <div id="paginationControls" class="pagination-container"></div>
+
+          <!-- Word item 3-dot menu dropdown (positioned by JS) -->
+          <div id="wordItemMenuDropdown" class="word-item-menu-dropdown" role="menu" aria-hidden="true"></div>
+
+          <!-- Help text -->
+          <p class="word-list-hint" data-i18n="multi_select_hint">Click to select • Ctrl/Cmd+Click for multi-select</p>
         </div>
       </div>
-      <label>
-        <span data-i18n="enable_highlight">Enable Highlighting</span>
-        <input type="checkbox" class="switch" id="listActive" />
-      </label>
     </div>
 
-    <div class="section">
-      <h2><i class="fa-solid fa-pen"></i> <span data-i18n="add_words">Add Words</span></h2>
-      <textarea id="bulkPaste" data-i18n="paste_hint" placeholder="Paste words here..."></textarea>
-      <button id="addWordsBtn"><span data-i18n="apply_paste">Add Words</span></button>
+    <!-- Page Highlights Tab -->
+    <div class="tab-content" data-tab-content="page-highlights">
+      <div class="tab-inner">
+        <div class="page-highlights-section">
+          <div class="page-highlights-header-row">
+            <span class="page-highlights-total-label" data-i18n="total_matches">Total matches</span>
+            <span class="page-highlights-total-count" id="totalHighlightsCount">0</span>
+          </div>
+          <div class="page-highlights-controls">
+            <label class="page-highlights-group-toggle">
+              <span class="switch-wrapper">
+                <input type="checkbox" id="pageHighlightsGroupByList" class="switch-input" />
+                <span class="switch-slider"></span>
+              </span>
+              <span class="page-highlights-group-label" data-i18n="group_by_list">Group by list</span>
+            </label>
+            <div class="page-highlights-filters-wrap">
+              <div id="pageHighlightsFiltersActions" class="page-highlights-filters-actions" hidden></div>
+              <div id="pageHighlightsListFilters" class="page-highlights-filters"></div>
+            </div>
+          </div>
+          <div id="pageHighlightsList" class="page-highlights-list"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="section">
-      <h2><i class="fa-solid fa-tags"></i> <span data-i18n="word_list">Word List</span>(<span id="wordCount">0</span>)
-      </h2>
-      <div class="button-row wrap">
-        <button id="selectAllBtn"><span data-i18n="select_all">Select All</span></button>
-        <button id="deselectAllBtn"><span data-i18n="deselect_all">Clear</span></button>
-        <button id="enableSelectedBtn"><span data-i18n="enable_selected">Enable</span></button>
-        <button id="disableSelectedBtn"><span data-i18n="disable_selected">Disable</span></button>
-        <button id="deleteSelectedBtn" class="danger"><span data-i18n="delete_selected">Delete</span></button>
+    <!-- Exceptions Tab -->
+    <div class="tab-content" data-tab-content="exceptions">
+      <div class="tab-inner">
+        <div class="exceptions-section">
+          <div class="exceptions-mode-card">
+            <span class="exceptions-mode-label" data-i18n="exceptions_mode">Mode</span>
+            <select id="exceptionsModeSelect" class="exceptions-mode-select" aria-label="Exceptions mode">
+              <option value="blacklist" data-i18n="exceptions_mode_option_blacklist">Blacklist</option>
+              <option value="whitelist" data-i18n="exceptions_mode_option_whitelist">Whitelist</option>
+            </select>
+            <p class="exceptions-mode-hint" id="exceptionsModeHint" aria-live="polite"></p>
+          </div>
+          <div class="exceptions-add-row">
+            <input type="text" id="exceptionDomainInput" class="exception-domain-input" data-i18n="exception_domain_placeholder" placeholder="example.com" />
+            <button type="button" class="exception-add-btn btn-primary-subdued" id="addExceptionBtn" aria-label="Add">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <button type="button" class="exceptions-add-current-link" id="addCurrentSiteBtn" data-i18n="add_current_site">Add current site</button>
+          <div class="exceptions-list-wrapper">
+            <div class="exceptions-list-header">
+              <span class="exceptions-mode-label" id="exceptionsListLabel" data-i18n="exceptions_list">Exception Sites</span>
+              <button type="button" class="clear-exceptions-link" id="clearExceptionsBtn" data-i18n="clear_all">Clear all</button>
+            </div>
+            <div id="exceptionsList" class="exceptions-list"></div>
+          </div>
+        </div>
       </div>
-      <input type="text" id="wordSearch" data-i18n="search_placeholder" placeholder="Search..." />
-      <div id="wordList"></div>
     </div>
 
-    <div class="section">
-      <h2><i class="fa-solid fa-sliders"></i> <span data-i18n="options">Options</span></h2>
-      <div class="button-row" style="margin-bottom:8px;">
-        <label><input type="checkbox" id="matchCase" /> <span data-i18n="match_case">Match Case</span></label>
-        <label><input type="checkbox" id="matchWhole" /> <span data-i18n="match_whole">Match Whole Word</span></label>
+    <!-- Settings Overlay -->
+    <div class="settings-overlay" id="settingsOverlay">
+      <div class="settings-overlay-content">
+        <div class="settings-overlay-header">
+          <h3 class="settings-overlay-title" data-i18n="options">Options</h3>
+          <button class="icon-button settings-close-btn" id="settingsCloseBtn" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="settings-overlay-body">
+          <div class="options-checkboxes">
+            <label class="option-checkbox-label">
+              <input type="checkbox" id="matchCase" class="option-checkbox" />
+              <span data-i18n="match_case">Match Case</span>
+            </label>
+            <label class="option-checkbox-label">
+              <input type="checkbox" id="matchWhole" class="option-checkbox" />
+              <span data-i18n="match_whole">Match Whole Word</span>
+            </label>
+          </div>
+
+          <div class="badge-position-section">
+            <p class="badge-position-label" data-i18n="badge_position_label">Field counter position</p>
+            <p class="badge-position-hint" data-i18n="badge_position_hint">Where the match-count badge sits on text fields.</p>
+            <div class="badge-position-row">
+              <label class="badge-position-field">
+                <span data-i18n="badge_position_horizontal">Horizontal</span>
+                <select id="badgePositionHorizontal" class="badge-position-select">
+                  <option value="left" data-i18n="badge_position_left">Left</option>
+                  <option value="right" data-i18n="badge_position_right">Right</option>
+                </select>
+              </label>
+              <label class="badge-position-field">
+                <span data-i18n="badge_position_vertical">Vertical</span>
+                <select id="badgePositionVertical" class="badge-position-select">
+                  <option value="top" data-i18n="badge_position_top">Top</option>
+                  <option value="center" data-i18n="badge_position_center">Center</option>
+                  <option value="bottom" data-i18n="badge_position_bottom">Bottom</option>
+                </select>
+              </label>
+              <label class="badge-position-field">
+                <span data-i18n="badge_position_placement">Placement</span>
+                <select id="badgePositionPlacement" class="badge-position-select">
+                  <option value="inside" data-i18n="badge_position_inside">Inside</option>
+                  <option value="outside" data-i18n="badge_position_outside">Outside</option>
+                  <option value="border" data-i18n="badge_position_border">On border</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="theme-toggle-section">
+            <div class="theme-toggle-content">
+              <div class="theme-toggle-text">
+                <p class="theme-toggle-title" data-i18n="dark_mode_title">Dark Mode</p>
+                <p class="theme-toggle-subtitle" data-i18n="dark_mode_subtitle">Toggle dark/light theme</p>
+              </div>
+              <label class="switch-wrapper">
+                <input type="checkbox" id="themeToggle" class="switch-input" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-export-import-section">
+            <p class="settings-export-import-label" data-i18n="export_import_settings_label">Export / Import</p>
+            <p class="settings-export-import-hint" data-i18n="export_import_settings_hint">Back up or restore lists and site exceptions.</p>
+            <div class="list-export-import-row">
+              <button type="button" class="list-export-import-btn" id="exportSettingsBtn">
+                <i class="fa-solid fa-download"></i>
+                <span data-i18n="export_settings">Export</span>
+              </button>
+              <button type="button" class="list-export-import-btn" id="importSettingsBtn">
+                <i class="fa-solid fa-upload"></i>
+                <span data-i18n="import_settings">Import</span>
+              </button>
+              <input type="file" id="importSettingsInput" accept="application/json" hidden />
+            </div>
+          </div>
+
+        </div>
       </div>
-      <div class="button-row">
-        <button id="importBtn"><i class="fa-solid fa-upload"></i> <span data-i18n="import_list">Import</span></button>
-        <input type="file" id="importInput" accept="application/json" hidden />
-        <button id="exportBtn"><i class="fa-solid fa-download"></i> <span data-i18n="export_list">Export</span></button>
-      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span class="footer-version">v<span id="version-number">...</span></span>
+      <a href="https://github.com/obsqrbtz/goose-highlighter" target="_blank" class="footer-link">
+        <i class="fa-brands fa-github"></i>
+        <span>GitHub</span>
+      </a>
     </div>
   </div>
 
-  <script src="../storage.js"></script>
-  <script src="popup.js"></script>
+  <script type="module" src="../dist/popup/popup.js"></script>
 </body>
 
 </html>

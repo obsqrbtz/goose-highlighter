@@ -2,11 +2,12 @@
   "manifest_version": 3,
   "name": "__MSG_extension_name__",
   "description": "__MSG_extension_description__",
-  "version": "1.6.0",
+  "version": "1.13.7",
   "default_locale": "en",
   "permissions": [
     "scripting",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -16,7 +17,17 @@
     "default_icon": "icons/icon128.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "scripts": [
+      "dist/background.js"
+    ],
+    "service_worker": "dist/background.js",
+    "type": "module"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{8f9d2c41-6b1e-4a7c-9f3a-0e2d5b7c1a64}",
+      "strict_min_version": "121.0"
+    }
   },
   "icons": {
     "48": "icons/icon48.png",

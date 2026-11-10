@@ -26,8 +26,11 @@
   "enable_highlight": {
     "message": "Включить выделение"
   },
+  "apply": {
+    "message": "Применить"
+  },
   "paste_hint": {
-    "message": "Вставьте список слов здесь"
+    "message": "Одно слово или фраза на строку"
   },
   "apply_paste": {
     "message": "Добавить слова"
@@ -36,19 +39,25 @@
     "message": "Выбрать все"
   },
   "delete_selected": {
-    "message": "Удалить"
+    "message": "Удалить выбранные"
   },
   "disable_selected": {
-    "message": "Отключить"
+    "message": "Отключить выбранные"
   },
   "enable_selected": {
-    "message": "Включить"
+    "message": "Включить выбранные"
   },
   "import_list": {
-    "message": "Импорт JSON"
+    "message": "Импорт списка"
   },
   "export_list": {
-    "message": "Экспорт JSON"
+    "message": "Экспорт списка"
+  },
+  "import_list_list_manager": {
+    "message": "Импорт списка"
+  },
+  "export_list_list_manager": {
+    "message": "Экспорт списка"
   },
   "default_list_name": {
     "message": "Список по умолчанию"
@@ -69,7 +78,7 @@
     "message": "Вы уверены, что хотите удалить выбранные слова?"
   },
   "deselect_all": {
-    "message": "Отменить выбор"
+    "message": "Снять выделение со всех"
   },
   "highlight_lists": {
     "message": "Списки"
@@ -100,5 +109,327 @@
   },
   "match_whole": {
     "message": "Слово целиком"
+  },
+  "badge_position_label": {
+    "message": "Положение счётчика в полях"
+  },
+  "badge_position_hint": {
+    "message": "Где располагается счётчик совпадений в текстовых полях (textarea / input)."
+  },
+  "badge_position_horizontal": {
+    "message": "По горизонтали"
+  },
+  "badge_position_vertical": {
+    "message": "По вертикали"
+  },
+  "badge_position_placement": {
+    "message": "Размещение"
+  },
+  "badge_position_left": {
+    "message": "Слева"
+  },
+  "badge_position_right": {
+    "message": "Справа"
+  },
+  "badge_position_top": {
+    "message": "Сверху"
+  },
+  "badge_position_center": {
+    "message": "По центру"
+  },
+  "badge_position_bottom": {
+    "message": "Снизу"
+  },
+  "badge_position_inside": {
+    "message": "Внутри"
+  },
+  "badge_position_outside": {
+    "message": "Снаружи"
+  },
+  "badge_position_border": {
+    "message": "На границе"
+  },
+  "site_exceptions": {
+    "message": "Сайты-исключения"
+  },
+  "add_exception": {
+    "message": "Добавить в исключения"
+  },
+  "remove_exception": {
+    "message": "Удалить из исключений"
+  },
+  "manage_exceptions": {
+    "message": "Управление"
+  },
+  "exceptions_mode": { "message": "Режим:" },
+  "exceptions_mode_blacklist": { "message": "Чёрный список — не подсвечивать на этих сайтах" },
+  "exceptions_mode_whitelist": { "message": "Белый список — подсвечивать только на этих сайтах" },
+  "exceptions_mode_option_blacklist": { "message": "Чёрный список" },
+  "exceptions_mode_option_whitelist": { "message": "Белый список" },
+  "exceptions_mode_hint_blacklist": { "message": "Не подсвечивать на этих сайтах." },
+  "exceptions_mode_hint_whitelist": { "message": "Подсвечивать только на этих сайтах." },
+  "exceptions_list": {
+    "message": "Сайты-исключения:"
+  },
+  "exceptions_list_blacklist": { "message": "Исключить сайты (чёрный список):" },
+  "exceptions_list_whitelist": { "message": "Включить сайты (белый список):" },
+  "add_current_site": { "message": "Добавить текущий сайт" },
+  "clear_all": {
+    "message": "Очистить все"
+  },
+  "confirm_clear_exceptions": {
+    "message": "Вы уверены, что хотите очистить все исключения?"
+  },
+  "remove": {
+    "message": "Удалить"
+  },
+  "tab_lists": {
+    "message": "Списки"
+  },
+  "tab_words": {
+    "message": "Слова"
+  },
+  "tab_exceptions": {
+    "message": "Исключения"
+  },
+  "no_exceptions": {
+    "message": "Нет исключений"
+  },
+  "toggle_highlighting_title": {
+    "message": "Выделение(вкл/выкл)"
+  },
+  "toggle_dark_mode_title": {
+    "message": "Темная/светлая тема"
+  },
+  "select_title": {
+    "message": "Выбрать"
+  },
+  "word_placeholder": {
+    "message": "Слово или фраза"
+  },
+  "background_color_title": {
+    "message": "Цвет фона"
+  },
+  "text_color_title": {
+    "message": "Цвет текста"
+  },
+  "tab_page_highlights": {
+    "message": "На странице"
+  },
+  "highlights_on_page": {
+    "message": "Найдено на этой странице"
+  },
+  "total_highlights": {
+    "message": "Всего"
+  },
+  "total_matches": {
+    "message": "Всего совпадений"
+  },
+  "group_by_list": {
+    "message": "Группировать по списку"
+  },
+  "other": {
+    "message": "Прочее"
+  },
+  "refresh": {
+    "message": "Обновить"
+  },
+  "no_highlights_on_page": {
+    "message": "На этой странице не найдены слова из списка"
+  },
+  "previous": {
+    "message": "Предыдущее"
+  },
+  "next": {
+    "message": "Следующее"
+  },
+  "duplicate": {
+    "message": "Дублировать"
+  },
+  "merge": {
+    "message": "Объединить"
+  },
+  "move": {
+    "message": "Переместить"
+  },
+  "copy": {
+    "message": "Копировать"
+  },
+  "move_to_list": {
+    "message": "Переместить в список"
+  },
+  "copy_to_list": {
+    "message": "Копировать в список"
+  },
+  "move_selected": {
+    "message": "Переместить выбранные"
+  },
+  "copy_selected": {
+    "message": "Копировать выбранные"
+  },
+  "no_other_lists": {
+    "message": "Нет других списков"
+  },
+  "word_actions": {
+    "message": "Переместить или скопировать в другой список"
+  },
+  "merge_lists_min_two": {
+    "message": "Выберите как минимум два списка для объединения."
+  },
+  "merge_lists_confirm": {
+    "message": "Объединить {count} список(ов) в \"{target}\"? Исходные списки будут удалены."
+  },
+  "delete_current_list": {
+    "message": "Удалить текущий список?"
+  },
+  "delete_lists_confirm": {
+    "message": "Удалить {count} выбранный(ых) список(ов)?"
+  },
+  "invalid_import_format": {
+    "message": "Неверный формат файла. Выберите действительный файл экспорта Goose Highlighter."
+  },
+  "import_failed": {
+    "message": "Не удалось импортировать файл. Убедитесь, что это действительный файл JSON."
+  },
+  "import_confirm": {
+    "message": "Импортировать {count} список(ов) с {words} словами всего?"
+  },
+  "import_success": {
+    "message": "Успешно импортировано {count} список(ов) с {words} словами."
+}
+,
+  "preview_label": {
+    "message": "Предпросмотр"
+  },
+  "import_page_title": {
+    "message": "Импорт — Goose Highlighter"
+  },
+  "import_page_heading": {
+    "message": "Импорт"
+  },
+  "import_choose_file": {
+    "message": "Выбрать файл"
+  },
+  "import_select_list_prompt": {
+    "message": "Выберите файл списка для импорта."
+  },
+  "import_select_settings_prompt": {
+    "message": "Выберите файл настроек для импорта."
+  },
+  "import_in_progress": {
+    "message": "Импорт…"
+  },
+  "import_complete": {
+    "message": "Импорт завершён."
+  },
+  "import_complete_lists": {
+    "message": "Импорт завершён. Добавлено списков: $COUNT$.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "import_close_tab_hint": {
+    "message": "Можно закрыть эту вкладку."
+  },
+  "preview_text": {
+    "message": "Так будет выглядеть выделенный текст."
+  },
+  "preview_text_before": {
+    "message": "Так будет выглядеть"
+  },
+  "preview_text_highlight": {
+    "message": "выделенный текст"
+  },
+  "preview_text_after": {
+    "message": "."
+  },
+  "enable_highlighting_title": {
+    "message": "Включить выделение"
+  },
+  "enable_highlighting_subtitle": {
+    "message": "Выделять слова из выбранного списка"
+  },
+  "manage_lists": {
+    "message": "Управление списками"
+  },
+  "background_label": {
+    "message": "Фон"
+  },
+  "foreground_label": {
+    "message": "Текст"
+  },
+  "multi_select_hint": {
+    "message": "Клик - выбрать • Ctrl+клик - выбрать несколько"
+  },
+  "dark_mode_title": {
+    "message": "Темная тема"
+  },
+  "dark_mode_subtitle": {
+    "message": "Переключить светлую/темную тему"
+  },
+  "list_manager_title": {
+    "message": "Управление списками"
+  },
+  "words_label": {
+    "message": "слова"
+  },
+  "active_label": {
+    "message": "активно"
+  },
+  "inactive_label": {
+    "message": "неактивно"
+  },
+  "drag_words_hint": {
+    "message": "Клик - выбрать • Ctrl+клик - несколько • Перетащить в список - переместить"
+  },
+  "drag_lists_hint": {
+    "message": "Перетащить - изменить порядок • Ctrl+клик - выбрать несколько"
+  },
+  "showing_items": {
+    "message": "Показано {start}-{end} из {total} слов"
+  },
+  "items_per_page": {
+    "message": "Элементов на странице:"
+  },
+  "page_info": {
+    "message": "Страница {current} из {total}"
+  },
+  "toggle_active": {
+    "message": "переключить активность"
+  },
+  "rename_list_title": {
+    "message": "Переименовать список"
+  },
+  "new_list_title": {
+    "message": "Новый список"
+  },
+  "delete_list_title": {
+    "message": "Удалить список"
+  },
+  "list_active_badge": {
+    "message": "Активен"
+  },
+  "list_paused_badge": {
+    "message": "Приостановлен"
+  },
+  "words_stats": {
+    "message": "{total} слов • {active} активных • {inactive} неактивных"
+  },
+  "rename_list": {
+    "message": "Переименовать список"
+  },
+  "export_settings": {
+    "message": "Экспорт"
+  },
+  "import_settings": {
+    "message": "Импорт"
+  },
+  "export_import_settings_label": {
+    "message": "Экспорт / Импорт"
+  },
+  "export_import_settings_hint": {
+    "message": "Резервное копирование или восстановление списков и исключений сайтов."
   }
 }
