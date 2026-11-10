@@ -1,7 +1,7 @@
 import { CONSTANTS } from '../dist/types.js';
 
 globalThis.browser = { i18n: { getMessage: () => '' } };
-const { HighlightEngine } = await import('../dist/content/HighlightEngine.js');
+const { HighlightEngine, activeHighlightWords } = await import('../dist/content/HighlightEngine.js');
 const { ImportService } = await import('../dist/services/ImportService.js');
 
 const results = [];
@@ -25,15 +25,15 @@ function expect(actual, expected) {
 async function check(name, html, run) {
     document.body.innerHTML = html;
     const engine = new HighlightEngine(() => highlight());
-    let lists;
+    let activeWords;
     let options;
 
     function highlight(words, settings = {}) {
         if (words) {
-            lists = settings.lists ?? [list(words)];
+            activeWords = activeHighlightWords(settings.lists ?? [list(words)]);
             options = settings;
         }
-        engine.highlight(lists, options.matchCase ?? false, options.matchWhole ?? false);
+        engine.highlight(activeWords, options.matchCase ?? false, options.matchWhole ?? false);
     }
 
     try {
@@ -153,6 +153,23 @@ if (location.search === '?empty-entry') {
         '<pre>alpha  beta</pre><p>alpha beta</p>', highlight => {
             highlight(['alpha beta']);
             expectRanges('alpha beta');
+            highlight(['alpha beta', 'alpha  beta']);
+            expectRanges('alpha  beta', 'alpha beta');
+        });
+
+    await check('highlight colors inherit through nested text and resolve CSS variables locally',
+        '<p style="--local-highlight: #00ff00"><em>alpha</em> <span>beta</span></p>', highlight => {
+            highlight([
+                { ...entry('alpha'), background: '#ff0000', foreground: '#0000ff' },
+                { ...entry('beta'), background: 'var(--local-highlight)' },
+            ]);
+            for (const [name, layer] of CSS.highlights) {
+                const [range] = layer;
+                const style = getComputedStyle(range.startContainer.parentElement, `::highlight(${name})`);
+                expect(style.backgroundColor, range.toString() === 'alpha' ? 'rgb(255, 0, 0)' : 'rgb(0, 255, 0)');
+                expect(style.color, range.toString() === 'alpha' ? 'rgb(0, 0, 255)' : 'rgb(0, 0, 0)');
+            }
+            expectRanges('alpha', 'beta');
         });
 
     await check('excludes hidden and non-content text',
@@ -349,11 +366,13 @@ if (location.search === '?empty-entry') {
             expect([range.startOffset, range.endOffset], [4, 7]);
         });
 
-    await check('the injected content bundle uses the same matcher',
-        '<p>Read the <a href="#notes">release notes</a>&nbsp;today.</p>', async () => {
+    await check('the injected bundle matches phrases and refreshes its wordlist snapshot',
+        '<p>Read the <a href="#notes">release notes</a>&nbsp;today.</p><div><textarea>release notes</textarea></div>', async () => {
             const phrase = 'Read the release notes today';
-            globalThis.browser.storage = { local: { get: async defaults => ({ ...defaults, lists: [list([phrase])] }) } };
-            globalThis.browser.runtime = { onMessage: { addListener() {} } };
+            let lists = [list([phrase])];
+            let onMessage;
+            globalThis.browser.storage = { local: { get: async defaults => ({ ...defaults, lists }) } };
+            globalThis.browser.runtime = { onMessage: { addListener(listener) { onMessage = listener; } } };
             const script = document.createElement('script');
             script.src = new URL('../dist/content-standalone.js', import.meta.url).href;
             await new Promise((resolve, reject) => {
@@ -362,6 +381,14 @@ if (location.search === '?empty-entry') {
                 document.head.appendChild(script);
             });
             expectRanges('Read the release notes\u00a0today');
+            lists = [list(['release notes'])];
+            onMessage({ type: 'WORD_LIST_UPDATED' });
+            await waitForUpdate();
+            expectRanges('release notes');
+            expect(document.querySelector(badge).textContent, '1');
+            const response = await new Promise(resolve => onMessage({ type: 'GET_PAGE_HIGHLIGHTS' }, {}, resolve));
+            expect(response.highlights.map(({ word, count }) => [word, count]), [['release notes', 2]]);
+            expect(response.lists, [{ id: 1, name: 'Test list', background: '#ff0' }]);
         });
 }
 

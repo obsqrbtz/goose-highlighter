@@ -461,16 +461,19 @@ export class WordManager {
     const list = this.lists[currentIndex];
     const wordList = document.getElementById('wordList') as HTMLDivElement;
 
-    let filteredWords = list.words;
-    const searchQuery = this.getWordSearchQuery();
-    if (searchQuery.trim()) {
-      const q = searchQuery.trim().toLowerCase();
-      filteredWords = list.words.filter(w => w.wordStr.toLowerCase().includes(q));
+    const query = this.getWordSearchQuery().trim().toLowerCase();
+    let matchingIndices: number[] | undefined;
+    if (query) {
+      const indices: number[] = [];
+      list.words.forEach((word, index) => {
+        if (word.wordStr.toLowerCase().includes(query)) indices.push(index);
+      });
+      matchingIndices = indices;
     }
 
-    this.totalWords = filteredWords.length;
+    this.totalWords = matchingIndices?.length ?? list.words.length;
 
-    if (filteredWords.length === 0) {
+    if (this.totalWords === 0) {
       wordList.innerHTML = '<div class="word-list-empty">No words found</div>';
       const wordCount = document.getElementById('wordCount');
       if (wordCount) wordCount.textContent = '0';
@@ -485,13 +488,13 @@ export class WordManager {
     }
     const startIndex = (currentPage - 1) * this.pageSize;
     const endIndex = Math.min(startIndex + this.pageSize, this.totalWords);
-    const paginatedWords = filteredWords.slice(startIndex, endIndex);
-
-    wordList.innerHTML = paginatedWords.map(w => {
-      const realIndex = list.words.indexOf(w);
+    const rows: string[] = [];
+    for (let index = startIndex; index < endIndex; index++) {
+      const realIndex = matchingIndices?.[index] ?? index;
       const isSelected = this.selectedCheckboxes.has(realIndex);
-      return PopupRenderer.createWordItemHTML(w, realIndex, isSelected, list.background, list.foreground);
-    }).join('');
+      rows.push(PopupRenderer.createWordItemHTML(list.words[realIndex], realIndex, isSelected, list.background, list.foreground));
+    }
+    wordList.innerHTML = rows.join('');
 
     const wordCount = document.getElementById('wordCount');
     if (wordCount) {

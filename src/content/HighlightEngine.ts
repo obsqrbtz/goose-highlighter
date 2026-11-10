@@ -17,6 +17,21 @@ interface FieldState {
   badge?: HTMLElement;
 }
 
+const hexColor = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/i;
+
+function supportsHighlightInheritance(): boolean {
+  if (typeof Highlight === 'undefined' || !matchMedia('(forced-colors: none)').matches) return false;
+  const probe = document.createElement('style');
+  const selector = '::highlight(gh-inheritance-probe)';
+  probe.textContent = `:root${selector} { background-color: rgb(1, 2, 3); }`;
+  document.head.appendChild(probe);
+  try {
+    return getComputedStyle(document.body, selector).backgroundColor === 'rgb(1, 2, 3)';
+  } finally {
+    probe.remove();
+  }
+}
+
 export function activeHighlightWords(lists: HighlightList[]): ActiveWord[] {
   const activeWords: ActiveWord[] = [];
   for (const list of lists) {
@@ -54,6 +69,7 @@ export class HighlightEngine {
   private matchWhole = false;
   private matcher?: PhraseMatcher;
   private preservedMatcher?: PhraseMatcher;
+  private inheritsHighlightColors?: boolean;
 
   constructor(private onUpdate: () => void) {
     this.observer = new MutationObserver(mutations => {
@@ -83,16 +99,17 @@ export class HighlightEngine {
 
   private *updateMatcher(words: ActiveWord[], matchCase: boolean, matchWhole: boolean): Generator<void> {
     if (this.matcher && this.matchCase === matchCase && this.matchWhole === matchWhole &&
-      this.words.length === words.length && words.every((word, i) =>
+      (this.words === words || (this.words.length === words.length && words.every((word, i) =>
         word.text === this.words[i].text && word.background === this.words[i].background &&
-        word.foreground === this.words[i].foreground)) return;
+        word.foreground === this.words[i].foreground)))) return;
 
-    const rules = ['::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); }'];
-    const styles = new Map<string, { id: number; colors: string }>();
+    const inheritColors = this.inheritsHighlightColors ??= supportsHighlightInheritance();
+    const rules: string[] = [];
+    const inheritedRules: string[] = [];
+    const styles = new Map<string, { id: number; colors: string; fixed: boolean }>();
     const layers = new Set<string>();
     const entries = new Map<string, PhraseEntry>();
-    const preserved = new Map<string, PhraseEntry>();
-    let hasDistinctWhitespace = false;
+    let preserved: Map<string, PhraseEntry> | undefined;
     let processed = 0;
     for (const word of words) {
       if (++processed % 256 === 0) yield;
@@ -104,24 +121,35 @@ export class HighlightEngine {
       if (!style) {
         const background = CSS.supports('color', word.background) ? word.background : '#ff0';
         const foreground = CSS.supports('color', word.foreground) ? word.foreground : '#000';
-        style = { id: styles.size, colors: `background-color: ${background}; color: ${foreground};` };
+        style = {
+          id: styles.size,
+          colors: `background-color: ${background}; color: ${foreground};`,
+          fixed: inheritColors && hexColor.test(background) && hexColor.test(foreground),
+        };
         styles.set(styleKey, style);
       }
       for (const length of [collapsed.length, key.length]) {
         const layer = `gh-${style.id}-${length}`;
         if (layers.has(layer)) continue;
         layers.add(layer);
-        rules.push(`::highlight(${layer}) { ${style.colors} }`);
+        (style.fixed ? inheritedRules : rules).push(`::highlight(${layer}) { ${style.colors} }`);
       }
       const entry = { key, style: style.id };
+      if (!preserved && collapsed !== key) {
+        preserved = new Map();
+        let copied = 0;
+        for (const [existingKey, existingEntry] of entries) {
+          preserved.set(existingKey, existingEntry);
+          if (++copied % 256 === 0) yield;
+        }
+      }
       entries.set(collapsed, entry);
-      preserved.set(key, entry);
-      hasDistinctWhitespace ||= collapsed !== key;
+      preserved?.set(key, entry);
     }
     const matcher = new PhraseMatcher(matchWhole);
     yield* matcher.build(entries);
     let preservedMatcher;
-    if (hasDistinctWhitespace) {
+    if (preserved) {
       preservedMatcher = new PhraseMatcher(matchWhole);
       yield* preservedMatcher.build(preserved);
     }
@@ -131,7 +159,17 @@ export class HighlightEngine {
       this.styleElement.id = 'goose-highlighter-styles';
       document.head.appendChild(this.styleElement);
     }
-    this.styleElement.textContent = rules.join('\n');
+    (inheritColors ? inheritedRules : rules).push('::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); }');
+    // Share fixed colors through highlight inheritance. Context-dependent colors
+    // and forced-color adjustments still need to resolve on each element.
+    if (inheritedRules.length) {
+      rules.push(
+        `@media (forced-colors: none) {\n${inheritedRules.map(rule => `:root${rule}`).join('\n')}\n}`,
+        `@media (forced-colors: active) {\n${inheritedRules.join('\n')}\n}`,
+      );
+    }
+    const stylesheet = rules.join('\n');
+    if (this.styleElement.textContent !== stylesheet) this.styleElement.textContent = stylesheet;
     this.words = words;
     this.matchCase = matchCase;
     this.matchWhole = matchWhole;
@@ -143,10 +181,9 @@ export class HighlightEngine {
     return (collapse ? undefined : this.preservedMatcher) ?? this.matcher!;
   }
 
-  highlight(lists: HighlightList[], matchCase: boolean, matchWhole: boolean): void {
+  highlight(words: ActiveWord[], matchCase: boolean, matchWhole: boolean): void {
     if (this.isDestroyed) return;
     this.clearHighlights();
-    const words = activeHighlightWords(lists);
     if (words.length === 0) return;
     const version = this.scanVersion;
     const work = this.scan(words, matchCase, matchWhole);

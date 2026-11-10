@@ -1,5 +1,5 @@
 globalThis.browser = { i18n: { getMessage: () => '' } };
-const { HighlightEngine } = await import('../../dist/content/HighlightEngine.js');
+const { HighlightEngine, activeHighlightWords } = await import('../../dist/content/HighlightEngine.js');
 
 const workloads = {
     small: { entries: 1_000, rows: 250, hitsPerRow: 1, hitEvery: 5, styles: 1, samples: 5 },
@@ -7,6 +7,8 @@ const workloads = {
     mixed: { entries: 10_000, rows: 2_500, hitsPerRow: 1, hitEvery: 5, styles: 1, samples: 3, mixed: true },
     dense: { entries: 10_000, rows: 2_500, hitsPerRow: 4, hitEvery: 1, styles: 64, samples: 5, inline: true },
     stress: { entries: 50_000, rows: 10_000, hitsPerRow: 1, hitEvery: 5, styles: 1, samples: 1 },
+    'large-list': { entries: 150_000, rows: 2_500, hitsPerRow: 1, hitEvery: 5, styles: 1, samples: 5, update: true },
+    'large-list-dense': { entries: 150_000, rows: 2_500, hitsPerRow: 4, hitEvery: 1, styles: 64, samples: 5, inline: true },
 };
 
 const filler = ['invoice', 'queue', 'opened', 'contact', 'account', 'ticket', 'review', 'service'];
@@ -102,7 +104,8 @@ async function benchmark(workload) {
     observer?.observe({ type: 'longtask' });
 
     let engine;
-    const highlight = () => engine.highlight(lists, false, true);
+    let activeWords;
+    const highlight = () => engine.highlight(activeWords ??= activeHighlightWords(lists), false, true);
     engine = new HighlightEngine(highlight);
     const passes = [];
     const updates = [];

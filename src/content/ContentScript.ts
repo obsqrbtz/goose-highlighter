@@ -1,10 +1,11 @@
-import { HighlightList, MessageData, ExceptionsMode, BadgePosition, DEFAULT_STORAGE } from '../types.js';
+import { ActiveWord, HighlightList, MessageData, ExceptionsMode, BadgePosition, DEFAULT_STORAGE } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { HighlightEngine, activeHighlightWords } from './HighlightEngine.js';
 
 export class ContentScript {
   private lists: HighlightList[] = [];
+  private activeWords?: ActiveWord[];
   private isGlobalHighlightEnabled = true;
   private exceptionsList: string[] = [];
   private exceptionsWhiteList: string[] = [];
@@ -117,6 +118,7 @@ export class ContentScript {
     try {
       const data = await StorageService.get(['lists']);
       this.lists = data.lists || [];
+      this.activeWords = undefined;
       this.processHighlights();
     } catch (error) {
       console.error('ContentScript.handleWordListUpdate error:', error);
@@ -164,16 +166,21 @@ export class ContentScript {
         return;
       }
 
-      this.highlightEngine.highlight(this.lists, this.matchCase, this.matchWhole);
+      this.highlightEngine.highlight(this.getActiveWords(), this.matchCase, this.matchWhole);
     } finally {
       this.isProcessing = false;
     }
   }
 
+  private getActiveWords(): ActiveWord[] {
+    return this.activeWords ??= activeHighlightWords(this.lists);
+  }
+
   private async handleGetPageHighlights(sendResponse: (response: unknown) => void): Promise<void> {
     await this.highlightEngine.waitForScan();
-    const highlights = this.highlightEngine.getPageHighlights(activeHighlightWords(this.lists));
-    sendResponse({ highlights, lists: this.lists.filter(l => l?.active) });
+    const highlights = this.highlightEngine.getPageHighlights(this.getActiveWords());
+    const lists = this.lists.filter(list => list?.active).map(({ id, name, background }) => ({ id, name, background }));
+    sendResponse({ highlights, lists });
   }
 
   private handleScrollToHighlight(word: string, index: number): void {

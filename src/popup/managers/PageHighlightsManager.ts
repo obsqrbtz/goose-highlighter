@@ -4,11 +4,13 @@ import { DOMUtils } from '../../utils/DOMUtils.js';
 import { PopupRenderer, PageHighlight } from './PopupRenderer.js';
 import { HighlightList } from '../../types.js';
 
+type PageHighlightList = Pick<HighlightList, 'id' | 'name' | 'background'>;
+
 export class PageHighlightsManager {
   private static readonly MANY_LISTS_THRESHOLD = 8;
 
   private pageHighlights: PageHighlight[] = [];
-  private pageHighlightsActiveLists: Array<{ id: number; name: string; background: string }> = [];
+  private pageHighlightsActiveLists: PageHighlightList[] = [];
   private pageHighlightsCollapsedGroups = new Set<string>();
   private highlightIndices = new Map<string, number>();
 
@@ -67,7 +69,7 @@ export class PageHighlightsManager {
 
   async load(): Promise<void> {
     try {
-      const response = await MessageService.sendToActiveTab({ type: 'GET_PAGE_HIGHLIGHTS' }) as { highlights?: PageHighlight[]; lists?: HighlightList[] } | null;
+      const response = await MessageService.sendToActiveTab({ type: 'GET_PAGE_HIGHLIGHTS' }) as { highlights?: PageHighlight[]; lists?: PageHighlightList[] } | null;
 
       if (response && response.highlights) {
         this.pageHighlights = response.highlights.map((h: PageHighlight) => ({

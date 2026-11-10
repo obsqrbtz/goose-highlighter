@@ -101,6 +101,8 @@ interface PhraseMatch extends PhraseEntry {
 }
 
 interface TrieState {
+  firstCharacter?: string;
+  firstChild?: TrieState;
   children?: Map<string, TrieState>;
   failure?: TrieState;
   suffix?: TrieState;
@@ -108,6 +110,10 @@ interface TrieState {
   length: number;
   leftBoundary?: boolean;
   rightBoundary?: boolean;
+}
+
+function transition(state: TrieState, character: string): TrieState | undefined {
+  return character === state.firstCharacter ? state.firstChild : state.children?.get(character);
 }
 
 const wordCharacter = /[\p{L}\p{M}\p{N}\p{Pc}]/uy;
@@ -132,11 +138,15 @@ export class PhraseMatcher {
       let state = this.root;
       for (let i = 0; i < phrase.length; i++) {
         const character = phrase[i];
-        const children = state.children ??= new Map();
-        let next = children.get(character);
+        let next = transition(state, character);
         if (!next) {
           next = { length: i + 1 };
-          children.set(character, next);
+          if (state.firstChild) {
+            (state.children ??= new Map()).set(character, next);
+          } else {
+            state.firstCharacter = character;
+            state.firstChild = next;
+          }
         }
         state = next;
       }
@@ -148,18 +158,25 @@ export class PhraseMatcher {
       if (++processed % 256 === 0) yield;
     }
     // Aho–Corasick failure links let a scan reuse shared prefixes and suffixes.
-    const queue = [...(this.root.children?.values() ?? [])];
-    for (const child of queue) child.failure = this.root;
+    const queue = [this.root];
+    let linked = 0;
+    const linkChild = (state: TrieState, character: string, child: TrieState) => {
+      let fallback = state.failure;
+      while (fallback && fallback !== this.root && !transition(fallback, character)) fallback = fallback.failure;
+      child.failure = (fallback && transition(fallback, character)) ?? this.root;
+      child.suffix = child.failure.entry ? child.failure : child.failure.suffix;
+      if (child.firstChild) queue.push(child);
+    };
     for (let i = 0; i < queue.length; i++) {
-      if (i % 256 === 0) yield;
       const state = queue[i];
+      if (state.firstChild) {
+        linkChild(state, state.firstCharacter!, state.firstChild);
+        if (++linked % 256 === 0) yield;
+      }
       if (!state.children) continue;
       for (const [character, child] of state.children) {
-        let fallback = state.failure!;
-        while (fallback !== this.root && !fallback.children?.has(character)) fallback = fallback.failure!;
-        child.failure = fallback.children?.get(character) ?? this.root;
-        child.suffix = child.failure.entry ? child.failure : child.failure.suffix;
-        queue.push(child);
+        linkChild(state, character, child);
+        if (++linked % 256 === 0) yield;
       }
     }
   }
@@ -175,10 +192,10 @@ export class PhraseMatcher {
     for (let i = 0; i < text.length; i++) {
       if (i > 0 && i % 2048 === 0) yield;
       const character = text[i];
-      let next = state.children?.get(character);
+      let next = transition(state, character);
       while (!next && state !== this.root) {
         state = state.failure!;
-        next = state.children?.get(character);
+        next = transition(state, character);
       }
       state = next ?? this.root;
       const end = i + 1;

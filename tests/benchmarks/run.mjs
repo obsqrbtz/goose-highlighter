@@ -11,8 +11,9 @@ const args = process.argv.slice(2);
 const defaults = ['small', 'sparse-with-updates', 'mixed', 'dense'];
 const workloads = args.length ? args : defaults;
 
-if (workloads.some(name => ![...defaults, 'stress'].includes(name))) {
-    throw new Error('Choose one or more workloads: small, sparse-with-updates, mixed, dense, stress');
+const available = [...defaults, 'stress', 'large-list', 'large-list-dense'];
+if (workloads.some(name => !available.includes(name))) {
+    throw new Error(`Choose one or more workloads: ${available.join(', ')}`);
 }
 
 async function run(name) {
