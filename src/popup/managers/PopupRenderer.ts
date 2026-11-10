@@ -69,16 +69,7 @@ export class PopupRenderer {
     `;
   }
 
-  static createPaginationHTML(currentPage: number, totalPages: number, totalWords: number, pageSize: number): string {
-    const startItem = (currentPage - 1) * pageSize + 1;
-    const endItem = Math.min(currentPage * pageSize, totalWords);
-
-    const showingText = browserAPI.i18n.getMessage('showing_items')
-      ?.replace('{start}', String(startItem))
-      .replace('{end}', String(endItem))
-      .replace('{total}', String(totalWords))
-      || `Showing ${startItem}-${endItem} of ${totalWords} words`;
-
+  static createPaginationHTML(currentPage: number, totalPages: number): string {
     const pageInfoText = browserAPI.i18n.getMessage('page_info')
       ?.replace('{current}', String(currentPage))
       .replace('{total}', String(totalPages))
@@ -90,9 +81,6 @@ export class PopupRenderer {
     const lastPageTitle = browserAPI.i18n.getMessage('last_page') || 'Last page';
 
     return `
-      <div class="pagination-info">
-        ${showingText}
-      </div>
       <div class="pagination-controls">
         <button class="pagination-btn" id="firstPageBtn" ${currentPage === 1 ? 'disabled' : ''} title="${firstPageTitle}">
           <i class="fa-solid fa-angles-left"></i>

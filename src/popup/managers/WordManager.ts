@@ -517,7 +517,7 @@ export class WordManager {
 
     const currentPage = this.getCurrentPage();
     paginationContainer.style.display = 'flex';
-    paginationContainer.innerHTML = PopupRenderer.createPaginationHTML(currentPage, totalPages, this.totalWords, this.pageSize);
+    paginationContainer.innerHTML = PopupRenderer.createPaginationHTML(currentPage, totalPages);
 
     this.setupPaginationEventListeners();
   }

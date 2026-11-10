@@ -5,6 +5,12 @@
   "extension_description": {
     "message": "Highlight words and phrases on any website. Create custom lists, use colors, import/export, and more."
   },
+  "list_actions": {
+    "message": "List actions"
+  },
+  "highlight_appearance": {
+    "message": "Highlight appearance"
+  },
   "select_list": {
     "message": "Select List:"
   },

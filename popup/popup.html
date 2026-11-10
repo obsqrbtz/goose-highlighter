@@ -39,19 +39,15 @@
     <!-- Tabs -->
     <div class="tabs">
       <button class="tab-button active" data-tab="lists">
-        <i class="fa-solid fa-list"></i>
         <span data-i18n="tab_lists">Lists</span>
       </button>
       <button class="tab-button" data-tab="words">
-        <i class="fa-solid fa-tags"></i>
         <span data-i18n="tab_words">Words</span>
       </button>
       <button class="tab-button" data-tab="page-highlights">
-        <i class="fa-solid fa-location-dot"></i>
         <span data-i18n="tab_page_highlights">On Page</span>
       </button>
       <button class="tab-button" data-tab="exceptions">
-        <i class="fa-solid fa-ban"></i>
         <span data-i18n="tab_exceptions">Exceptions</span>
       </button>
     </div>
@@ -74,59 +70,54 @@
                 <!-- Populated dynamically -->
               </div>
             </div>
-            <button class="icon-button" id="renameListBtn" data-i18n-title="rename_list_title" title="Rename list">
-              <i class="fa-solid fa-pen"></i>
-            </button>
             <button class="icon-button" id="newListBtn" data-i18n-title="new_list_title" title="New list">
               <i class="fa-solid fa-plus"></i>
             </button>
-            <button class="icon-button danger" id="deleteListBtn" data-i18n-title="delete_list_title" title="Delete list">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-
-          <!-- Export / Import (Lists tab) -->
-          <div class="list-export-import-row">
-            <button class="list-export-import-btn" id="exportListBtn">
-              <i class="fa-solid fa-download"></i>
-              <span data-i18n="export_list">Export</span>
-            </button>
-            <button class="list-export-import-btn" id="importListBtn">
-              <i class="fa-solid fa-upload"></i>
-              <span data-i18n="import_list">Import</span>
-            </button>
+            <details class="list-actions" id="listActions">
+              <summary class="icon-button" data-i18n-title="list_actions" title="List actions">
+                <i class="fa-solid fa-ellipsis-v" aria-hidden="true"></i>
+              </summary>
+              <div class="list-actions-panel">
+                <button type="button" id="renameListBtn"><i class="fa-solid fa-pen" aria-hidden="true"></i><span data-i18n="rename_list_title">Rename list</span></button>
+                <button type="button" id="importListBtn"><i class="fa-solid fa-upload" aria-hidden="true"></i><span data-i18n="import_list">Import</span></button>
+                <button type="button" id="exportListBtn"><i class="fa-solid fa-download" aria-hidden="true"></i><span data-i18n="export_list">Export</span></button>
+                <button type="button" class="danger" id="deleteListBtn"><i class="fa-solid fa-trash" aria-hidden="true"></i><span data-i18n="delete_list_title">Delete list</span></button>
+              </div>
+            </details>
             <input type="file" id="importListInput" accept="application/json" hidden />
           </div>
 
-          <!-- Color Pickers -->
-          <div class="color-pickers-row">
-            <div class="color-picker-group">
-              <label class="color-picker-label" data-i18n="background_label">Background</label>
-              <div class="color-picker-input-group">
-                <input type="color" id="listBg" class="color-picker-swatch" />
-                <input type="text" id="listBgText" class="color-picker-text" maxlength="7" />
-              </div>
-            </div>
-            <div class="color-picker-group">
-              <label class="color-picker-label" data-i18n="foreground_label">Foreground</label>
-              <div class="color-picker-input-group">
-                <input type="color" id="listFg" class="color-picker-swatch" />
-                <input type="text" id="listFgText" class="color-picker-text" maxlength="7" />
-              </div>
-            </div>
-          </div>
+          <section class="list-appearance" aria-labelledby="listAppearanceTitle">
+            <h2 id="listAppearanceTitle" data-i18n="highlight_appearance">Highlight appearance</h2>
 
-          <!-- Preview -->
-          <div class="preview-section">
-            <label class="preview-label" data-i18n="preview_label">Preview</label>
-            <div class="preview-box">
+            <!-- Color Pickers -->
+            <div class="color-pickers-row">
+              <div class="color-picker-group">
+                <label class="color-picker-label" id="listBgLabel" for="listBgText" data-i18n="background_label">Background</label>
+                <div class="color-picker-input-group">
+                  <input type="color" id="listBg" aria-labelledby="listBgLabel" class="color-picker-swatch" />
+                  <input type="text" id="listBgText" class="color-picker-text" maxlength="7" />
+                </div>
+              </div>
+              <div class="color-picker-group">
+                <label class="color-picker-label" id="listFgLabel" for="listFgText" data-i18n="foreground_label">Foreground</label>
+                <div class="color-picker-input-group">
+                  <input type="color" id="listFg" aria-labelledby="listFgLabel" class="color-picker-swatch" />
+                  <input type="text" id="listFgText" class="color-picker-text" maxlength="7" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="preview-section">
+              <span class="preview-label" data-i18n="preview_label">Preview</span>
               <p class="preview-text">
                 <span data-i18n="preview_text_before">This is how your</span>
                 <span class="preview-highlight" id="previewHighlight" data-i18n="preview_text_highlight">highlighted text</span>
                 <span data-i18n="preview_text_after">will appear.</span>
               </p>
             </div>
-          </div>
+          </section>
 
           <!-- Enable Toggle -->
           <div class="enable-toggle-section">
@@ -144,7 +135,7 @@
         </div>
 
         <!-- Apply Button -->
-        <button class="apply-button btn-primary-subdued" id="applyListSettingsBtn">
+        <button class="apply-button" id="applyListSettingsBtn">
           <i class="fa-solid fa-check"></i>
           <span data-i18n="apply">Apply Changes</span>
         </button>
@@ -157,7 +148,6 @@
         <!-- Add Words Section -->
         <div class="add-words-section">
           <label class="section-label">
-            <i class="fa-solid fa-pen"></i>
             <span data-i18n="add_words">Add Words</span>
           </label>
           <textarea id="bulkPaste" class="add-words-textarea" data-i18n="paste_hint" placeholder="Paste words or phrases here. Each new word/phrase should start from next line."></textarea>
@@ -170,7 +160,6 @@
         <div class="word-list-section">
           <div class="word-list-header">
             <label class="section-label">
-              <i class="fa-solid fa-tags"></i>
               <span data-i18n="word_list">Word List</span>
               <span class="word-count-badge" id="wordCount">0</span>
             </label>
@@ -188,8 +177,6 @@
           <!-- Word item 3-dot menu dropdown (positioned by JS) -->
           <div id="wordItemMenuDropdown" class="word-item-menu-dropdown" role="menu" aria-hidden="true"></div>
 
-          <!-- Help text -->
-          <p class="word-list-hint" data-i18n="multi_select_hint">Click to select • Ctrl/Cmd+Click for multi-select</p>
         </div>
       </div>
     </div>
@@ -224,7 +211,7 @@
     <div class="tab-content" data-tab-content="exceptions">
       <div class="tab-inner">
         <div class="exceptions-section">
-          <div class="exceptions-mode-card">
+          <div class="exceptions-mode-section">
             <span class="exceptions-mode-label" data-i18n="exceptions_mode">Mode</span>
             <select id="exceptionsModeSelect" class="exceptions-mode-select" aria-label="Exceptions mode">
               <option value="blacklist" data-i18n="exceptions_mode_option_blacklist">Blacklist</option>
@@ -234,7 +221,7 @@
           </div>
           <div class="exceptions-add-row">
             <input type="text" id="exceptionDomainInput" class="exception-domain-input" data-i18n="exception_domain_placeholder" placeholder="example.com" />
-            <button type="button" class="exception-add-btn btn-primary-subdued" id="addExceptionBtn" aria-label="Add">
+            <button type="button" class="exception-add-btn" id="addExceptionBtn" aria-label="Add">
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>

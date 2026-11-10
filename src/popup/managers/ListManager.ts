@@ -15,14 +15,28 @@ export class ListManager {
   setupEventListeners(): void {
     const dropdownBtn = document.getElementById('listDropdownBtn');
     const dropdownMenu = document.getElementById('listDropdownMenu');
+    const listActions = document.querySelector<HTMLDetailsElement>('#listActions');
+    const listActionsTrigger = listActions?.querySelector('summary');
 
     dropdownBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (listActions) listActions.open = false;
       dropdownMenu?.classList.toggle('open');
     });
 
-    document.addEventListener('click', () => {
+    document.addEventListener('click', (event) => {
       dropdownMenu?.classList.remove('open');
+      if (!listActions?.open || !listActionsTrigger || event.composedPath().includes(listActionsTrigger)) return;
+      if (listActions.contains(document.activeElement)) listActionsTrigger.focus();
+      listActions.open = false;
+    });
+
+    listActions?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !listActions.open) return;
+      event.preventDefault();
+      event.stopPropagation();
+      listActions.open = false;
+      listActionsTrigger?.focus();
     });
 
     document.getElementById('applyListSettingsBtn')?.addEventListener('click', () => {
