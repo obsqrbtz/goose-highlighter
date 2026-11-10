@@ -316,6 +316,29 @@ if (location.search === '?empty-entry') {
             expect(words, ['alpha']);
         }
     });
+
+    await check('maps combined whitespace and accents split across inline nodes',
+        '<p>😀  Cafe<span>\u0301&nbsp;</span>  notes!</p>', highlight => {
+            highlight(['café notes']);
+            expectRanges('Cafe\u0301\u00a0  notes');
+            const [range] = ranges();
+            expect([range.startOffset, range.endOffset], [4, 7]);
+        });
+
+    await check('the injected content bundle uses the same matcher',
+        '<p>Read the <a href="#notes">release notes</a>&nbsp;today.</p>', async () => {
+            const phrase = 'Read the release notes today';
+            globalThis.browser.storage = { local: { get: async defaults => ({ ...defaults, lists: [list([phrase])] }) } };
+            globalThis.browser.runtime = { onMessage: { addListener() {} } };
+            const script = document.createElement('script');
+            script.src = new URL('../dist/content-standalone.js', import.meta.url).href;
+            await new Promise((resolve, reject) => {
+                script.onload = resolve;
+                script.onerror = () => reject(new Error('Could not load the content bundle'));
+                document.head.appendChild(script);
+            });
+            expectRanges('Read the release notes\u00a0today');
+        });
 }
 
 const report = document.createElement('pre');

@@ -2,6 +2,7 @@ import { browserAPI } from '../../utils/browser.js';
 import { HighlightList, ExportData, ExceptionsMode } from '../../types.js';
 import { StorageService } from '../../services/StorageService.js';
 import { MessageService } from '../../services/MessageService.js';
+import { ImportService } from '../../services/ImportService.js';
 
 export class ImportExportManager {
   constructor(
@@ -112,22 +113,7 @@ export class ImportExportManager {
 
   private importLists(jsonString: string): void {
     try {
-      const data = JSON.parse(jsonString);
-      const toAdd: HighlightList[] = [];
-
-      if (Array.isArray(data)) {
-        data.forEach((item: unknown) => {
-          if (this.isValidList(item)) toAdd.push(item);
-        });
-      } else if (data && typeof data === 'object') {
-        if (Array.isArray(data.lists)) {
-          data.lists.forEach((item: unknown) => {
-            if (this.isValidList(item)) toAdd.push(item);
-          });
-        } else if (this.isValidList(data)) {
-          toAdd.push(data);
-        }
-      }
+      const toAdd = ImportService.extractLists(jsonString);
 
       if (toAdd.length === 0) {
         alert(browserAPI.i18n.getMessage('invalid_import_format') || 'Invalid list format. Please select a valid list file.');
@@ -163,41 +149,30 @@ export class ImportExportManager {
 
   private async importSettings(jsonString: string): Promise<void> {
     try {
-      const data = JSON.parse(jsonString) as unknown;
-
-      if (!data || typeof data !== 'object') {
-        alert(browserAPI.i18n.getMessage('invalid_import_format') || 'Invalid file format. Please select a valid export file.');
-        return;
-      }
-
-      const obj = data as Record<string, unknown>;
+      const settings = ImportService.extractSettings(jsonString);
       let listsApplied = false;
       let exceptionsApplied = false;
 
-      if (Array.isArray(obj.lists) && obj.lists.length > 0) {
+      if (settings.lists?.length) {
         const baseId = Date.now();
-        const validLists = obj.lists
-          .filter((item: unknown) => this.isValidList(item))
-          .map((item: HighlightList, i: number) => ({ ...item, id: baseId + i }));
-        if (validLists.length > 0) {
-          this.lists.length = 0;
-          this.lists.push(...validLists);
-          const currentIndex = this.getCurrentListIndex();
-          this.setCurrentListIndex(Math.min(currentIndex, this.lists.length - 1));
-          listsApplied = true;
-        }
+        const validLists = settings.lists.map((item, i) => ({ ...item, id: baseId + i }));
+        this.lists.length = 0;
+        this.lists.push(...validLists);
+        const currentIndex = this.getCurrentListIndex();
+        this.setCurrentListIndex(Math.min(currentIndex, this.lists.length - 1));
+        listsApplied = true;
       }
 
-      if (Array.isArray(obj.exceptionsList)) {
-        this.setExceptionsList(obj.exceptionsList.filter((d): d is string => typeof d === 'string'));
+      if (settings.exceptionsList) {
+        this.setExceptionsList(settings.exceptionsList);
         exceptionsApplied = true;
       }
-      if (Array.isArray(obj.exceptionsWhiteList)) {
-        this.setExceptionsWhiteList(obj.exceptionsWhiteList.filter((d): d is string => typeof d === 'string'));
+      if (settings.exceptionsWhiteList) {
+        this.setExceptionsWhiteList(settings.exceptionsWhiteList);
         exceptionsApplied = true;
       }
-      if (obj.exceptionsMode === 'whitelist' || obj.exceptionsMode === 'blacklist') {
-        this.setExceptionsMode(obj.exceptionsMode);
+      if (settings.exceptionsMode) {
+        this.setExceptionsMode(settings.exceptionsMode);
         exceptionsApplied = true;
       }
 
@@ -229,17 +204,6 @@ export class ImportExportManager {
     } catch (err) {
       alert((browserAPI.i18n.getMessage('invalid_json_error') || 'Invalid JSON file') + ': ' + (err as Error).message);
     }
-  }
-
-  private isValidList(obj: unknown): obj is HighlightList {
-    if (!obj || typeof obj !== 'object') return false;
-    const o = obj as Record<string, unknown>;
-    return (
-      typeof o.name === 'string' &&
-      Array.isArray(o.words) &&
-      (typeof o.background === 'string' || typeof o.background === 'undefined') &&
-      (typeof o.foreground === 'string' || typeof o.foreground === 'undefined')
-    );
   }
 
   private async saveAndNotify(): Promise<void> {

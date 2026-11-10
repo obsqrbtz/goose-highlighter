@@ -5,6 +5,8 @@ const browserContent = fs.readFileSync('src/utils/browser.ts', 'utf8');
 const domUtilsContent = fs.readFileSync('src/utils/DOMUtils.ts', 'utf8');
 const storageServiceContent = fs.readFileSync('src/services/StorageService.ts', 'utf8');
 const messageServiceContent = fs.readFileSync('src/services/MessageService.ts', 'utf8');
+const phraseMatcherContent = fs.readFileSync('src/content/PhraseMatcher.ts', 'utf8');
+const textRunsContent = fs.readFileSync('src/content/TextRuns.ts', 'utf8');
 const highlightEngineContent = fs.readFileSync('src/content/HighlightEngine.ts', 'utf8');
 const contentScriptContent = fs.readFileSync('src/content/ContentScript.ts', 'utf8');
 const mainContent = fs.readFileSync('src/main.ts', 'utf8');
@@ -39,6 +41,8 @@ ${extractDefinitions(browserContent, 'utils/browser.ts')}
 ${extractDefinitions(domUtilsContent, 'utils/DOMUtils.ts')}
 ${extractDefinitions(storageServiceContent, 'services/StorageService.ts')}
 ${extractDefinitions(messageServiceContent, 'services/MessageService.ts')}
+${extractDefinitions(phraseMatcherContent, 'content/PhraseMatcher.ts')}
+${extractDefinitions(textRunsContent, 'content/TextRuns.ts')}
 ${extractDefinitions(highlightEngineContent, 'content/HighlightEngine.ts')}
 ${extractDefinitions(contentScriptContent, 'content/ContentScript.ts')}
 ${extractDefinitions(mainContent, 'main.ts')}

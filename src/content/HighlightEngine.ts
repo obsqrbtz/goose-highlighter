@@ -1,304 +1,294 @@
 import { browserAPI } from '../utils/browser.js';
-import { HighlightList, ActiveWord, CONSTANTS, BadgePosition } from '../types.js';
-import { DOMUtils } from '../utils/DOMUtils.js';
+import { HighlightList, ActiveWord, CONSTANTS, BadgePosition, HighlightInfo, isValidHighlightWord } from '../types.js';
+import { PhraseMatcher, phraseKey, projectText, PhraseEntry } from './PhraseMatcher.js';
+import { isHighlighterUi, rangeFor, textRuns } from './TextRuns.js';
 
+type TextField = HTMLTextAreaElement | HTMLInputElement;
+
+interface FieldMatch {
+  key: string;
+  start: number;
+  end: number;
+}
+
+interface FieldState {
+  onInput: () => void;
+  matches: FieldMatch[];
+  badge?: HTMLElement;
+}
+
+export function activeHighlightWords(lists: HighlightList[]): ActiveWord[] {
+  const activeWords: ActiveWord[] = [];
+  for (const list of lists) {
+    if (!list?.active || !Array.isArray(list.words)) continue;
+    for (const word of list.words) {
+      if (!isValidHighlightWord(word) || !word.active) continue;
+      activeWords.push({
+        text: word.wordStr,
+        background: word.background || list.background || '#ff0',
+        foreground: word.foreground || list.foreground || '#000',
+        listId: list.id,
+        listName: list.name || 'Default',
+      });
+    }
+  }
+  return activeWords;
+}
 
 export class HighlightEngine {
-      private static renderHighlighted(text: string, pattern: RegExp): string {
-        let html = '';
-        let lastIndex = 0;
-        pattern.lastIndex = 0;
-        while ((pattern.exec(text)) !== null) {
-          const match = pattern.exec(text);
-          if (!match) break;
-          html += DOMUtils.escapeHtml(text.substring(lastIndex, match.index));
-          html += `<mark>${DOMUtils.escapeHtml(match[0])}</mark>`;
-          lastIndex = match.index + match[0].length;
-        }
-        html += DOMUtils.escapeHtml(text.substring(lastIndex));
-        return html;
-      }
-
-      private static createOrUpdateBadge(input: HTMLTextAreaElement | HTMLInputElement, pattern: RegExp): void {
-        const text = input.value;
-        let matchCount = 0;
-        pattern.lastIndex = 0;
-        while ((pattern.exec(text)) !== null) {
-          matchCount++;
-        }
-        const oldBadge = input.parentElement?.querySelector('.goose-highlighter-textarea-badge');
-        if (oldBadge) oldBadge.remove();
-        if (matchCount > 0) {
-          const badge = document.createElement('div');
-          badge.className = 'goose-highlighter-textarea-badge';
-          badge.textContent = matchCount.toString();
-          const parent = input.parentElement;
-          if (parent && window.getComputedStyle(parent).position === 'static') {
-            parent.style.position = 'relative';
-          }
-          parent?.appendChild(badge);
-          HighlightEngine.positionBadge(badge, input);
-          badge.addEventListener('click', () => {
-            document.querySelectorAll('.goose-highlighter-textarea-popup').forEach(p => p.remove());
-            const popup = document.createElement('div');
-            popup.className = 'goose-highlighter-textarea-popup';
-            popup.innerHTML = `
-              <div class="gh-popup-titlebar">
-                <button class="gh-popup-close" title="${browserAPI.i18n.getMessage('close') || 'Close'}">&times;</button>
-              </div>
-              <pre class="gh-popup-pre">${HighlightEngine.renderHighlighted(text, pattern)}</pre>
-            `;
-            document.body.appendChild(popup);
-            const closeBtn = popup.querySelector('.gh-popup-close');
-            closeBtn?.addEventListener('click', () => popup.remove());
-          });
-        }
-      }
-
-      private static positionBadge(badge: HTMLElement, input: HTMLTextAreaElement | HTMLInputElement): void {
-        const gap = 8;
-        const w = badge.offsetWidth || 16;
-        const h = badge.offsetHeight || 16;
-        const { horizontal, vertical, placement } = HighlightEngine.badgePosition;
-
-        const il = input.offsetLeft;
-        const it = input.offsetTop;
-        const ir = il + input.offsetWidth;
-        const ib = it + input.offsetHeight;
-
-        let left: number;
-        if (horizontal === 'left') {
-          left = placement === 'inside' ? il + gap : placement === 'outside' ? il - w - gap : il - w / 2;
-        } else {
-          left = placement === 'inside' ? ir - w - gap : placement === 'outside' ? ir + gap : ir - w / 2;
-        }
-
-        let top: number;
-        if (vertical === 'top') {
-          top = placement === 'inside' ? it + gap : placement === 'outside' ? it - h - gap : it - h / 2;
-        } else if (vertical === 'bottom') {
-          top = placement === 'inside' ? ib - h - gap : placement === 'outside' ? ib + gap : ib - h / 2;
-        } else {
-          // 'center' — vertically centered on the field; placement only affects horizontal
-          top = it + (input.offsetHeight - h) / 2;
-        }
-
-        badge.style.setProperty('left', `${left}px`, 'important');
-        badge.style.setProperty('top', `${top}px`, 'important');
-        badge.style.removeProperty('transform');
-      }
-
-      private static attachBadgeListener(input: HTMLTextAreaElement | HTMLInputElement, pattern: RegExp): void {
-        const updateBadge = () => HighlightEngine.createOrUpdateBadge(input, pattern);
-        updateBadge();
-        input.removeEventListener('input', updateBadge);
-        input.addEventListener('input', updateBadge);
-      }
-  private static badgePosition: BadgePosition = { horizontal: 'right', vertical: 'top', placement: 'border' };
-
-  setBadgePosition(position: BadgePosition): void {
-    HighlightEngine.badgePosition = position;
-  }
-
-  private styleSheet: CSSStyleSheet | null = null;
-  private highlights = new Map<string, Highlight>();
+  private badgePosition: BadgePosition = { horizontal: 'right', vertical: 'top', placement: 'border' };
+  private styleElement?: HTMLStyleElement;
+  private highlights = new Map<number, Highlight>();
   private highlightsByWord = new Map<string, Range[]>();
-  private textareaMatchesByWord = new Map<string, Array<{ input: HTMLTextAreaElement | HTMLInputElement; position: number }>>();
+  private fields = new Map<TextField, FieldState>();
+  private popup?: HTMLElement;
   private observer: MutationObserver;
-  private isHighlighting = false;
-  private currentMatchCase = false;
-  private eventListeners = new Map<HTMLElement, Map<string, EventListener>>();
+  private scanVersion = 0;
+  private scanDone?: Promise<void>;
+  private finishScan?: () => void;
+  private updateTimer?: number;
+  private flashTimer?: number;
   private isDestroyed = false;
+  private words: ActiveWord[] = [];
+  private matchCase = false;
+  private matchWhole = false;
+  private matcher?: PhraseMatcher;
+  private preservedMatcher?: PhraseMatcher;
 
   constructor(private onUpdate: () => void) {
-    this.observer = new MutationObserver(DOMUtils.debounce((mutations: MutationRecord[]) => {
-      if (this.isHighlighting || this.isDestroyed) return;
-      const hasContentChanges = mutations.some((mutation: MutationRecord) => {
-        if (mutation.type !== 'childList') return false;
-        const allNodes = [...Array.from(mutation.addedNodes), ...Array.from(mutation.removedNodes)];
-        return allNodes.some(node => {
-          if (node.nodeType === Node.TEXT_NODE) return true;
-          if (node instanceof Element) return true;
-          return false;
-        });
+    this.observer = new MutationObserver(mutations => {
+      const changed = mutations.some(mutation => {
+        if (isHighlighterUi(mutation.target)) return false;
+        if (mutation.type !== 'childList') return true;
+        return [...mutation.addedNodes, ...mutation.removedNodes].some(node =>
+          (node instanceof Text || node instanceof Element) && !isHighlighterUi(node));
       });
-      if (hasContentChanges) {
-        this.onUpdate();
-      }
-    }, CONSTANTS.DEBOUNCE_DELAY));
-  }
-
-  private initializeStyleSheet(): void {
-    if (!this.styleSheet) {
-      const style = document.createElement('style');
-      style.id = 'goose-highlighter-styles';
-      document.head.appendChild(style);
-      this.styleSheet = style.sheet!;
-    }
-  }
-
-  private updateHighlightStyles(activeWords: ActiveWord[]): void {
-    this.initializeStyleSheet();
-
-    while (this.styleSheet!.cssRules.length > 0) {
-      this.styleSheet!.deleteRule(0);
-    }
-
-    const uniqueStyles = new Map<string, number>();
-    let styleIndex = 0;
-
-    for (const word of activeWords) {
-      const styleKey = `${word.background}-${word.foreground}`;
-      if (!uniqueStyles.has(styleKey)) {
-        uniqueStyles.set(styleKey, styleIndex);
-        const rule = `::highlight(gh-${styleIndex}) { background-color: ${word.background}; color: ${word.foreground}; }`;
-        this.styleSheet!.insertRule(rule, this.styleSheet!.cssRules.length);
-        styleIndex++;
-      }
-    }
-  }
-
-  clearHighlights(): void {
-    this.observer.disconnect();
-    this.clearHighlightsInternal();
-    this.cleanupEventListeners();
-  }
-
-
-  private getTextNodes(): Text[] {
-    const textNodes: Text[] = [];
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode: (node: Text) => {
-          if (node.parentNode && ['SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'TEXTAREA', 'INPUT'].includes(node.parentNode.nodeName)) {
-            return NodeFilter.FILTER_REJECT;
-          }
-          if (!node.nodeValue?.trim()) {
-            return NodeFilter.FILTER_SKIP;
-          }
-          return NodeFilter.FILTER_ACCEPT;
-        }
-      }
-    );
-
-    while (walker.nextNode()) {
-      textNodes.push(walker.currentNode as Text);
-    }
-    return textNodes;
-  }
-
-  private extractActiveWords(lists: HighlightList[]): ActiveWord[] {
-    const activeWords: ActiveWord[] = [];
-    for (const list of lists) {
-      if (!list.active) continue;
-      for (const word of list.words) {
-        if (!word.active) continue;
-        activeWords.push({
-          text: word.wordStr,
-          background: word.background || list.background,
-          foreground: word.foreground || list.foreground
+      if (!changed) return;
+      clearTimeout(this.updateTimer);
+      const timer = window.setTimeout(() => {
+        // Let an in-flight scan finish before rescanning changes made during it.
+        void this.waitForScan().then(() => {
+          if (this.updateTimer !== timer) return;
+          this.updateTimer = undefined;
+          this.onUpdate();
         });
+      }, CONSTANTS.DEBOUNCE_DELAY);
+      this.updateTimer = timer;
+    });
+  }
+
+  setBadgePosition(position: BadgePosition): void {
+    this.badgePosition = position;
+  }
+
+  private *updateMatcher(words: ActiveWord[], matchCase: boolean, matchWhole: boolean): Generator<void> {
+    if (this.matcher && this.matchCase === matchCase && this.matchWhole === matchWhole &&
+      this.words.length === words.length && words.every((word, i) =>
+        word.text === this.words[i].text && word.background === this.words[i].background &&
+        word.foreground === this.words[i].foreground)) return;
+
+    const rules = ['::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); }'];
+    const styles = new Map<string, number>();
+    const entries = new Map<string, PhraseEntry>();
+    const preserved = new Map<string, PhraseEntry>();
+    let hasDistinctWhitespace = false;
+    let processed = 0;
+    for (const word of words) {
+      if (++processed % 256 === 0) yield;
+      const key = phraseKey(word.text, matchCase);
+      const collapsed = key.replace(/[ \t\r\n\f]+/g, ' ');
+      if (!collapsed) continue;
+      const styleKey = `${word.background}|${word.foreground}`;
+      let style = styles.get(styleKey);
+      if (style === undefined) {
+        style = styles.size;
+        styles.set(styleKey, style);
+        const background = CSS.supports('color', word.background) ? word.background : '#ff0';
+        const foreground = CSS.supports('color', word.foreground) ? word.foreground : '#000';
+        rules.push(`::highlight(gh-${style}) { background-color: ${background}; color: ${foreground}; }`);
       }
+      const entry = { key, style };
+      entries.set(collapsed, entry);
+      preserved.set(key, entry);
+      hasDistinctWhitespace ||= collapsed !== key;
     }
-    return activeWords;
+    const matcher = new PhraseMatcher(matchWhole);
+    yield* matcher.build(entries);
+    let preservedMatcher;
+    if (hasDistinctWhitespace) {
+      preservedMatcher = new PhraseMatcher(matchWhole);
+      yield* preservedMatcher.build(preserved);
+    }
+
+    if (!this.styleElement) {
+      this.styleElement = document.createElement('style');
+      this.styleElement.id = 'goose-highlighter-styles';
+      document.head.appendChild(this.styleElement);
+    }
+    this.styleElement.textContent = rules.join('\n');
+    this.words = words;
+    this.matchCase = matchCase;
+    this.matchWhole = matchWhole;
+    this.matcher = matcher;
+    this.preservedMatcher = preservedMatcher;
+  }
+
+  private getMatcher(collapse: boolean): PhraseMatcher {
+    return (collapse ? undefined : this.preservedMatcher) ?? this.matcher!;
   }
 
   highlight(lists: HighlightList[], matchCase: boolean, matchWhole: boolean): void {
-    if (this.isHighlighting || this.isDestroyed) return;
-    this.isHighlighting = true;
+    if (this.isDestroyed) return;
+    this.clearHighlights();
+    const words = activeHighlightWords(lists);
+    if (words.length === 0) return;
+    const version = this.scanVersion;
+    const work = this.scan(words, matchCase, matchWhole);
+    const scheduler = (window as Window & { scheduler?: { yield(): Promise<void> } }).scheduler;
+    this.scanDone = new Promise(resolve => { this.finishScan = resolve; });
 
-    this.currentMatchCase = matchCase;
-
-    this.observer.disconnect();
-    this.clearHighlightsInternal();
-
-    const activeWords = this.extractActiveWords(lists);
-    if (activeWords.length === 0) {
-      this.startObserving();
-      this.isHighlighting = false;
-      return;
-    }
-
-    this.updateHighlightStyles(activeWords);
-
-    const styleMap = new Map<string, number>();
-    const uniqueStyles = new Map<string, number>();
-    let styleIndex = 0;
-
-    for (const word of activeWords) {
-      const styleKey = `${word.background}-${word.foreground}`;
-      if (!uniqueStyles.has(styleKey)) {
-        uniqueStyles.set(styleKey, styleIndex++);
+    this.startObserving();
+    const runBatch = () => {
+      if (version !== this.scanVersion) return;
+      const deadline = performance.now() + 8;
+      try {
+        while (!work.next().done) {
+          if (performance.now() < deadline) continue;
+          if (scheduler?.yield) void scheduler.yield().then(runBatch);
+          else window.setTimeout(runBatch, 0);
+          return;
+        }
+        this.completeScan();
+      } catch (error) {
+        console.error('Goose Highlighter scan failed:', error);
+        this.clearHighlights();
+        this.startObserving();
       }
-      const lookup = matchCase ? word.text : word.text.toLowerCase();
-      styleMap.set(lookup, uniqueStyles.get(styleKey)!);
-    }
+    };
+    runBatch();
+  }
 
-    const flags = matchCase ? 'gu' : 'giu';
-    let wordsPattern = Array.from(styleMap.keys()).map(DOMUtils.escapeRegex).join('|');
+  private *scan(words: ActiveWord[], matchCase: boolean, matchWhole: boolean): Generator<void> {
+    yield* this.updateMatcher(words, matchCase, matchWhole);
+    this.highlightFields();
 
-    if (matchWhole) {
-      wordsPattern = `(?:(?<!\\p{L})|^)(${wordsPattern})(?:(?!\\p{L})|$)`;
-    }
-
-    try {
-      const pattern = new RegExp(`(${wordsPattern})`, flags);
-      const textNodes = this.getTextNodes();
-
-      const rangesByStyle = new Map<number, Range[]>();
-      this.highlightsByWord.clear();
-      this.textareaMatchesByWord.clear();
-
-      for (const node of textNodes) {
-        if (!node.nodeValue) continue;
-
-        const text = node.nodeValue;
-        pattern.lastIndex = 0;
-        let match;
-
-        while ((match = pattern.exec(text)) !== null) {
-          const lookup = matchCase ? match[0] : match[0].toLowerCase();
-          const styleIdx = styleMap.get(lookup);
-
-          if (styleIdx !== undefined) {
-            const range = new Range();
-            range.setStart(node, match.index);
-            range.setEnd(node, match.index + match[0].length);
-
-            if (!rangesByStyle.has(styleIdx)) {
-              rangesByStyle.set(styleIdx, []);
-            }
-            rangesByStyle.get(styleIdx)!.push(range);
-
-            if (!this.highlightsByWord.has(lookup)) {
-              this.highlightsByWord.set(lookup, []);
-            }
-            this.highlightsByWord.get(lookup)!.push(range);
+    if (typeof Highlight === 'undefined' || !CSS.highlights) return;
+    let rendered = 0;
+    for (const run of textRuns(document.body)) {
+      if (run) {
+        const projected = projectText(run.text, matchCase, run.collapse);
+        for (const match of this.getMatcher(run.collapse).scan(projected.text)) {
+          if (!match) {
+            yield;
+            continue;
           }
+          const range = rangeFor(run, projected.offset(match.start), projected.offset(match.end, true));
+          if (!range) continue;
+          let highlight = this.highlights.get(match.style);
+          if (!highlight) {
+            highlight = new Highlight();
+            this.highlights.set(match.style, highlight);
+            CSS.highlights.set(`gh-${match.style}`, highlight);
+          }
+          highlight.add(range);
+          const ranges = this.highlightsByWord.get(match.key) ?? [];
+          if (ranges.length === 0) this.highlightsByWord.set(match.key, ranges);
+          ranges.push(range);
+          if (++rendered % 128 === 0) yield;
         }
       }
-
-      for (const [styleIdx, ranges] of rangesByStyle) {
-        const highlight = new Highlight(...ranges);
-        const highlightName = `gh-${styleIdx}`;
-        this.highlights.set(highlightName, highlight);
-        CSS.highlights.set(highlightName, highlight);
-      }
-
-      this.highlightTextareas(pattern, styleMap, activeWords);
-    } catch (error) {
-      console.error('HighlightEngine.highlight - Regex error:', error);
-      // Clear any partial highlights on error
-      this.clearHighlightsInternal();
-    } finally {
-      this.startObserving();
-      this.isHighlighting = false;
+      yield;
     }
   }
 
-  private highlightTextareas(pattern: RegExp, _styleMap: Map<string, number>, _activeWords: ActiveWord[]): void {
+  private updateField(input: TextField, field: FieldState): void {
+    const text = input.value;
+    const projected = projectText(text, this.matchCase, false);
+    field.matches = Array.from(this.getMatcher(false).find(projected.text), match => ({
+      key: match.key,
+      start: projected.offset(match.start),
+      end: projected.offset(match.end, true),
+    }));
+    field.badge?.remove();
+    field.badge = undefined;
+    if (!field.matches.length || !input.parentElement) return;
+
+    const parent = input.parentElement;
+    if (getComputedStyle(parent).position === 'static') parent.style.position = 'relative';
+    const badge = document.createElement('div');
+    badge.className = 'goose-highlighter-textarea-badge';
+    badge.textContent = String(field.matches.length);
+    parent.appendChild(badge);
+    this.positionBadge(badge, input);
+    badge.addEventListener('click', () => this.showFieldMatches(text, field.matches));
+    field.badge = badge;
+  }
+
+  private showFieldMatches(text: string, matches: FieldMatch[]): void {
+    this.popup?.remove();
+    const popup = document.createElement('div');
+    popup.className = 'goose-highlighter-textarea-popup';
+    const titlebar = document.createElement('div');
+    titlebar.className = 'gh-popup-titlebar';
+    const close = document.createElement('button');
+    close.className = 'gh-popup-close';
+    close.title = browserAPI.i18n.getMessage('close') || 'Close';
+    close.textContent = '×';
+    close.addEventListener('click', () => popup.remove());
+    titlebar.appendChild(close);
+    const pre = document.createElement('pre');
+    pre.className = 'gh-popup-pre';
+    let previousEnd = 0;
+    for (const match of matches) {
+      pre.append(text.slice(previousEnd, match.start));
+      const mark = document.createElement('mark');
+      mark.textContent = text.slice(match.start, match.end);
+      pre.appendChild(mark);
+      previousEnd = match.end;
+    }
+    pre.append(text.slice(previousEnd));
+    popup.append(titlebar, pre);
+    document.body.appendChild(popup);
+    this.popup = popup;
+  }
+
+  private positionBadge(badge: HTMLElement, input: HTMLTextAreaElement | HTMLInputElement): void {
+    const gap = 8;
+    const w = badge.offsetWidth || 16;
+    const h = badge.offsetHeight || 16;
+    const { horizontal, vertical, placement } = this.badgePosition;
+
+    const il = input.offsetLeft;
+    const it = input.offsetTop;
+    const ir = il + input.offsetWidth;
+    const ib = it + input.offsetHeight;
+
+    let left: number;
+    if (horizontal === 'left') {
+      left = placement === 'inside' ? il + gap : placement === 'outside' ? il - w - gap : il - w / 2;
+    } else {
+      left = placement === 'inside' ? ir - w - gap : placement === 'outside' ? ir + gap : ir - w / 2;
+    }
+
+    let top: number;
+    if (vertical === 'top') {
+      top = placement === 'inside' ? it + gap : placement === 'outside' ? it - h - gap : it - h / 2;
+    } else if (vertical === 'bottom') {
+      top = placement === 'inside' ? ib - h - gap : placement === 'outside' ? ib + gap : ib - h / 2;
+    } else {
+      // 'center' — vertically centered on the field; placement only affects horizontal
+      top = it + (input.offsetHeight - h) / 2;
+    }
+
+    badge.style.setProperty('left', `${left}px`, 'important');
+    badge.style.setProperty('top', `${top}px`, 'important');
+    badge.style.removeProperty('transform');
+  }
+
+
+  private highlightFields(): void {
+    const fields = document.querySelectorAll<TextField>('textarea, input');
+    if (fields.length === 0) return;
     if (!document.getElementById('gh-textarea-badge-style')) {
       const style = document.createElement('style');
       style.id = 'gh-textarea-badge-style';
@@ -424,38 +414,66 @@ export class HighlightEngine {
       `;
       document.head.appendChild(style);
     }
-    const textareas = document.querySelectorAll('textarea, input[type="text"], input[type="search"], input[type="email"], input[type="url"]');
-    document.querySelectorAll('.goose-highlighter-textarea-badge').forEach(badge => badge.remove());
-    for (const element of Array.from(textareas)) {
-      const input = element as HTMLTextAreaElement | HTMLInputElement;
-      HighlightEngine.attachBadgeListener(input, pattern);
+    for (const input of fields) {
+      if (input instanceof HTMLInputElement && !['text', 'search', 'email', 'url'].includes(input.type)) continue;
+      const field: FieldState = { matches: [], onInput: () => this.updateField(input, field) };
+      this.fields.set(input, field);
+      input.addEventListener('input', field.onInput);
+      this.updateField(input, field);
     }
   }
 
+  private getFieldMatches(key: string): Array<{ input: TextField } & FieldMatch> {
+    const matches: Array<{ input: TextField } & FieldMatch> = [];
+    for (const [input, field] of this.fields) {
+      for (const match of field.matches) {
+        if (match.key === key) matches.push({ input, ...match });
+      }
+    }
+    return matches;
+  }
 
-  private clearHighlightsInternal(): void {
-    for (const name of this.highlights.keys()) {
-      CSS.highlights.delete(name);
+  clearHighlights(): void {
+    this.stopObserving();
+    this.scanVersion++;
+    this.completeScan();
+    clearTimeout(this.flashTimer);
+    if (CSS.highlights) {
+      for (const style of this.highlights.keys()) CSS.highlights.delete(`gh-${style}`);
+      CSS.highlights.delete('gh-flash');
     }
     this.highlights.clear();
     this.highlightsByWord.clear();
-    this.textareaMatchesByWord.clear();
-    if (this.styleSheet && this.styleSheet.cssRules.length > 0) {
-      while (this.styleSheet.cssRules.length > 0) {
-        this.styleSheet.deleteRule(0);
-      }
+    for (const [input, field] of this.fields) {
+      input.removeEventListener('input', field.onInput);
+      field.badge?.remove();
     }
+    this.fields.clear();
+    this.popup?.remove();
+    this.popup = undefined;
   }
 
-  getPageHighlights(activeWords: ActiveWord[]): Array<{ word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }> {
-    const seen = new Map<string, { word: string; count: number; background: string; foreground: string; listId?: number; listName?: string; listNames: string[] }>();
+  private completeScan(): void {
+    this.finishScan?.();
+    this.finishScan = undefined;
+    this.scanDone = undefined;
+  }
+
+  async waitForScan(): Promise<void> {
+    while (this.scanDone) await this.scanDone;
+  }
+
+  getPageHighlights(activeWords: ActiveWord[]): HighlightInfo[] {
+    const seen = new Map<string, HighlightInfo & { listNames: string[] }>();
+    const fieldCounts = new Map<string, number>();
+    for (const field of this.fields.values()) {
+      for (const match of field.matches) fieldCounts.set(match.key, (fieldCounts.get(match.key) ?? 0) + 1);
+    }
 
     for (const activeWord of activeWords) {
-      const lookup = this.currentMatchCase ? activeWord.text : activeWord.text.toLowerCase();
+      const lookup = phraseKey(activeWord.text, this.matchCase);
       const ranges = this.highlightsByWord.get(lookup);
-      const textareaMatches = this.textareaMatchesByWord.get(lookup);
-
-      const totalCount = (ranges?.length || 0) + (textareaMatches?.length || 0);
+      const totalCount = (ranges?.length ?? 0) + (fieldCounts.get(lookup) ?? 0);
 
       if (totalCount > 0) {
         const listName = activeWord.listName || 'Default';
@@ -484,9 +502,9 @@ export class HighlightEngine {
   }
 
   scrollToHighlight(word: string, index: number): void {
-    const lookup = this.currentMatchCase ? word : word.toLowerCase();
+    const lookup = phraseKey(word, this.matchCase);
     const ranges = this.highlightsByWord.get(lookup) || [];
-    const textareaMatches = this.textareaMatchesByWord.get(lookup) || [];
+    const textareaMatches = this.getFieldMatches(lookup);
 
     const totalMatches = ranges.length + textareaMatches.length;
     if (totalMatches === 0) return;
@@ -497,7 +515,7 @@ export class HighlightEngine {
       if (targetIndex >= ranges.length) {
         const textareaIndex = targetIndex - ranges.length;
         const textareaMatch = textareaMatches[textareaIndex];
-        this.scrollToTextareaMatch(textareaMatch.input, textareaMatch.position, word.length);
+        this.scrollToTextareaMatch(textareaMatch.input, textareaMatch.start, textareaMatch.end);
         return;
       }
 
@@ -525,24 +543,14 @@ export class HighlightEngine {
 
       const flashHighlight = new Highlight(range);
       CSS.highlights.set('gh-flash', flashHighlight);
-
-      if (this.styleSheet) {
-        const flashRule = '::highlight(gh-flash) { background-color: rgba(255, 165, 0, 0.8); box-shadow: 0 0 10px 3px rgba(255, 165, 0, 0.8); }';
-        const ruleIndex = this.styleSheet.insertRule(flashRule, this.styleSheet.cssRules.length);
-
-        setTimeout(() => {
-          CSS.highlights.delete('gh-flash');
-          if (this.styleSheet && ruleIndex < this.styleSheet.cssRules.length) {
-            this.styleSheet.deleteRule(ruleIndex);
-          }
-        }, 600);
-      }
+      clearTimeout(this.flashTimer);
+      this.flashTimer = window.setTimeout(() => CSS.highlights.delete('gh-flash'), 600);
     } catch (e) {
       console.error('Error scrolling to highlight:', e);
     }
   }
 
-  private scrollToTextareaMatch(input: HTMLTextAreaElement | HTMLInputElement, position: number, wordLength: number): void {
+  private scrollToTextareaMatch(input: HTMLTextAreaElement | HTMLInputElement, position: number, end: number): void {
     input.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     if (input.tagName === 'TEXTAREA') {
@@ -560,7 +568,7 @@ export class HighlightEngine {
     }
 
     input.focus();
-    input.setSelectionRange(position, position + wordLength);
+    if (input.selectionStart !== null) input.setSelectionRange(position, end);
 
   }
 
@@ -602,42 +610,23 @@ export class HighlightEngine {
 
   stopObserving(): void {
     this.observer.disconnect();
+    clearTimeout(this.updateTimer);
+    this.updateTimer = undefined;
   }
 
   private startObserving(): void {
-    if (this.isDestroyed) return;
     this.observer.observe(document.body, {
       childList: true,
       subtree: true,
-      attributes: false
-    });
-  }
-
-  private cleanupEventListeners(): void {
-    for (const [element, listeners] of this.eventListeners) {
-      for (const [event, listener] of listeners) {
-        try {
-          element.removeEventListener(event, listener);
-        } catch (error) {
-          console.warn('HighlightEngine.cleanupEventListeners - Error removing event listener:', error);
-        }
-      }
-    }
-    this.eventListeners.clear();
-    
-    // Also cleanup textarea badges
-    document.querySelectorAll('.goose-highlighter-textarea-badge').forEach(badge => {
-      try {
-        badge.remove();
-      } catch (error) {
-        console.warn('HighlightEngine.cleanupEventListeners - Error removing badge:', error);
-      }
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['class', 'style', 'hidden', 'open', 'type', 'value'],
     });
   }
 
   destroy(): void {
     this.isDestroyed = true;
-    this.observer.disconnect();
     this.clearHighlights();
+    this.styleElement?.remove();
   }
 }

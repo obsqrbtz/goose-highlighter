@@ -5,6 +5,15 @@ export interface HighlightWord {
   active: boolean;
 }
 
+export function isValidHighlightWord(value: unknown): value is { wordStr: string } & Partial<HighlightWord> {
+  if (!value || typeof value !== 'object') return false;
+  const word = value as Partial<HighlightWord>;
+  return typeof word.wordStr === 'string' && word.wordStr.trim().length > 0 &&
+    (word.active === undefined || typeof word.active === 'boolean') &&
+    (word.background === undefined || typeof word.background === 'string') &&
+    (word.foreground === undefined || typeof word.foreground === 'string');
+}
+
 export interface HighlightList {
   id: number;
   name: string;
