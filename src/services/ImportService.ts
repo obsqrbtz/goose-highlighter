@@ -1,5 +1,5 @@
 import { browserAPI } from '../utils/browser.js';
-import { HighlightList, ExceptionsMode, StorageData } from '../types.js';
+import { HighlightList, ExceptionsMode, StorageData, isValidHighlightWord } from '../types.js';
 import { StorageService } from './StorageService.js';
 import { MessageService } from './MessageService.js';
 
@@ -22,6 +22,10 @@ export class ImportService {
     );
   }
 
+  private static sanitizeList(list: HighlightList): HighlightList {
+    return { ...list, words: list.words.filter(isValidHighlightWord) };
+  }
+
   /** Parse a "list import" file into valid lists (no ids assigned). Throws on bad JSON. */
   static extractLists(jsonString: string): HighlightList[] {
     const data = JSON.parse(jsonString) as unknown;
@@ -36,7 +40,7 @@ export class ImportService {
         out.push(data);
       }
     }
-    return out;
+    return out.map(list => this.sanitizeList(list));
   }
 
   /** Parse a "settings export" file. Throws on bad JSON. */
@@ -46,7 +50,7 @@ export class ImportService {
     const obj = data as Record<string, unknown>;
     const result: ParsedSettings = {};
     if (Array.isArray(obj.lists)) {
-      result.lists = obj.lists.filter((item: unknown) => this.isValidList(item)) as HighlightList[];
+      result.lists = obj.lists.filter((item: unknown) => this.isValidList(item)).map(list => this.sanitizeList(list));
     }
     if (Array.isArray(obj.exceptionsList)) {
       result.exceptionsList = obj.exceptionsList.filter((d): d is string => typeof d === 'string');

@@ -1,7 +1,7 @@
-import { HighlightList, MessageData, ExceptionsMode, ActiveWord, BadgePosition, DEFAULT_STORAGE } from '../types.js';
+import { HighlightList, MessageData, ExceptionsMode, BadgePosition, DEFAULT_STORAGE } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
-import { HighlightEngine } from './HighlightEngine.js';
+import { HighlightEngine, activeHighlightWords } from './HighlightEngine.js';
 
 export class ContentScript {
   private lists: HighlightList[] = [];
@@ -102,7 +102,7 @@ export class ContentScript {
           void this.handleExceptionsUpdate();
           return false;
         case 'GET_PAGE_HIGHLIGHTS':
-          this.handleGetPageHighlights(sendResponse);
+          void this.handleGetPageHighlights(sendResponse);
           return true;
         case 'SCROLL_TO_HIGHLIGHT':
           this.handleScrollToHighlight(message.word!, message.index!);
@@ -170,25 +170,10 @@ export class ContentScript {
     }
   }
 
-  private handleGetPageHighlights(sendResponse: (response: unknown) => void): void {
-    const activeWords: ActiveWord[] = [];
-    
-    for (const list of this.lists) {
-      if (!list.active) continue;
-      for (const word of list.words) {
-        if (!word.active) continue;
-        activeWords.push({
-          text: word.wordStr,
-          background: word.background || list.background,
-          foreground: word.foreground || list.foreground,
-          listId: list.id,
-          listName: list.name || 'Default'
-        });
-      }
-    }
-
-    const highlights = this.highlightEngine.getPageHighlights(activeWords);
-    sendResponse({ highlights, lists: this.lists.filter(l => l.active) });
+  private async handleGetPageHighlights(sendResponse: (response: unknown) => void): Promise<void> {
+    await this.highlightEngine.waitForScan();
+    const highlights = this.highlightEngine.getPageHighlights(activeHighlightWords(this.lists));
+    sendResponse({ highlights, lists: this.lists.filter(l => l?.active) });
   }
 
   private handleScrollToHighlight(word: string, index: number): void {

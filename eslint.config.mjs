@@ -4,7 +4,7 @@ import tseslint from 'typescript-eslint';
 
 export default [
     {
-        ignores: ['dist/**', 'node_modules/**', 'eslint.config.mjs', 'src/types/css-highlights.d.ts'],
+        ignores: ['dist/**', 'node_modules/**', 'eslint.config.mjs', 'src/content-standalone.ts', 'src/types/css-highlights.d.ts'],
     },
     js.configs.recommended,
     {
