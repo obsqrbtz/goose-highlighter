@@ -336,7 +336,7 @@
         "message": "하이라이트된 텍스트가 이렇게 표시됩니다."
     },
     "preview_text_before": {
-        "message": ""
+        "message": "예를 들어"
     },
     "preview_text_highlight": {
         "message": "하이라이트된 텍스트"
@@ -430,5 +430,44 @@
     },
     "export_import_settings_hint": {
         "message": "목록 및 사이트 예외를 백업하거나 복원합니다."
-    }
+    },
+  "list_actions": {
+    "message": "목록 작업"
+  },
+  "highlight_appearance": {
+    "message": "하이라이트 모양"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "이 목록에 단어가 없습니다"
+  },
+  "edit_word": {
+    "message": "단어 편집"
+  },
+  "first_page": {
+    "message": "첫 페이지"
+  },
+  "previous_page": {
+    "message": "이전 페이지"
+  },
+  "next_page": {
+    "message": "다음 페이지"
+  },
+  "last_page": {
+    "message": "마지막 페이지"
+  },
+  "enter_list_name": {
+    "message": "목록 이름을 입력하세요:"
+  },
+  "cannot_delete_last_list": {
+    "message": "마지막 목록은 삭제할 수 없습니다"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "목록 이름 및 색상 편집"
+  },
+  "close": {
+    "message": "닫기"
+  }
 }

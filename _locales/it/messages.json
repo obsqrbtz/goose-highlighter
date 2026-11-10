@@ -430,5 +430,44 @@
     },
     "export_import_settings_hint": {
         "message": "Backup o ripristino di elenchi e eccezioni di siti."
-    }
+    },
+  "list_actions": {
+    "message": "Azioni della lista"
+  },
+  "highlight_appearance": {
+    "message": "Aspetto dell’evidenziazione"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "Nessuna parola in questa lista"
+  },
+  "edit_word": {
+    "message": "Modifica parola"
+  },
+  "first_page": {
+    "message": "Prima pagina"
+  },
+  "previous_page": {
+    "message": "Pagina precedente"
+  },
+  "next_page": {
+    "message": "Pagina successiva"
+  },
+  "last_page": {
+    "message": "Ultima pagina"
+  },
+  "enter_list_name": {
+    "message": "Inserisci il nome della lista:"
+  },
+  "cannot_delete_last_list": {
+    "message": "Impossibile eliminare l’ultima lista"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Modifica il nome e i colori della lista"
+  },
+  "close": {
+    "message": "Chiudi"
+  }
 }

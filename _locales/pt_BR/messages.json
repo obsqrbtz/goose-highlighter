@@ -430,5 +430,44 @@
   },
   "export_import_settings_hint": {
     "message": "Fazer backup ou restaurar listas e exceções de sites."
+  },
+  "list_actions": {
+    "message": "Ações da lista"
+  },
+  "highlight_appearance": {
+    "message": "Aparência do destaque"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "Nenhuma palavra nesta lista"
+  },
+  "edit_word": {
+    "message": "Editar palavra"
+  },
+  "first_page": {
+    "message": "Primeira página"
+  },
+  "previous_page": {
+    "message": "Página anterior"
+  },
+  "next_page": {
+    "message": "Próxima página"
+  },
+  "last_page": {
+    "message": "Última página"
+  },
+  "enter_list_name": {
+    "message": "Digite o nome da lista:"
+  },
+  "cannot_delete_last_list": {
+    "message": "Não é possível excluir a última lista"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Editar o nome e as cores da lista"
+  },
+  "close": {
+    "message": "Fechar"
   }
 }

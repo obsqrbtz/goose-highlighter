@@ -431,5 +431,44 @@
   },
   "export_import_settings_hint": {
     "message": "Резервное копирование или восстановление списков и исключений сайтов."
+  },
+  "list_actions": {
+    "message": "Действия со списком"
+  },
+  "highlight_appearance": {
+    "message": "Внешний вид подсветки"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "В этом списке нет слов"
+  },
+  "edit_word": {
+    "message": "Редактировать слово"
+  },
+  "first_page": {
+    "message": "Первая страница"
+  },
+  "previous_page": {
+    "message": "Предыдущая страница"
+  },
+  "next_page": {
+    "message": "Следующая страница"
+  },
+  "last_page": {
+    "message": "Последняя страница"
+  },
+  "enter_list_name": {
+    "message": "Введите название списка:"
+  },
+  "cannot_delete_last_list": {
+    "message": "Нельзя удалить последний список"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Изменить название и цвета списка"
+  },
+  "close": {
+    "message": "Закрыть"
   }
 }

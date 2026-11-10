@@ -430,5 +430,44 @@
   },
   "export_import_settings_hint": {
     "message": "Utwórz kopię zapasową lub przywróć listy i wyjątki witryn."
+  },
+  "list_actions": {
+    "message": "Działania na liście"
+  },
+  "highlight_appearance": {
+    "message": "Wygląd wyróżnienia"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "Brak słów na tej liście"
+  },
+  "edit_word": {
+    "message": "Edytuj słowo"
+  },
+  "first_page": {
+    "message": "Pierwsza strona"
+  },
+  "previous_page": {
+    "message": "Poprzednia strona"
+  },
+  "next_page": {
+    "message": "Następna strona"
+  },
+  "last_page": {
+    "message": "Ostatnia strona"
+  },
+  "enter_list_name": {
+    "message": "Wpisz nazwę listy:"
+  },
+  "cannot_delete_last_list": {
+    "message": "Nie można usunąć ostatniej listy"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Edytuj nazwę i kolory listy"
+  },
+  "close": {
+    "message": "Zamknij"
   }
 }

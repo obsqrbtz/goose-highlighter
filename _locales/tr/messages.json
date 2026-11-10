@@ -430,5 +430,44 @@
   },
   "export_import_settings_hint": {
     "message": "Listeleri ve site istisnalarını yedekleyin veya geri yükleyin."
+  },
+  "list_actions": {
+    "message": "Liste işlemleri"
+  },
+  "highlight_appearance": {
+    "message": "Vurgulama görünümü"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "Bu listede sözcük yok"
+  },
+  "edit_word": {
+    "message": "Sözcüğü düzenle"
+  },
+  "first_page": {
+    "message": "İlk sayfa"
+  },
+  "previous_page": {
+    "message": "Önceki sayfa"
+  },
+  "next_page": {
+    "message": "Sonraki sayfa"
+  },
+  "last_page": {
+    "message": "Son sayfa"
+  },
+  "enter_list_name": {
+    "message": "Liste adını girin:"
+  },
+  "cannot_delete_last_list": {
+    "message": "Son liste silinemez"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Liste adını ve renklerini düzenle"
+  },
+  "close": {
+    "message": "Kapat"
   }
 }

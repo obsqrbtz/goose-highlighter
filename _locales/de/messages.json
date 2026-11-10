@@ -398,5 +398,44 @@
   },
   "export_import_settings_hint": {
     "message": "Listen und Website-Ausnahmen sichern oder wiederherstellen."
+  },
+  "list_actions": {
+    "message": "Listenaktionen"
+  },
+  "highlight_appearance": {
+    "message": "Darstellung der Hervorhebung"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "Keine Wörter in dieser Liste"
+  },
+  "edit_word": {
+    "message": "Wort bearbeiten"
+  },
+  "first_page": {
+    "message": "Erste Seite"
+  },
+  "previous_page": {
+    "message": "Vorherige Seite"
+  },
+  "next_page": {
+    "message": "Nächste Seite"
+  },
+  "last_page": {
+    "message": "Letzte Seite"
+  },
+  "enter_list_name": {
+    "message": "Listennamen eingeben:"
+  },
+  "cannot_delete_last_list": {
+    "message": "Die letzte Liste kann nicht gelöscht werden"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Listennamen und Farben bearbeiten"
+  },
+  "close": {
+    "message": "Schließen"
   }
 }

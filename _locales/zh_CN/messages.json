@@ -430,5 +430,44 @@
   },
   "export_import_settings_hint": {
     "message": "备份或恢复列表和站点例外。"
+  },
+  "list_actions": {
+    "message": "列表操作"
+  },
+  "highlight_appearance": {
+    "message": "高亮样式"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "此列表中没有词条"
+  },
+  "edit_word": {
+    "message": "编辑词条"
+  },
+  "first_page": {
+    "message": "第一页"
+  },
+  "previous_page": {
+    "message": "上一页"
+  },
+  "next_page": {
+    "message": "下一页"
+  },
+  "last_page": {
+    "message": "最后一页"
+  },
+  "enter_list_name": {
+    "message": "请输入列表名称："
+  },
+  "cannot_delete_last_list": {
+    "message": "无法删除最后一个列表"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "编辑列表名称和颜色"
+  },
+  "close": {
+    "message": "关闭"
   }
 }

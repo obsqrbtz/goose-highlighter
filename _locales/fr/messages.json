@@ -430,5 +430,44 @@
     },
     "export_import_settings_hint": {
         "message": "Sauvegarder ou restaurer les listes et les exceptions de sites."
-    }
+    },
+  "list_actions": {
+    "message": "Actions de la liste"
+  },
+  "highlight_appearance": {
+    "message": "Apparence du surlignage"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "Aucun mot dans cette liste"
+  },
+  "edit_word": {
+    "message": "Modifier le mot"
+  },
+  "first_page": {
+    "message": "Première page"
+  },
+  "previous_page": {
+    "message": "Page précédente"
+  },
+  "next_page": {
+    "message": "Page suivante"
+  },
+  "last_page": {
+    "message": "Dernière page"
+  },
+  "enter_list_name": {
+    "message": "Saisissez le nom de la liste :"
+  },
+  "cannot_delete_last_list": {
+    "message": "Impossible de supprimer la dernière liste"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Modifier le nom et les couleurs de la liste"
+  },
+  "close": {
+    "message": "Fermer"
+  }
 }

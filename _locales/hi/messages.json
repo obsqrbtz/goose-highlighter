@@ -430,5 +430,44 @@
     },
     "export_import_settings_hint": {
         "message": "सूचियों और साइट अपवादों का बैकअप लें या पुनर्स्थापित करें।"
-    }
+    },
+  "list_actions": {
+    "message": "सूची की कार्रवाइयाँ"
+  },
+  "highlight_appearance": {
+    "message": "हाइलाइट का स्वरूप"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "इस सूची में कोई शब्द नहीं है"
+  },
+  "edit_word": {
+    "message": "शब्द संपादित करें"
+  },
+  "first_page": {
+    "message": "पहला पृष्ठ"
+  },
+  "previous_page": {
+    "message": "पिछला पृष्ठ"
+  },
+  "next_page": {
+    "message": "अगला पृष्ठ"
+  },
+  "last_page": {
+    "message": "अंतिम पृष्ठ"
+  },
+  "enter_list_name": {
+    "message": "सूची का नाम दर्ज करें:"
+  },
+  "cannot_delete_last_list": {
+    "message": "अंतिम सूची हटाई नहीं जा सकती"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "सूची का नाम और रंग संपादित करें"
+  },
+  "close": {
+    "message": "बंद करें"
+  }
 }

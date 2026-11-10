@@ -430,5 +430,44 @@
   },
   "export_import_settings_hint": {
     "message": "Back-up maken of lijsten en site-uitzonderingen herstellen."
+  },
+  "list_actions": {
+    "message": "Lijstacties"
+  },
+  "highlight_appearance": {
+    "message": "Weergave van markeringen"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "Geen woorden in deze lijst"
+  },
+  "edit_word": {
+    "message": "Woord bewerken"
+  },
+  "first_page": {
+    "message": "Eerste pagina"
+  },
+  "previous_page": {
+    "message": "Vorige pagina"
+  },
+  "next_page": {
+    "message": "Volgende pagina"
+  },
+  "last_page": {
+    "message": "Laatste pagina"
+  },
+  "enter_list_name": {
+    "message": "Voer de lijstnaam in:"
+  },
+  "cannot_delete_last_list": {
+    "message": "De laatste lijst kan niet worden verwijderd"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "Lijstnaam en kleuren bewerken"
+  },
+  "close": {
+    "message": "Sluiten"
   }
 }

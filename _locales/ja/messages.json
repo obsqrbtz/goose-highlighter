@@ -336,7 +336,7 @@
         "message": "ハイライトされたテキストはこのように表示されます。"
     },
     "preview_text_before": {
-        "message": ""
+        "message": "たとえば、"
     },
     "preview_text_highlight": {
         "message": "ハイライトされたテキスト"
@@ -430,5 +430,44 @@
     },
     "export_import_settings_hint": {
         "message": "リストとサイトの例外をバックアップまたは復元します。"
-    }
+    },
+  "list_actions": {
+    "message": "リストの操作"
+  },
+  "highlight_appearance": {
+    "message": "ハイライトの外観"
+  },
+  "exception_domain_placeholder": {
+    "message": "example.com"
+  },
+  "no_words_in_list": {
+    "message": "このリストに単語がありません"
+  },
+  "edit_word": {
+    "message": "単語を編集"
+  },
+  "first_page": {
+    "message": "最初のページ"
+  },
+  "previous_page": {
+    "message": "前のページ"
+  },
+  "next_page": {
+    "message": "次のページ"
+  },
+  "last_page": {
+    "message": "最後のページ"
+  },
+  "enter_list_name": {
+    "message": "リスト名を入力してください："
+  },
+  "cannot_delete_last_list": {
+    "message": "最後のリストは削除できません"
+  },
+  "edit_list_name_and_colors_title": {
+    "message": "リスト名と色を編集"
+  },
+  "close": {
+    "message": "閉じる"
+  }
 }
