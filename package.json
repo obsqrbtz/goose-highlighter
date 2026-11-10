@@ -22,6 +22,7 @@
     "rebuild": "npm run clean && npm run build",
     "prepare": "npm run build && node scripts/update-manifest-version.js",
     "test": "npm run build && node --test tests/browser.test.mjs",
+    "benchmark": "npm run build && node tests/benchmarks/run.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   }
