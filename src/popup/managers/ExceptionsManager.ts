@@ -1,5 +1,5 @@
 import { browserAPI } from '../../utils/browser.js';
-import { ExceptionsMode } from '../../types.js';
+import { ExceptionsMode, StorageData } from '../../types.js';
 import { StorageService } from '../../services/StorageService.js';
 import { MessageService } from '../../services/MessageService.js';
 import { PopupRenderer } from './PopupRenderer.js';
@@ -12,6 +12,16 @@ export class ExceptionsManager {
     private currentTabHost: string,
     private onExceptionsChanged: () => void
   ) {}
+
+  setCurrentTabHost(host: string): void {
+    this.currentTabHost = host;
+  }
+
+  setSettings(settings: Partial<Pick<StorageData, 'exceptionsList' | 'exceptionsWhiteList' | 'exceptionsMode'>>): void {
+    this.exceptionsList = settings.exceptionsList ?? this.exceptionsList;
+    this.exceptionsWhiteList = settings.exceptionsWhiteList ?? this.exceptionsWhiteList;
+    this.exceptionsMode = settings.exceptionsMode ?? this.exceptionsMode;
+  }
 
   setupEventListeners(): void {
     document.getElementById('exceptionsModeSelect')?.addEventListener('change', async (e) => {

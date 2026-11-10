@@ -366,6 +366,64 @@ if (location.search === '?empty-entry') {
             expect([range.startOffset, range.endOffset], [4, 7]);
         });
 
+    await check('popup opens page highlights before loading wordlists and keeps list views current', '', async () => {
+        const html = await fetch('/popup/popup.html').then(response => response.text());
+        document.body.innerHTML = new DOMParser().parseFromString(html, 'text/html').body.innerHTML;
+        const previousBrowser = { ...globalThis.browser };
+        let completeListRead;
+        let onStorageChange;
+        let listReads = 0;
+        let pageRequests = 0;
+        const storedList = list(['alpha'], { name: 'Stored list' });
+        Object.assign(globalThis.browser, {
+            storage: {
+                local: {
+                    get: async defaults => {
+                        if (typeof defaults === 'string') return { [defaults]: '{"activeTab":"page-highlights"}' };
+                        if (!Object.hasOwn(defaults, 'lists')) return defaults;
+                        listReads++;
+                        return await new Promise(resolve => { completeListRead = resolve; });
+                    },
+                    set: async () => {},
+                },
+                onChanged: { addListener(listener) { onStorageChange = listener; } },
+            },
+            tabs: {
+                query: async () => [{ id: 1, url: 'https://example.com' }],
+                sendMessage: async () => {
+                    pageRequests++;
+                    return { highlights: [], lists: [] };
+                },
+            },
+            runtime: { getPlatformInfo: async () => ({ os: 'linux' }), sendMessage: async () => {} },
+        });
+        const { PopupController } = await import('../dist/popup/PopupController.js');
+        const controller = new PopupController();
+        const open = tab => document.querySelector(`[data-tab="${tab}"]`).click();
+        try {
+            await controller.initialize();
+            expect([listReads, pageRequests], [0, 1]);
+            open('lists');
+            open('words');
+            expect(listReads, 1);
+            expect(document.querySelector('[data-tab-content="words"]').inert, true);
+            onStorageChange({ lists: { newValue: [storedList] } }, 'local');
+            completeListRead({ lists: [list(['stale'])] });
+            await new Promise(resolve => setTimeout(resolve, 0));
+            expect(document.getElementById('wordCount').textContent, '1');
+            expect(document.getElementById('wordList').textContent.includes('alpha'), true);
+            expect(document.querySelector('[data-tab-content="words"]').inert, false);
+            onStorageChange({ globalHighlightEnabled: { newValue: false } }, 'local');
+            expect(document.getElementById('globalHighlightToggle').checked, false);
+            open('lists');
+            expect(document.getElementById('currentListName').textContent, 'Stored list');
+            expect(listReads, 1);
+        } finally {
+            controller.captureScrollAndSave();
+            Object.assign(globalThis.browser, previousBrowser);
+        }
+    });
+
     await check('the injected bundle matches phrases and refreshes its wordlist snapshot',
         '<p>Read the <a href="#notes">release notes</a>&nbsp;today.</p><div><textarea>release notes</textarea></div>', async () => {
             const phrase = 'Read the release notes today';

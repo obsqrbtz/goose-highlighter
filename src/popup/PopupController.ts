@@ -1,5 +1,5 @@
 import { browserAPI } from '../utils/browser.js';
-import { HighlightList, BadgePosition, BadgeHorizontal, BadgeVertical, BadgePlacement, DEFAULT_STORAGE } from '../types.js';
+import { HighlightList, BadgePosition, BadgeHorizontal, BadgeVertical, BadgePlacement, DEFAULT_STORAGE, StorageData } from '../types.js';
 import { StorageService } from '../services/StorageService.js';
 import { MessageService } from '../services/MessageService.js';
 import { PopupStateManager, PopupState } from './managers/PopupStateManager.js';
@@ -12,7 +12,9 @@ import { ImportExportManager } from './managers/ImportExportManager.js';
 
 export class PopupController {
   // Core data
-  private lists: HighlightList[] = [];
+  private readonly lists: HighlightList[] = [];
+  private listsLoaded = false;
+  private listsLoading?: Promise<void>;
   private globalHighlightEnabled = true;
   private matchCaseEnabled = false;
   private matchWholeEnabled = false;
@@ -39,16 +41,20 @@ export class PopupController {
 
   async initialize(): Promise<void> {
     try {
-      await this.loadData();
-      await this.getCurrentTab();
-      
+      const settings = StorageService.get([
+        'globalHighlightEnabled', 'matchCaseEnabled', 'matchWholeEnabled', 'badgePosition',
+        'exceptionsList', 'exceptionsWhiteList', 'exceptionsMode'
+      ]);
+      const currentTab = this.getCurrentTab();
       this.initializeManagers();
-      
-      await this.stateManager.load();
+      const [data] = await Promise.all([settings, currentTab, this.stateManager.load()]);
+      this.applySettings(data);
+      this.exceptionsManager.setCurrentTabHost(this.currentTabHost);
       
       PopupRenderer.translateTitles();
       this.setupEventListeners();
-      this.render();
+      this.exceptionsManager.render();
+      this.updateFormValues();
       this.restoreWordSearchInput();
       
       requestAnimationFrame(() => {
@@ -130,48 +136,52 @@ export class PopupController {
       () => this.exceptionsManager.getExceptionsList(),
       () => this.exceptionsManager.getExceptionsWhiteList(),
       () => this.exceptionsManager.getExceptionsMode(),
-      (_list) => { /* handled by exceptionsManager */ },
-      (_list) => { /* handled by exceptionsManager */ },
-      (_mode) => { /* handled by exceptionsManager */ },
+      (list) => this.exceptionsManager.setSettings({ exceptionsList: list }),
+      (list) => this.exceptionsManager.setSettings({ exceptionsWhiteList: list }),
+      (mode) => this.exceptionsManager.setSettings({ exceptionsMode: mode }),
+      () => this.ensureLists(),
       () => this.render()
     );
   }
 
-  private async loadData(): Promise<void> {
-    try {
-      const data = await StorageService.get();
-      this.lists = data.lists || [];
-      this.globalHighlightEnabled = data.globalHighlightEnabled ?? true;
-      this.matchCaseEnabled = data.matchCaseEnabled ?? false;
-      this.matchWholeEnabled = data.matchWholeEnabled ?? false;
-      this.badgePosition = data.badgePosition ?? { ...DEFAULT_STORAGE.badgePosition };
+  private ensureLists(): Promise<void> {
+    if (this.listsLoaded) return Promise.resolve();
+    return this.listsLoading ??= StorageService.get(['lists']).then(({ lists }) => {
+      // A storage change received during the read is newer than the snapshot.
+      if (!this.listsLoaded) this.applyLists(lists);
+    }).finally(() => {
+      this.listsLoading = undefined;
+    });
+  }
 
-      if (this.lists.length === 0) {
-        this.lists.push({
-          id: Date.now(),
-          name: browserAPI.i18n.getMessage('default_list_name') || 'Default List',
-          background: '#ffff00',
-          foreground: '#000000',
-          active: true,
-          words: []
-        });
-      }
-    } catch (error) {
-      console.error('PopupController.loadData error:', error);
-      // Use defaults on error
-      this.lists = [{
+  private applyLists(lists: HighlightList[]): void {
+    this.lists.length = 0;
+    for (const list of lists ?? []) this.lists.push(list);
+    if (this.lists.length === 0) {
+      this.lists.push({
         id: Date.now(),
         name: browserAPI.i18n.getMessage('default_list_name') || 'Default List',
         background: '#ffff00',
         foreground: '#000000',
         active: true,
         words: []
-      }];
-      this.globalHighlightEnabled = true;
-      this.matchCaseEnabled = false;
-      this.matchWholeEnabled = false;
-      this.badgePosition = { ...DEFAULT_STORAGE.badgePosition };
+      });
     }
+    this.state.currentListIndex = Math.min(this.state.currentListIndex, this.lists.length - 1);
+    this.listsLoaded = true;
+    document.querySelectorAll<HTMLElement>('.tab-content[aria-busy]').forEach(panel => {
+      panel.removeAttribute('aria-busy');
+      panel.inert = false;
+    });
+    this.renderListTab();
+  }
+
+  private applySettings(data: Partial<StorageData>): void {
+    this.globalHighlightEnabled = data.globalHighlightEnabled ?? this.globalHighlightEnabled;
+    this.matchCaseEnabled = data.matchCaseEnabled ?? this.matchCaseEnabled;
+    this.matchWholeEnabled = data.matchWholeEnabled ?? this.matchWholeEnabled;
+    this.badgePosition = data.badgePosition ?? this.badgePosition;
+    this.exceptionsManager.setSettings(data);
   }
 
   private async getCurrentTab(): Promise<void> {
@@ -231,7 +241,10 @@ export class PopupController {
     });
 
     if (tabName === 'page-highlights') {
-      this.pageHighlightsManager.load();
+      void this.pageHighlightsManager.load();
+    } else if (tabName === 'lists' || tabName === 'words') {
+      if (this.listsLoaded) this.renderListTab();
+      else void this.ensureLists().then(() => this.stateManager.restoreScrollPositions());
     }
     requestAnimationFrame(() => this.stateManager.restoreScrollPositions());
   }
@@ -358,22 +371,24 @@ export class PopupController {
   private setupStorageSync(): void {
     browserAPI.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== 'local') return;
-      if (changes.lists || changes.globalHighlightEnabled || changes.matchCaseEnabled ||
-          changes.matchWholeEnabled || changes.exceptionsList || changes.exceptionsWhiteList ||
-          changes.exceptionsMode || changes.badgePosition) {
-        void this.reloadFromStorage();
+      if (changes.lists && (this.listsLoaded || this.listsLoading)) {
+        this.applyLists(changes.lists.newValue as HighlightList[] ?? []);
+      }
+      const settings: Partial<StorageData> = {};
+      const keys = [
+        'globalHighlightEnabled', 'matchCaseEnabled', 'matchWholeEnabled', 'badgePosition',
+        'exceptionsList', 'exceptionsWhiteList', 'exceptionsMode'
+      ] as const;
+      for (const key of keys) {
+        const change = changes[key];
+        if (change) Object.assign(settings, { [key]: change.newValue ?? DEFAULT_STORAGE[key] });
+      }
+      if (Object.keys(settings).length > 0) {
+        this.applySettings(settings);
+        this.exceptionsManager.render();
+        this.updateFormValues();
       }
     });
-  }
-
-  private async reloadFromStorage(): Promise<void> {
-    try {
-      await this.loadData();
-      this.state.currentListIndex = Math.min(this.state.currentListIndex, this.lists.length - 1);
-      this.render();
-    } catch (error) {
-      console.error('PopupController.reloadFromStorage error:', error);
-    }
   }
 
   private restoreWordSearchInput(): void {
@@ -384,10 +399,15 @@ export class PopupController {
   }
 
   private render(): void {
-    this.listManager.render();
-    this.wordManager.render();
+    this.renderListTab();
     this.exceptionsManager.render();
     this.updateFormValues();
+  }
+
+  private renderListTab(): void {
+    if (!this.listsLoaded) return;
+    if (this.state.activeTab === 'lists') this.listManager.render();
+    if (this.state.activeTab === 'words') this.wordManager.render();
   }
 
   private updateFormValues(): void {

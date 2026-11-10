@@ -15,6 +15,7 @@ export class ImportExportManager {
     private setExceptionsList: (list: string[]) => void,
     private setExceptionsWhiteList: (list: string[]) => void,
     private setExceptionsMode: (mode: ExceptionsMode) => void,
+    private ensureLists: () => Promise<void>,
     private onDataChanged: () => void
   ) {}
 
@@ -72,7 +73,7 @@ export class ImportExportManager {
     const importSettingsInput = document.getElementById('importSettingsInput') as HTMLInputElement;
 
     document.getElementById('exportSettingsBtn')?.addEventListener('click', () => {
-      this.exportSettings();
+      void this.exportSettings();
     });
 
     document.getElementById('importSettingsBtn')?.addEventListener('click', () => {
@@ -131,7 +132,8 @@ export class ImportExportManager {
     }
   }
 
-  private exportSettings(): void {
+  private async exportSettings(): Promise<void> {
+    await this.ensureLists();
     const data: ExportData = {
       lists: this.lists,
       exceptionsList: [...this.getExceptionsList()],
@@ -150,6 +152,7 @@ export class ImportExportManager {
   private async importSettings(jsonString: string): Promise<void> {
     try {
       const settings = ImportService.extractSettings(jsonString);
+      await this.ensureLists();
       let listsApplied = false;
       let exceptionsApplied = false;
 

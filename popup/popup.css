@@ -43,6 +43,27 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
+.tab-content[aria-busy="true"] {
+  position: relative;
+}
+
+.tab-content[aria-busy="true"] > .tab-inner {
+  visibility: hidden;
+}
+
+.tab-content[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--input-border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

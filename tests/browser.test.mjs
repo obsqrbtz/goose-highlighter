@@ -11,7 +11,7 @@ const launch = promisify(execFile);
 
 const server = createServer(async (request, response) => {
     const { pathname } = new URL(request.url, 'http://localhost');
-    if (!/^\/(?:tests\/(?:fixture\.html|highlighting\.mjs)|dist\/(?:[\w-]+\/)*[\w-]+\.js)$/.test(pathname)) {
+    if (!/^\/(?:tests\/(?:fixture\.html|highlighting\.mjs)|popup\/popup\.html|dist\/(?:[\w-]+\/)*[\w-]+\.js)$/.test(pathname)) {
         response.writeHead(404).end();
         return;
     }
