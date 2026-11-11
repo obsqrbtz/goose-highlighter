@@ -162,8 +162,10 @@ export class ExceptionsManager {
     if (!container) return;
 
     const list = this.getCurrentExceptionsList();
+    const clearButton = document.getElementById('clearExceptionsBtn') as HTMLButtonElement | null;
+    if (clearButton) clearButton.disabled = list.length === 0;
     if (list.length === 0) {
-      container.innerHTML = `<div class="exception-item exception-empty">${browserAPI.i18n.getMessage('no_exceptions') || 'No exceptions'}</div>`;
+      container.innerHTML = `<div class="exception-item exception-empty">${browserAPI.i18n.getMessage(this.exceptionsMode === 'whitelist' ? 'no_sites_included' : 'no_sites_excluded') || (this.exceptionsMode === 'whitelist' ? 'No sites included' : 'No sites excluded')}</div>`;
       return;
     }
 

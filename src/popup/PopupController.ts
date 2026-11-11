@@ -277,6 +277,7 @@ export class PopupController {
     globalToggle?.addEventListener('change', async () => {
       try {
         this.globalHighlightEnabled = globalToggle.checked;
+        this.updatePowerLabel();
         await StorageService.update('globalHighlightEnabled', this.globalHighlightEnabled);
         MessageService.sendToAllTabs({
           type: 'GLOBAL_TOGGLE_UPDATED',
@@ -410,7 +411,17 @@ export class PopupController {
     if (this.state.activeTab === 'words') this.wordManager.render();
   }
 
+  private updatePowerLabel(): void {
+    const key = this.globalHighlightEnabled ? 'turn_highlighting_off' : 'turn_highlighting_on';
+    const label = browserAPI.i18n.getMessage(key) || (this.globalHighlightEnabled ? 'Turn highlighting off' : 'Turn highlighting on');
+    document.getElementById('globalHighlightToggle')?.setAttribute('aria-label', label);
+    document.querySelector('.header-power-toggle')?.setAttribute('aria-label', label);
+    const tooltip = document.querySelector('.power-tooltip');
+    if (tooltip) tooltip.textContent = label;
+  }
+
   private updateFormValues(): void {
+    this.updatePowerLabel();
     (document.getElementById('globalHighlightToggle') as HTMLInputElement).checked = this.globalHighlightEnabled;
     (document.getElementById('matchCase') as HTMLInputElement).checked = this.matchCaseEnabled;
     (document.getElementById('matchWhole') as HTMLInputElement).checked = this.matchWholeEnabled;

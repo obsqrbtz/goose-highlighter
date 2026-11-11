@@ -498,7 +498,7 @@ export class WordManager {
 
     const wordCount = document.getElementById('wordCount');
     if (wordCount) {
-      wordCount.textContent = this.totalWords.toString();
+      wordCount.textContent = this.totalWords.toLocaleString();
     }
 
     this.renderPaginationControls();

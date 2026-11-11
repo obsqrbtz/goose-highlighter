@@ -469,5 +469,8 @@
   },
   "close": {
     "message": "閉じる"
-  }
+  },
+  "apply_list_settings": { "message": "リスト設定を適用" },
+  "no_sites_included": { "message": "対象サイトはありません" },
+  "no_sites_excluded": { "message": "除外サイトはありません" }
 }

@@ -469,5 +469,8 @@
   },
   "close": {
     "message": "बंद करें"
-  }
+  },
+  "apply_list_settings": { "message": "सूची सेटिंग लागू करें" },
+  "no_sites_included": { "message": "कोई साइट शामिल नहीं" },
+  "no_sites_excluded": { "message": "कोई साइट बाहर नहीं" }
 }

@@ -1,0 +1,36 @@
+/* Locally bundled Reicon filled icons; see icons/reicon/README.md. */
+.fa-solid { display: inline-block; width: 1em; height: 1em; background: currentColor; mask: var(--reicon) center / contain no-repeat; }
+.fa-solid::before { content: none; }
+.fa-gear { --reicon: url("../icons/reicon/settings.svg"); }
+.fa-power-off { --reicon: url("../icons/reicon/power.svg"); }
+.fa-chevron-down { --reicon: url("../icons/reicon/arrow-down2.svg"); }
+.fa-chevron-up { --reicon: url("../icons/reicon/arrow-up2.svg"); }
+.fa-chevron-right { --reicon: url("../icons/reicon/arrow-right2.svg"); }
+.fa-pen { --reicon: url("../icons/reicon/pen.svg"); }
+.fa-plus { --reicon: url("../icons/reicon/plus.svg"); }
+.fa-trash { --reicon: url("../icons/reicon/trash.svg"); }
+.fa-download { --reicon: url("../icons/reicon/download.svg"); }
+.fa-upload { --reicon: url("../icons/reicon/upload.svg"); }
+.fa-check { --reicon: url("../icons/reicon/check.svg"); }
+.fa-xmark { --reicon: url("../icons/reicon/xmark.svg"); }
+.fa-eye { --reicon: url("../icons/reicon/eye.svg"); }
+.fa-eye-slash { --reicon: url("../icons/reicon/eye-off.svg"); }
+.fa-arrow-right { --reicon: url("../icons/reicon/arrow-right.svg"); }
+.fa-copy { --reicon: url("../icons/reicon/copy.svg"); }
+.fa-ellipsis-v { --reicon: url("../icons/reicon/more-h.svg"); }
+.fa-at { --reicon: url("../icons/reicon/at-sign.svg"); }
+.fa-angles-left { --reicon: url("../icons/reicon/arrows-left.svg"); }
+.fa-angle-left { --reicon: url("../icons/reicon/arrow-left2.svg"); }
+.fa-angle-right { --reicon: url("../icons/reicon/arrow-right2.svg"); }
+.fa-angles-right { --reicon: url("../icons/reicon/arrows-right.svg"); }
+.fa-ellipsis-v { transform: rotate(90deg); }
+
+/* SVGs use a 24px artboard; give them room to read at popup scale. */
+.header-settings-btn .fa-solid,
+.power-icon-wrapper .fa-solid { font-size: 20px; width: 20px; height: 20px; flex: none; }
+:is(.icon-button, .word-item-icon-btn, .list-actions-panel, .word-item-menu-item, .pagination-btn, .page-highlight-nav, .option-button) .fa-solid {
+  font-size: 18px; width: 18px; height: 18px; flex: none;
+}
+.header-settings-btn .fa-solid { font-size: 20px; width: 20px; height: 20px; }
+.word-item-eye-icon { width: 18px; height: 18px; }
+.word-item-eye-icon .fa-solid { width: 18px; height: 18px; font-size: 18px; }

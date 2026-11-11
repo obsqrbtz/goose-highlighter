@@ -16,8 +16,8 @@ export class PopupRenderer {
           <button class="word-item-icon-btn edit-word-btn" data-index="${realIndex}" title="${browserAPI.i18n.getMessage('edit') || 'Edit'}">
             <i class="fa-solid fa-pen"></i>
           </button>
-          <input type="color" value="${bgColor}" data-bg-edit="${realIndex}" class="word-item-color-picker" title="${browserAPI.i18n.getMessage('background_color_title') || 'Background color'}">
-          <input type="color" value="${fgColor}" data-fg-edit="${realIndex}" class="word-item-color-picker" title="${browserAPI.i18n.getMessage('text_color_title') || 'Text color'}">
+          <input type="color" value="${bgColor}" data-bg-edit="${realIndex}" class="word-item-color-picker" aria-label="${DOMUtils.escapeHtml(browserAPI.i18n.getMessage('background_color_title') || 'Background color')}" title="${browserAPI.i18n.getMessage('background_color_title') || 'Background color'}">
+          <input type="color" value="${fgColor}" data-fg-edit="${realIndex}" class="word-item-color-picker" aria-label="${DOMUtils.escapeHtml(browserAPI.i18n.getMessage('text_color_title') || 'Text color')}" title="${browserAPI.i18n.getMessage('text_color_title') || 'Text color'}">
           <label class="word-item-eye-toggle" title="${browserAPI.i18n.getMessage('toggle_active') || 'Toggle active'}" aria-label="${browserAPI.i18n.getMessage('toggle_active') || 'Toggle active'}">
             <input type="checkbox" class="word-item-eye-input" ${word.active !== false ? 'checked' : ''} data-index="${realIndex}">
             <span class="word-item-eye-icon">
@@ -71,8 +71,8 @@ export class PopupRenderer {
 
   static createPaginationHTML(currentPage: number, totalPages: number): string {
     const pageInfoText = browserAPI.i18n.getMessage('page_info')
-      ?.replace('{current}', String(currentPage))
-      .replace('{total}', String(totalPages))
+      ?.replace('{current}', currentPage.toLocaleString())
+      .replace('{total}', totalPages.toLocaleString())
       || `Page ${currentPage} of ${totalPages}`;
 
     const firstPageTitle = browserAPI.i18n.getMessage('first_page') || 'First page';

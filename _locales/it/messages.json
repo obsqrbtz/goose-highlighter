@@ -469,5 +469,8 @@
   },
   "close": {
     "message": "Chiudi"
-  }
+  },
+  "apply_list_settings": { "message": "Applica impostazioni elenco" },
+  "no_sites_included": { "message": "Nessun sito incluso" },
+  "no_sites_excluded": { "message": "Nessun sito escluso" }
 }

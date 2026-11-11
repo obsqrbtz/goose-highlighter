@@ -469,5 +469,8 @@
   },
   "close": {
     "message": "Kapat"
-  }
+  },
+  "apply_list_settings": { "message": "Liste ayarlarını uygula" },
+  "no_sites_included": { "message": "Dahil edilen site yok" },
+  "no_sites_excluded": { "message": "Hariç tutulan site yok" }
 }

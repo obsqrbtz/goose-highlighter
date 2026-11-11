@@ -7,6 +7,7 @@
   <title data-i18n="extension_name">Goose Highlighter</title>
   <link rel="stylesheet" href="popup.css" />
   <link rel="stylesheet" href="../shared/icons.css" />
+  <link rel="stylesheet" href="../shared/reicon.css" />
 </head>
 
 <body>
@@ -27,11 +28,12 @@
         <button class="icon-button header-settings-btn" id="settingsBtn" data-i18n-title="options" title="Options" aria-label="Settings">
           <i class="fa-solid fa-gear"></i>
         </button>
-        <label class="header-power-toggle" title="Toggle highlighting" aria-label="Toggle highlighting">
+        <label class="header-power-toggle" aria-label="Toggle highlighting">
           <input type="checkbox" id="globalHighlightToggle" class="header-power-input" />
           <span class="power-icon-wrapper">
             <i class="fa-solid fa-power-off"></i>
           </span>
+          <span class="power-tooltip" role="tooltip">Toggle highlighting</span>
         </label>
       </div>
     </div>
@@ -137,7 +139,7 @@
         <!-- Apply Button -->
         <button class="apply-button" id="applyListSettingsBtn">
           <i class="fa-solid fa-check"></i>
-          <span data-i18n="apply">Apply Changes</span>
+          <span data-i18n="apply_list_settings">Apply list settings</span>
         </button>
       </div>
     </div>

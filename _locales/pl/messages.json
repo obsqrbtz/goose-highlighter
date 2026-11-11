@@ -469,5 +469,8 @@
   },
   "close": {
     "message": "Zamknij"
-  }
+  },
+  "apply_list_settings": { "message": "Zastosuj ustawienia listy" },
+  "no_sites_included": { "message": "Brak uwzględnionych witryn" },
+  "no_sites_excluded": { "message": "Brak wykluczonych witryn" }
 }

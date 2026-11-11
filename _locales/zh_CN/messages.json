@@ -469,5 +469,8 @@
   },
   "close": {
     "message": "关闭"
-  }
+  },
+  "apply_list_settings": { "message": "应用列表设置" },
+  "no_sites_included": { "message": "未包含任何网站" },
+  "no_sites_excluded": { "message": "未排除任何网站" }
 }

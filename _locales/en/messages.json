@@ -489,5 +489,11 @@
   },
   "export_import_settings_hint": {
     "message": "Back up or restore lists and site exceptions."
-  }
+  },
+  "apply_list_settings": { "message": "Apply list settings" },
+  "no_sites_included": { "message": "No sites included" },
+  "no_sites_excluded": { "message": "No sites excluded" },
+  "page_highlights_hint": { "message": "Add words in the Words tab and enable highlighting to see matches here." },
+  "turn_highlighting_off": { "message": "Turn highlighting off" },
+  "turn_highlighting_on": { "message": "Turn highlighting on" }
 }

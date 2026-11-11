@@ -139,10 +139,10 @@ export class PageHighlightsManager {
 
     const filtered = this.pageHighlights.filter(h => this.passesListFilter(h));
     const totalCount = filtered.reduce((sum, h) => sum + h.count, 0);
-    countElement.textContent = totalCount.toString();
+    countElement.textContent = totalCount.toLocaleString();
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div class="page-highlights-empty">${browserAPI.i18n.getMessage('no_highlights_on_page') || 'No highlights on this page'}</div>`;
+      container.innerHTML = `<div class="page-highlights-empty">${browserAPI.i18n.getMessage('no_highlights_on_page') || 'No highlights on this page'}<p class="empty-hint">${browserAPI.i18n.getMessage('page_highlights_hint') || 'Add words in the Words tab and enable highlighting to see matches here.'}</p></div>`;
       return;
     }
 

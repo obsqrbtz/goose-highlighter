@@ -469,5 +469,8 @@
   },
   "close": {
     "message": "닫기"
-  }
+  },
+  "apply_list_settings": { "message": "목록 설정 적용" },
+  "no_sites_included": { "message": "포함된 사이트 없음" },
+  "no_sites_excluded": { "message": "제외된 사이트 없음" }
 }

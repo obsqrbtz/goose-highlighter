@@ -470,5 +470,8 @@
   },
   "close": {
     "message": "Закрыть"
-  }
+  },
+  "apply_list_settings": { "message": "Применить настройки списка" },
+  "no_sites_included": { "message": "Нет включённых сайтов" },
+  "no_sites_excluded": { "message": "Нет исключённых сайтов" }
 }

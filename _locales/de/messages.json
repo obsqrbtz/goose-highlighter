@@ -437,5 +437,8 @@
   },
   "close": {
     "message": "Schließen"
-  }
+  },
+  "apply_list_settings": { "message": "Listeneinstellungen anwenden" },
+  "no_sites_included": { "message": "Keine Websites eingeschlossen" },
+  "no_sites_excluded": { "message": "Keine Websites ausgeschlossen" }
 }
