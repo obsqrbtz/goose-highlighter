@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "सूची सेटिंग लागू करें" },
   "no_sites_included": { "message": "कोई साइट शामिल नहीं" },
-  "no_sites_excluded": { "message": "कोई साइट बाहर नहीं" }
+  "no_sites_excluded": { "message": "कोई साइट बाहर नहीं" },
+  "page_matches": {
+    "message": "मिलान"
+  },
+  "page_group_by": {
+    "message": "इसके अनुसार समूह बनाएँ:"
+  },
+  "page_group_none": {
+    "message": "कोई नहीं"
+  },
+  "page_group_list": {
+    "message": "सूची"
+  },
+  "page_highlights_hint": {
+    "message": "यहाँ मिलान देखने के लिए शब्द टैब में शब्द जोड़ें और हाइलाइटिंग चालू करें।"
+  },
+  "turn_highlighting_off": {
+    "message": "हाइलाइटिंग बंद करें"
+  },
+  "turn_highlighting_on": {
+    "message": "हाइलाइटिंग चालू करें"
+  },
+  "quick_word_hint": {
+    "message": "शब्द या वाक्यांश"
+  },
+  "add_multiple": {
+    "message": "एक साथ कई जोड़ें…"
+  },
+  "bulk_word_hint": {
+    "message": "हर पंक्ति में एक शब्द या वाक्यांश। समीक्षा के लिए यहाँ सूची पेस्ट करें।"
+  },
+  "add_row": {
+    "message": "पंक्ति जोड़ें"
+  },
+  "adding_to_list": {
+    "message": "इसमें जोड़ा जा रहा है: {list}"
+  },
+  "add_n_entries": {
+    "message": "{count} प्रविष्टियाँ जोड़ें"
+  },
+  "entry_row": {
+    "message": "प्रविष्टि"
+  },
+  "entry_list_missing": {
+    "message": "यह सूची अब मौजूद नहीं है। दूसरी सूची चुनने के लिए रद्द करें।"
+  },
+  "entry_duplicate": {
+    "message": "यह प्रविष्टि सूची में पहले से है।"
+  },
+  "entries_added": {
+    "message": "{count} प्रविष्टियाँ जोड़ी गईं।"
+  },
+  "entry_save_failed": {
+    "message": "सहेजा नहीं जा सका। आपका ड्राफ़्ट सुरक्षित है; फिर से कोशिश करें।"
+  },
+  "add": {
+    "message": "जोड़ें"
+  },
+  "cancel": {
+    "message": "रद्द करें"
+  },
+  "edit": {
+    "message": "संपादित करें"
+  }
 }

@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "应用列表设置" },
   "no_sites_included": { "message": "未包含任何网站" },
-  "no_sites_excluded": { "message": "未排除任何网站" }
+  "no_sites_excluded": { "message": "未排除任何网站" },
+  "page_matches": {
+    "message": "处匹配"
+  },
+  "page_group_by": {
+    "message": "分组依据："
+  },
+  "page_group_none": {
+    "message": "无"
+  },
+  "page_group_list": {
+    "message": "列表"
+  },
+  "page_highlights_hint": {
+    "message": "在“词语”选项卡中添加词语并启用高亮，即可在此查看匹配结果。"
+  },
+  "turn_highlighting_off": {
+    "message": "关闭高亮"
+  },
+  "turn_highlighting_on": {
+    "message": "开启高亮"
+  },
+  "quick_word_hint": {
+    "message": "词语或短语"
+  },
+  "add_multiple": {
+    "message": "批量添加…"
+  },
+  "bulk_word_hint": {
+    "message": "每行一个词语或短语。粘贴列表后可在此检查。"
+  },
+  "add_row": {
+    "message": "添加行"
+  },
+  "adding_to_list": {
+    "message": "添加到：{list}"
+  },
+  "add_n_entries": {
+    "message": "添加 {count} 个条目"
+  },
+  "entry_row": {
+    "message": "条目"
+  },
+  "entry_list_missing": {
+    "message": "此列表已不存在。请取消并选择其他列表。"
+  },
+  "entry_duplicate": {
+    "message": "此条目已在列表中。"
+  },
+  "entries_added": {
+    "message": "已添加 {count} 个条目。"
+  },
+  "entry_save_failed": {
+    "message": "无法保存。草稿已保留，请重试。"
+  },
+  "add": {
+    "message": "添加"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "edit": {
+    "message": "编辑"
+  }
 }

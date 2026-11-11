@@ -543,5 +543,11 @@
   },
   "add": {
     "message": "Add"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "edit": {
+    "message": "Edit"
   }
 }

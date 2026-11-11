@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "Zastosuj ustawienia listy" },
   "no_sites_included": { "message": "Brak uwzględnionych witryn" },
-  "no_sites_excluded": { "message": "Brak wykluczonych witryn" }
+  "no_sites_excluded": { "message": "Brak wykluczonych witryn" },
+  "page_matches": {
+    "message": "dopasowania"
+  },
+  "page_group_by": {
+    "message": "Grupuj według:"
+  },
+  "page_group_none": {
+    "message": "Brak"
+  },
+  "page_group_list": {
+    "message": "Lista"
+  },
+  "page_highlights_hint": {
+    "message": "Dodaj słowa na karcie Słowa i włącz podświetlanie, aby zobaczyć tutaj dopasowania."
+  },
+  "turn_highlighting_off": {
+    "message": "Wyłącz podświetlanie"
+  },
+  "turn_highlighting_on": {
+    "message": "Włącz podświetlanie"
+  },
+  "quick_word_hint": {
+    "message": "Słowo lub fraza"
+  },
+  "add_multiple": {
+    "message": "Dodaj wiele…"
+  },
+  "bulk_word_hint": {
+    "message": "Jedno słowo lub fraza w każdym wierszu. Wklej listę, aby ją tutaj przejrzeć."
+  },
+  "add_row": {
+    "message": "Dodaj wiersz"
+  },
+  "adding_to_list": {
+    "message": "Dodawanie do: {list}"
+  },
+  "add_n_entries": {
+    "message": "Dodaj wpisy: {count}"
+  },
+  "entry_row": {
+    "message": "Wpis"
+  },
+  "entry_list_missing": {
+    "message": "Ta lista już nie istnieje. Anuluj, aby wybrać inną listę."
+  },
+  "entry_duplicate": {
+    "message": "Ten wpis jest już na liście."
+  },
+  "entries_added": {
+    "message": "Dodano wpisy: {count}."
+  },
+  "entry_save_failed": {
+    "message": "Nie udało się zapisać. Wersja robocza została zachowana; spróbuj ponownie."
+  },
+  "add": {
+    "message": "Dodaj"
+  },
+  "cancel": {
+    "message": "Anuluj"
+  },
+  "edit": {
+    "message": "Edytuj"
+  }
 }

@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "목록 설정 적용" },
   "no_sites_included": { "message": "포함된 사이트 없음" },
-  "no_sites_excluded": { "message": "제외된 사이트 없음" }
+  "no_sites_excluded": { "message": "제외된 사이트 없음" },
+  "page_matches": {
+    "message": "일치 항목"
+  },
+  "page_group_by": {
+    "message": "그룹 기준:"
+  },
+  "page_group_none": {
+    "message": "없음"
+  },
+  "page_group_list": {
+    "message": "목록"
+  },
+  "page_highlights_hint": {
+    "message": "단어 탭에서 단어를 추가하고 강조 표시를 켜면 여기에 일치 항목이 표시됩니다."
+  },
+  "turn_highlighting_off": {
+    "message": "강조 표시 끄기"
+  },
+  "turn_highlighting_on": {
+    "message": "강조 표시 켜기"
+  },
+  "quick_word_hint": {
+    "message": "단어 또는 구문"
+  },
+  "add_multiple": {
+    "message": "여러 항목 추가…"
+  },
+  "bulk_word_hint": {
+    "message": "한 줄에 단어 또는 구문 하나를 입력하세요. 목록을 붙여넣어 여기에서 검토하세요."
+  },
+  "add_row": {
+    "message": "행 추가"
+  },
+  "adding_to_list": {
+    "message": "추가할 목록: {list}"
+  },
+  "add_n_entries": {
+    "message": "{count}개 항목 추가"
+  },
+  "entry_row": {
+    "message": "항목"
+  },
+  "entry_list_missing": {
+    "message": "이 목록은 더 이상 존재하지 않습니다. 취소하고 다른 목록을 선택하세요."
+  },
+  "entry_duplicate": {
+    "message": "이 항목은 이미 목록에 있습니다."
+  },
+  "entries_added": {
+    "message": "{count}개 항목을 추가했습니다."
+  },
+  "entry_save_failed": {
+    "message": "저장하지 못했습니다. 초안은 유지됩니다. 다시 시도하세요."
+  },
+  "add": {
+    "message": "추가"
+  },
+  "cancel": {
+    "message": "취소"
+  },
+  "edit": {
+    "message": "편집"
+  }
 }

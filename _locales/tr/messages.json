@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "Liste ayarlarını uygula" },
   "no_sites_included": { "message": "Dahil edilen site yok" },
-  "no_sites_excluded": { "message": "Hariç tutulan site yok" }
+  "no_sites_excluded": { "message": "Hariç tutulan site yok" },
+  "page_matches": {
+    "message": "eşleşme"
+  },
+  "page_group_by": {
+    "message": "Gruplama ölçütü:"
+  },
+  "page_group_none": {
+    "message": "Yok"
+  },
+  "page_group_list": {
+    "message": "Liste"
+  },
+  "page_highlights_hint": {
+    "message": "Eşleşmeleri burada görmek için Kelimeler sekmesinde kelimeler ekleyin ve vurgulamayı açın."
+  },
+  "turn_highlighting_off": {
+    "message": "Vurgulamayı kapat"
+  },
+  "turn_highlighting_on": {
+    "message": "Vurgulamayı aç"
+  },
+  "quick_word_hint": {
+    "message": "Kelime veya ifade"
+  },
+  "add_multiple": {
+    "message": "Birden fazla ekle…"
+  },
+  "bulk_word_hint": {
+    "message": "Her satıra bir kelime veya ifade girin. Burada gözden geçirmek için bir liste yapıştırın."
+  },
+  "add_row": {
+    "message": "Satır ekle"
+  },
+  "adding_to_list": {
+    "message": "Eklenecek liste: {list}"
+  },
+  "add_n_entries": {
+    "message": "{count} girdi ekle"
+  },
+  "entry_row": {
+    "message": "Girdi"
+  },
+  "entry_list_missing": {
+    "message": "Bu liste artık mevcut değil. Başka bir liste seçmek için iptal edin."
+  },
+  "entry_duplicate": {
+    "message": "Bu girdi zaten listede var."
+  },
+  "entries_added": {
+    "message": "{count} girdi eklendi."
+  },
+  "entry_save_failed": {
+    "message": "Kaydedilemedi. Taslağınız korundu; lütfen tekrar deneyin."
+  },
+  "add": {
+    "message": "Ekle"
+  },
+  "cancel": {
+    "message": "İptal"
+  },
+  "edit": {
+    "message": "Düzenle"
+  }
 }

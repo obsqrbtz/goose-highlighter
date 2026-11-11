@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "Applica impostazioni elenco" },
   "no_sites_included": { "message": "Nessun sito incluso" },
-  "no_sites_excluded": { "message": "Nessun sito escluso" }
+  "no_sites_excluded": { "message": "Nessun sito escluso" },
+  "page_matches": {
+    "message": "corrispondenze"
+  },
+  "page_group_by": {
+    "message": "Raggruppa per:"
+  },
+  "page_group_none": {
+    "message": "Nessuno"
+  },
+  "page_group_list": {
+    "message": "Elenco"
+  },
+  "page_highlights_hint": {
+    "message": "Aggiungi parole nella scheda Parole e attiva l’evidenziazione per vedere le corrispondenze qui."
+  },
+  "turn_highlighting_off": {
+    "message": "Disattiva evidenziazione"
+  },
+  "turn_highlighting_on": {
+    "message": "Attiva evidenziazione"
+  },
+  "quick_word_hint": {
+    "message": "Parola o frase"
+  },
+  "add_multiple": {
+    "message": "Aggiungi più voci…"
+  },
+  "bulk_word_hint": {
+    "message": "Una parola o frase per riga. Incolla un elenco per rivederlo qui."
+  },
+  "add_row": {
+    "message": "Aggiungi riga"
+  },
+  "adding_to_list": {
+    "message": "Aggiunta a: {list}"
+  },
+  "add_n_entries": {
+    "message": "Aggiungi {count} voci"
+  },
+  "entry_row": {
+    "message": "Voce"
+  },
+  "entry_list_missing": {
+    "message": "Questo elenco non esiste più. Annulla per scegliere un altro elenco."
+  },
+  "entry_duplicate": {
+    "message": "Questa voce è già nell’elenco."
+  },
+  "entries_added": {
+    "message": "{count} voci aggiunte."
+  },
+  "entry_save_failed": {
+    "message": "Impossibile salvare. La bozza è conservata; riprova."
+  },
+  "add": {
+    "message": "Aggiungi"
+  },
+  "cancel": {
+    "message": "Annulla"
+  },
+  "edit": {
+    "message": "Modifica"
+  }
 }

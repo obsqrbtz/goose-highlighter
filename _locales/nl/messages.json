@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "Lijstinstellingen toepassen" },
   "no_sites_included": { "message": "Geen sites opgenomen" },
-  "no_sites_excluded": { "message": "Geen sites uitgesloten" }
+  "no_sites_excluded": { "message": "Geen sites uitgesloten" },
+  "page_matches": {
+    "message": "overeenkomsten"
+  },
+  "page_group_by": {
+    "message": "Groeperen op:"
+  },
+  "page_group_none": {
+    "message": "Geen"
+  },
+  "page_group_list": {
+    "message": "Lijst"
+  },
+  "page_highlights_hint": {
+    "message": "Voeg woorden toe op het tabblad Woorden en schakel markering in om hier overeenkomsten te zien."
+  },
+  "turn_highlighting_off": {
+    "message": "Markering uitschakelen"
+  },
+  "turn_highlighting_on": {
+    "message": "Markering inschakelen"
+  },
+  "quick_word_hint": {
+    "message": "Woord of woordgroep"
+  },
+  "add_multiple": {
+    "message": "Meerdere toevoegen…"
+  },
+  "bulk_word_hint": {
+    "message": "Eén woord of woordgroep per regel. Plak een lijst om deze hier te controleren."
+  },
+  "add_row": {
+    "message": "Regel toevoegen"
+  },
+  "adding_to_list": {
+    "message": "Toevoegen aan: {list}"
+  },
+  "add_n_entries": {
+    "message": "{count} items toevoegen"
+  },
+  "entry_row": {
+    "message": "Item"
+  },
+  "entry_list_missing": {
+    "message": "Deze lijst bestaat niet meer. Annuleer om een andere lijst te kiezen."
+  },
+  "entry_duplicate": {
+    "message": "Dit item staat al in de lijst."
+  },
+  "entries_added": {
+    "message": "{count} items toegevoegd."
+  },
+  "entry_save_failed": {
+    "message": "Opslaan mislukt. Je concept blijft bewaard; probeer het opnieuw."
+  },
+  "add": {
+    "message": "Toevoegen"
+  },
+  "cancel": {
+    "message": "Annuleren"
+  },
+  "edit": {
+    "message": "Bewerken"
+  }
 }

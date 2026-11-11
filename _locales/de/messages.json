@@ -440,5 +440,68 @@
   },
   "apply_list_settings": { "message": "Listeneinstellungen anwenden" },
   "no_sites_included": { "message": "Keine Websites eingeschlossen" },
-  "no_sites_excluded": { "message": "Keine Websites ausgeschlossen" }
+  "no_sites_excluded": { "message": "Keine Websites ausgeschlossen" },
+  "page_matches": {
+    "message": "Treffer"
+  },
+  "page_group_by": {
+    "message": "Gruppieren nach:"
+  },
+  "page_group_none": {
+    "message": "Keine"
+  },
+  "page_group_list": {
+    "message": "Liste"
+  },
+  "page_highlights_hint": {
+    "message": "Fügen Sie im Tab „Wörter“ Wörter hinzu und aktivieren Sie die Hervorhebung, um hier Treffer zu sehen."
+  },
+  "turn_highlighting_off": {
+    "message": "Hervorhebung ausschalten"
+  },
+  "turn_highlighting_on": {
+    "message": "Hervorhebung einschalten"
+  },
+  "quick_word_hint": {
+    "message": "Wort oder Ausdruck"
+  },
+  "add_multiple": {
+    "message": "Mehrere hinzufügen…"
+  },
+  "bulk_word_hint": {
+    "message": "Ein Wort oder Ausdruck pro Zeile. Fügen Sie eine Liste ein, um sie hier zu überprüfen."
+  },
+  "add_row": {
+    "message": "Zeile hinzufügen"
+  },
+  "adding_to_list": {
+    "message": "Hinzufügen zu: {list}"
+  },
+  "add_n_entries": {
+    "message": "{count} Einträge hinzufügen"
+  },
+  "entry_row": {
+    "message": "Eintrag"
+  },
+  "entry_list_missing": {
+    "message": "Diese Liste existiert nicht mehr. Brechen Sie ab, um eine andere Liste auszuwählen."
+  },
+  "entry_duplicate": {
+    "message": "Dieser Eintrag ist bereits in der Liste."
+  },
+  "entries_added": {
+    "message": "{count} Einträge hinzugefügt."
+  },
+  "entry_save_failed": {
+    "message": "Speichern fehlgeschlagen. Ihr Entwurf bleibt erhalten. Bitte versuchen Sie es erneut."
+  },
+  "add": {
+    "message": "Hinzufügen"
+  },
+  "cancel": {
+    "message": "Abbrechen"
+  },
+  "edit": {
+    "message": "Bearbeiten"
+  }
 }

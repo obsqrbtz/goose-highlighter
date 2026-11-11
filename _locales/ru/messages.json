@@ -521,5 +521,20 @@
   },
   "add": {
     "message": "Добавить"
+  },
+  "page_highlights_hint": {
+    "message": "Добавьте слова на вкладке «Слова» и включите подсветку, чтобы увидеть совпадения здесь."
+  },
+  "turn_highlighting_off": {
+    "message": "Выключить подсветку"
+  },
+  "turn_highlighting_on": {
+    "message": "Включить подсветку"
+  },
+  "cancel": {
+    "message": "Отмена"
+  },
+  "edit": {
+    "message": "Изменить"
   }
 }

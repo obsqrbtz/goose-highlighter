@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "リスト設定を適用" },
   "no_sites_included": { "message": "対象サイトはありません" },
-  "no_sites_excluded": { "message": "除外サイトはありません" }
+  "no_sites_excluded": { "message": "除外サイトはありません" },
+  "page_matches": {
+    "message": "一致"
+  },
+  "page_group_by": {
+    "message": "グループ化："
+  },
+  "page_group_none": {
+    "message": "なし"
+  },
+  "page_group_list": {
+    "message": "リスト"
+  },
+  "page_highlights_hint": {
+    "message": "「単語」タブで単語を追加し、ハイライトを有効にすると、ここに一致が表示されます。"
+  },
+  "turn_highlighting_off": {
+    "message": "ハイライトを無効にする"
+  },
+  "turn_highlighting_on": {
+    "message": "ハイライトを有効にする"
+  },
+  "quick_word_hint": {
+    "message": "単語またはフレーズ"
+  },
+  "add_multiple": {
+    "message": "まとめて追加…"
+  },
+  "bulk_word_hint": {
+    "message": "1行に1つの単語またはフレーズを入力してください。リストを貼り付けてここで確認できます。"
+  },
+  "add_row": {
+    "message": "行を追加"
+  },
+  "adding_to_list": {
+    "message": "追加先：{list}"
+  },
+  "add_n_entries": {
+    "message": "{count}件を追加"
+  },
+  "entry_row": {
+    "message": "項目"
+  },
+  "entry_list_missing": {
+    "message": "このリストは存在しません。キャンセルして別のリストを選択してください。"
+  },
+  "entry_duplicate": {
+    "message": "この項目はすでにリストにあります。"
+  },
+  "entries_added": {
+    "message": "{count}件を追加しました。"
+  },
+  "entry_save_failed": {
+    "message": "保存できませんでした。下書きは保持されています。もう一度お試しください。"
+  },
+  "add": {
+    "message": "追加"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "edit": {
+    "message": "編集"
+  }
 }

@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "Appliquer les paramètres de la liste" },
   "no_sites_included": { "message": "Aucun site inclus" },
-  "no_sites_excluded": { "message": "Aucun site exclu" }
+  "no_sites_excluded": { "message": "Aucun site exclu" },
+  "page_matches": {
+    "message": "correspondances"
+  },
+  "page_group_by": {
+    "message": "Grouper par :"
+  },
+  "page_group_none": {
+    "message": "Aucun"
+  },
+  "page_group_list": {
+    "message": "Liste"
+  },
+  "page_highlights_hint": {
+    "message": "Ajoutez des mots dans l’onglet Mots et activez le surlignage pour voir les correspondances ici."
+  },
+  "turn_highlighting_off": {
+    "message": "Désactiver le surlignage"
+  },
+  "turn_highlighting_on": {
+    "message": "Activer le surlignage"
+  },
+  "quick_word_hint": {
+    "message": "Mot ou expression"
+  },
+  "add_multiple": {
+    "message": "Ajouter plusieurs…"
+  },
+  "bulk_word_hint": {
+    "message": "Un mot ou une expression par ligne. Collez une liste pour la vérifier ici."
+  },
+  "add_row": {
+    "message": "Ajouter une ligne"
+  },
+  "adding_to_list": {
+    "message": "Ajout à : {list}"
+  },
+  "add_n_entries": {
+    "message": "Ajouter {count} entrées"
+  },
+  "entry_row": {
+    "message": "Entrée"
+  },
+  "entry_list_missing": {
+    "message": "Cette liste n’existe plus. Annulez pour choisir une autre liste."
+  },
+  "entry_duplicate": {
+    "message": "Cette entrée est déjà dans la liste."
+  },
+  "entries_added": {
+    "message": "{count} entrées ajoutées."
+  },
+  "entry_save_failed": {
+    "message": "Impossible d’enregistrer. Votre brouillon est conservé ; réessayez."
+  },
+  "add": {
+    "message": "Ajouter"
+  },
+  "cancel": {
+    "message": "Annuler"
+  },
+  "edit": {
+    "message": "Modifier"
+  }
 }

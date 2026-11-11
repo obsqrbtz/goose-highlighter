@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "Aplicar configurações da lista" },
   "no_sites_included": { "message": "Nenhum site incluído" },
-  "no_sites_excluded": { "message": "Nenhum site excluído" }
+  "no_sites_excluded": { "message": "Nenhum site excluído" },
+  "page_matches": {
+    "message": "correspondências"
+  },
+  "page_group_by": {
+    "message": "Agrupar por:"
+  },
+  "page_group_none": {
+    "message": "Nenhum"
+  },
+  "page_group_list": {
+    "message": "Lista"
+  },
+  "page_highlights_hint": {
+    "message": "Adicione palavras na aba Palavras e ative o destaque para ver correspondências aqui."
+  },
+  "turn_highlighting_off": {
+    "message": "Desativar destaque"
+  },
+  "turn_highlighting_on": {
+    "message": "Ativar destaque"
+  },
+  "quick_word_hint": {
+    "message": "Palavra ou frase"
+  },
+  "add_multiple": {
+    "message": "Adicionar várias…"
+  },
+  "bulk_word_hint": {
+    "message": "Uma palavra ou frase por linha. Cole uma lista para revisá-la aqui."
+  },
+  "add_row": {
+    "message": "Adicionar linha"
+  },
+  "adding_to_list": {
+    "message": "Adicionando a: {list}"
+  },
+  "add_n_entries": {
+    "message": "Adicionar {count} entradas"
+  },
+  "entry_row": {
+    "message": "Entrada"
+  },
+  "entry_list_missing": {
+    "message": "Esta lista não existe mais. Cancele para escolher outra lista."
+  },
+  "entry_duplicate": {
+    "message": "Esta entrada já está na lista."
+  },
+  "entries_added": {
+    "message": "{count} entradas adicionadas."
+  },
+  "entry_save_failed": {
+    "message": "Não foi possível salvar. Seu rascunho foi mantido; tente novamente."
+  },
+  "add": {
+    "message": "Adicionar"
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "edit": {
+    "message": "Editar"
+  }
 }

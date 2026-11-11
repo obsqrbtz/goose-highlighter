@@ -472,5 +472,68 @@
   },
   "apply_list_settings": { "message": "Aplicar ajustes de la lista" },
   "no_sites_included": { "message": "No hay sitios incluidos" },
-  "no_sites_excluded": { "message": "No hay sitios excluidos" }
+  "no_sites_excluded": { "message": "No hay sitios excluidos" },
+  "page_matches": {
+    "message": "coincidencias"
+  },
+  "page_group_by": {
+    "message": "Agrupar por:"
+  },
+  "page_group_none": {
+    "message": "Ninguno"
+  },
+  "page_group_list": {
+    "message": "Lista"
+  },
+  "page_highlights_hint": {
+    "message": "Añade palabras en la pestaña Palabras y activa el resaltado para ver coincidencias aquí."
+  },
+  "turn_highlighting_off": {
+    "message": "Desactivar el resaltado"
+  },
+  "turn_highlighting_on": {
+    "message": "Activar el resaltado"
+  },
+  "quick_word_hint": {
+    "message": "Palabra o frase"
+  },
+  "add_multiple": {
+    "message": "Añadir varias…"
+  },
+  "bulk_word_hint": {
+    "message": "Una palabra o frase por fila. Pega una lista para revisarla aquí."
+  },
+  "add_row": {
+    "message": "Añadir fila"
+  },
+  "adding_to_list": {
+    "message": "Añadiendo a: {list}"
+  },
+  "add_n_entries": {
+    "message": "Añadir {count} entradas"
+  },
+  "entry_row": {
+    "message": "Entrada"
+  },
+  "entry_list_missing": {
+    "message": "Esta lista ya no existe. Cancela para elegir otra lista."
+  },
+  "entry_duplicate": {
+    "message": "Esta entrada ya está en la lista."
+  },
+  "entries_added": {
+    "message": "Se añadieron {count} entradas."
+  },
+  "entry_save_failed": {
+    "message": "No se pudo guardar. Tu borrador se conserva; inténtalo de nuevo."
+  },
+  "add": {
+    "message": "Añadir"
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "edit": {
+    "message": "Editar"
+  }
 }
