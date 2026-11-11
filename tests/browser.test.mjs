@@ -11,13 +11,13 @@ const launch = promisify(execFile);
 
 const server = createServer(async (request, response) => {
     const { pathname } = new URL(request.url, 'http://localhost');
-    if (!/^\/(?:tests\/(?:fixture\.html|highlighting\.mjs)|popup\/popup\.html|dist\/(?:[\w-]+\/)*[\w-]+\.js)$/.test(pathname)) {
+    if (!/^\/(?:tests\/(?:fixture\.html|highlighting\.mjs)|popup\/popup\.(?:html|css)|shared\/[\w-]+\.css|dist\/(?:[\w-]+\/)*[\w-]+\.js)$/.test(pathname)) {
         response.writeHead(404).end();
         return;
     }
     try {
         const content = await readFile(new URL(`..${pathname}`, import.meta.url));
-        const type = pathname.endsWith('.html') ? 'text/html' : 'text/javascript';
+        const type = pathname.endsWith('.html') ? 'text/html' : pathname.endsWith('.css') ? 'text/css' : 'text/javascript';
         response.writeHead(200, { 'Content-Type': `${type}; charset=utf-8` }).end(content);
     } catch {
         response.writeHead(404).end();

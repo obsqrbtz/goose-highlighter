@@ -149,14 +149,24 @@
       <div class="tab-inner">
         <!-- Add Words Section -->
         <div class="add-words-section">
-          <label class="section-label">
-            <span data-i18n="add_words">Add Words</span>
-          </label>
-          <textarea id="bulkPaste" class="add-words-textarea" data-i18n="paste_hint" placeholder="Paste words or phrases here. Each new word/phrase should start from next line."></textarea>
-          <button class="add-words-button" id="addWordsBtn">
-            <span data-i18n="apply_paste">Add Words</span>
-          </button>
+          <span class="words-destination" id="wordsDestination"></span>
+          <form id="quickWordForm" class="quick-word-row">
+            <input id="quickWord" type="text" autocomplete="off" data-i18n="quick_word_hint" placeholder="Word or phrase" aria-label="Word or phrase" />
+            <button type="submit" class="add-words-button" id="addWordsBtn" data-i18n="add">Add</button>
+          </form>
+          <button type="button" class="words-text-button" id="addMultipleBtn" data-i18n="add_multiple">Add multiple…</button>
         </div>
+        <p id="wordEntryStatus" class="word-entry-status" role="status" hidden></p>
+        <section id="bulkWordEditor" class="bulk-word-editor" aria-label="Add multiple entries" hidden>
+          <p class="words-destination" id="bulkDestination"></p>
+          <p class="bulk-word-hint" data-i18n="bulk_word_hint">One word or phrase per row. Paste a list to review it here.</p>
+          <div id="bulkWordRows" class="bulk-word-rows"></div>
+          <button type="button" class="words-text-button" id="addBulkRowBtn" data-i18n="add_row">Add row</button>
+          <div class="bulk-word-actions">
+            <button type="button" id="cancelBulkWords" data-i18n="cancel">Cancel</button>
+            <button type="button" id="saveBulkWords" class="add-words-button"></button>
+          </div>
+        </section>
 
         <!-- Word List Section -->
         <div class="word-list-section">

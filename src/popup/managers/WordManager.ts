@@ -4,6 +4,7 @@ import { StorageService } from '../../services/StorageService.js';
 import { MessageService } from '../../services/MessageService.js';
 import { DOMUtils } from '../../utils/DOMUtils.js';
 import { PopupRenderer } from './PopupRenderer.js';
+import { WordEntryManager } from './WordEntryManager.js';
 
 export class WordManager {
   private selectedCheckboxes = new Set<number>();
@@ -12,6 +13,7 @@ export class WordManager {
   private wordMenuCloseListener: (() => void) | null = null;
   private readonly pageSize = 100;
   private totalWords = 0;
+  private entryManager: WordEntryManager;
 
   constructor(
     private lists: HighlightList[],
@@ -21,17 +23,14 @@ export class WordManager {
     private getCurrentPage: () => number,
     private setCurrentPage: (page: number) => void,
     private onWordsChanged: () => void
-  ) {}
+  ) {
+    this.entryManager = new WordEntryManager(lists, getCurrentListIndex, onWordsChanged);
+  }
 
   setupEventListeners(): void {
-    const bulkPaste = document.getElementById('bulkPaste') as HTMLTextAreaElement;
+    this.entryManager.setupEventListeners();
     const wordList = document.getElementById('wordList') as HTMLDivElement;
     const wordSearch = document.getElementById('wordSearch') as HTMLInputElement;
-
-    document.getElementById('addWordsBtn')?.addEventListener('click', () => {
-      this.addBulkWords(bulkPaste.value);
-      bulkPaste.value = '';
-    });
 
     this.setupWordListEvents(wordList);
 
@@ -40,26 +39,6 @@ export class WordManager {
       this.setCurrentPage(1);
       this.onWordsChanged();
     });
-  }
-
-  private addBulkWords(text: string): void {
-    const words = text.split(/\n+/).map(w => w.trim()).filter(Boolean);
-    const currentIndex = this.getCurrentListIndex();
-    const list = this.lists[currentIndex];
-    const existingWords = new Set(list.words.map(w => w.wordStr));
-    
-    for (const w of words) {
-      if (!existingWords.has(w)) {
-        list.words.push({
-          wordStr: w,
-          background: '',
-          foreground: '',
-          active: true
-        });
-        existingWords.add(w);
-      }
-    }
-    void this.saveAndNotify();
   }
 
   private setupWordListEvents(wordList: HTMLDivElement): void {
@@ -456,6 +435,7 @@ export class WordManager {
   }
 
   render(): void {
+    this.entryManager.render();
     this.closeWordItemMenu();
     const currentIndex = this.getCurrentListIndex();
     const list = this.lists[currentIndex];

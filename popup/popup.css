@@ -1827,3 +1827,28 @@ body.dark .add-words-button:hover,
 .clear-exceptions-link:disabled { color: var(--footer-text); opacity: 0.6; cursor: default; }
 
 .empty-hint { margin-top: 8px; font-size: var(--text-sm); font-weight: 400; line-height: 1.5; }
+
+[data-tab-content="words"] [hidden] { display: none !important; }
+.words-destination { margin: 0; color: var(--footer-text); font-size: var(--text-sm); overflow-wrap: anywhere; }
+.quick-word-row { display: flex; gap: 8px; }
+.quick-word-row input, .bulk-word-row input {
+  flex: 1; min-width: 0; height: 32px; padding: 0 10px;
+  border: 1px solid var(--input-border); border-radius: 6px;
+  background: var(--input-bg); color: var(--text-color); font-size: var(--text-base);
+}
+.quick-word-row #addWordsBtn { flex: 0 0 auto; width: auto; padding: 0 14px; }
+.words-text-button {
+  align-self: flex-start; padding: 4px 0; border: 0; background: transparent;
+  color: var(--accent); cursor: pointer; font-size: var(--text-sm);
+}
+.words-text-button:hover { text-decoration: underline; }
+.bulk-word-editor { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 8px; }
+.bulk-word-hint, .word-entry-status { margin: 0; font-size: var(--text-sm); color: var(--footer-text); line-height: 1.4; }
+.bulk-word-rows { flex: 1; min-height: 0; overflow-y: auto; scrollbar-gutter: stable; }
+.bulk-word-row { display: flex; gap: 6px; margin-bottom: 6px; }
+.bulk-word-row button { width: 32px; height: 32px; flex-shrink: 0; border-radius: 6px; cursor: pointer; }
+.bulk-word-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.bulk-word-actions > button { flex: 1; min-width: 0; height: 32px; border-radius: 6px; cursor: pointer; }
+.words-text-button:focus-visible, .bulk-word-actions button:focus-visible, .bulk-word-row button:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: -2px;
+}

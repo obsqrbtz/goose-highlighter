@@ -461,6 +461,124 @@ if (location.search === '?empty-entry') {
         }
     });
 
+    await check('quick entry keeps a usable input beside Add in both themes', '', async () => {
+        const html = await fetch('/popup/popup.html').then(response => response.text());
+        document.body.innerHTML = new DOMParser().parseFromString(html, 'text/html').body.innerHTML;
+        const stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '/popup/popup.css';
+        await new Promise((resolve, reject) => {
+            stylesheet.onload = resolve;
+            stylesheet.onerror = reject;
+            document.head.append(stylesheet);
+        });
+        const panel = document.querySelector('[data-tab-content="words"]');
+        document.querySelectorAll('.tab-content').forEach(item => item.classList.remove('active'));
+        panel.classList.add('active');
+        panel.removeAttribute('aria-busy');
+        panel.inert = false;
+        try {
+            for (const theme of ['dark', 'light']) {
+                document.documentElement.className = theme;
+                for (const label of ['Add', 'Добавить', 'Hinzufügen']) {
+                    document.getElementById('addWordsBtn').textContent = label;
+                    const input = document.getElementById('quickWord').getBoundingClientRect();
+                    const button = document.getElementById('addWordsBtn').getBoundingClientRect();
+                    const row = document.getElementById('quickWordForm').getBoundingClientRect();
+                    expect(input.width > 180, true);
+                    expect(button.width < 140, true);
+                    expect(input.right <= button.left && button.right <= row.right + 1, true);
+                    expect([input.height, button.height], [32, 32]);
+                }
+            }
+        } finally {
+            stylesheet.remove();
+            document.documentElement.className = '';
+        }
+    });
+
+    await check('word entry reviews multiline paste, restores drafts and retries failed saves', '', async () => {
+        const html = await fetch('/popup/popup.html').then(response => response.text());
+        const resetDOM = () => {
+            document.body.innerHTML = new DOMParser().parseFromString(html, 'text/html').body.innerHTML;
+            document.querySelector('[data-tab-content="words"]').inert = false;
+        };
+        resetDOM();
+        const previousBrowser = { ...globalThis.browser };
+        const lists = [list(['alpha'])];
+        let failSave = false;
+        let writes = 0;
+        Object.assign(globalThis.browser, {
+            storage: { local: { set: async () => {
+                writes++;
+                if (failSave) throw new Error('Storage full');
+            } } },
+            tabs: { query: (_options, callback) => callback([]) },
+        });
+        const { WordEntryManager } = await import('../dist/popup/managers/WordEntryManager.js');
+        const create = () => {
+            const manager = new WordEntryManager(lists, () => 0, () => {});
+            manager.setupEventListeners();
+            manager.render();
+            return manager;
+        };
+        const paste = (element, text) => {
+            const clipboardData = new DataTransfer();
+            clipboardData.setData('text/plain', text);
+            element.dispatchEvent(new ClipboardEvent('paste', { clipboardData, bubbles: true, cancelable: true }));
+        };
+        const settle = () => new Promise(resolve => setTimeout(resolve, 0));
+        try {
+            localStorage.removeItem('goose-word-entry-draft');
+            localStorage.removeItem('goose-word-entry-draft-quick');
+            create();
+            const quick = document.getElementById('quickWord');
+            quick.value = 'single phrase';
+            document.getElementById('quickWordForm').dispatchEvent(new Event('submit', { cancelable: true }));
+            await settle();
+            expect(lists[0].words.map(word => word.wordStr), ['alpha', 'single phrase']);
+            expect([quick.value, document.activeElement.id], ['', 'quickWord']);
+            paste(quick, 'alpha\r\n beta gamma \r\nbeta gamma\r\n\r\ndelta');
+            expect(document.getElementById('bulkWordEditor').hidden, false);
+            expect(document.getElementById('saveBulkWords').textContent, 'Add 2 entries');
+            const inputs = () => [...document.querySelectorAll('#bulkWordRows input')];
+            expect(inputs().map(input => input.value), ['alpha', ' beta gamma ', 'beta gamma', '', 'delta']);
+            inputs().at(-1).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+            expect(inputs().length, 6);
+            expect(document.activeElement, inputs().at(-1));
+            inputs().at(-1).value = 'epsilon';
+            inputs().at(-1).dispatchEvent(new Event('input', { bubbles: true }));
+            resetDOM();
+            create();
+            expect(inputs().at(-1).value, 'epsilon');
+            expect(document.getElementById('bulkDestination').textContent, 'Adding to: Test list');
+            expect(document.getElementById('saveBulkWords').textContent, 'Add 3 entries');
+            failSave = true;
+            document.getElementById('saveBulkWords').click();
+            await settle();
+            expect(lists[0].words.length, 2);
+            expect(document.getElementById('bulkWordEditor').hidden, false);
+            expect(document.getElementById('wordEntryStatus').textContent.includes('Could not save'), true);
+            expect(JSON.parse(localStorage.getItem('goose-word-entry-draft')).rows.at(-1), 'epsilon');
+            failSave = false;
+            document.getElementById('saveBulkWords').click();
+            await settle();
+            expect(lists[0].words.map(word => word.wordStr), ['alpha', 'single phrase', 'beta gamma', 'delta', 'epsilon']);
+            expect(document.getElementById('bulkWordEditor').hidden, true);
+            expect(localStorage.getItem('goose-word-entry-draft'), null);
+            expect(writes, 3);
+            document.getElementById('addMultipleBtn').click();
+            expect(inputs().map(input => input.value), ['']);
+            expect(document.getElementById('saveBulkWords').disabled, true);
+            document.getElementById('cancelBulkWords').click();
+            expect(document.getElementById('bulkWordEditor').hidden, true);
+        } finally {
+            localStorage.removeItem('goose-word-entry-draft');
+            localStorage.removeItem('goose-word-entry-draft-quick');
+            Object.assign(globalThis.browser, previousBrowser);
+        }
+    });
+
     await check('the injected bundle matches phrases and refreshes its wordlist snapshot',
         '<p>Read the <a href="#notes">release notes</a>&nbsp;today.</p><div><textarea>release notes</textarea></div>', async () => {
             const phrase = 'Read the release notes today';

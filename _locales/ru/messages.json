@@ -473,5 +473,41 @@
   },
   "apply_list_settings": { "message": "Применить настройки списка" },
   "no_sites_included": { "message": "Нет включённых сайтов" },
-  "no_sites_excluded": { "message": "Нет исключённых сайтов" }
+  "no_sites_excluded": { "message": "Нет исключённых сайтов" },
+  "quick_word_hint": {
+    "message": "Слово или фраза"
+  },
+  "add_multiple": {
+    "message": "Добавить несколько…"
+  },
+  "bulk_word_hint": {
+    "message": "Одно слово или фраза в строке. Вставьте список для проверки."
+  },
+  "add_row": {
+    "message": "Добавить строку"
+  },
+  "adding_to_list": {
+    "message": "Добавление в список: {list}"
+  },
+  "add_n_entries": {
+    "message": "Добавить записей: {count}"
+  },
+  "entry_row": {
+    "message": "Запись"
+  },
+  "entry_list_missing": {
+    "message": "Этот список больше не существует. Нажмите «Отмена», чтобы выбрать другой."
+  },
+  "entry_duplicate": {
+    "message": "Эта запись уже есть в списке."
+  },
+  "entries_added": {
+    "message": "Добавлено записей: {count}."
+  },
+  "entry_save_failed": {
+    "message": "Не удалось сохранить. Черновик сохранён; попробуйте ещё раз."
+  },
+  "add": {
+    "message": "Добавить"
+  }
 }

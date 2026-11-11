@@ -495,5 +495,41 @@
   "no_sites_excluded": { "message": "No sites excluded" },
   "page_highlights_hint": { "message": "Add words in the Words tab and enable highlighting to see matches here." },
   "turn_highlighting_off": { "message": "Turn highlighting off" },
-  "turn_highlighting_on": { "message": "Turn highlighting on" }
+  "turn_highlighting_on": { "message": "Turn highlighting on" },
+  "quick_word_hint": {
+    "message": "Word or phrase"
+  },
+  "add_multiple": {
+    "message": "Add multiple…"
+  },
+  "bulk_word_hint": {
+    "message": "One word or phrase per row. Paste a list to review it here."
+  },
+  "add_row": {
+    "message": "Add row"
+  },
+  "adding_to_list": {
+    "message": "Adding to: {list}"
+  },
+  "add_n_entries": {
+    "message": "Add {count} entries"
+  },
+  "entry_row": {
+    "message": "Entry"
+  },
+  "entry_list_missing": {
+    "message": "This list no longer exists. Cancel to choose another list."
+  },
+  "entry_duplicate": {
+    "message": "This entry is already in the list."
+  },
+  "entries_added": {
+    "message": "Added {count} entries."
+  },
+  "entry_save_failed": {
+    "message": "Could not save. Your draft is kept; please try again."
+  },
+  "add": {
+    "message": "Add"
+  }
 }
