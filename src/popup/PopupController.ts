@@ -431,8 +431,8 @@ export class PopupController {
     if (badgeHorizontal) badgeHorizontal.value = this.badgePosition.horizontal;
     if (badgeVertical) badgeVertical.value = this.badgePosition.vertical;
     if (badgePlacement) badgePlacement.value = this.badgePosition.placement;
-    const groupCheckbox = document.getElementById('pageHighlightsGroupByList') as HTMLInputElement;
-    if (groupCheckbox) groupCheckbox.checked = this.state.pageHighlightsGroupByList;
+    const groupSelect = document.getElementById('pageHighlightsGroupByList') as HTMLSelectElement;
+    if (groupSelect) groupSelect.value = this.state.pageHighlightsGroupByList ? 'list' : 'none';
   }
 
   captureScrollAndSave(): void {

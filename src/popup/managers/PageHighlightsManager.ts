@@ -61,7 +61,7 @@ export class PageHighlightsManager {
     });
 
     document.getElementById('pageHighlightsGroupByList')?.addEventListener('change', (e) => {
-      this.setGroupByList((e.target as HTMLInputElement).checked);
+      this.setGroupByList((e.target as HTMLSelectElement).value === 'list');
       this.onStateChanged();
       this.render();
     });

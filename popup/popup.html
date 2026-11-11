@@ -198,17 +198,19 @@
       <div class="tab-inner">
         <div class="page-highlights-section">
           <div class="page-highlights-header-row">
-            <span class="page-highlights-total-label" data-i18n="total_matches">Total matches</span>
-            <span class="page-highlights-total-count" id="totalHighlightsCount">0</span>
+            <span class="page-highlights-summary">
+              <span id="totalHighlightsCount">0</span>
+              <span data-i18n="page_matches">matches</span>
+            </span>
+            <label class="page-highlights-group-control" for="pageHighlightsGroupByList">
+              <span data-i18n="page_group_by">Group by:</span>
+              <select id="pageHighlightsGroupByList" class="page-highlights-group-select">
+                <option value="none" data-i18n="page_group_none">None</option>
+                <option value="list" data-i18n="page_group_list">List</option>
+              </select>
+            </label>
           </div>
           <div class="page-highlights-controls">
-            <label class="page-highlights-group-toggle">
-              <span class="switch-wrapper">
-                <input type="checkbox" id="pageHighlightsGroupByList" class="switch-input" />
-                <span class="switch-slider"></span>
-              </span>
-              <span class="page-highlights-group-label" data-i18n="group_by_list">Group by list</span>
-            </label>
             <div class="page-highlights-filters-wrap">
               <div id="pageHighlightsFiltersActions" class="page-highlights-filters-actions" hidden></div>
               <div id="pageHighlightsListFilters" class="page-highlights-filters"></div>

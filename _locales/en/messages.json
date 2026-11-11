@@ -251,6 +251,18 @@
   "total_matches": {
     "message": "Total matches"
   },
+  "page_matches": {
+    "message": "matches"
+  },
+  "page_group_by": {
+    "message": "Group by:"
+  },
+  "page_group_none": {
+    "message": "None"
+  },
+  "page_group_list": {
+    "message": "List"
+  },
   "group_by_list": {
     "message": "Group by list"
   },
