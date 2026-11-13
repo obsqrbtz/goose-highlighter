@@ -1,3 +1,23 @@
+# [1.14.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.7...v1.14.0) (2026-11-13)
+
+
+### Bug Fixes
+
+* loading lists does not freeze the whole popup ([1fa8dd7](https://github.com/obsqrbtz/goose-highlighter/commit/1fa8dd7542900ebd4a88dcc912f01c5d3d517ed4))
+* preserve long matches, which are overlapped by smaller ones ([fe0ef3b](https://github.com/obsqrbtz/goose-highlighter/commit/fe0ef3bcdf589d083856c9e7465cdf34eb285eaa))
+* ui cleanup ([4ba2d71](https://github.com/obsqrbtz/goose-highlighter/commit/4ba2d711b2145b70991f1710d9aa8811b8c193c2))
+
+
+### Features
+
+* implement PhraseMatcher and TextRuns ([6abd8bd](https://github.com/obsqrbtz/goose-highlighter/commit/6abd8bd90099ab58441a3bb21664a197cf41a47e))
+
+
+### Performance Improvements
+
+* cache text runs ([cb76858](https://github.com/obsqrbtz/goose-highlighter/commit/cb76858f4fb6b94c3e27e259f10b174606fdc9e2))
+* fewer allocations, dynamic rescans with prepared wordlist, popup receives list metadata instead of full wordlists ([92766ec](https://github.com/obsqrbtz/goose-highlighter/commit/92766ec24ba146e4e23244bb9aedd7a1dbd75fd8))
+
 ## [1.13.7](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.6...v1.13.7) (2026-06-28)
 
 
