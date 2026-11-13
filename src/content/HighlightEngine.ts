@@ -358,17 +358,18 @@ export class HighlightEngine {
     badge.textContent = String(field.matches.length);
     parent.appendChild(badge);
     this.positionBadge(badge, input);
-    badge.addEventListener('click', () => this.showFieldMatches(text, field.matches));
+    badge.addEventListener('click', () => this.showFieldMatches(input, text, field.matches));
     field.badge = badge;
   }
 
-  private showFieldMatches(text: string, matches: FieldMatch[]): void {
+  private showFieldMatches(input: TextField, text: string, matches: FieldMatch[]): void {
     this.popup?.remove();
     const popup = document.createElement('div');
     popup.className = 'goose-highlighter-textarea-popup';
     const titlebar = document.createElement('div');
     titlebar.className = 'gh-popup-titlebar';
     const close = document.createElement('button');
+    close.type = 'button';
     close.className = 'gh-popup-close';
     close.title = browserAPI.i18n.getMessage('close') || 'Close';
     close.textContent = '×';
@@ -390,7 +391,7 @@ export class HighlightEngine {
     }
     pre.append(text.slice(previousEnd));
     popup.append(titlebar, pre);
-    document.body.appendChild(popup);
+    (input.closest('dialog[open]') ?? document.body).appendChild(popup);
     this.popup = popup;
   }
 

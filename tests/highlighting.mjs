@@ -531,6 +531,32 @@ if (location.search === '?empty-entry') {
             expect(document.querySelector('.goose-highlighter-textarea-popup'), null);
         });
 
+    await check('a badge inside a modal dialog opens a visible interactive preview',
+        '<form method="dialog"><dialog><label>Editable dialog text<textarea>alpha alpha beta — release notes</textarea></label></dialog></form>',
+        (highlight, engine) => {
+            const dialog = document.querySelector('dialog');
+            dialog.showModal();
+            try {
+                highlight(['alpha', 'beta', 'release notes']);
+                document.querySelector(badge).click();
+                const popup = document.querySelector('.goose-highlighter-textarea-popup');
+                expect(popup?.querySelector('.gh-popup-pre').textContent, 'alpha alpha beta — release notes');
+                const close = popup.querySelector('.gh-popup-close');
+                close.focus();
+                expect(document.activeElement === close, true);
+                const rect = close.getBoundingClientRect();
+                expect(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2) === close, true);
+                close.click();
+                expect(popup.isConnected, false);
+                expect(dialog.open, true);
+                document.querySelector(badge).click();
+                engine.clearHighlights();
+                expect(document.querySelector('.goose-highlighter-textarea-popup'), null);
+            } finally {
+                dialog.close();
+            }
+        });
+
     await check('text field occurrences are counted and navigable', '<div><textarea>alpha alpha</textarea></div>', (highlight, engine) => {
         highlight(['alpha']);
         expect(count(engine, 'alpha'), 2);
