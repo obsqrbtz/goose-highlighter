@@ -1,3 +1,11 @@
+## [1.14.1](https://github.com/obsqrbtz/goose-highlighter/compare/v1.14.0...v1.14.1) (2026-11-13)
+
+
+### Bug Fixes
+
+* preserve highlights during dynamic page updates ([bcdebee](https://github.com/obsqrbtz/goose-highlighter/commit/bcdebeefe30abe5aef4f65607f73c1cff3dce9cd))
+* textarea matches dialog should always be on top of other windows ([b642388](https://github.com/obsqrbtz/goose-highlighter/commit/b6423885d09d689943ea998a027b30b625b1f984))
+
 # [1.14.0](https://github.com/obsqrbtz/goose-highlighter/compare/v1.13.7...v1.14.0) (2026-11-13)
 
 
