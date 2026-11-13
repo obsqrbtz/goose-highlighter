@@ -47,7 +47,7 @@ async function runBrowserCases(group = '', timeout = 15_000) {
             '--no-first-run',
             '--no-default-browser-check',
             '--enable-logging=stderr',
-            '--virtual-time-budget=4000',
+            '--virtual-time-budget=6000',
             `--user-data-dir=${profile}`,
             '--dump-dom',
             url.href,

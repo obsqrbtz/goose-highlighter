@@ -23,7 +23,7 @@ interface RunMatch {
   length: number;
   start: number;
   end: number;
-  range?: Range;
+  range?: StaticRange;
 }
 
 interface CachedRun {
@@ -75,8 +75,9 @@ export function activeHighlightWords(lists: HighlightList[]): ActiveWord[] {
 export class HighlightEngine {
   private badgePosition: BadgePosition = { horizontal: 'right', vertical: 'top', placement: 'border' };
   private styleElement?: HTMLStyleElement;
+  private stylesheet = '';
   private highlights = new Map<string, Highlight>();
-  private highlightsByWord = new Map<string, Range[]>();
+  private highlightsByWord = new Map<string, StaticRange[]>();
   private fields = new Map<TextField, FieldState>();
   private popup?: HTMLElement;
   private observer: MutationObserver;
@@ -191,8 +192,7 @@ export class HighlightEngine {
         `@media (forced-colors: active) {\n${inheritedRules.join('\n')}\n}`,
       );
     }
-    const stylesheet = rules.join('\n');
-    if (this.styleElement.textContent !== stylesheet) this.styleElement.textContent = stylesheet;
+    this.stylesheet = rules.join('\n');
     this.words = words;
     this.matchCase = matchCase;
     this.matchWhole = matchWhole;
@@ -211,7 +211,7 @@ export class HighlightEngine {
       this.clearHighlights();
       return;
     }
-    this.resetHighlights();
+    this.resetHighlights(true);
     const version = this.scanVersion;
     const timings = this.onScanMeasured ? { preparation: 0, active: 0, registration: 0 } : undefined;
     const work = this.scan(words, matchCase, matchWhole, timings);
@@ -252,6 +252,8 @@ export class HighlightEngine {
     this.highlightFields();
 
     if (typeof Highlight === 'undefined' || !CSS.highlights) return;
+    const highlights = new Map<string, Highlight>();
+    const highlightsByWord = new Map<string, StaticRange[]>();
     const nextRuns = new WeakMap<Text, CachedRun>();
     let rendered = 0;
     for (const run of textRuns(document.body)) {
@@ -271,7 +273,7 @@ export class HighlightEngine {
           const registrationStart = timings ? performance.now() : 0;
           const range = rangeFor(run, match.start, match.end, match.range);
           match.range = range;
-          if (range) this.registerRange(match, range);
+          if (range) this.registerRange(match, range, highlights, highlightsByWord);
           if (timings) timings.registration += performance.now() - registrationStart;
           if (++rendered % 128 === 0) yield;
         }
@@ -279,6 +281,30 @@ export class HighlightEngine {
       }
       yield;
     }
+    const registrationStart = timings ? performance.now() : 0;
+    if (this.styleElement && this.styleElement.textContent !== this.stylesheet) {
+      this.styleElement.textContent = this.stylesheet;
+    }
+    for (const [layer, next] of highlights) {
+      const current = this.highlights.get(layer);
+      if (!current) {
+        CSS.highlights.set(layer, next);
+        continue;
+      }
+      for (const range of current) {
+        if (!next.has(range)) current.delete(range);
+      }
+      for (const range of next) {
+        if (!current.has(range)) current.add(range);
+      }
+      highlights.set(layer, current);
+    }
+    for (const layer of this.highlights.keys()) {
+      if (!highlights.has(layer)) CSS.highlights.delete(layer);
+    }
+    this.highlights = highlights;
+    this.highlightsByWord = highlightsByWord;
+    if (timings) timings.registration += performance.now() - registrationStart;
     this.cachedRuns = nextRuns;
   }
 
@@ -299,18 +325,17 @@ export class HighlightEngine {
     }
   }
 
-  private registerRange(match: RunMatch, range: Range): void {
-    let highlight = this.highlights.get(match.layer);
+  private registerRange(match: RunMatch, range: StaticRange, highlights: Map<string, Highlight>, highlightsByWord: Map<string, StaticRange[]>): void {
+    let highlight = highlights.get(match.layer);
     if (!highlight) {
       highlight = new Highlight();
       // Shorter matches paint over longer ones. The flash keeps priority zero.
       highlight.priority = -match.length;
-      this.highlights.set(match.layer, highlight);
-      CSS.highlights.set(match.layer, highlight);
+      highlights.set(match.layer, highlight);
     }
     highlight.add(range);
-    const ranges = this.highlightsByWord.get(match.key) ?? [];
-    if (ranges.length === 0) this.highlightsByWord.set(match.key, ranges);
+    const ranges = highlightsByWord.get(match.key) ?? [];
+    if (ranges.length === 0) highlightsByWord.set(match.key, ranges);
     ranges.push(range);
   }
 
@@ -553,26 +578,28 @@ export class HighlightEngine {
   clearHighlights(): void {
     this.cachedRuns = new WeakMap();
     this.resetHighlights();
+    this.popup?.remove();
+    this.popup = undefined;
   }
 
-  private resetHighlights(): void {
+  private resetHighlights(preservePaint = false): void {
     this.stopObserving();
     this.scanVersion++;
     this.completeScan();
-    clearTimeout(this.flashTimer);
-    if (CSS.highlights) {
-      for (const layer of this.highlights.keys()) CSS.highlights.delete(layer);
-      CSS.highlights.delete('gh-flash');
+    if (!preservePaint) {
+      clearTimeout(this.flashTimer);
+      if (CSS.highlights) {
+        for (const layer of this.highlights.keys()) CSS.highlights.delete(layer);
+        CSS.highlights.delete('gh-flash');
+      }
+      this.highlights.clear();
+      this.highlightsByWord.clear();
     }
-    this.highlights.clear();
-    this.highlightsByWord.clear();
     for (const [input, field] of this.fields) {
       input.removeEventListener('input', field.onInput);
       field.badge?.remove();
     }
     this.fields.clear();
-    this.popup?.remove();
-    this.popup = undefined;
   }
 
   private completeScan(): void {
@@ -641,8 +668,12 @@ export class HighlightEngine {
         return;
       }
 
-      const range = ranges[targetIndex];
-      if (!range) return;
+      const target = ranges[targetIndex];
+      if (!target || !target.startContainer.isConnected || !target.endContainer.isConnected) return;
+      const range = new Range();
+      range.setStart(target.startContainer, target.startOffset);
+      range.setEnd(target.endContainer, target.endOffset);
+      if (range.collapsed) return;
 
       // First, scroll any scrollable containers
       const element = range.commonAncestorContainer.nodeType === Node.TEXT_NODE
@@ -663,7 +694,7 @@ export class HighlightEngine {
         behavior: 'smooth'
       });
 
-      const flashHighlight = new Highlight(range);
+      const flashHighlight = new Highlight(target);
       CSS.highlights.set('gh-flash', flashHighlight);
       clearTimeout(this.flashTimer);
       this.flashTimer = window.setTimeout(() => CSS.highlights.delete('gh-flash'), 600);

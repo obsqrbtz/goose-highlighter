@@ -1,11 +1,11 @@
 // CSS Highlights API type declarations
 interface Highlight {
-  new(...ranges: Range[]): Highlight;
+  new(...ranges: AbstractRange[]): Highlight;
   priority: number;
-  add(range: Range): void;
+  add(range: AbstractRange): void;
   clear(): void;
-  delete(range: Range): boolean;
-  has(range: Range): boolean;
+  delete(range: AbstractRange): boolean;
+  has(range: AbstractRange): boolean;
   readonly size: number;
 }
 
@@ -24,5 +24,5 @@ interface CSS {
 
 declare var Highlight: {
   prototype: Highlight;
-  new(...ranges: Range[]): Highlight;
+  new(...ranges: AbstractRange[]): Highlight;
 };

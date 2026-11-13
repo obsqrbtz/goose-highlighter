@@ -51,8 +51,15 @@ function ranges() {
     return [...CSS.highlights.values()].flatMap(highlight => [...highlight]);
 }
 
+function rangeText(range) {
+    const live = new Range();
+    live.setStart(range.startContainer, range.startOffset);
+    live.setEnd(range.endContainer, range.endOffset);
+    return live.toString();
+}
+
 function expectRanges(...texts) {
-    expect(ranges().map(range => range.toString()), texts);
+    expect(ranges().map(rangeText), texts);
 }
 
 function count(engine, text) {
@@ -154,7 +161,8 @@ if (location.search === '?empty-entry') {
             highlight(['alpha beta']);
             expectRanges('alpha beta');
             highlight(['alpha beta', 'alpha  beta']);
-            expectRanges('alpha  beta', 'alpha beta');
+            // Registry insertion order is retained when an existing layer is reused.
+            expect(ranges().map(rangeText).sort(), ['alpha  beta', 'alpha beta']);
         });
 
     await check('highlight colors inherit through nested text and resolve CSS variables locally',
@@ -166,8 +174,8 @@ if (location.search === '?empty-entry') {
             for (const [name, layer] of CSS.highlights) {
                 const [range] = layer;
                 const style = getComputedStyle(range.startContainer.parentElement, `::highlight(${name})`);
-                expect(style.backgroundColor, range.toString() === 'alpha' ? 'rgb(255, 0, 0)' : 'rgb(0, 255, 0)');
-                expect(style.color, range.toString() === 'alpha' ? 'rgb(0, 0, 255)' : 'rgb(0, 0, 0)');
+                expect(style.backgroundColor, rangeText(range) === 'alpha' ? 'rgb(255, 0, 0)' : 'rgb(0, 255, 0)');
+                expect(style.color, rangeText(range) === 'alpha' ? 'rgb(0, 0, 255)' : 'rgb(0, 0, 0)');
             }
             expectRanges('alpha', 'beta');
         });
@@ -187,10 +195,10 @@ if (location.search === '?empty-entry') {
                     ...entry(word), background: ['red', 'green', 'blue', 'yellow'][i],
                 })))];
                 highlight([], { matchWhole: true, lists });
-                expect(ranges().map(range => range.toString()).sort(), [...words].sort());
+                expect(ranges().map(rangeText).sort(), [...words].sort());
                 for (const word of words) expect(count(engine, word), 1);
                 const priorities = new Map([...CSS.highlights.values()].flatMap(layer =>
-                    [...layer].map(range => [range.toString(), layer.priority])));
+                    [...layer].map(range => [rangeText(range), layer.priority])));
                 expect(priorities.get('beta') > priorities.get('beta gamma'), true);
                 expect(priorities.get('gamma') > priorities.get('beta gamma'), true);
                 expect(priorities.get('gamma') > priorities.get('gamma delta'), true);
@@ -297,7 +305,8 @@ if (location.search === '?empty-entry') {
             ];
             const snapshot = () => {
                 const layers = [...CSS.highlights].filter(([name]) => name !== 'gh-flash')
-                    .map(([name, layer]) => [name, layer.priority, [...layer].map(offsets)]);
+                    .map(([name, layer]) => [name, layer.priority, [...layer].map(offsets)
+                        .sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2] || a[3] - b[3])]);
                 engine.scrollToHighlight('alpha beta', 1);
                 return [layers, words.map(word => count(engine, word)), offsets([...CSS.highlights.get('gh-flash')][0])];
             };
@@ -306,6 +315,166 @@ if (location.search === '?empty-entry') {
             highlight();
             await engine.waitForScan();
             expect(snapshot(), reused);
+        });
+
+    await check('keeps painted highlights until a batched rescan finishes',
+        '<p>alpha</p><p>beta</p>', async (highlight, engine) => {
+            highlight(['alpha', 'beta']);
+            await engine.waitForScan();
+            const previousLayers = [...CSS.highlights];
+            const previousStyles = document.querySelector('#goose-highlighter-styles').textContent;
+            const betaRange = ranges().find(range => rangeText(range) === 'beta');
+            document.querySelector('p').textContent = 'gamma';
+            const originalNow = performance.now;
+            let clock = originalNow.call(performance);
+            // Force the engine to yield so the browser could paint between batches.
+            performance.now = () => clock += 10;
+            try {
+                highlight(['gamma', 'beta'], { lists: [list(['gamma', 'beta'], { background: '#0f0' })] });
+                expect(previousLayers.every(([name, layer]) => CSS.highlights.get(name) === layer), true);
+                expect(ranges().includes(betaRange), true);
+                expect(count(engine, 'beta'), 1);
+                expect(document.querySelector('#goose-highlighter-styles').textContent, previousStyles);
+            } finally {
+                performance.now = originalNow;
+            }
+            await engine.waitForScan();
+            expectRanges('gamma', 'beta');
+            expect(count(engine, 'alpha'), 0);
+            expect(count(engine, 'gamma'), 1);
+            expect(document.querySelector('#goose-highlighter-styles').textContent.includes('#0f0'), true);
+            highlight(['beta']);
+            await engine.waitForScan();
+            expectRanges('beta');
+            expect(CSS.highlights.size, 1);
+            engine.clearHighlights();
+            expectRanges();
+        });
+
+    await check('clearing a yielded scan cannot republish its pending highlights',
+        '<p>alpha</p><p>beta</p>', async (highlight, engine) => {
+            highlight(['alpha']);
+            await engine.waitForScan();
+            const originalNow = performance.now;
+            let clock = originalNow.call(performance);
+            performance.now = () => clock += 10;
+            try {
+                highlight(['beta']);
+                engine.clearHighlights();
+            } finally {
+                performance.now = originalNow;
+            }
+            await waitForUpdate();
+            expectRanges();
+            expect(count(engine, 'alpha'), 0);
+            expect(count(engine, 'beta'), 0);
+        });
+
+    await check('scroll-driven updates preserve unchanged highlight layers and ranges',
+        '<p>alpha</p><p>beta</p><div id="feed"></div>', async (highlight, engine) => {
+            highlight(['alpha', 'beta']);
+            await engine.waitForScan();
+            const originalLayers = [...CSS.highlights];
+            const originalRanges = ranges();
+            const registry = CSS.highlights;
+            const originalSet = registry.set;
+            const originalDelete = registry.delete;
+            let registryChanges = 0;
+            registry.set = function (...args) { registryChanges++; return originalSet.apply(this, args); };
+            registry.delete = function (...args) { registryChanges++; return originalDelete.apply(this, args); };
+            const onScroll = () => document.body.classList.toggle('scrolled');
+            window.addEventListener('scroll', onScroll);
+            try {
+                for (let i = 0; i < 3; i++) {
+                    window.dispatchEvent(new Event('scroll'));
+                    const item = document.createElement('p');
+                    item.textContent = 'unrelated lazy-loaded item';
+                    document.querySelector('#feed').append(item);
+                    await waitForUpdate();
+                    await engine.waitForScan();
+                    expect(originalLayers.every(([name, layer]) => registry.get(name) === layer), true);
+                    expect(originalRanges.every(range => ranges().includes(range)), true);
+                }
+                expect(registryChanges, 0);
+                document.querySelector('p').textContent = 'alpha alpha';
+                highlight();
+                await engine.waitForScan();
+                expect(count(engine, 'alpha'), 2);
+                expect(ranges().includes(originalRanges[1]), true);
+                expect(originalLayers.every(([name, layer]) => registry.get(name) === layer), true);
+                expect(registryChanges, 0);
+                document.querySelector('p').remove();
+                highlight();
+                await engine.waitForScan();
+                expectRanges('beta');
+                expect(registryChanges, 1);
+            } finally {
+                window.removeEventListener('scroll', onScroll);
+                document.body.classList.remove('scrolled');
+                registry.set = originalSet;
+                registry.delete = originalDelete;
+            }
+        });
+
+    await check('a 100k-word feed keeps product highlights when loading nodes change mid-scan',
+        '<div id="feed"><p id="loading">loading</p><p>alpha</p></div>', async (highlight, engine) => {
+            highlight(['alpha', 'beta', ...Array.from({ length: 99_998 }, (_, i) => `catalogue-entry-${i}`)]);
+            await engine.waitForScan();
+            const originalNow = performance.now;
+            const originalYield = window.scheduler.yield;
+            let clock = originalNow.call(performance);
+            const batches = [];
+            performance.now = () => clock += 10;
+            window.scheduler.yield = () => new Promise(resolve => batches.push(resolve));
+            try {
+                highlight();
+                // Pause after the traversal has read the loading paragraph,
+                // then remove it as an infinite feed does between scan tasks.
+                for (let i = 0; i < 2; i++) {
+                    expect(batches.length, 1);
+                    batches.shift()();
+                    await Promise.resolve();
+                }
+                document.querySelector('#loading').remove();
+                const product = document.createElement('p');
+                product.textContent = 'beta';
+                document.querySelector('#feed').append(product);
+            } finally {
+                performance.now = originalNow;
+                window.scheduler.yield = originalYield;
+                batches.shift()?.();
+            }
+            await engine.waitForScan();
+            expectRanges('alpha');
+            expect(count(engine, 'alpha'), 1);
+            await waitForUpdate();
+            await engine.waitForScan();
+            expectRanges('alpha', 'beta');
+        });
+
+    await check('recycling a product card keeps its highlights before a rescan',
+        '<div id="pool" style="will-change:transform;transform:translateY(0)"><article>alpha beta</article></div><div id="parking"></div>',
+        async (highlight, engine) => {
+            highlight(['alpha', 'beta']);
+            await engine.waitForScan();
+            const originalRanges = ranges();
+            const card = document.querySelector('article');
+            const pool = document.querySelector('#pool');
+            document.querySelector('#parking').append(card);
+            pool.append(card);
+            await Promise.resolve();
+            expect(ranges().every(range => !range.collapsed), true);
+            expectRanges('alpha', 'beta');
+            // Frameworks can also rewrite a Text node with its existing value.
+            const unchangedText = card.firstChild.data;
+            card.firstChild.data = unchangedText;
+            await Promise.resolve();
+            expectRanges('alpha', 'beta');
+            await waitForUpdate();
+            await engine.waitForScan();
+            expect(originalRanges.every(range => ranges().includes(range)), true);
+            engine.scrollToHighlight('beta', 0);
+            expect(rangeText([...CSS.highlights.get('gh-flash')][0]), 'beta');
         });
 
     await check('keeps relevant mutations across observer deliveries', '<p>beta</p>', async highlight => {
@@ -336,6 +505,31 @@ if (location.search === '?empty-entry') {
         expect([...document.querySelectorAll('.gh-popup-pre mark')].map(mark => mark.textContent),
             ['alpha', 'alpha', 'alpha']);
     });
+
+    await check('text field preview survives page rescans and still closes explicitly',
+        '<div><textarea>alpha alpha</textarea></div><p>beta</p>', async (highlight, engine) => {
+            highlight(['alpha']);
+            document.querySelector(badge).click();
+            const popup = document.querySelector('.goose-highlighter-textarea-popup');
+            const paragraph = document.querySelector('p');
+            paragraph.textContent = 'alpha';
+            await waitForUpdate();
+            await engine.waitForScan();
+            expect(count(engine, 'alpha'), 3);
+            expect(popup.isConnected, true);
+            expect(popup.querySelector('.gh-popup-pre').textContent, 'alpha alpha');
+
+            document.querySelector('textarea').classList.add('validated');
+            await waitForUpdate();
+            await engine.waitForScan();
+            expect(popup.isConnected, true);
+            popup.querySelector('.gh-popup-close').click();
+            expect(popup.isConnected, false);
+
+            document.querySelector(badge).click();
+            engine.clearHighlights();
+            expect(document.querySelector('.goose-highlighter-textarea-popup'), null);
+        });
 
     await check('text field occurrences are counted and navigable', '<div><textarea>alpha alpha</textarea></div>', (highlight, engine) => {
         highlight(['alpha']);

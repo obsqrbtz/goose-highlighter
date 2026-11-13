@@ -41,7 +41,7 @@ export function* textRuns(root: HTMLElement): Generator<TextRun | undefined> {
   const rootStyle = getComputedStyle(root);
   if (rootStyle.display === 'none' || rootStyle.getPropertyValue('content-visibility') === 'hidden') return;
   let context = textContext(rootStyle);
-  const ancestors: { element: Element; context: TextContext; separates: boolean }[] = [];
+  const ancestors: { element: Element; context: TextContext; separates: boolean; siblings: ChildNode[]; index: number }[] = [];
   let chunks: string[] = [];
   let parts: TextPart[] = [];
   let length = 0;
@@ -63,11 +63,14 @@ export function* textRuns(root: HTMLElement): Generator<TextRun | undefined> {
     length += text.length;
   }
 
-  let node: ChildNode | null = root.firstChild;
+  let siblings = Array.from(root.childNodes);
+  let index = 0;
+  let node: ChildNode | undefined = siblings[index];
   while (node) {
     // Large groups of inline elements can have no natural yield point.
     if (++visited % 256 === 0) yield;
-    if (node instanceof Text && context.visible) {
+    const attached = node.isConnected && node.parentNode === (ancestors.at(-1)?.element ?? root);
+    if (attached && node instanceof Text && context.visible) {
       if (context.whitespace === 'preserve-breaks') {
         let offset = 0;
         for (const line of node.data.split(/(?<=\n)/)) {
@@ -79,7 +82,7 @@ export function* textRuns(root: HTMLElement): Generator<TextRun | undefined> {
       } else {
         append(node, node.data, 0);
       }
-    } else if (node instanceof Element && !ignoredElements.has(node.tagName) &&
+    } else if (attached && node instanceof Element && !ignoredElements.has(node.tagName) &&
       !node.classList.contains('goose-highlighter-textarea-badge') &&
       !node.classList.contains('goose-highlighter-textarea-popup')) {
       const style = getComputedStyle(node);
@@ -92,22 +95,26 @@ export function* textRuns(root: HTMLElement): Generator<TextRun | undefined> {
             nextContext.visible !== context.visible;
           if (separates) yield flush();
           if (node.firstChild) {
-            ancestors.push({ element: node, context, separates });
+            ancestors.push({ element: node, context, separates, siblings, index });
             context = nextContext;
-            node = node.firstChild;
+            siblings = Array.from(node.childNodes);
+            index = 0;
+            node = siblings[index];
             continue;
           }
         }
       }
     }
 
-    while (!node.nextSibling && ancestors.length > 0) {
+    index++;
+    while (index >= siblings.length && ancestors.length > 0) {
       const parent = ancestors.pop()!;
       if (parent.separates) yield flush();
       context = parent.context;
-      node = parent.element;
+      siblings = parent.siblings;
+      index = parent.index + 1;
     }
-    node = node.nextSibling;
+    node = siblings[index];
   }
   yield flush();
 }
@@ -123,7 +130,7 @@ function findPart(parts: TextPart[], offset: number): TextPart {
   return parts[low];
 }
 
-export function rangeFor(run: TextRun, start: number, end: number, existing?: Range): Range | undefined {
+export function rangeFor(run: TextRun, start: number, end: number, existing?: StaticRange): StaticRange | undefined {
   const first = findPart(run.parts, start);
   const last = findPart(run.parts, end - 1);
   const startOffset = first.offset + start - first.start;
@@ -133,8 +140,6 @@ export function rangeFor(run: TextRun, start: number, end: number, existing?: Ra
       startOffset > first.node.length || endOffset > last.node.length) return;
   if (existing?.startContainer === first.node && !existing.collapsed && existing.startOffset === startOffset &&
       existing.endContainer === last.node && existing.endOffset === endOffset) return existing;
-  const range = new Range();
-  range.setStart(first.node, startOffset);
-  range.setEnd(last.node, endOffset);
+  const range = new StaticRange({ startContainer: first.node, startOffset, endContainer: last.node, endOffset });
   return range.collapsed ? undefined : range;
 }
